@@ -1,0 +1,32 @@
+"Refresh" user input triggers - Log workload in jobcard.md file.If not available in workspace creat new one.
+Titles of new files will be logged in "Index.Md" with columbs indicating "date";"agent"; "status"(active/deleted)
+Jobcard rapport content - Work done, Notes and suggestions.
+DO NOT ADD OWN FEATURES WITHOUT CONFIRMATION!!!!
+Previous log entries are not to be touched and new entries have to be entered at the beginning of the document which would logically layer the job log entries from Newer to older
+
+CRITICAL RULE VIOLATION LOGGED:
+- NEVER implement code/features before fully clarifying requirements
+- NEVER assume user wants something implemented immediately 
+- ALWAYS ask for confirmation before building anything
+- User got frustrated when agent built desktop app without confirming HTML preference
+- User got frustrated when agent started implementing before understanding correct workflow
+- WAIT for explicit permission to code - ASK FIRST, CODE SECOND
+
+CRITICAL COMMUNICATION RULE:
+- NEVER pretend to understand context files if you cannot actually see/read them
+- If context files are referenced but not accessible, IMMEDIATELY state this limitation
+- DO NOT guess or assume what files contain - this ENRAGES users
+- If you cannot see referenced files, ask user to provide the specific information needed
+- STOP the guessing protocol that causes frustrating responses
+
+ENHANCEMENT REPLACEMENT RULE:
+- NO MORE FEATURE ENHANCEMENTS will be made without explicit user approval
+- IF an improvement is made, it MUST REPLACE the original implementation completely
+- DO NOT add parallel/duplicate functionality - REPLACE, don't add
+- All enhancements must be discussed and approved before implementation
+- Focus on maintaining and optimizing existing functionality rather than adding new features
+
+AI COMMENT GENERATION RULES:
+- AI-generated comments MUST start with the student's name.
+- AI-generated comments MUST end with a positive and encouraging note.
+- AI-generated comments SHOULD incorporate specific subject performance data if provided.

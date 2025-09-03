@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fixed Comment Generation Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f8f9fa;
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        .test-section {
+            margin: 20px 0;
+            padding: 20px;
+            border: 2px solid #007bff;
+            border-radius: 8px;
+        }
+        .result {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 10px 0;
+            white-space: pre-wrap;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+        }
+        .comment-display {
+            background: #e8f5e8;
+            border: 1px solid #28a745;
+            padding: 20px;
+            margin: 15px 0;
+            border-radius: 5px;
+        }
+        .comment-display h4 {
+            color: #155724;
+            margin: 0 0 10px 0;
+        }
+        .comment-text {
+            font-family: 'Times New Roman', serif;
+            font-size: 16px;
+            line-height: 1.6;
+            color: #333;
+        }
+        .word-count {
+            font-size: 12px;
+            color: #666;
+            margin-top: 10px;
+            font-style: italic;
+        }
+        .validation-result {
+            background: #fff3cd;
+            border: 1px solid #ffc107;
+            padding: 15px;
+            border-radius: 5px;
+            margin: 10px 0;
+        }
+        .validation-success {
+            background: #d4edda;
+            border-color: #28a745;
+            color: #155724;
+        }
+        .validation-error {
+            background: #f8d7da;
+            border-color: #dc3545;
+            color: #721c24;
+        }
+        button {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 8px;
+            font-size: 16px;
+        }
+        button:hover {
+            background: #0056b3;
+        }
+        .btn-success {
+            background: #28a745;
+        }
+        .btn-success:hover {
+            background: #1e7e34;
+        }
+        .btn-warning {
+            background: #ffc107;
+            color: #212529;
+        }
+        .btn-warning:hover {
+            background: #e0a800;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔧 Fixed Comment Generation Test</h1>
+        <p>This page tests the fixed comment generation system to ensure all user data is properly included in the final comments.</p>
+        
+        <div class="test-section">
+            <h3>📝 Setup Test Data</h3>
+            <button onclick="setupRealisticTestData()" class="btn-success">Setup Realistic Test Data</button>
+            <button onclick="setupMinimalTestData()" class="btn-warning">Setup Minimal Test Data</button>
+            <button onclick="clearTestData()">Clear All Data</button>
+            <div id="setupStatus" class="result"></div>
+        </div>
+        
+        <div class="test-section">
+            <h3>🧪 Test Comment Generation</h3>
+            <button onclick="testFixedCommentGeneration()" class="btn-success">Test Fixed Generation</button>
+            <button onclick="testOriginalGeneration()" class="btn-warning">Test Original Generation</button>
+            <div id="generationStatus" class="result"></div>
+        </div>
+        
+        <div class="test-section">
+            <h3>📄 Generated Comments</h3>
+            <div id="commentsDisplay"></div>
+        </div>
+        
+        <div class="test-section">
+            <h3>🔍 Validation Results</h3>
+            <div id="validationResults"></div>
+        </div>
+    </div>
+
+    <!-- Load JavaScript files -->
+    <script src="assets/js/comment-engine.js"></script>
+    <script src="enhanced-comment-engine.js"></script>
+    <script src="optimized-comment-generator.js"></script>
+    <script src="missing-functions.js"></script>
+
+    <script>
+        function setupRealisticTestData() {
+            const realisticData = {
+                studentName: 'Emma Martinez',
+                gender: 'she',
+                strengths: 'creative problem solving, excellent verbal communication, leadership qualities, mathematical reasoning',
+                weaknesses: 'sometimes rushes through work, needs encouragement with fine motor skills, requires reminders for organization',
+                overallAttributes: '8',
+                timestamp: Date.now(),
+                version: '1.0'
+            };
+            
+            localStorage.setItem('studentData', JSON.stringify(realisticData));
+            
+            // Add realistic subject selections
+            const subjects = ['Mathematics', 'Language Arts', 'Science', 'Art'];
+            localStorage.setItem('selectedSubjects', JSON.stringify(subjects));
+            
+            document.getElementById('setupStatus').textContent = 
+                'Realistic test data created:\n' + JSON.stringify(realisticData, null, 2) + 
+                '\n\nSelected Subjects: ' + JSON.stringify(subjects, null, 2);
+        }
+        
+        function setupMinimalTestData() {
+            const minimalData = {
+                studentName: 'Alex Chen',
+                gender: 'they',
+                strengths: '',
+                weaknesses: '',
+                overallAttributes: '5',
+                timestamp: Date.now(),
+                version: '1.0'
+            };
+            
+            localStorage.setItem('studentData', JSON.stringify(minimalData));
+            localStorage.setItem('selectedSubjects', JSON.stringify([]));
+            
+            document.getElementById('setupStatus').textContent = 
+                'Minimal test data created (empty strengths/weaknesses, no subjects):\n' + 
+                JSON.stringify(minimalData, null, 2);
+        }
+        
+        function clearTestData() {
+            localStorage.clear();
+            document.getElementById('setupStatus').textContent = 'All test data cleared.';
+            document.getElementById('commentsDisplay').innerHTML = '';
+            document.getElementById('validationResults').innerHTML = '';
+        }
+        
+        function testFixedCommentGeneration() {
+            try {
+                const statusDiv = document.getElementById('generationStatus');
+                statusDiv.textContent = 'Testing fixed comment generation...\n';
+                
+                // Get test data
+                const studentData = JSON.parse(localStorage.getItem('studentData') || '{}');
+                if (!studentData.studentName) {
+                    throw new Error('No test data found. Please setup test data first.');
+                }
+                
+                // Prepare session data
+                const selectedSubjects = JSON.parse(localStorage.getItem('selectedSubjects') || '[]');
+                const sessionData = {
+                    studentName: studentData.studentName,
+                    gender: studentData.gender,
+                    overallRating: parseInt(studentData.overallAttributes) || 5,
+                    strengths: studentData.strengths || '',
+                    weaknesses: studentData.weaknesses || '',
+                    subjects: selectedSubjects,
+                    topicRatings: { 'classroom_participation': 5, 'peer_interaction': 5 }
+                };
+                
+                statusDiv.textContent += 'Session data prepared:\n' + JSON.stringify(sessionData, null, 2) + '\n\n';
+                
+                // Test with Enhanced Engine
+                if (typeof EnhancedCommentEngine !== 'undefined') {
+                    const enhancedEngine = new EnhancedCommentEngine();
+                    const comments = enhancedEngine.generateComments(sessionData);
+                    
+                    statusDiv.textContent += 'Fixed generation completed successfully!\n';
+                    displayComments(comments, 'Fixed');
+                    validateComments(comments, sessionData);
+                    
+                } else {
+                    throw new Error('EnhancedCommentEngine not available');
+                }
+                
+            } catch (error) {
+                document.getElementById('generationStatus').textContent = 'ERROR: ' + error.message + '\n\n' + error.stack;
+            }
+        }
+        
+        function testOriginalGeneration() {
+            try {
+                const statusDiv = document.getElementById('generationStatus');
+                statusDiv.textContent = 'Testing original comment generation...\n';
+                
+                // Get test data
+                const studentData = JSON.parse(localStorage.getItem('studentData') || '{}');
+                if (!studentData.studentName) {
+                    throw new Error('No test data found. Please setup test data first.');
+                }
+                
+                // Prepare session data
+                const selectedSubjects = JSON.parse(localStorage.getItem('selectedSubjects') || '[]');
+                const sessionData = {
+                    studentName: studentData.studentName,
+                    gender: studentData.gender,
+                    overallRating: parseInt(studentData.overallAttributes) || 5,
+                    strengths: studentData.strengths || '',
+                    weaknesses: studentData.weaknesses || '',
+                    subjects: selectedSubjects,
+                    topicRatings: { 'classroom_participation': 5, 'peer_interaction': 5 }
+                };
+                
+                statusDiv.textContent += 'Session data prepared:\n' + JSON.stringify(sessionData, null, 2) + '\n\n';
+                
+                // Test with Original Engine
+                if (typeof PremiumCommentEngine !== 'undefined') {
+                    const originalEngine = new PremiumCommentEngine();
+                    const comments = originalEngine.generateComments(sessionData);
+                    
+                    statusDiv.textContent += 'Original generation completed!\n';
+                    displayComments(comments, 'Original');
+                    validateComments(comments, sessionData);
+                    
+                } else {
+                    throw new Error('PremiumCommentEngine not available');
+                }
+                
+            } catch (error) {
+                document.getElementById('generationStatus').textContent = 'ERROR: ' + error.message + '\n\n' + error.stack;
+            }
+        }
+        
+        function displayComments(comments, type) {
+            const displayDiv = document.getElementById('commentsDisplay');
+            
+            const commentsHTML = `
+                <h3>${type} Comment Generation Results</h3>
+                
+                <div class="comment-display">
+                    <h4>👨‍🏫 Male Teacher Style</h4>
+                    <div class="comment-text">${comments.male}</div>
+                    <div class="word-count">Word count: ${comments.wordCount.male} words</div>
+                </div>
+                
+                <div class="comment-display">
+                    <h4>👩‍🏫 Female Teacher Style</h4>
+                    <div class="comment-text">${comments.female}</div>
+                    <div class="word-count">Word count: ${comments.wordCount.female} words</div>
+                </div>
+            `;
+            
+            displayDiv.innerHTML = commentsHTML;
+        }
+        
+        function validateComments(comments, sessionData) {
+            const resultsDiv = document.getElementById('validationResults');
+            
+            // Check what data should be included
+            const expectedData = {
+                studentName: sessionData.studentName,
+                strengths: sessionData.strengths,
+                weaknesses: sessionData.weaknesses,
+                subjects: sessionData.subjects
+            };
+            
+            // Validate male comment
+            const maleValidation = validateSingleComment(comments.male, expectedData);
+            const femaleValidation = validateSingleComment(comments.female, expectedData);
+            
+            let resultsHTML = '<h3>Validation Results</h3>';
+            
+            // Male comment validation
+            resultsHTML += `<div class="validation-result ${maleValidation.isValid ? 'validation-success' : 'validation-error'}">
+                <h4>👨‍🏫 Male Comment Validation</h4>
+                <p><strong>Status:</strong> ${maleValidation.isValid ? '✅ PASS' : '❌ FAIL'}</p>
+                <p><strong>Found:</strong> ${maleValidation.found.join(', ') || 'None'}</p>
+                <p><strong>Missing:</strong> ${maleValidation.missing.join(', ') || 'None'}</p>
+            </div>`;
+            
+            // Female comment validation
+            resultsHTML += `<div class="validation-result ${femaleValidation.isValid ? 'validation-success' : 'validation-error'}">
+                <h4>👩‍🏫 Female Comment Validation</h4>
+                <p><strong>Status:</strong> ${femaleValidation.isValid ? '✅ PASS' : '❌ FAIL'}</p>
+                <p><strong>Found:</strong> ${femaleValidation.found.join(', ') || 'None'}</p>
+                <p><strong>Missing:</strong> ${femaleValidation.missing.join(', ') || 'None'}</p>
+            </div>`;
+            
+            // Overall validation
+            const overallValid = maleValidation.isValid && femaleValidation.isValid;
+            resultsHTML += `<div class="validation-result ${overallValid ? 'validation-success' : 'validation-error'}">
+                <h4>🎯 Overall Validation</h4>
+                <p><strong>Status:</strong> ${overallValid ? '✅ ALL USER DATA INCLUDED' : '❌ USER DATA MISSING'}</p>
+            </div>`;
+            
+            resultsDiv.innerHTML = resultsHTML;
+        }
+        
+        function validateSingleComment(comment, expectedData) {
+            const commentLower = comment.toLowerCase();
+            const result = {
+                isValid: true,
+                found: [],
+                missing: []
+            };
+            
+            // Check student name
+            if (commentLower.includes(expectedData.studentName.toLowerCase())) {
+                result.found.push('Student name');
+            } else {
+                result.missing.push('Student name');
+                result.isValid = false;
+            }
+            
+            // Check strengths
+            if (expectedData.strengths && expectedData.strengths.trim() !== '') {
+                const strengthWords = expectedData.strengths.toLowerCase().split(/[,\s]+/)
+                    .filter(word => word.length > 3);
+                
+                const strengthFound = strengthWords.some(word => commentLower.includes(word));
+                if (strengthFound) {
+                    result.found.push('Strengths');
+                } else {
+                    result.missing.push('Strengths');
+                    result.isValid = false;
+                }
+            }
+            
+            // Check weaknesses
+            if (expectedData.weaknesses && expectedData.weaknesses.trim() !== '') {
+                const weaknessWords = expectedData.weaknesses.toLowerCase().split(/[,\s]+/)
+                    .filter(word => word.length > 3);
+                
+                const weaknessFound = weaknessWords.some(word => commentLower.includes(word)) ||
+                    commentLower.includes('development') || commentLower.includes('improvement') ||
+                    commentLower.includes('practice') || commentLower.includes('support');
+                
+                if (weaknessFound) {
+                    result.found.push('Areas for improvement');
+                } else {
+                    result.missing.push('Areas for improvement');
+                    result.isValid = false;
+                }
+            }
+            
+            // Check subjects
+            if (Array.isArray(expectedData.subjects) && expectedData.subjects.length > 0) {
+                const subjectFound = expectedData.subjects.some(subject => 
+                    commentLower.includes(subject.toLowerCase())
+                );
+                
+                if (subjectFound) {
+                    result.found.push('Selected subjects');
+                } else {
+                    result.missing.push('Selected subjects');
+                    result.isValid = false;
+                }
+            }
+            
+            return result;
+        }
+        
+        // Auto-setup on page load
+        window.addEventListener('load', function() {
+            console.log('Fixed comment generation test page loaded.');
+        });
+    </script>
+</body>
+</html>

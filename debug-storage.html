@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Storage Debug</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        .debug-section { margin: 20px 0; padding: 15px; border: 1px solid #ccc; }
+        button { padding: 10px; margin: 5px; }
+        pre { background: #f5f5f5; padding: 10px; overflow: auto; }
+    </style>
+</head>
+<body>
+    <h1>LocalStorage Debug Tool</h1>
+    
+    <div class="debug-section">
+        <h3>Current Student Data</h3>
+        <pre id="currentData">Loading...</pre>
+        <button onclick="refreshData()">Refresh</button>
+        <button onclick="clearData()">Clear All</button>
+    </div>
+    
+    <div class="debug-section">
+        <h3>Test Save/Load</h3>
+        <input type="text" id="testName" placeholder="Enter test name" value="Test Student">
+        <select id="testGender">
+            <option value="">Select...</option>
+            <option value="he">He</option>
+            <option value="she">She</option>
+        </select>
+        <br><br>
+        <button onclick="testSave()">Test Save</button>
+        <button onclick="testLoad()">Test Load</button>
+        <div id="testResult"></div>
+    </div>
+
+    <script>
+        function refreshData() {
+            const data = localStorage.getItem('studentData');
+            const display = document.getElementById('currentData');
+            
+            if (data) {
+                try {
+                    const parsed = JSON.parse(data);
+                    display.textContent = JSON.stringify(parsed, null, 2);
+                } catch (e) {
+                    display.textContent = 'Error parsing data: ' + e.message + '\nRaw data: ' + data;
+                }
+            } else {
+                display.textContent = 'No student data found in localStorage';
+            }
+            
+            // Show all localStorage keys
+            const allKeys = Object.keys(localStorage);
+            display.textContent += '\n\nAll localStorage keys: ' + allKeys.join(', ');
+        }
+        
+        function clearData() {
+            localStorage.clear();
+            refreshData();
+            alert('All localStorage data cleared');
+        }
+        
+        function testSave() {
+            const testData = {
+                studentName: document.getElementById('testName').value,
+                gender: document.getElementById('testGender').value,
+                timestamp: Date.now()
+            };
+            
+            try {
+                localStorage.setItem('studentData', JSON.stringify(testData));
+                document.getElementById('testResult').innerHTML = '✅ Save successful';
+                refreshData();
+            } catch (e) {
+                document.getElementById('testResult').innerHTML = '❌ Save failed: ' + e.message;
+            }
+        }
+        
+        function testLoad() {
+            try {
+                const data = localStorage.getItem('studentData');
+                if (data) {
+                    const parsed = JSON.parse(data);
+                    document.getElementById('testName').value = parsed.studentName || '';
+                    document.getElementById('testGender').value = parsed.gender || '';
+                    document.getElementById('testResult').innerHTML = '✅ Load successful';
+                } else {
+                    document.getElementById('testResult').innerHTML = '❌ No data to load';
+                }
+            } catch (e) {
+                document.getElementById('testResult').innerHTML = '❌ Load failed: ' + e.message;
+            }
+        }
+        
+        // Auto-refresh on load
+        window.addEventListener('load', refreshData);
+    </script>
+</body>
+</html>

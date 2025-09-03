@@ -1,0 +1,31 @@
+{
+    "cSpell.words": [
+        "daygrid",
+        "conv",
+        "onclick",
+        "onchange",
+        "toggleSubject",
+        "handleSubjectCheck",
+        "innerHTML",
+        "textContent",
+        "getElementsByClassName",
+        "getElementById",
+        "querySelector",
+        "querySelectorAll",
+        "addEventListener",
+        "removeEventListener",
+        "localStorage",
+        "sessionStorage",
+        "classList",
+        "preventDefault",
+        "stopPropagation",
+        "phonics",
+        "strengths",
+        "weaknesses"
+    ],
+    "cSpell.ignoreWords": [
+        "conv1",
+        "conv3",
+        "thisp"
+    ]
+}

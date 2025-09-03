@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LocalStorage Test</title>
+</head>
+<body>
+    <h1>LocalStorage Test</h1>
+    <input type="text" id="testInput" placeholder="Enter test data">
+    <button onclick="saveTest()">Save</button>
+    <button onclick="loadTest()">Load</button>
+    <button onclick="clearTest()">Clear</button>
+    <div id="result"></div>
+
+    <script>
+        function saveTest() {
+            const input = document.getElementById('testInput');
+            const data = {
+                testValue: input.value,
+                timestamp: Date.now()
+            };
+            localStorage.setItem('testData', JSON.stringify(data));
+            document.getElementById('result').innerHTML = 'Saved: ' + input.value;
+        }
+
+        function loadTest() {
+            const saved = localStorage.getItem('testData');
+            if (saved) {
+                const data = JSON.parse(saved);
+                document.getElementById('testInput').value = data.testValue;
+                document.getElementById('result').innerHTML = 'Loaded: ' + data.testValue;
+            } else {
+                document.getElementById('result').innerHTML = 'No data found';
+            }
+        }
+
+        function clearTest() {
+            localStorage.removeItem('testData');
+            document.getElementById('testInput').value = '';
+            document.getElementById('result').innerHTML = 'Cleared';
+        }
+
+        // Auto-load on page load
+        window.addEventListener('load', loadTest);
+    </script>
+</body>
+</html>
