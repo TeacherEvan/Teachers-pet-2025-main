@@ -299,8 +299,17 @@ function enhancedEnsureCommentGeneration() {
     try {
         console.log('🚀 Starting enhanced comment generation...');
         
-        // Collect all form data
-        const studentData = JSON.parse(localStorage.getItem('studentData') || '{}');
+        // Collect all form data with robust retrieval and sessionStorage fallback
+        const safeParse = (val) => { try { return JSON.parse(val || '{}'); } catch { return {}; } };
+        let studentData = safeParse(localStorage.getItem('studentData'));
+        if (!studentData.studentName || !studentData.gender) {
+            const ssData = safeParse(sessionStorage.getItem('studentData'));
+            if (ssData.studentName && ssData.gender) {
+                console.warn('ℹ️ Restoring studentData from sessionStorage fallback (enhanced engine)');
+                studentData = ssData;
+                try { localStorage.setItem('studentData', JSON.stringify(ssData)); } catch {}
+            }
+        }
         const selectedSubjects = [];
         const topicRatings = {};
         
@@ -313,8 +322,9 @@ function enhancedEnsureCommentGeneration() {
             topicRatings[cb.value] = 5; // Default rating
         });
         
-        // Basic validation
+        // Basic validation with diagnostics
         if (!studentData.studentName || !studentData.gender) {
+            console.error('❌ Student data missing or incomplete (enhanced engine)', studentData);
             alert('Missing student information. Please go back and complete the student information form.');
             return;
         }

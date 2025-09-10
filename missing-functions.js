@@ -108,8 +108,23 @@ function ensureCommentGeneration() {
     try {
         console.log('🚀 Starting comment generation...');
         
-        // Collect all form data
-        const studentData = JSON.parse(localStorage.getItem('studentData') || '{}');
+        // Collect all form data with robust retrieval and diagnostics
+        const safeParse = (val) => {
+            try { return JSON.parse(val || '{}'); } catch { return {}; }
+        };
+
+        let studentData = safeParse(localStorage.getItem('studentData'));
+        // If required fields are missing, try to recover from sessionStorage (navigation fallback)
+        if (!studentData.studentName || !studentData.gender) {
+            const ssData = safeParse(sessionStorage.getItem('studentData'));
+            if (ssData.studentName && ssData.gender) {
+                console.warn('ℹ️ Restoring studentData from sessionStorage fallback');
+                studentData = ssData;
+                try { localStorage.setItem('studentData', JSON.stringify(ssData)); } catch {}
+            }
+        }
+
+        console.log('📦 Retrieved studentData:', studentData);
         const selectedSubjects = [];
         const topicRatings = {};
         
@@ -122,8 +137,13 @@ function ensureCommentGeneration() {
             topicRatings[cb.value] = 5; // Default rating
         });
         
-        // Validate required data
+        // Validate required data with clearer diagnostics
         if (!studentData.studentName || !studentData.gender) {
+            console.error('❌ Student data missing or incomplete', {
+                hasName: !!studentData.studentName,
+                hasGender: !!studentData.gender,
+                localStorageKeys: Object.keys(localStorage || {})
+            });
             alert('Missing student information. Please go back and complete the student information form.');
             return;
         }

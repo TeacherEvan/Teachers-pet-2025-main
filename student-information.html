@@ -671,8 +671,10 @@
                 console.log('Saving form data:', formData);
                 console.log('Student name being saved:', formData.studentName);
                 
-                // Save to localStorage with error handling
-                localStorage.setItem('studentData', JSON.stringify(formData));
+                // Save to localStorage and sessionStorage with error handling
+                const serialized = JSON.stringify(formData);
+                localStorage.setItem('studentData', serialized);
+                try { sessionStorage.setItem('studentData', serialized); } catch {}
                 
                 // Verify the data was saved correctly
                 const savedData = localStorage.getItem('studentData');
@@ -840,7 +842,12 @@
                 return;
             }
             
+            // Persist once more before navigation, including sessionStorage fallback
             saveFormData();
+            try {
+                const serialized = localStorage.getItem('studentData');
+                if (serialized) sessionStorage.setItem('studentData', serialized);
+            } catch {}
             window.location.href = 'Subjects.html';
         }
         
