@@ -21,11 +21,38 @@
         "stopPropagation",
         "phonics",
         "strengths",
-        "weaknesses"
+        "weaknesses",
+        "Noond",
+        "colour",
+        "Colour",
+        "handprint",
+        "jobcard",
+        "glassmorphism",
+        "Glassmorphism",
+        "punct",
+        "arches",
+        "hurdle",
+        "ladybug",
+        "toothpaste",
+        "popsicle",
+        "squirrel",
+        "caterpillar",
+        "bullfrog",
+        "coconut"
     ],
     "cSpell.ignoreWords": [
         "conv1",
         "conv3",
         "thisp"
-    ]
+    ],
+    "javascript.validate.enable": true,
+    "markdownlint.config": {
+        "MD024": false,
+        "MD040": false,
+        "MD022": false,
+        "MD032": false,
+        "MD009": false,
+        "MD031": false,
+        "MD026": false
+    }
 }

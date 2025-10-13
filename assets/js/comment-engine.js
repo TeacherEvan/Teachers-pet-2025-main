@@ -83,7 +83,7 @@ class PremiumCommentEngine {
         },
         she: {
           subject: "She",
-          subject_lower: "she", 
+          subject_lower: "she",
           object: "her",
           possessive: "her",
           possessive_cap: "Her",
@@ -106,11 +106,17 @@ class PremiumCommentEngine {
       subjectCapitalization: {
         english: "English",
         mathematics: "Mathematics",
-        phonics: "Phonics",
         science: "Science",
         "social studies": "Social Studies",
         "i.q": "I.Q",
         "physical education": "Physical Education",
+        cooking: "Cooking",
+        "conversation 1": "Conversation 1",
+        "conversation 2": "Conversation 2",
+        arts: "Arts",
+        "puppet show": "Puppet Show",
+        "super safari": "Super Safari",
+        "story time": "Story Time",
       },
     };
 
@@ -226,7 +232,7 @@ class PremiumCommentEngine {
 
       // Process the session data
       const processedData = this.processSessionData(sessionData);
-      
+
       // Generate both comment styles
       const maleComment = this.generateStyleComment('male', processedData);
       const femaleComment = this.generateStyleComment('female', processedData);
@@ -251,7 +257,7 @@ class PremiumCommentEngine {
   processSessionData(sessionData) {
     const performance = this.performanceMap[sessionData.overallRating] || this.performanceMap[5];
     const pronouns = this.grammarRules.pronouns[sessionData.gender.toLowerCase()] || this.grammarRules.pronouns.they;
-    
+
     // Process subjects and topics
     const subjects = this.capitalizeSubjects(sessionData.subjects || []);
     const topicRatings = sessionData.topicRatings || {};
