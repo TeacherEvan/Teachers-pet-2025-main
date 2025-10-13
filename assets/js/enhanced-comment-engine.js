@@ -11,16 +11,16 @@
 class EnhancedCommentEngine {
     constructor() {
         this.performanceMap = {
-            10: { level: "exceptional", descriptor: "outstanding", verb: "excelled" },
-            9: { level: "excellent", descriptor: "impressive", verb: "demonstrated excellence" },
-            8: { level: "very strong", descriptor: "commendable", verb: "performed admirably" },
-            7: { level: "strong", descriptor: "noteworthy", verb: "achieved well" },
-            6: { level: "good", descriptor: "positive", verb: "progressed steadily" },
-            5: { level: "satisfactory", descriptor: "appropriate", verb: "developed consistently" },
-            4: { level: "developing", descriptor: "emerging", verb: "showed growth" },
-            3: { level: "basic", descriptor: "foundational", verb: "made progress" },
-            2: { level: "beginning", descriptor: "initial", verb: "began developing" },
-            1: { level: "emerging", descriptor: "starting", verb: "explored" }
+            10: { level: "exceptional", descriptor: "outstanding and exemplary", verb: "excelled magnificently", adverb: "remarkably" },
+            9: { level: "excellent", descriptor: "impressive and sophisticated", verb: "demonstrated exceptional excellence", adverb: "consistently" },
+            8: { level: "very strong", descriptor: "commendable and proficient", verb: "performed admirably", adverb: "skillfully" },
+            7: { level: "strong", descriptor: "noteworthy and capable", verb: "achieved well", adverb: "effectively" },
+            6: { level: "good", descriptor: "positive and encouraging", verb: "progressed steadily", adverb: "confidently" },
+            5: { level: "satisfactory", descriptor: "appropriate and developing", verb: "developed consistently", adverb: "reliably" },
+            4: { level: "developing", descriptor: "emerging and growing", verb: "showed promising growth", adverb: "steadily" },
+            3: { level: "basic", descriptor: "foundational and budding", verb: "made valuable progress", adverb: "gradually" },
+            2: { level: "beginning", descriptor: "initial and exploratory", verb: "began developing", adverb: "eagerly" },
+            1: { level: "emerging", descriptor: "starting and discovering", verb: "explored enthusiastically", adverb: "curiously" }
         };
 
         this.grammarRules = {
@@ -218,13 +218,15 @@ class EnhancedCommentEngine {
      */
     generateOpening(data, isMale) {
         const templates = isMale ? [
-            `${data.name} demonstrated ${data.level} performance this term, achieving consistent progress across multiple developmental areas.`,
-            `${data.name} has shown ${data.level} academic development throughout this period, displaying structured engagement with learning objectives.`,
-            `${data.name} ${data.verb} this term, establishing strong foundational competencies in essential educational areas.`
+            `${data.name} demonstrated ${data.level} performance this term, achieving consistent and ${data.descriptor} progress across multiple developmental areas.`,
+            `${data.name} has shown ${data.level} academic development throughout this period, displaying structured and ${data.descriptor} engagement with learning objectives.`,
+            `${data.name} ${data.verb} this term, establishing strong foundational competencies and ${data.descriptor} mastery in essential educational areas.`,
+            `Throughout this term, ${data.name} exhibited ${data.level} performance, demonstrating ${data.descriptor} growth in key developmental domains.`
         ] : [
-            `${data.name} has had a wonderful term, bringing great energy and enthusiasm to our classroom community.`,
-            `It has been a pleasure watching ${data.name} grow and develop, making ${data.level} progress on this learning journey.`,
-            `${data.name} has developed into a confident learner, embracing each day with curiosity and ${data.level} engagement.`
+            `${data.name} has had a wonderful and enriching term, bringing great energy and enthusiastic participation to our classroom community.`,
+            `It has been a pleasure watching ${data.name} grow and develop ${data.adverb}, making ${data.level} progress on this delightful learning journey.`,
+            `${data.name} has developed into a confident and capable learner, embracing each day with curiosity and ${data.level} engagement.`,
+            `What a joy to see ${data.name} blossom this term, showing ${data.level} development with such ${data.descriptor} enthusiasm.`
         ];
 
         return this.selectRandom(templates);
@@ -237,13 +239,15 @@ class EnhancedCommentEngine {
         const strengthsList = this.naturalJoin(data.strengths);
 
         const templates = isMale ? [
-            `${data.pronoun_subject} consistently demonstrates strong capabilities in ${strengthsList}, achieving measurable proficiency.`,
-            `Notable strengths include ${data.pronoun_possessive} abilities in ${strengthsList}, reflecting sustained achievement.`,
-            `${data.name} excels particularly in ${strengthsList}, displaying consistent performance excellence.`
+            `${data.pronoun_subject} consistently demonstrates strong and versatile capabilities in ${strengthsList}, achieving measurable proficiency ${data.adverb}.`,
+            `Notable strengths include ${data.pronoun_possessive} ${data.descriptor} abilities in ${strengthsList}, reflecting sustained achievement and dedication.`,
+            `${data.name} excels particularly in ${strengthsList}, displaying consistent performance excellence and remarkable aptitude.`,
+            `${data.pronoun_possessive_cap} proficiency in ${strengthsList} is ${data.descriptor}, demonstrating exceptional competence throughout this term.`
         ] : [
-            `${data.pronoun_possessive_cap} admirable talents in ${strengthsList} are a joy to see and inspire others.`,
-            `We celebrate ${data.pronoun_possessive} wonderful gifts in ${strengthsList}, which are developing each day.`,
-            `${data.name} brings a lovely energy to the room through ${data.pronoun_possessive} exceptional abilities in ${strengthsList}.`
+            `${data.pronoun_possessive_cap} admirable and versatile talents in ${strengthsList} are a joy to see and inspire others beautifully.`,
+            `We celebrate ${data.pronoun_possessive} wonderful and blossoming gifts in ${strengthsList}, which are developing delightfully each day.`,
+            `${data.name} brings a lovely energy to the room through ${data.pronoun_possessive} exceptional and heartwarming abilities in ${strengthsList}.`,
+            `It's wonderful to see ${data.pronoun_possessive} natural strengths shine through in ${strengthsList}, bringing such ${data.descriptor} contribution to our class.`
         ];
 
         return this.selectRandom(templates);
@@ -273,16 +277,18 @@ class EnhancedCommentEngine {
 
             if (isMale) {
                 const templates = [
-                    `In ${subject}, ${data.pronoun_subject_lower} showed solid progress with ${topicsText}.`,
-                    `${data.name} demonstrated competency in ${subject}, particularly with ${topicsText}.`,
-                    `${data.pronoun_possessive_cap} work in ${subject} was ${data.descriptor}, especially in ${topicsText}.`
+                    `In ${subject}, ${data.pronoun_subject_lower} showed ${data.descriptor} progress with ${topicsText}, demonstrating proficient understanding.`,
+                    `${data.name} demonstrated ${data.level} competency in ${subject}, particularly excelling with ${topicsText}.`,
+                    `${data.pronoun_possessive_cap} work in ${subject} was ${data.descriptor}, especially notable in ${topicsText}.`,
+                    `${data.pronoun_subject} achieved ${data.level} results in ${subject}, displaying skillful engagement with ${topicsText}.`
                 ];
                 parts.push(this.selectRandom(templates));
             } else {
                 const templates = [
-                    `In ${subject}, ${data.pronoun_subject_lower} delighted us with ${topicsText}.`,
-                    `${data.name} showed wonderful enthusiasm in ${subject}, particularly enjoying ${topicsText}.`,
-                    `${data.pronoun_possessive_cap} progress in ${subject} was lovely to see, especially with ${topicsText}.`
+                    `In ${subject}, ${data.pronoun_subject_lower} delighted us with ${data.descriptor} enthusiasm for ${topicsText}.`,
+                    `${data.name} showed wonderful and heartwarming engagement in ${subject}, particularly enjoying ${topicsText}.`,
+                    `${data.pronoun_possessive_cap} progress in ${subject} was lovely to see, especially with the joyful exploration of ${topicsText}.`,
+                    `What a pleasure to watch ${data.pronoun_object} flourish in ${subject}, bringing such vibrant energy to ${topicsText}.`
                 ];
                 parts.push(this.selectRandom(templates));
             }
@@ -304,9 +310,9 @@ class EnhancedCommentEngine {
         if (remainingSubjects.length > 0) {
             const subjectsList = this.naturalJoin(remainingSubjects);
             if (isMale) {
-                parts.push(`${data.pronoun_subject} also made consistent progress in ${subjectsList}.`);
+                parts.push(`${data.pronoun_subject} also made consistent and ${data.descriptor} progress in ${subjectsList}, demonstrating versatile aptitude.`);
             } else {
-                parts.push(`${data.pronoun_subject} also flourished in ${subjectsList}.`);
+                parts.push(`${data.pronoun_subject} also flourished beautifully in ${subjectsList}, bringing delightful energy to each activity.`);
             }
         }
 
@@ -315,9 +321,9 @@ class EnhancedCommentEngine {
             console.warn('⚠️ No subject parts generated, adding fallback');
             const allSubjectsList = this.naturalJoin(data.subjects);
             if (isMale) {
-                parts.push(`${data.name} made progress across ${allSubjectsList}.`);
+                parts.push(`${data.name} made ${data.descriptor} progress across ${allSubjectsList}, showing versatile development.`);
             } else {
-                parts.push(`${data.name} showed growth in ${allSubjectsList}.`);
+                parts.push(`${data.name} showed wonderful and blossoming growth in ${allSubjectsList}, embracing each learning opportunity.`);
             }
         }
 
@@ -333,13 +339,15 @@ class EnhancedCommentEngine {
         const weaknessesList = this.naturalJoin(data.weaknesses);
 
         const templates = isMale ? [
-            `With continued practice in ${weaknessesList}, ${data.name} will further strengthen foundational skills.`,
-            `Areas for development include ${weaknessesList}, where additional support will foster growth.`,
-            `Ongoing focus on ${weaknessesList} will help build greater mastery and confidence.`
+            `With continued practice and focused attention in ${weaknessesList}, ${data.name} will further strengthen foundational skills and achieve greater mastery.`,
+            `Areas for development include ${weaknessesList}, where additional support and structured guidance will foster meaningful growth.`,
+            `Ongoing focus on ${weaknessesList} will help build greater confidence, mastery, and proficiency in these essential areas.`,
+            `${data.pronoun_subject} would benefit from enhanced practice in ${weaknessesList} to develop more robust capabilities.`
         ] : [
-            `With gentle encouragement in ${weaknessesList}, ${data.name} will continue to develop with confidence.`,
-            `Through nurturing support in ${weaknessesList}, ${data.pronoun_subject_lower} will discover ${data.pronoun_possessive} full potential.`,
-            `Areas where ${data.name} will benefit from caring guidance include ${weaknessesList}.`
+            `With gentle encouragement and nurturing support in ${weaknessesList}, ${data.name} will continue to develop with growing confidence.`,
+            `Through caring guidance in ${weaknessesList}, ${data.pronoun_subject_lower} will discover ${data.pronoun_possessive} full potential and blossom beautifully.`,
+            `Areas where ${data.name} will benefit from loving guidance include ${weaknessesList}, where ${data.pronoun_subject_lower} will flourish with support.`,
+            `With patient encouragement in ${weaknessesList}, ${data.pronoun_subject_lower} will grow in confidence and capability.`
         ];
 
         return this.selectRandom(templates);
@@ -350,13 +358,15 @@ class EnhancedCommentEngine {
      */
     generateConclusion(data, isMale) {
         const templates = isMale ? [
-            `${data.name} is well-prepared for continued advancement and demonstrates excellent potential for future success.`,
-            `With ongoing support, ${data.name} will continue to thrive academically and achieve learning goals.`,
-            `${data.name} shows strong readiness for new challenges and continued educational growth.`
+            `${data.name} is well-prepared for continued advancement and demonstrates excellent potential for sustained future success.`,
+            `With ongoing support and structured guidance, ${data.name} will continue to thrive academically and achieve ambitious learning goals.`,
+            `${data.name} shows strong readiness for new challenges and demonstrates promising capability for continued educational growth.`,
+            `${data.pronoun_subject} has established a solid foundation for future learning and exhibits exceptional promise for academic achievement.`
         ] : [
-            `${data.name} is ready for new adventures and shows great potential for continued success.`,
-            `With nurturing guidance, ${data.name} will continue to flourish and grow in all areas.`,
-            `${data.name} brings such joy to learning and is well-prepared for future growth.`
+            `${data.name} is ready for new adventures and shows such great potential for continued success and joyful learning.`,
+            `With nurturing guidance, ${data.name} will continue to flourish beautifully and grow in all developmental areas.`,
+            `${data.name} brings such joy and vibrant energy to learning and is wonderfully prepared for future growth.`,
+            `What a delight to watch ${data.pronoun_object} grow—${data.name} is ready to embrace new challenges with enthusiasm and confidence.`
         ];
 
         return this.selectRandom(templates);
