@@ -239,17 +239,16 @@ class EnhancedCommentEngine {
 
     /**
      * Generate subject-specific section mentioning TOPICS
+     * UPDATED: Mention ALL subjects, not just 3
      */
     generateSubjectSection(data, isMale) {
         const parts = [];
-        const maxSubjectsToDetail = 3; // Detail 3 subjects with topics
         const subjectsWithTopics = Object.entries(data.topicsBySubject)
-            .filter(([subject, topics]) => topics.length > 0)
-            .slice(0, maxSubjectsToDetail);
+            .filter(([subject, topics]) => topics.length > 0);
 
-        // Detailed subject mentions with topics
+        // Detailed subject mentions with topics - mention ALL subjects with topics
         subjectsWithTopics.forEach(([subject, topics], index) => {
-            const topicSample = topics.slice(0, 2); // Mention up to 2 topics per subject
+            const topicSample = topics.slice(0, 3); // Mention up to 3 topics per subject
             const topicsText = this.naturalJoin(topicSample);
 
             if (isMale) {
@@ -269,10 +268,9 @@ class EnhancedCommentEngine {
             }
         });
 
-        // Mention remaining subjects without detailed topics
+        // Mention remaining subjects (those without specific topics selected)
         const remainingSubjects = data.subjects
-            .filter(subj => !subjectsWithTopics.find(([s]) => s === subj))
-            .slice(0, 3);
+            .filter(subj => !subjectsWithTopics.find(([s]) => s === subj));
 
         if (remainingSubjects.length > 0) {
             const subjectsList = this.naturalJoin(remainingSubjects);

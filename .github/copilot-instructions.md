@@ -30,25 +30,36 @@ index.html (launcher) → student-information.html → Subjects.html (generates 
   - `getCurrentPage()` determines context (launcher/student-info/subjects)
   - `sessionData` object: `{studentName, gender, overallRating, strengths, weaknesses, subjects[], topicRatings{}}`
   
-- **`PremiumCommentEngine`** (`assets/js/comment-engine.js`): AI comment generation
-  - Dual teacher personas: `male` (formal/structured) vs `female` (warm/nurturing)
+- **`EnhancedCommentEngine`** (`assets/js/enhanced-comment-engine.js`): **CURRENT** AI comment generator (Oct 2025)
+  - Replaces `PremiumCommentEngine` - ensures ALL user selections mentioned in comments
+  - Subject-topic grouping: Intelligently maps topics to parent subjects (e.g., "finger painting" → Arts)
+  - Comprehensive coverage: Details 3 subjects WITH specific activities + lists remaining subjects
+  - ALL strengths/weaknesses mentioned (up to 5 each)
+  - Dual teacher personas preserved: `male` (formal/structured) vs `female` (warm/nurturing)
+  - See `COMMENT-INTEGRATION-SUMMARY.md` for implementation details
+  
+- **`PremiumCommentEngine`** (`assets/js/comment-engine.js`): Legacy comment generator
   - Performance mapping: 1-10 ratings → descriptive language levels
   - Grammar rules: Pronoun conjugation system (he/she/they)
   - Template-based generation with natural language joining
+  - ⚠️ Known limitation: Only mentions 2-3 subjects, doesn't integrate specific topics
 
 ## Comment Generation System
 
-### Key Algorithm Details
+### Key Algorithm Details (EnhancedCommentEngine)
 - **Target**: Exactly 100-word comments
 - **Input Integration**: Name, gender, strengths, weaknesses, overall rating (1-10), subjects, topic ratings
 - **Dual Output**: Generates both male and female teacher style simultaneously
-- **Structure**: Opening → Strengths → Subjects → Topics → Weaknesses → Behavior → Social → Conclusion
+- **Structure**: Opening → Strengths (all) → Detailed Subjects (3) → Remaining Subjects (list) → Weaknesses (all) → Conclusion
 - **Grammar**: Dynamic pronoun substitution with proper conjugation (see `grammarRules.pronouns`)
+- **Topic Grouping**: Uses `subjectTopicMap` to intelligently group topics under parent subjects
+  - Example: ["finger painting", "ladybug"] in Arts → "In Arts, she delighted us with finger painting and ladybug"
 
 ### Critical Rules (from `RULES.mdc`)
 - AI comments **MUST start with student's name**
 - AI comments **MUST end with positive/encouraging note**
-- **SHOULD incorporate specific subject performance data**
+- AI comments **MUST incorporate ALL selected subjects**
+- AI comments **SHOULD mention specific topic activities** (e.g., "Harry frog", "counting 1-10")
 
 ### Performance Map Example
 ```javascript
@@ -85,19 +96,39 @@ index.html (launcher) → student-information.html → Subjects.html (generates 
 - `assets/css/main.css`: Core design system, variables, glassmorphism
 - `assets/css/components.css`: Reusable UI components
 - `assets/js/app.js`: Application controller, form validation, navigation
-- `assets/js/comment-engine.js`: Comment generation engine
-  - Update `subjectCapitalization` object when adding new subjects
+- `assets/js/enhanced-comment-engine.js`: **PRIMARY** comment generator engine
+- `enhanced-comment-engine.js`: **ROOT COPY** - MUST stay synchronized with assets/js version
+  - ⚠️ CRITICAL: Both files must be identical (root loads after assets, overwrites window.EnhancedCommentEngine)
+  - Use `Copy-Item` PowerShell command to sync after editing assets version
+- `assets/js/comment-engine.js`: Legacy PremiumCommentEngine (maintained for reference)
+  - Update `subjectCapitalization` object when adding new subjects in ALL engines
 
 ### Reference Documents
 - `curriculum-data.md`: Current kindergarten curriculum with all marking points (Oct 2025)
+- `COMMENT-INTEGRATION-SUMMARY.md`: Detailed explanation of enhanced comment engine improvements
+- `BEFORE-AFTER-COMPARISON.md`: Real examples comparing old vs new comment output
 - `curriculum-update-plan.md`: Implementation plan for curriculum changes
+- `CURRICULUM-UPDATE-SUMMARY.md`: Completed curriculum migration notes
 
 ### Debug/Test Files
 - `test-*.html`: Testing harnesses (localStorage, comments, etc.)
 - `debug-*.html`: Debugging tools
 - `*-monitor.js`: Development utilities
+- `test-fixed-comments.html`: **Primary test harness** for comment engine validation
+  - Contains realistic and minimal data scenarios
+  - Tests both engines side-by-side
+  - Use this to verify comment generation changes
 
-## Common Workflows
+### Common Workflows
+
+### Editing Enhanced Comment Engine
+1. **ALWAYS edit** `assets/js/enhanced-comment-engine.js` (PRIMARY source)
+2. **IMMEDIATELY sync** to root using PowerShell:
+   ```powershell
+   Copy-Item "assets/js/enhanced-comment-engine.js" "enhanced-comment-engine.js" -Force
+   ```
+3. **Test with** `test-fixed-comments.html` to verify changes
+4. **Update jobcard.md** with changes made
 
 ### Adding New Features
 1. **Get user approval** (check RULES.mdc violations)
