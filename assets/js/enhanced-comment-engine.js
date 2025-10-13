@@ -92,11 +92,16 @@ class EnhancedCommentEngine {
      * Process and structure session data for comment generation
      */
     processSessionData(sessionData) {
+        console.log('🔍 Processing session data:', sessionData);
+        console.log('📊 sessionData.subjects:', sessionData.subjects);
+        console.log('📊 sessionData.topicRatings:', sessionData.topicRatings);
+
         const performance = this.performanceMap[sessionData.overallRating] || this.performanceMap[5];
         const pronouns = this.grammarRules.pronouns[sessionData.gender.toLowerCase()] || this.grammarRules.pronouns.they;
 
         // Group topics by their parent subjects
         const topicsBySubject = this.groupTopicsBySubject(sessionData.subjects || [], sessionData.topicRatings || {});
+        console.log('📦 Topics grouped by subject:', topicsBySubject);
 
         return {
             name: sessionData.studentName.trim(),

@@ -1,5 +1,46 @@
 # Job Card - Kindergarten Report Generator
 
+## Session: October 13, 2025 (Evening - Part 2) - SUBJECTS STILL NOT APPEARING 🔍
+
+### 🎯 USER REPORT
+- **Problem**: After previous fix, subjects STILL not appearing in final comments
+- **Example**: Selected I.Q and Science with topics, but comments only mention strengths/weaknesses
+- **No subject references**: "creative thinking, good listening skills, refining motor skills" but NO "I.Q" or "Science"
+- **Status**: 🔧 DEBUGGING IN PROGRESS
+
+### 🔍 DIAGNOSTIC STEPS ADDED
+
+#### 1. **Enhanced Logging in `missing-functions.js`**
+Added comprehensive console logging to track:
+- Total subject checkboxes found vs checked
+- Actual values being collected from checkboxes
+- Total topic checkboxes found vs checked
+- Topic ratings object structure
+
+#### 2. **Enhanced Logging in `enhanced-comment-engine.js`**
+Added logging to track:
+- Incoming sessionData structure
+- subjects array content
+- topicRatings object content
+- Topics grouped by subject result
+
+### 📋 DEBUGGING CHECKLIST
+- [ ] Check browser console for logged data
+- [ ] Verify selectedSubjects array has values
+- [ ] Verify topicRatings object has entries
+- [ ] Confirm data reaches EnhancedCommentEngine
+- [ ] Confirm groupTopicsBySubject returns valid mapping
+- [ ] Verify generateSubjectSection is being called
+- [ ] Check if parts array is empty
+
+### 🔧 NEXT STEPS
+1. User refreshes page and tests
+2. Check browser console (F12) for debug logs
+3. Share console output to diagnose where data is lost
+4. Fix identified issue based on logs
+
+---
+
 ## Session: October 13, 2025 (Evening) - CRITICAL FIX: Comment Engine Not Working ✅
 
 ### 🎯 ISSUE REPORTED BY USER
