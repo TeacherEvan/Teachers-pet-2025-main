@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Topic-Only Selection - Teachers Pet</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: #666;
+            margin-bottom: 30px;
+        }
+
+        .test-section {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-left: 4px solid #667eea;
+        }
+
+        .test-title {
+            font-size: 18px;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .test-description {
+            color: #666;
+            margin-bottom: 15px;
+            font-size: 14px;
+        }
+
+        .test-data {
+            background: white;
+            padding: 15px;
+            border-radius: 6px;
+            margin-bottom: 15px;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+        }
+
+        .test-data strong {
+            color: #667eea;
+        }
+
+        button {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: 600;
+            margin-right: 10px;
+            margin-bottom: 10px;
+            transition: all 0.3s ease;
+        }
+
+        button:hover {
+            background: #5568d3;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+        }
+
+        .result {
+            background: white;
+            padding: 20px;
+            border-radius: 6px;
+            margin-top: 15px;
+            display: none;
+        }
+
+        .result.show {
+            display: block;
+        }
+
+        .result h3 {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 16px;
+        }
+
+        .comment-box {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 6px;
+            margin: 10px 0;
+            line-height: 1.6;
+            border-left: 3px solid #667eea;
+        }
+
+        .male-comment {
+            border-left-color: #4299e1;
+        }
+
+        .female-comment {
+            border-left-color: #ed64a6;
+        }
+
+        .validation {
+            padding: 15px;
+            border-radius: 6px;
+            margin: 10px 0;
+        }
+
+        .validation.success {
+            background: #d4edda;
+            border: 1px solid #c3e6cb;
+            color: #155724;
+        }
+
+        .validation.error {
+            background: #f8d7da;
+            border: 1px solid #f5c6cb;
+            color: #721c24;
+        }
+
+        .validation.warning {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            color: #856404;
+        }
+
+        .word-count {
+            font-size: 13px;
+            color: #666;
+            font-style: italic;
+        }
+
+        .inferred-subjects {
+            background: #e7f3ff;
+            padding: 10px;
+            border-radius: 6px;
+            margin: 10px 0;
+            border-left: 3px solid #4299e1;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🧪 Topic-Only Selection Test</h1>
+        <p class="subtitle">Testing comment generation when users select only topics without checking parent subject checkbox</p>
+
+        <!-- Test 1: Only topics selected, no subject checkboxes -->
+        <div class="test-section">
+            <div class="test-title">Test 1: Topic-Only Selection (Core Bug Fix)</div>
+            <div class="test-description">
+                User checks only "counting from 1 to 10" under Mathematics without checking the Mathematics subject checkbox itself.
+                <br><strong>Expected:</strong> Comment should mention "In Mathematics, counting from 1 to 10..."
+            </div>
+            <div class="test-data">
+                <strong>Student:</strong> Johnny (male)<br>
+                <strong>Rating:</strong> 7/10<br>
+                <strong>Strengths:</strong> creative thinking, problem solving<br>
+                <strong>Weaknesses:</strong> fine motor skills<br>
+                <strong>Selected Subjects:</strong> None (empty array)<br>
+                <strong>Selected Topics:</strong> "counting from 1 to 10"
+            </div>
+            <button onclick="runTest1()">🚀 Run Test 1</button>
+            <div id="result1" class="result"></div>
+        </div>
+
+        <!-- Test 2: Multiple topics from different subjects, no subject checkboxes -->
+        <div class="test-section">
+            <div class="test-title">Test 2: Multiple Topics from Different Subjects</div>
+            <div class="test-description">
+                User checks topics from Mathematics, I.Q, and Arts without checking any subject checkboxes.
+                <br><strong>Expected:</strong> All three subjects should be mentioned with their respective topics.
+            </div>
+            <div class="test-data">
+                <strong>Student:</strong> Sarah (female)<br>
+                <strong>Rating:</strong> 8/10<br>
+                <strong>Strengths:</strong> good listening, helpful attitude<br>
+                <strong>Weaknesses:</strong> concentration<br>
+                <strong>Selected Subjects:</strong> None (empty array)<br>
+                <strong>Selected Topics:</strong> "counting from 1 to 10", "color pictures that are the same", "finger painting"
+            </div>
+            <button onclick="runTest2()">🚀 Run Test 2</button>
+            <div id="result2" class="result"></div>
+        </div>
+
+        <!-- Test 3: Mix of subject checkboxes and topic-only selections -->
+        <div class="test-section">
+            <div class="test-title">Test 3: Mixed Selection (Subject + Topic-Only)</div>
+            <div class="test-description">
+                User checks "English" subject checkbox AND selects only topics from Mathematics (without checking Math checkbox).
+                <br><strong>Expected:</strong> Both English and Mathematics should appear in comments.
+            </div>
+            <div class="test-data">
+                <strong>Student:</strong> Alex (they)<br>
+                <strong>Rating:</strong> 6/10<br>
+                <strong>Strengths:</strong> enthusiasm, participation<br>
+                <strong>Weaknesses:</strong> following instructions<br>
+                <strong>Selected Subjects:</strong> English<br>
+                <strong>Selected Topics:</strong> "trace letters starting from the dot", "counting from 1 to 10", "mark picture with correct amount"
+            </div>
+            <button onclick="runTest3()">🚀 Run Test 3</button>
+            <div id="result3" class="result"></div>
+        </div>
+
+        <!-- Test 4: All subject checkboxes checked with some topics -->
+        <div class="test-section">
+            <div class="test-title">Test 4: Traditional Selection (Subjects Checked)</div>
+            <div class="test-description">
+                User checks Mathematics and Science subject checkboxes with specific topics.
+                <br><strong>Expected:</strong> Traditional behavior - all subjects and topics mentioned.
+            </div>
+            <div class="test-data">
+                <strong>Student:</strong> Emma (female)<br>
+                <strong>Rating:</strong> 9/10<br>
+                <strong>Strengths:</strong> excellent effort, creative solutions<br>
+                <strong>Weaknesses:</strong> needs confidence building<br>
+                <strong>Selected Subjects:</strong> Mathematics, Science<br>
+                <strong>Selected Topics:</strong> "counting from 1 to 10", "Magnet experiment"
+            </div>
+            <button onclick="runTest4()">🚀 Run Test 4</button>
+            <div id="result4" class="result"></div>
+        </div>
+
+        <button onclick="runAllTests()" style="background: #28a745; font-size: 16px; padding: 12px 30px;">
+            🎯 Run All Tests
+        </button>
+    </div>
+
+    <!-- Load comment engines -->
+    <script src="assets/js/enhanced-comment-engine.js"></script>
+    <script src="enhanced-comment-engine.js"></script>
+
+    <script>
+        // Helper function to infer subjects from topics (same as in missing-functions.js)
+        function inferSubjectsFromTopics(topicRatings, selectedSubjects) {
+            const topicToSubjectMap = {
+                "English": ["draw lines", "trace", "match", "circle", "letter"],
+                "Mathematics": ["count", "number", "match", "trace", "dotted"],
+                "I.Q": ["color", "same", "fatter", "taller", "hot", "cold", "shape"],
+                "Social Studies": ["identify", "animal", "sounds", "habits", "hygiene", "gestures"],
+                "Science": ["tissue", "lava", "magnet", "volcano", "experiment"],
+                "Cooking": ["look chop", "sugar", "bean", "salt", "coconut"],
+                "Conversation 1": ["pet", "feel", "lunch", "want to be", "like to go"],
+                "Conversation 2": ["drink", "going", "school"],
+                "Arts": ["finger painting", "ladybug", "play dough", "sponge", "origami"],
+                "Physical Education": ["football", "balance", "ball", "ring", "jump", "zigzag", "hurdle"],
+                "Puppet Show": ["noond", "vegetables", "panicked rabbit"],
+                "Super Safari": ["listen", "colour", "numbers", "circle", "pets", "food", "maze", "train", "mask"],
+                "Story Time": ["harry frog", "bird", "lovely animals", "ox and the frog"]
+            };
+
+            const topicList = Object.keys(topicRatings);
+            const inferredSubjects = [];
+
+            topicList.forEach(topic => {
+                const topicLower = topic.toLowerCase();
+                
+                for (const [subject, keywords] of Object.entries(topicToSubjectMap)) {
+                    if (keywords.some(keyword => topicLower.includes(keyword.toLowerCase()))) {
+                        if (!selectedSubjects.some(s => s.toLowerCase() === subject.toLowerCase()) &&
+                            !inferredSubjects.includes(subject)) {
+                            inferredSubjects.push(subject);
+                        }
+                        break;
+                    }
+                }
+
+                // Try direct subject name matching
+                for (const subject of Object.keys(topicToSubjectMap)) {
+                    if (topicLower.includes(subject.toLowerCase())) {
+                        if (!selectedSubjects.some(s => s.toLowerCase() === subject.toLowerCase()) &&
+                            !inferredSubjects.includes(subject)) {
+                            inferredSubjects.push(subject);
+                        }
+                        break;
+                    }
+                }
+            });
+
+            return inferredSubjects;
+        }
+
+        function validateSubjectsInComments(comments, expectedSubjects) {
+            const maleComment = comments.male.toLowerCase();
+            const femaleComment = comments.female.toLowerCase();
+            const missing = [];
+
+            expectedSubjects.forEach(subject => {
+                const subjectLower = subject.toLowerCase();
+                const inMale = maleComment.includes(subjectLower);
+                const inFemale = femaleComment.includes(subjectLower);
+
+                if (!inMale || !inFemale) {
+                    missing.push({
+                        subject: subject,
+                        inMale: inMale,
+                        inFemale: inFemale
+                    });
+                }
+            });
+
+            return missing;
+        }
+
+        function displayResults(testNum, comments, sessionData, inferredSubjects) {
+            const resultDiv = document.getElementById('result' + testNum);
+            let html = '';
+
+            // Show inferred subjects if any
+            if (inferredSubjects.length > 0) {
+                html += `<div class="inferred-subjects">
+                    <strong>✅ Inferred Subjects:</strong> ${inferredSubjects.join(', ')}<br>
+                    <small>These subjects were automatically detected from selected topics</small>
+                </div>`;
+            }
+
+            // Display comments
+            html += '<h3>Generated Comments:</h3>';
+            
+            html += `<div class="comment-box male-comment">
+                <strong>👨‍🏫 Male Teacher Style:</strong><br>
+                ${comments.male}<br>
+                <span class="word-count">${comments.wordCount.male} words</span>
+            </div>`;
+
+            html += `<div class="comment-box female-comment">
+                <strong>👩‍🏫 Female Teacher Style:</strong><br>
+                ${comments.female}<br>
+                <span class="word-count">${comments.wordCount.female} words</span>
+            </div>`;
+
+            // Validate subjects appear in comments
+            const allSubjects = [...sessionData.subjects];
+            const missing = validateSubjectsInComments(comments, allSubjects);
+
+            if (missing.length === 0) {
+                html += `<div class="validation success">
+                    <strong>✅ VALIDATION PASSED</strong><br>
+                    All expected subjects (${allSubjects.join(', ')}) appear in both comments.
+                </div>`;
+            } else {
+                html += `<div class="validation error">
+                    <strong>❌ VALIDATION FAILED</strong><br>
+                    Missing subjects: ${missing.map(m => 
+                        `${m.subject} (Male: ${m.inMale ? '✓' : '✗'}, Female: ${m.inFemale ? '✓' : '✗'})`
+                    ).join(', ')}
+                </div>`;
+            }
+
+            resultDiv.innerHTML = html;
+            resultDiv.classList.add('show');
+        }
+
+        function runTest1() {
+            console.log('🧪 Running Test 1...');
+            
+            const selectedSubjects = [];
+            const topicRatings = {
+                'counting from 1 to 10': 5
+            };
+
+            // Infer subjects from topics
+            const inferredSubjects = inferSubjectsFromTopics(topicRatings, selectedSubjects);
+            inferredSubjects.forEach(s => selectedSubjects.push(s));
+
+            const sessionData = {
+                studentName: 'Johnny',
+                gender: 'male',
+                overallRating: 7,
+                strengths: 'creative thinking, problem solving',
+                weaknesses: 'fine motor skills',
+                subjects: selectedSubjects,
+                topicRatings: topicRatings
+            };
+
+            const engine = new EnhancedCommentEngine();
+            const comments = engine.generateComments(sessionData);
+            displayResults(1, comments, sessionData, inferredSubjects);
+        }
+
+        function runTest2() {
+            console.log('🧪 Running Test 2...');
+            
+            const selectedSubjects = [];
+            const topicRatings = {
+                'counting from 1 to 10': 5,
+                'color pictures that are the same': 5,
+                'finger painting': 5
+            };
+
+            const inferredSubjects = inferSubjectsFromTopics(topicRatings, selectedSubjects);
+            inferredSubjects.forEach(s => selectedSubjects.push(s));
+
+            const sessionData = {
+                studentName: 'Sarah',
+                gender: 'female',
+                overallRating: 8,
+                strengths: 'good listening, helpful attitude',
+                weaknesses: 'concentration',
+                subjects: selectedSubjects,
+                topicRatings: topicRatings
+            };
+
+            const engine = new EnhancedCommentEngine();
+            const comments = engine.generateComments(sessionData);
+            displayResults(2, comments, sessionData, inferredSubjects);
+        }
+
+        function runTest3() {
+            console.log('🧪 Running Test 3...');
+            
+            const selectedSubjects = ['English'];
+            const topicRatings = {
+                'trace letters starting from the dot': 5,
+                'counting from 1 to 10': 5,
+                'mark picture with correct amount': 5
+            };
+
+            const inferredSubjects = inferSubjectsFromTopics(topicRatings, selectedSubjects);
+            inferredSubjects.forEach(s => selectedSubjects.push(s));
+
+            const sessionData = {
+                studentName: 'Alex',
+                gender: 'they',
+                overallRating: 6,
+                strengths: 'enthusiasm, participation',
+                weaknesses: 'following instructions',
+                subjects: selectedSubjects,
+                topicRatings: topicRatings
+            };
+
+            const engine = new EnhancedCommentEngine();
+            const comments = engine.generateComments(sessionData);
+            displayResults(3, comments, sessionData, inferredSubjects);
+        }
+
+        function runTest4() {
+            console.log('🧪 Running Test 4...');
+            
+            const selectedSubjects = ['Mathematics', 'Science'];
+            const topicRatings = {
+                'counting from 1 to 10': 5,
+                'Magnet experiment': 5
+            };
+
+            const inferredSubjects = inferSubjectsFromTopics(topicRatings, selectedSubjects);
+            // In this case, no new subjects should be inferred since they're already checked
+
+            const sessionData = {
+                studentName: 'Emma',
+                gender: 'female',
+                overallRating: 9,
+                strengths: 'excellent effort, creative solutions',
+                weaknesses: 'needs confidence building',
+                subjects: selectedSubjects,
+                topicRatings: topicRatings
+            };
+
+            const engine = new EnhancedCommentEngine();
+            const comments = engine.generateComments(sessionData);
+            displayResults(4, comments, sessionData, inferredSubjects);
+        }
+
+        function runAllTests() {
+            runTest1();
+            setTimeout(() => runTest2(), 500);
+            setTimeout(() => runTest3(), 1000);
+            setTimeout(() => runTest4(), 1500);
+        }
+    </script>
+</body>
+</html>
