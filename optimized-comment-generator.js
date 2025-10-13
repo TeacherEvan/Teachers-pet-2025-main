@@ -25,7 +25,7 @@ class OptimizedCommentGenerator {
                 this.isInitialized = true;
                 console.log('OptimizedCommentGenerator initialized with PremiumCommentEngine (fallback)');
             } else {
-                console.warn('No comment engine available, using fallback mode');
+                console.warn('No comment engines available, using fallback mode');
                 this.fallbackMode = true;
                 this.initializeFallback();
             }
