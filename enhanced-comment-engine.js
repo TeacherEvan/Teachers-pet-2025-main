@@ -27,7 +27,8 @@ class EnhancedCommentEngine {
             pronouns: {
                 he: { subject: "He", subject_lower: "he", object: "him", possessive: "his", possessive_cap: "His", verb: "has", isAre: "is" },
                 she: { subject: "She", subject_lower: "she", object: "her", possessive: "her", possessive_cap: "Her", verb: "has", isAre: "is" },
-                they: { subject: "They", subject_lower: "they", object: "them", possessive: "their", possessive_cap: "Their", verb: "have", isAre: "are" }
+                male: { subject: "He", subject_lower: "he", object: "him", possessive: "his", possessive_cap: "His", verb: "has", isAre: "is" },
+                female: { subject: "She", subject_lower: "she", object: "her", possessive: "her", possessive_cap: "Her", verb: "has", isAre: "is" }
             },
             subjectCapitalization: {
                 english: "English", mathematics: "Mathematics", science: "Science",
@@ -97,7 +98,8 @@ class EnhancedCommentEngine {
         console.log('📊 sessionData.topicRatings:', sessionData.topicRatings);
 
         const performance = this.performanceMap[sessionData.overallRating] || this.performanceMap[5];
-        const pronouns = this.grammarRules.pronouns[sessionData.gender.toLowerCase()] || this.grammarRules.pronouns.they;
+        const genderKey = sessionData.gender.toLowerCase();
+        const pronouns = this.grammarRules.pronouns[genderKey] || this.grammarRules.pronouns.he;
 
         // Group topics by their parent subjects
         const topicsBySubject = this.groupTopicsBySubject(sessionData.subjects || [], sessionData.topicRatings || {});
