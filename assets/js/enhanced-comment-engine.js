@@ -103,6 +103,11 @@ class EnhancedCommentEngine {
         const topicsBySubject = this.groupTopicsBySubject(sessionData.subjects || [], sessionData.topicRatings || {});
         console.log('📦 Topics grouped by subject:', topicsBySubject);
 
+        // Log each subject and its topics for clarity
+        Object.entries(topicsBySubject).forEach(([subject, topics]) => {
+            console.log(`  ✓ ${subject}: ${topics.length} topics`, topics);
+        });
+
         return {
             name: sessionData.studentName.trim(),
             level: performance.level,
@@ -245,11 +250,19 @@ class EnhancedCommentEngine {
     /**
      * Generate subject-specific section mentioning TOPICS
      * UPDATED: Mention ALL subjects, not just 3
+     * FIXED: Ensure ALL checked subjects appear in comment, even without topics
      */
     generateSubjectSection(data, isMale) {
+        console.log('🎯 generateSubjectSection called with data:', {
+            subjects: data.subjects,
+            topicsBySubject: data.topicsBySubject
+        });
+
         const parts = [];
         const subjectsWithTopics = Object.entries(data.topicsBySubject)
             .filter(([subject, topics]) => topics.length > 0);
+
+        console.log('📦 Subjects with topics:', subjectsWithTopics);
 
         // Detailed subject mentions with topics - mention ALL subjects with topics
         subjectsWithTopics.forEach(([subject, topics], index) => {
@@ -273,9 +286,18 @@ class EnhancedCommentEngine {
             }
         });
 
-        // Mention remaining subjects (those without specific topics selected)
-        const remainingSubjects = data.subjects
-            .filter(subj => !subjectsWithTopics.find(([s]) => s === subj));
+        // Find remaining subjects (those without specific topics selected)
+        // FIX: Use case-insensitive comparison to ensure all subjects are found
+        const subjectsWithTopicsNames = subjectsWithTopics.map(([s]) => s);
+        const remainingSubjects = data.subjects.filter(subj => {
+            // Check if this subject is NOT in the subjectsWithTopics list
+            const found = subjectsWithTopicsNames.some(name =>
+                name.toLowerCase() === subj.toLowerCase()
+            );
+            return !found;
+        });
+
+        console.log('📋 Remaining subjects (without topics):', remainingSubjects);
 
         if (remainingSubjects.length > 0) {
             const subjectsList = this.naturalJoin(remainingSubjects);
@@ -286,7 +308,20 @@ class EnhancedCommentEngine {
             }
         }
 
-        return parts.join(' ');
+        // SAFETY CHECK: If NO subjects mentioned at all, add generic statement
+        if (parts.length === 0 && data.subjects.length > 0) {
+            console.warn('⚠️ No subject parts generated, adding fallback');
+            const allSubjectsList = this.naturalJoin(data.subjects);
+            if (isMale) {
+                parts.push(`${data.name} made progress across ${allSubjectsList}.`);
+            } else {
+                parts.push(`${data.name} showed growth in ${allSubjectsList}.`);
+            }
+        }
+
+        const result = parts.join(' ');
+        console.log('✅ Generated subject section:', result);
+        return result;
     }
 
     /**
