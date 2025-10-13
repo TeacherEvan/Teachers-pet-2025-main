@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test Engine Fix</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+        }
+        .result {
+            margin: 10px 0;
+            padding: 15px;
+            background: #f0f0f0;
+            border-left: 4px solid #007bff;
+            white-space: pre-wrap;
+            font-family: monospace;
+        }
+        .success { border-color: #28a745; background: #d4edda; }
+        .error { border-color: #dc3545; background: #f8d7da; }
+        button {
+            margin: 5px;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            background: #007bff;
+            color: white;
+        }
+        button:hover { background: #0056b3; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔧 Test Engine Fix - Subjects in Comments</h1>
+        
+        <div>
+            <h3>Test Scenario</h3>
+            <button onclick="runTest()">Run Test</button>
+            <button onclick="clearResults()">Clear Results</button>
+        </div>
+        
+        <div id="results"></div>
+    </div>
+
+    <!-- Load JavaScript files in correct order -->
+    <script src="assets/js/comment-engine.js"></script>
+    <script src="assets/js/enhanced-comment-engine.js"></script>
+    <script src="enhanced-comment-engine.js"></script>
+    <script src="optimized-comment-generator.js"></script>
+
+    <script>
+        function clearResults() {
+            document.getElementById('results').innerHTML = '';
+        }
+
+        function runTest() {
+            const resultsDiv = document.getElementById('results');
+            resultsDiv.innerHTML = '<h3>Running Test...</h3>';
+            
+            try {
+                // Create test data with subjects and topics
+                const testData = {
+                    studentName: 'Emma',
+                    gender: 'she',
+                    overallRating: 8,
+                    strengths: 'creative thinking, good listening skills',
+                    weaknesses: 'refining motor skills',
+                    subjects: ['I.Q', 'Science', 'Mathematics'],
+                    topicRatings: {
+                        'color matching': 5,
+                        'shape recognition': 5,
+                        'Magnet experiment': 5,
+                        'counting to 10': 5
+                    }
+                };
+                
+                console.log('Test Data:', testData);
+                
+                // Check which engine is being used
+                const engineType = window.commentGenerator && window.commentGenerator.engine ? 
+                    window.commentGenerator.engine.constructor.name : 'Unknown';
+                
+                resultsDiv.innerHTML += `<div class="result">Engine Type: ${engineType}</div>`;
+                
+                // Generate comments
+                const result = window.commentGenerator.generateComments(testData);
+                
+                console.log('Generated Comments:', result);
+                
+                // Display results
+                resultsDiv.innerHTML += `
+                    <div class="result">
+                        <h4>Male Teacher Comment (${result.wordCount.male} words):</h4>
+                        ${result.male}
+                    </div>
+                    
+                    <div class="result">
+                        <h4>Female Teacher Comment (${result.wordCount.female} words):</h4>
+                        ${result.female}
+                    </div>
+                `;
+                
+                // Validate subjects appear in comments
+                const maleHasSubjects = testData.subjects.some(subj => result.male.includes(subj));
+                const femaleHasSubjects = testData.subjects.some(subj => result.female.includes(subj));
+                
+                const validation = `
+                    <div class="result ${maleHasSubjects && femaleHasSubjects ? 'success' : 'error'}">
+                        <h4>Validation:</h4>
+                        Male comment contains subjects: ${maleHasSubjects ? '✅ YES' : '❌ NO'}
+                        Female comment contains subjects: ${femaleHasSubjects ? '✅ YES' : '❌ NO'}
+                        
+                        Expected subjects: ${testData.subjects.join(', ')}
+                    </div>
+                `;
+                
+                resultsDiv.innerHTML += validation;
+                
+            } catch (error) {
+                resultsDiv.innerHTML += `<div class="result error">
+                    <h4>Error:</h4>
+                    ${error.message}
+                    
+                    <h4>Stack:</h4>
+                    ${error.stack}
+                </div>`;
+                console.error('Test failed:', error);
+            }
+        }
+    </script>
+</body>
+</html>

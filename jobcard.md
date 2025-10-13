@@ -1,5 +1,40 @@
 # Job Card - Kindergarten Report Generator
 
+## Session: October 13, 2025 (Late Evening) - ROOT CAUSE FIXED ✅
+
+### 🎯 ROOT CAUSE IDENTIFIED AND FIXED
+- **Problem**: `OptimizedCommentGenerator` was using `PremiumCommentEngine` (old engine with limitations)
+- **Solution**: Updated to use `EnhancedCommentEngine` (new engine that properly handles all subjects)
+- **File Modified**: `optimized-comment-generator.js` line 18-26
+- **Change**: Engine selection now prioritizes EnhancedCommentEngine over PremiumCommentEngine
+
+### 📝 TECHNICAL DETAILS
+**Old Code** (line 18):
+```javascript
+if (typeof PremiumCommentEngine !== 'undefined') {
+    this.engine = new PremiumCommentEngine();
+```
+
+**New Code** (line 18-26):
+```javascript
+if (typeof EnhancedCommentEngine !== 'undefined') {
+    this.engine = new EnhancedCommentEngine();
+} else if (typeof PremiumCommentEngine !== 'undefined') {
+    this.engine = new PremiumCommentEngine();
+```
+
+### 🔍 WHY THIS FIXES THE ISSUE
+- **PremiumCommentEngine**: Only mentions 2-3 subjects, doesn't integrate topics well
+- **EnhancedCommentEngine**: Mentions ALL subjects with proper grammar and integrates all selected topics
+- Script loading order already correct (enhanced engine loads before optimized generator)
+
+### ✅ TESTING
+- Created `test-engine-fix.html` to verify the fix
+- Test data includes multiple subjects (I.Q, Science, Mathematics) with topics
+- Validation checks if subjects appear in generated comments
+
+---
+
 ## Session: October 13, 2025 (Evening - Part 2) - SUBJECTS STILL NOT APPEARING 🔍
 
 ### 🎯 USER REPORT
