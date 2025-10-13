@@ -104,6 +104,63 @@ function refreshReport() {
     }
 }
 
+/**
+ * Infer parent subjects from selected topics
+ * This ensures that if a user only checks topics without checking the parent subject,
+ * the parent subject is still included in the comment
+ */
+function inferSubjectsFromTopics(topicRatings, selectedSubjects) {
+    // Map of keywords to subjects (matches the subjectTopicMap in enhanced-comment-engine.js)
+    const topicToSubjectMap = {
+        "English": ["draw lines", "trace", "match", "circle", "letter"],
+        "Mathematics": ["count", "number", "match", "trace", "dotted"],
+        "I.Q": ["color", "same", "fatter", "taller", "hot", "cold", "shape"],
+        "Social Studies": ["identify", "animal", "sounds", "habits", "hygiene", "gestures"],
+        "Science": ["tissue", "lava", "magnet", "volcano", "experiment"],
+        "Cooking": ["look chop", "sugar", "bean", "salt", "coconut"],
+        "Conversation 1": ["pet", "feel", "lunch", "want to be", "like to go"],
+        "Conversation 2": ["drink", "going", "school"],
+        "Arts": ["finger painting", "ladybug", "play dough", "sponge", "origami"],
+        "Physical Education": ["football", "balance", "ball", "ring", "jump", "zigzag", "hurdle"],
+        "Puppet Show": ["noond", "vegetables", "panicked rabbit"],
+        "Super Safari": ["listen", "colour", "numbers", "circle", "pets", "food", "maze", "train", "mask"],
+        "Story Time": ["harry frog", "bird", "lovely animals", "ox and the frog"]
+    };
+
+    const topicList = Object.keys(topicRatings);
+    const inferredSubjects = new Set();
+
+    topicList.forEach(topic => {
+        const topicLower = topic.toLowerCase();
+        
+        // Try to match topic with subject using keywords
+        for (const [subject, keywords] of Object.entries(topicToSubjectMap)) {
+            if (keywords.some(keyword => topicLower.includes(keyword.toLowerCase()))) {
+                inferredSubjects.add(subject);
+                break;
+            }
+        }
+
+        // Try direct subject name matching
+        for (const subject of Object.keys(topicToSubjectMap)) {
+            if (topicLower.includes(subject.toLowerCase())) {
+                inferredSubjects.add(subject);
+                break;
+            }
+        }
+    });
+
+    // Add inferred subjects to selectedSubjects if not already present
+    inferredSubjects.forEach(subject => {
+        if (!selectedSubjects.some(s => s.toLowerCase() === subject.toLowerCase())) {
+            console.log('✅ Inferred subject from topic:', subject);
+            selectedSubjects.push(subject);
+        }
+    });
+
+    console.log('📋 Final subjects after inference:', selectedSubjects);
+}
+
 function ensureCommentGeneration() {
     try {
         console.log('🚀 Starting comment generation...');
@@ -146,6 +203,10 @@ function ensureCommentGeneration() {
         console.log('📋 Total topic checkboxes found:', document.querySelectorAll('.topic-checkbox').length);
         console.log('📋 Total CHECKED topic checkboxes:', document.querySelectorAll('.topic-checkbox:checked').length);
         console.log('📋 Topic ratings object:', topicRatings);
+
+        // Infer parent subjects from selected topics if not already in selectedSubjects
+        // This handles the case where users only check topics without checking the parent subject
+        inferSubjectsFromTopics(topicRatings, selectedSubjects);
 
         // Validate required data with clearer diagnostics
         if (!studentData.studentName || !studentData.gender) {
