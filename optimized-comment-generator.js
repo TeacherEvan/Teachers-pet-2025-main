@@ -14,13 +14,18 @@ class OptimizedCommentGenerator {
     
     init() {
         try {
-            // Check if PremiumCommentEngine is available
-            if (typeof PremiumCommentEngine !== 'undefined') {
+            // Check if EnhancedCommentEngine is available (preferred)
+            if (typeof EnhancedCommentEngine !== 'undefined') {
+                this.engine = new EnhancedCommentEngine();
+                this.isInitialized = true;
+                console.log('OptimizedCommentGenerator initialized with EnhancedCommentEngine');
+            } else if (typeof PremiumCommentEngine !== 'undefined') {
+                // Fallback to PremiumCommentEngine if Enhanced is not available
                 this.engine = new PremiumCommentEngine();
                 this.isInitialized = true;
-                console.log('OptimizedCommentGenerator initialized with PremiumCommentEngine');
+                console.log('OptimizedCommentGenerator initialized with PremiumCommentEngine (fallback)');
             } else {
-                console.warn('PremiumCommentEngine not available, using fallback mode');
+                console.warn('No comment engines available, using fallback mode');
                 this.fallbackMode = true;
                 this.initializeFallback();
             }
