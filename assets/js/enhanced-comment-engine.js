@@ -220,9 +220,9 @@ class EnhancedCommentEngine {
             `${data.name} has shown ${data.level} academic development throughout this period, displaying structured engagement with learning objectives.`,
             `${data.name} ${data.verb} this term, establishing strong foundational competencies in essential educational areas.`
         ] : [
-            `${data.name} has flourished beautifully this term, bringing such joy and enthusiasm to our classroom community.`,
-            `It has been wonderful watching ${data.name} blossom and grow, making ${data.level} progress throughout this learning journey.`,
-            `${data.name} has bloomed into a confident learner, embracing each moment with curiosity and ${data.level} engagement.`
+            `${data.name} has had a wonderful term, bringing great energy and enthusiasm to our classroom community.`,
+            `It has been a pleasure watching ${data.name} grow and develop, making ${data.level} progress on this learning journey.`,
+            `${data.name} has developed into a confident learner, embracing each day with curiosity and ${data.level} engagement.`
         ];
 
         return this.selectRandom(templates);
@@ -239,9 +239,9 @@ class EnhancedCommentEngine {
             `Notable strengths include ${data.pronoun_possessive} abilities in ${strengthsList}, reflecting sustained achievement.`,
             `${data.name} excels particularly in ${strengthsList}, displaying consistent performance excellence.`
         ] : [
-            `${data.pronoun_possessive_cap} beautiful talents in ${strengthsList} truly shine and inspire everyone.`,
-            `We celebrate ${data.pronoun_possessive} wonderful gifts in ${strengthsList}, which blossom each day.`,
-            `${data.name} brings radiant joy through ${data.pronoun_possessive} exceptional abilities in ${strengthsList}.`
+            `${data.pronoun_possessive_cap} admirable talents in ${strengthsList} are a joy to see and inspire others.`,
+            `We celebrate ${data.pronoun_possessive} wonderful gifts in ${strengthsList}, which are developing each day.`,
+            `${data.name} brings a lovely energy to the room through ${data.pronoun_possessive} exceptional abilities in ${strengthsList}.`
         ];
 
         return this.selectRandom(templates);
@@ -280,7 +280,7 @@ class EnhancedCommentEngine {
                 const templates = [
                     `In ${subject}, ${data.pronoun_subject_lower} delighted us with ${topicsText}.`,
                     `${data.name} showed wonderful enthusiasm in ${subject}, particularly enjoying ${topicsText}.`,
-                    `${data.pronoun_possessive_cap} progress in ${subject} was beautiful, especially with ${topicsText}.`
+                    `${data.pronoun_possessive_cap} progress in ${subject} was lovely to see, especially with ${topicsText}.`
                 ];
                 parts.push(this.selectRandom(templates));
             }
@@ -335,8 +335,8 @@ class EnhancedCommentEngine {
             `Areas for development include ${weaknessesList}, where additional support will foster growth.`,
             `Ongoing focus on ${weaknessesList} will help build greater mastery and confidence.`
         ] : [
-            `With gentle encouragement in ${weaknessesList}, ${data.name} will continue to blossom beautifully.`,
-            `Through nurturing support in ${weaknessesList}, ${data.pronoun_subject_lower} will discover ${data.pronoun_possessive} wonderful potential.`,
+            `With gentle encouragement in ${weaknessesList}, ${data.name} will continue to develop with confidence.`,
+            `Through nurturing support in ${weaknessesList}, ${data.pronoun_subject_lower} will discover ${data.pronoun_possessive} full potential.`,
             `Areas where ${data.name} will benefit from caring guidance include ${weaknessesList}.`
         ];
 
@@ -352,9 +352,9 @@ class EnhancedCommentEngine {
             `With ongoing support, ${data.name} will continue to thrive academically and achieve learning goals.`,
             `${data.name} shows strong readiness for new challenges and continued educational growth.`
         ] : [
-            `${data.name} is ready for wonderful new adventures and shows beautiful potential for continued success.`,
-            `With nurturing guidance, ${data.name} will continue to flourish and bloom in all areas.`,
-            `${data.name} brings such joy to learning and is beautifully prepared for future growth.`
+            `${data.name} is ready for new adventures and shows great potential for continued success.`,
+            `With nurturing guidance, ${data.name} will continue to flourish and grow in all areas.`,
+            `${data.name} brings such joy to learning and is well-prepared for future growth.`
         ];
 
         return this.selectRandom(templates);
