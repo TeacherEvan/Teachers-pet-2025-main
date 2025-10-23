@@ -6,6 +6,7 @@
 class TeachersPetApp {
   constructor() {
     this.sessionData = {
+      grade: '',
       studentName: '',
       gender: '',
       overallRating: 5,
@@ -24,6 +25,7 @@ class TeachersPetApp {
 
   getCurrentPage() {
     const path = window.location.pathname;
+    if (path.includes('grade-selection')) return 'grade-selection';
     if (path.includes('student-information')) return 'student-info';
     if (path.includes('Subjects')) return 'subjects';
     return 'launcher';
@@ -36,6 +38,9 @@ class TeachersPetApp {
     switch (this.currentPage) {
       case 'launcher':
         this.initLauncher();
+        break;
+      case 'grade-selection':
+        this.initGradeSelection();
         break;
       case 'student-info':
         this.initStudentInfo();
@@ -174,6 +179,7 @@ class TeachersPetApp {
       
       // Reset the session data
       this.sessionData = {
+        grade: '',
         studentName: '',
         gender: '',
         overallRating: 5,
@@ -191,6 +197,13 @@ class TeachersPetApp {
         window.location.href = 'index.html';
       }, 600);
     };
+  }
+
+  // GRADE SELECTION PAGE METHODS
+  initGradeSelection() {
+    console.log('Initializing grade selection page');
+    // Grade selection page is self-contained with inline JS
+    // This method exists for consistency but most logic is in the page itself
   }
 
   // STUDENT INFORMATION PAGE METHODS
