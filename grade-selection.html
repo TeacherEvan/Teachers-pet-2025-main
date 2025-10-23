@@ -1,0 +1,471 @@
+<!DOCTYPE html>
+<html lang="en" spellcheck="false">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Select student grade level for Teachers Pet report">
+    <title>📚 Select Grade - Teachers Pet</title>
+    
+    <!-- Preload Critical Resources -->
+    <link rel="preload" href="assets/css/main.css" as="style">
+    <link rel="preload" href="assets/css/components.css" as="style">
+    <link rel="preload" href="assets/js/app.js" as="script">
+    
+    <!-- CSS -->
+    <link rel="stylesheet" href="assets/css/main.css">
+    <link rel="stylesheet" href="assets/css/components.css">
+    
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+            background: 
+                url('https://images.unsplash.com/photo-1502134249126-9f3755a50d78?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80') center/cover no-repeat fixed,
+                radial-gradient(ellipse at center, rgba(30, 39, 70, 0.8) 0%, rgba(15, 15, 35, 0.9) 50%, rgba(0, 0, 0, 0.95) 100%);
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow-x: hidden;
+        }
+        
+        /* Space stars animation */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(2px 2px at 20px 30px, rgba(255, 255, 255, 0.8), transparent),
+                radial-gradient(2px 2px at 40px 70px, rgba(255, 255, 255, 0.6), transparent),
+                radial-gradient(1px 1px at 90px 40px, rgba(255, 255, 255, 0.5), transparent),
+                radial-gradient(1px 1px at 130px 80px, rgba(255, 255, 255, 0.4), transparent),
+                radial-gradient(2px 2px at 160px 30px, rgba(255, 255, 255, 0.7), transparent);
+            background-repeat: repeat;
+            background-size: 200px 200px;
+            animation: twinkle 20s linear infinite;
+            pointer-events: none;
+            z-index: 1;
+            will-change: transform, opacity;
+        }
+        
+        @keyframes twinkle {
+            0% { transform: translate3d(0px, 0px, 0) rotate(0deg); opacity: 0.8; }
+            50% { opacity: 1; }
+            100% { transform: translate3d(100px, -200px, 0) rotate(360deg); opacity: 0.8; }
+        }
+        
+        .container {
+            background: rgba(255, 255, 255, 0.3);
+            -webkit-backdrop-filter: blur(20px);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+            border-radius: 16px;
+            padding: 40px;
+            max-width: 600px;
+            width: 100%;
+            box-shadow: 
+                0 10px 30px rgba(0, 0, 0, 0.3),
+                0 0 50px rgba(255, 255, 255, 0.1);
+            position: relative;
+            z-index: 10;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+        
+        .icon {
+            font-size: 4rem;
+            margin-bottom: 15px;
+            display: block;
+            animation: float 3s ease-in-out infinite;
+        }
+        
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-10px); }
+        }
+        
+        h1 {
+            color: white;
+            font-size: 2.2em;
+            margin-bottom: 10px;
+            font-weight: 700;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+        }
+        
+        .subtitle {
+            color: rgba(255, 255, 255, 0.9);
+            font-size: 1.1em;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+            font-weight: 500;
+        }
+        
+        .form-group {
+            margin-bottom: 30px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 12px;
+            font-weight: 600;
+            color: white;
+            font-size: 1.1em;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+        }
+        
+        select {
+            width: 100%;
+            padding: 16px 20px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 12px;
+            font-size: 1.1em;
+            background: rgba(255, 255, 255, 0.95);
+            color: #2c3e50;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Inter', 'Segoe UI', sans-serif;
+        }
+        
+        select:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2);
+            background: white;
+        }
+        
+        select:hover {
+            border-color: rgba(255, 255, 255, 0.5);
+            background: white;
+        }
+        
+        .grade-info {
+            background: rgba(255, 255, 255, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            border-radius: 12px;
+            padding: 20px;
+            margin-top: 20px;
+            display: none;
+        }
+        
+        .grade-info.show {
+            display: block;
+            animation: slideIn 0.3s ease-out;
+        }
+        
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .grade-info h3 {
+            color: white;
+            margin-bottom: 8px;
+            font-size: 1.2em;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+        }
+        
+        .grade-info p {
+            color: rgba(255, 255, 255, 0.9);
+            line-height: 1.6;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
+        }
+        
+        .coming-soon-badge {
+            display: inline-block;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.75em;
+            font-weight: 600;
+            margin-left: 8px;
+            vertical-align: middle;
+        }
+        
+        .navigation {
+            display: flex;
+            gap: 15px;
+            justify-content: space-between;
+            margin-top: 35px;
+        }
+        
+        .button {
+            flex: 1;
+            padding: 16px 28px;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: 600;
+            font-family: 'Inter', 'Segoe UI', sans-serif;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            text-decoration: none;
+        }
+        
+        .button-back {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+        }
+        
+        .button-back:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .button-continue {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+        
+        .button-continue:hover:not(:disabled) {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.5);
+        }
+        
+        .button-continue:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        .arrow-icon {
+            font-size: 1.2em;
+        }
+        
+        @media (max-width: 768px) {
+            .container {
+                padding: 30px 20px;
+            }
+            
+            h1 {
+                font-size: 1.8em;
+            }
+            
+            .subtitle {
+                font-size: 1em;
+            }
+            
+            .navigation {
+                flex-direction: column;
+            }
+            
+            .button {
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="header">
+            <span class="icon">📚</span>
+            <h1>Select Grade Level</h1>
+            <p class="subtitle">Choose the kindergarten level for this report</p>
+        </div>
+        
+        <form id="gradeForm">
+            <div class="form-group">
+                <label for="gradeLevel">Grade Level:</label>
+                <select id="gradeLevel" name="gradeLevel" required>
+                    <option value="">Choose a grade...</option>
+                    <option value="K1">K1 - Kindergarten 1</option>
+                    <option value="K2">K2 - Kindergarten 2 (Coming Soon)</option>
+                    <option value="K3">K3 - Kindergarten 3 (Coming Soon)</option>
+                </select>
+            </div>
+            
+            <div id="k1Info" class="grade-info">
+                <h3>📘 Kindergarten 1</h3>
+                <p>Foundation year focusing on basic social skills, early literacy, and creative exploration through play-based learning.</p>
+            </div>
+            
+            <div id="k2Info" class="grade-info">
+                <h3>📗 Kindergarten 2 <span class="coming-soon-badge">COMING SOON</span></h3>
+                <p>Curriculum information coming soon. This level will build upon K1 foundations.</p>
+            </div>
+            
+            <div id="k3Info" class="grade-info">
+                <h3>📕 Kindergarten 3 <span class="coming-soon-badge">COMING SOON</span></h3>
+                <p>Curriculum information coming soon. This level will prepare students for primary education.</p>
+            </div>
+        </form>
+        
+        <div class="navigation">
+            <a href="index.html" class="button button-back">
+                <span class="arrow-icon">←</span>
+                <span>Back</span>
+            </a>
+            <button type="button" class="button button-continue" id="continueBtn" disabled>
+                <span>Continue</span>
+                <span class="arrow-icon">→</span>
+            </button>
+        </div>
+    </div>
+
+    <script>
+        // Grade selection handler
+        const gradeSelect = document.getElementById('gradeLevel');
+        const continueBtn = document.getElementById('continueBtn');
+        const gradeInfos = {
+            'K1': document.getElementById('k1Info'),
+            'K2': document.getElementById('k2Info'),
+            'K3': document.getElementById('k3Info')
+        };
+
+        // Load saved grade if exists
+        function loadSavedGrade() {
+            try {
+                const savedData = localStorage.getItem('studentData');
+                if (savedData) {
+                    const data = JSON.parse(savedData);
+                    if (data.grade) {
+                        gradeSelect.value = data.grade;
+                        updateGradeInfo(data.grade);
+                        updateContinueButton();
+                    }
+                }
+            } catch (error) {
+                console.error('Error loading saved grade:', error);
+            }
+        }
+
+        // Update grade info display
+        function updateGradeInfo(grade) {
+            // Hide all info boxes
+            Object.values(gradeInfos).forEach(info => {
+                if (info) info.classList.remove('show');
+            });
+            
+            // Show selected grade info
+            if (grade && gradeInfos[grade]) {
+                gradeInfos[grade].classList.add('show');
+            }
+        }
+
+        // Update continue button state
+        function updateContinueButton() {
+            const selectedGrade = gradeSelect.value;
+            if (selectedGrade === 'K1') {
+                continueBtn.disabled = false;
+            } else if (selectedGrade === 'K2' || selectedGrade === 'K3') {
+                // Disable for coming soon grades
+                continueBtn.disabled = true;
+                alert(`${selectedGrade} curriculum is coming soon. Currently, only K1 reports are available.`);
+            } else {
+                continueBtn.disabled = true;
+            }
+        }
+
+        // Handle grade selection
+        gradeSelect.addEventListener('change', function() {
+            const selectedGrade = this.value;
+            console.log('Grade selected:', selectedGrade);
+            
+            updateGradeInfo(selectedGrade);
+            updateContinueButton();
+            
+            // Save grade to localStorage
+            if (selectedGrade) {
+                saveGrade(selectedGrade);
+            }
+        });
+
+        // Save grade data
+        function saveGrade(grade) {
+            try {
+                // Get existing student data or create new
+                let studentData = {};
+                const saved = localStorage.getItem('studentData');
+                if (saved) {
+                    studentData = JSON.parse(saved);
+                }
+                
+                // Update grade
+                studentData.grade = grade;
+                studentData.timestamp = Date.now();
+                
+                // Save to localStorage and sessionStorage
+                const serialized = JSON.stringify(studentData);
+                localStorage.setItem('studentData', serialized);
+                try {
+                    sessionStorage.setItem('studentData', serialized);
+                } catch (e) {
+                    console.warn('SessionStorage not available:', e);
+                }
+                
+                console.log('Grade saved:', studentData);
+            } catch (error) {
+                console.error('Error saving grade:', error);
+                alert('Unable to save grade selection. Please try again.');
+            }
+        }
+
+        // Continue to student information
+        continueBtn.addEventListener('click', function() {
+            const selectedGrade = gradeSelect.value;
+            
+            if (!selectedGrade) {
+                alert('Please select a grade level before continuing.');
+                return;
+            }
+            
+            if (selectedGrade !== 'K1') {
+                alert(`${selectedGrade} is not yet available. Please select K1.`);
+                return;
+            }
+            
+            // Save grade one more time before navigation
+            saveGrade(selectedGrade);
+            
+            // Navigate to student information page
+            window.location.href = 'student-information.html';
+        });
+
+        // Load saved grade on page load
+        window.addEventListener('load', loadSavedGrade);
+        
+        // Auto-select K1 if coming from fresh start
+        window.addEventListener('load', function() {
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.has('fresh')) {
+                // Clear existing data for fresh start
+                localStorage.clear();
+                sessionStorage.clear();
+                // Remove the URL parameter
+                window.history.replaceState({}, document.title, window.location.pathname);
+            }
+        });
+    </script>
+</body>
+
+</html>
