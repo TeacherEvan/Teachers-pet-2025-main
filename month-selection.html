@@ -353,7 +353,7 @@
                     <option value="August">August</option>
                     <option value="September" disabled>September (Coming Soon)</option>
                     <option value="October" disabled>October (Coming Soon)</option>
-                    <option value="November" disabled>November (Coming Soon)</option>
+                    <option value="November">November</option>
                     <option value="December" disabled>December (Coming Soon)</option>
                     <option value="January" disabled>January (Coming Soon)</option>
                     <option value="February" disabled>February (Coming Soon)</option>
@@ -370,6 +370,13 @@
                 <h3>📘 August Curriculum</h3>
                 <p>Foundation month focusing on basic social skills, early literacy, number recognition, and creative
                     exploration through play-based learning activities.</p>
+            </div>
+
+            <div id="novemberInfo" class="month-info">
+                <h3>📘 November Curriculum</h3>
+                <p>2nd Semester curriculum building on foundational skills with advanced phonics (N/O/P), expanded
+                    mathematics (1-10 counting & tracing), health & hygiene awareness, and creative arts including
+                    Father's Day activities.</p>
             </div>
 
             <div id="comingSoonInfo" class="month-info">
@@ -395,7 +402,7 @@
     <script>
         // Available months by grade
         const availableMonths = {
-            'K1': ['August'],
+            'K1': ['August', 'November'],
             'K2': [],
             'K3': []
         };
@@ -405,6 +412,7 @@
         const gradeDisplay = document.getElementById('gradeDisplay');
         const monthInfos = {
             'August': document.getElementById('augustInfo'),
+            'November': document.getElementById('novemberInfo'),
             'comingSoon': document.getElementById('comingSoonInfo')
         };
 
