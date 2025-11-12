@@ -907,7 +907,7 @@
 
     <!-- Load curriculum dynamically based on grade and month -->
     <script id="dynamic-curriculum-loader">
-        (async function () {
+        document.addEventListener('DOMContentLoaded', async function () {
             try {
                 // Get grade and month from session
                 const params = new URLSearchParams(window.location.search);
@@ -924,6 +924,9 @@
                     // Generate subjects HTML dynamically
                     const subjectsForm = document.getElementById('subjectsForm');
                     if (subjectsForm && curriculum.subjects) {
+                        // CLEAR existing hardcoded HTML first
+                        subjectsForm.innerHTML = '';
+
                         let html = '';
 
                         curriculum.subjects.forEach(subject => {
@@ -964,7 +967,7 @@
                 console.warn('⚠️ Curriculum loading failed, keeping hardcoded subjects:', error.message);
                 // Fallback to hardcoded K1 August subjects (current implementation)
             }
-        })();
+        });
     </script>
 
     <script>
