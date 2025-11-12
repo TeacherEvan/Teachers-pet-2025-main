@@ -14,9 +14,9 @@ From `RULES.mdc` - **VIOLATION LOGS EXIST**:
 
 ## Architecture & Data Flow
 
-### Application Flow (3-Page Wizard)
+### Application Flow (5-Page Wizard)
 ```
-index.html (launcher) → student-information.html → Subjects.html (generates comments)
+index.html (launcher) → grade-selection.html → month-selection.html → student-information.html → Subjects.html (generates comments)
 ```
 
 ### State Management
@@ -27,8 +27,8 @@ index.html (launcher) → student-information.html → Subjects.html (generates 
 
 ### Core Classes
 - **`TeachersPetApp`** (`assets/js/app.js`): Page-specific initialization, form handling, navigation
-  - `getCurrentPage()` determines context (launcher/student-info/subjects)
-  - `sessionData` object: `{studentName, gender, overallRating, strengths, weaknesses, subjects[], topicRatings{}}`
+  - `getCurrentPage()` determines context (launcher/grade-selection/month-selection/student-info/subjects)
+  - `sessionData` object: `{grade, month, studentName, gender, overallRating, strengths, weaknesses, subjects[], topicRatings{}}`
   
 - **`EnhancedCommentEngine`** (`assets/js/enhanced-comment-engine.js`): **CURRENT** AI comment generator (Oct 2025)
   - Replaces `PremiumCommentEngine` - ensures ALL user selections mentioned in comments
@@ -87,6 +87,8 @@ index.html (launcher) → student-information.html → Subjects.html (generates 
 
 ### Entry Points
 - **`index.html`**: Launcher with "Start New Report" and "Fresh Start" cards
+- **`grade-selection.html`**: Grade level selection (K1/K2/K3) - K2/K3 coming soon
+- **`month-selection.html`**: Month selection (Jan-Dec) - Only August available for K1
 - **`student-information.html`**: Student data input form (name, gender, rating, strengths/weaknesses)
 - **`Subjects.html`**: Subject/topic selection + comment generation button
   - **Current subjects** (as of Oct 2025): English, Mathematics, I.Q, Social Studies, Science, Cooking, Conversation 1, Conversation 2, Arts, Physical Education, Puppet Show, Super Safari, Story Time
@@ -96,6 +98,8 @@ index.html (launcher) → student-information.html → Subjects.html (generates 
 - `assets/css/main.css`: Core design system, variables, glassmorphism
 - `assets/css/components.css`: Reusable UI components
 - `assets/js/app.js`: Application controller, form validation, navigation
+- `assets/js/curriculum/curriculum-loader.js`: Dynamic curriculum loading utility
+- `assets/js/curriculum/k1/august.js`: K1 August curriculum data (JavaScript object)
 - `assets/js/enhanced-comment-engine.js`: **PRIMARY** comment generator engine
 - `enhanced-comment-engine.js`: **ROOT COPY** - MUST stay synchronized with assets/js version
   - ⚠️ CRITICAL: Both files must be identical (root loads after assets, overwrites window.EnhancedCommentEngine)

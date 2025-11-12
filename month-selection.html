@@ -4,8 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Select student grade level for Teachers Pet report">
-    <title>📚 Select Grade - Teachers Pet</title>
+    <meta name="description" content="Select curriculum month for Teachers Pet report">
+    <title>📅 Select Month - Teachers Pet</title>
 
     <!-- Preload Critical Resources -->
     <link rel="preload" href="assets/css/main.css" as="style">
@@ -132,6 +132,29 @@
             font-weight: 500;
         }
 
+        .grade-context {
+            background: rgba(255, 255, 255, 0.15);
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            border-radius: 12px;
+            padding: 15px 20px;
+            margin-bottom: 30px;
+            text-align: center;
+        }
+
+        .grade-context-label {
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 0.9em;
+            margin-bottom: 5px;
+            font-weight: 500;
+        }
+
+        .grade-context-value {
+            color: white;
+            font-size: 1.3em;
+            font-weight: 700;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+        }
+
         .form-group {
             margin-bottom: 30px;
         }
@@ -171,7 +194,12 @@
             background: white;
         }
 
-        .grade-info {
+        select option:disabled {
+            color: #999;
+            font-style: italic;
+        }
+
+        .month-info {
             background: rgba(255, 255, 255, 0.15);
             border: 1px solid rgba(255, 255, 255, 0.25);
             border-radius: 12px;
@@ -180,7 +208,7 @@
             display: none;
         }
 
-        .grade-info.show {
+        .month-info.show {
             display: block;
             animation: slideIn 0.3s ease-out;
         }
@@ -197,14 +225,14 @@
             }
         }
 
-        .grade-info h3 {
+        .month-info h3 {
             color: white;
             margin-bottom: 8px;
             font-size: 1.2em;
             text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
         }
 
-        .grade-info p {
+        .month-info p {
             color: rgba(255, 255, 255, 0.9);
             line-height: 1.6;
             text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.2);
@@ -306,41 +334,53 @@
 <body>
     <div class="container">
         <div class="header">
-            <span class="icon">📚</span>
-            <h1>Select Grade Level</h1>
-            <p class="subtitle">Choose the kindergarten level for this report</p>
+            <span class="icon">📅</span>
+            <h1>Select Curriculum Month</h1>
+            <p class="subtitle">Choose the month for this report period</p>
         </div>
 
-        <form id="gradeForm">
+        <!-- Grade Context Display -->
+        <div class="grade-context">
+            <div class="grade-context-label">Selected Grade Level</div>
+            <div class="grade-context-value" id="gradeDisplay">Loading...</div>
+        </div>
+
+        <form id="monthForm">
             <div class="form-group">
-                <label for="gradeLevel">Grade Level:</label>
-                <select id="gradeLevel" name="gradeLevel" required>
-                    <option value="">Choose a grade...</option>
-                    <option value="K1">K1 - Kindergarten 1</option>
-                    <option value="K2">K2 - Kindergarten 2 (Coming Soon)</option>
-                    <option value="K3">K3 - Kindergarten 3 (Coming Soon)</option>
+                <label for="monthSelect">Curriculum Month:</label>
+                <select id="monthSelect" name="monthSelect" required>
+                    <option value="">Choose a month...</option>
+                    <option value="August">August</option>
+                    <option value="September" disabled>September (Coming Soon)</option>
+                    <option value="October" disabled>October (Coming Soon)</option>
+                    <option value="November" disabled>November (Coming Soon)</option>
+                    <option value="December" disabled>December (Coming Soon)</option>
+                    <option value="January" disabled>January (Coming Soon)</option>
+                    <option value="February" disabled>February (Coming Soon)</option>
+                    <option value="March" disabled>March (Coming Soon)</option>
+                    <option value="April" disabled>April (Coming Soon)</option>
+                    <option value="May" disabled>May (Coming Soon)</option>
+                    <option value="June" disabled>June (Coming Soon)</option>
+                    <option value="July" disabled>July (Coming Soon)</option>
                 </select>
             </div>
 
-            <div id="k1Info" class="grade-info">
-                <h3>📘 Kindergarten 1</h3>
-                <p>Foundation year focusing on basic social skills, early literacy, and creative exploration through
-                    play-based learning.</p>
+            <!-- Month Info Display -->
+            <div id="augustInfo" class="month-info">
+                <h3>📘 August Curriculum</h3>
+                <p>Foundation month focusing on basic social skills, early literacy, number recognition, and creative
+                    exploration through play-based learning activities.</p>
             </div>
 
-            <div id="k2Info" class="grade-info">
-                <h3>📗 Kindergarten 2 <span class="coming-soon-badge">COMING SOON</span></h3>
-                <p>Curriculum information coming soon. This level will build upon K1 foundations.</p>
-            </div>
-
-            <div id="k3Info" class="grade-info">
-                <h3>📕 Kindergarten 3 <span class="coming-soon-badge">COMING SOON</span></h3>
-                <p>Curriculum information coming soon. This level will prepare students for primary education.</p>
+            <div id="comingSoonInfo" class="month-info">
+                <h3>Coming Soon <span class="coming-soon-badge">AVAILABLE LATER</span></h3>
+                <p>This month's curriculum is currently being developed. Please select August for now, or check back
+                    later for updates.</p>
             </div>
         </form>
 
         <div class="navigation">
-            <a href="index.html" class="button button-back">
+            <a href="grade-selection.html" class="button button-back">
                 <span class="arrow-icon">←</span>
                 <span>Back</span>
             </a>
@@ -351,76 +391,113 @@
         </div>
     </div>
 
+    <script src="assets/js/app.js"></script>
     <script>
-        // Grade selection handler
-        const gradeSelect = document.getElementById('gradeLevel');
-        const continueBtn = document.getElementById('continueBtn');
-        const gradeInfos = {
-            'K1': document.getElementById('k1Info'),
-            'K2': document.getElementById('k2Info'),
-            'K3': document.getElementById('k3Info')
+        // Available months by grade
+        const availableMonths = {
+            'K1': ['August'],
+            'K2': [],
+            'K3': []
         };
 
-        // Load saved grade if exists
-        function loadSavedGrade() {
+        const monthSelect = document.getElementById('monthSelect');
+        const continueBtn = document.getElementById('continueBtn');
+        const gradeDisplay = document.getElementById('gradeDisplay');
+        const monthInfos = {
+            'August': document.getElementById('augustInfo'),
+            'comingSoon': document.getElementById('comingSoonInfo')
+        };
+
+        let currentGrade = '';
+
+        // Load grade from previous page
+        function loadGradeContext() {
             try {
-                const savedData = localStorage.getItem('studentData');
-                if (savedData) {
-                    const data = JSON.parse(savedData);
-                    if (data.grade) {
-                        gradeSelect.value = data.grade;
-                        updateGradeInfo(data.grade);
-                        updateContinueButton();
+                // Try URL parameters first
+                const params = new URLSearchParams(window.location.search);
+                if (params.has('grade')) {
+                    currentGrade = params.get('grade');
+                } else {
+                    // Fallback to localStorage
+                    const savedData = localStorage.getItem('studentData');
+                    if (savedData) {
+                        const data = JSON.parse(savedData);
+                        currentGrade = data.grade || '';
                     }
                 }
+
+                // Display grade or redirect if missing
+                if (currentGrade) {
+                    gradeDisplay.textContent = `${currentGrade} - Kindergarten ${currentGrade.substring(1)}`;
+                    console.log('Loaded grade:', currentGrade);
+                } else {
+                    console.warn('No grade selected, redirecting to grade selection');
+                    alert('Please select a grade first.');
+                    window.location.href = 'grade-selection.html';
+                }
             } catch (error) {
-                console.error('Error loading saved grade:', error);
+                console.error('Error loading grade context:', error);
+                alert('Error loading grade information. Returning to grade selection.');
+                window.location.href = 'grade-selection.html';
             }
         }
 
-        // Update grade info display
-        function updateGradeInfo(grade) {
+        // Check if month is available for current grade
+        function isMonthAvailable(month) {
+            if (!currentGrade || !availableMonths[currentGrade]) {
+                return false;
+            }
+            return availableMonths[currentGrade].includes(month);
+        }
+
+        // Update month info display
+        function updateMonthInfo(month) {
             // Hide all info boxes
-            Object.values(gradeInfos).forEach(info => {
+            Object.values(monthInfos).forEach(info => {
                 if (info) info.classList.remove('show');
             });
 
-            // Show selected grade info
-            if (grade && gradeInfos[grade]) {
-                gradeInfos[grade].classList.add('show');
+            // Show appropriate info
+            if (month === 'August' && isMonthAvailable('August')) {
+                monthInfos['August'].classList.add('show');
+            } else if (month && !isMonthAvailable(month)) {
+                monthInfos['comingSoon'].classList.add('show');
             }
         }
 
         // Update continue button state
         function updateContinueButton() {
-            const selectedGrade = gradeSelect.value;
-            if (selectedGrade === 'K1') {
-                continueBtn.disabled = false;
-            } else if (selectedGrade === 'K2' || selectedGrade === 'K3') {
-                // Disable for coming soon grades
+            const selectedMonth = monthSelect.value;
+
+            if (!selectedMonth) {
                 continueBtn.disabled = true;
-                alert(`${selectedGrade} curriculum is coming soon. Currently, only K1 reports are available.`);
+                return;
+            }
+
+            if (isMonthAvailable(selectedMonth)) {
+                continueBtn.disabled = false;
             } else {
                 continueBtn.disabled = true;
+                alert(`${selectedMonth} curriculum for ${currentGrade} is coming soon. Currently, only August is available for ${currentGrade}.`);
             }
         }
 
-        // Handle grade selection
-        gradeSelect.addEventListener('change', function () {
-            const selectedGrade = this.value;
-            console.log('Grade selected:', selectedGrade);
+        // Handle month selection
+        monthSelect.addEventListener('change', function () {
+            const selectedMonth = this.value;
+            console.log('Month selected:', selectedMonth);
 
-            updateGradeInfo(selectedGrade);
+            updateMonthInfo(selectedMonth);
             updateContinueButton();
 
-            // Save grade to localStorage
-            if (selectedGrade) {
-                saveGrade(selectedGrade);
+            // Save month if valid
+            if (selectedMonth && isMonthAvailable(selectedMonth)) {
+                saveMonth(selectedMonth);
             }
         });
 
-        // Save grade data
-        function saveGrade(grade) {
+        // Save month data
+        function saveMonth(month) {
             try {
                 // Get existing student data or create new
                 let studentData = {};
@@ -429,8 +506,9 @@
                     studentData = JSON.parse(saved);
                 }
 
-                // Update grade
-                studentData.grade = grade;
+                // Update month and grade
+                studentData.month = month;
+                studentData.grade = currentGrade;
                 studentData.timestamp = Date.now();
 
                 // Save to localStorage and sessionStorage
@@ -442,46 +520,70 @@
                     console.warn('SessionStorage not available:', e);
                 }
 
-                console.log('Grade saved:', studentData);
+                console.log('Month saved:', studentData);
             } catch (error) {
-                console.error('Error saving grade:', error);
-                alert('Unable to save grade selection. Please try again.');
+                console.error('Error saving month:', error);
+                alert('Unable to save month selection. Please try again.');
+            }
+        }
+
+        // Load saved month if exists
+        function loadSavedMonth() {
+            try {
+                const savedData = localStorage.getItem('studentData');
+                if (savedData) {
+                    const data = JSON.parse(savedData);
+                    if (data.month && data.grade === currentGrade) {
+                        monthSelect.value = data.month;
+                        updateMonthInfo(data.month);
+                        updateContinueButton();
+                    }
+                }
+            } catch (error) {
+                console.error('Error loading saved month:', error);
             }
         }
 
         // Continue to student information
         continueBtn.addEventListener('click', function () {
-            const selectedGrade = gradeSelect.value;
+            const selectedMonth = monthSelect.value;
 
-            if (!selectedGrade) {
-                alert('Please select a grade level before continuing.');
+            if (!selectedMonth) {
+                alert('Please select a curriculum month before continuing.');
                 return;
             }
 
-            if (selectedGrade !== 'K1') {
-                alert(`${selectedGrade} is not yet available. Please select K1.`);
+            if (!isMonthAvailable(selectedMonth)) {
+                alert(`${selectedMonth} is not yet available. Please select August.`);
                 return;
             }
 
-            // Save grade one more time before navigation
-            saveGrade(selectedGrade);
+            // Save month one more time before navigation
+            saveMonth(selectedMonth);
 
-            // Navigate to month selection page with grade context
-            window.location.href = `month-selection.html?grade=${selectedGrade}`;
+            // Navigate to student information page with context
+            const params = new URLSearchParams({
+                grade: currentGrade,
+                month: selectedMonth
+            });
+            window.location.href = `student-information.html?${params.toString()}`;
         });
 
-        // Load saved grade on page load
-        window.addEventListener('load', loadSavedGrade);
+        // Initialize page
+        window.addEventListener('load', function () {
+            loadGradeContext();
+            loadSavedMonth();
+        });
 
-        // Auto-select K1 if coming from fresh start
+        // Handle fresh start parameter
         window.addEventListener('load', function () {
             const urlParams = new URLSearchParams(window.location.search);
             if (urlParams.has('fresh')) {
                 // Clear existing data for fresh start
                 localStorage.clear();
                 sessionStorage.clear();
-                // Remove the URL parameter
-                window.history.replaceState({}, document.title, window.location.pathname);
+                // Redirect to grade selection
+                window.location.href = 'grade-selection.html?fresh=1';
             }
         });
     </script>

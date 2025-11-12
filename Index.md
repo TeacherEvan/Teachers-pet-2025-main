@@ -2,6 +2,10 @@
 
 | Date | Agent | File | Status |
 |------|-------|------|--------|
+| 2025-11-12 | GitHub Copilot | month-selection.html | active |
+| 2025-11-12 | GitHub Copilot | assets/js/curriculum/k1/august.js | active |
+| 2025-11-12 | GitHub Copilot | assets/js/curriculum/curriculum-loader.js | active |
+| 2025-11-12 | GitHub Copilot | MULTI-GRADE-IMPLEMENTATION-PLAN.md | active |
 | 2025-10-23 | GitHub Copilot | grade-selection.html | active |
 | 2025-10-13 | GitHub Copilot | SUBJECT-BUG-FIX.md | active |
 | 2025-10-13 | GitHub Copilot | test-subject-bug.html | active |

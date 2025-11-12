@@ -1,12 +1,15 @@
 /**
  * Teachers Pet - Main Application Controller
  * Premium In-Memory Session Management with No Storage Dependencies
+ * @class TeachersPetApp
  */
 
+/* eslint-disable no-unused-vars */
 class TeachersPetApp {
   constructor() {
     this.sessionData = {
       grade: '',
+      month: '',
       studentName: '',
       gender: '',
       overallRating: 5,
@@ -15,10 +18,10 @@ class TeachersPetApp {
       subjects: [],
       topicRatings: {}
     };
-    
+
     this.currentPage = this.getCurrentPage();
     this.initialized = false;
-    
+
     // Initialize app based on current page
     this.init();
   }
@@ -26,6 +29,7 @@ class TeachersPetApp {
   getCurrentPage() {
     const path = window.location.pathname;
     if (path.includes('grade-selection')) return 'grade-selection';
+    if (path.includes('month-selection')) return 'month-selection';
     if (path.includes('student-information')) return 'student-info';
     if (path.includes('Subjects')) return 'subjects';
     return 'launcher';
@@ -33,7 +37,7 @@ class TeachersPetApp {
 
   init() {
     if (this.initialized) return;
-    
+
     // Initialize based on current page
     switch (this.currentPage) {
       case 'launcher':
@@ -42,6 +46,9 @@ class TeachersPetApp {
       case 'grade-selection':
         this.initGradeSelection();
         break;
+      case 'month-selection':
+        this.initMonthSelection();
+        break;
       case 'student-info':
         this.initStudentInfo();
         break;
@@ -49,7 +56,7 @@ class TeachersPetApp {
         this.initSubjects();
         break;
     }
-    
+
     this.initialized = true;
   }
 
@@ -57,10 +64,10 @@ class TeachersPetApp {
   initLauncher() {
     // Initialize premium loading screen
     this.showLoadingScreen();
-    
+
     // Setup start over functionality
     this.setupStartOver();
-    
+
     // Initialize particles and animations
     setTimeout(() => {
       this.hideLoadingScreen();
@@ -79,7 +86,7 @@ class TeachersPetApp {
   hideLoadingScreen() {
     const loadingScreen = document.getElementById('loadingScreen');
     const appContainer = document.getElementById('appContainer');
-    
+
     if (loadingScreen && appContainer) {
       loadingScreen.classList.add('fade-out');
       appContainer.classList.add('fade-in');
@@ -105,7 +112,7 @@ class TeachersPetApp {
       card.addEventListener('mouseenter', () => {
         card.style.transform = 'translateY(-8px) scale(1.02)';
       });
-      
+
       card.addEventListener('mouseleave', () => {
         card.style.transform = 'translateY(0) scale(1)';
       });
@@ -169,14 +176,14 @@ class TeachersPetApp {
       // Clear ALL localStorage data for a true fresh start
       localStorage.clear();
       sessionStorage.clear();
-      
+
       // Clear any cookies (if applicable)
       if (typeof document !== 'undefined') {
-        document.cookie.split(";").forEach(function(c) { 
-          document.cookie = c.replace(/^ +/, "").replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/"); 
+        document.cookie.split(";").forEach(function (c) {
+          document.cookie = c.replace(/^ +/, "").replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/");
         });
       }
-      
+
       // Reset the session data
       this.sessionData = {
         grade: '',
@@ -188,11 +195,11 @@ class TeachersPetApp {
         subjects: [],
         topicRatings: {}
       };
-      
+
       console.log('🧹 All data cleared - starting fresh!');
-      
+
       document.body.classList.add('page-exit');
-      
+
       setTimeout(() => {
         window.location.href = 'index.html';
       }, 600);
@@ -204,6 +211,39 @@ class TeachersPetApp {
     console.log('Initializing grade selection page');
     // Grade selection page is self-contained with inline JS
     // This method exists for consistency but most logic is in the page itself
+  }
+
+  initMonthSelection() {
+    console.log('Initializing month selection page');
+    // Month selection page is self-contained with inline JS
+    // Load grade/month from URL or storage if available
+    this.loadGradeMonthFromStorage();
+  }
+
+  loadGradeMonthFromStorage() {
+    const params = new URLSearchParams(window.location.search);
+    if (params.has('grade')) {
+      this.sessionData.grade = params.get('grade');
+    }
+    if (params.has('month')) {
+      this.sessionData.month = params.get('month');
+    }
+
+    // Fallback to localStorage
+    if (!this.sessionData.grade || !this.sessionData.month) {
+      try {
+        const saved = localStorage.getItem('studentData');
+        if (saved) {
+          const data = JSON.parse(saved);
+          this.sessionData.grade = this.sessionData.grade || data.grade || '';
+          this.sessionData.month = this.sessionData.month || data.month || '';
+        }
+      } catch (error) {
+        console.warn('Could not load from localStorage:', error);
+      }
+    }
+
+    console.log('Loaded grade/month:', this.sessionData.grade, this.sessionData.month);
   }
 
   // STUDENT INFORMATION PAGE METHODS
@@ -219,7 +259,7 @@ class TeachersPetApp {
     if (!form) return;
 
     const inputs = form.querySelectorAll('input, textarea, select');
-    
+
     inputs.forEach(input => {
       input.addEventListener('input', () => this.validateField(input));
       input.addEventListener('blur', () => this.validateField(input));
@@ -283,16 +323,16 @@ class TeachersPetApp {
     const progressText = document.querySelector('.progress-text');
 
     const updateProgress = () => {
-      const completedFields = Array.from(inputs).filter(input => 
+      const completedFields = Array.from(inputs).filter(input =>
         input.value.trim() !== '' && this.validateField(input)
       ).length;
-      
+
       const progress = (completedFields / inputs.length) * 100;
-      
+
       if (progressFill) {
         progressFill.style.width = `${progress}%`;
       }
-      
+
       if (progressText) {
         progressText.textContent = `Form Progress: ${Math.round(progress)}% Complete`;
       }
@@ -308,13 +348,13 @@ class TeachersPetApp {
   initSlider() {
     const slider = document.querySelector('.slider');
     const sliderValue = document.querySelector('.slider-value');
-    
+
     if (!slider || !sliderValue) return;
 
     const updateSliderDisplay = () => {
       const value = parseInt(slider.value);
       sliderValue.textContent = `${value}/10`;
-      
+
       // Update slider appearance based on value
       const percentage = (value - 1) / 9 * 100;
       slider.style.background = `linear-gradient(90deg, 
@@ -344,7 +384,7 @@ class TeachersPetApp {
 
     // Collect form data
     const formData = new FormData(form);
-    
+
     // Validate all required fields
     const requiredFields = form.querySelectorAll('[required]');
     let allValid = true;
@@ -393,7 +433,7 @@ class TeachersPetApp {
 
   loadSessionDataFromURL() {
     const params = new URLSearchParams(window.location.search);
-    
+
     // Restore session data from URL
     if (params.has('studentName')) {
       this.sessionData.studentName = params.get('studentName');
@@ -406,16 +446,16 @@ class TeachersPetApp {
 
   setupSubjectInteractions() {
     const subjectSections = document.querySelectorAll('.subject-section');
-    
+
     subjectSections.forEach(section => {
       const header = section.querySelector('.subject-header');
       const content = section.querySelector('.subject-content');
       const arrow = section.querySelector('.dropdown-arrow');
-      
+
       if (header && content && arrow) {
         header.addEventListener('click', () => {
           const isExpanded = content.classList.contains('expanded');
-          
+
           // Close all other sections
           subjectSections.forEach(otherSection => {
             if (otherSection !== section) {
@@ -424,14 +464,14 @@ class TeachersPetApp {
               otherSection.classList.remove('expanded');
             }
           });
-          
+
           // Toggle current section
           content.classList.toggle('expanded', !isExpanded);
           arrow.classList.toggle('rotated', !isExpanded);
           section.classList.toggle('expanded', !isExpanded);
         });
       }
-      
+
       // Setup topic checkboxes and ratings
       const topics = section.querySelectorAll('.topic-item');
       topics.forEach(topic => this.setupTopicInteraction(topic));
@@ -442,7 +482,7 @@ class TeachersPetApp {
     const checkbox = topicElement.querySelector('.topic-checkbox');
     const ratingOptions = topicElement.querySelectorAll('.rating-option');
     const topicText = topicElement.querySelector('.topic-text').textContent.trim();
-    
+
     if (checkbox) {
       checkbox.addEventListener('change', () => {
         if (checkbox.checked) {
@@ -472,23 +512,23 @@ class TeachersPetApp {
         this.updateSelectionSummary();
       });
     }
-    
+
     // Setup rating interaction
     ratingOptions.forEach(option => {
       option.addEventListener('click', () => {
         if (!checkbox.checked) return;
-        
+
         // Clear previous selection
         ratingOptions.forEach(opt => opt.classList.remove('selected'));
-        
+
         // Set new selection
         option.classList.add('selected');
         this.sessionData.topicRatings[topicText] = parseInt(option.dataset.value);
-        
+
         this.updateSelectionSummary();
       });
     });
-    
+
     // Initialize rating options as disabled
     ratingOptions.forEach(option => {
       option.style.pointerEvents = 'none';
@@ -499,7 +539,7 @@ class TeachersPetApp {
   setupBulkActions() {
     const selectAllButton = document.querySelector('[data-action="select-all"]');
     const clearAllButton = document.querySelector('[data-action="clear-all"]');
-    
+
     if (selectAllButton) {
       selectAllButton.addEventListener('click', () => {
         const checkboxes = document.querySelectorAll('.topic-checkbox');
@@ -511,7 +551,7 @@ class TeachersPetApp {
         });
       });
     }
-    
+
     if (clearAllButton) {
       clearAllButton.addEventListener('click', () => {
         const checkboxes = document.querySelectorAll('.topic-checkbox');
@@ -528,10 +568,10 @@ class TeachersPetApp {
   updateSelectionSummary() {
     const summaryContent = document.querySelector('.summary-content');
     if (!summaryContent) return;
-    
+
     const selectedCount = this.sessionData.subjects.length;
     const ratedCount = Object.keys(this.sessionData.topicRatings).length;
-    
+
     summaryContent.innerHTML = `
       <span class="summary-count">${selectedCount}</span> subjects selected, 
       <span class="summary-count">${ratedCount}</span> rated. 
@@ -547,7 +587,7 @@ class TeachersPetApp {
           this.showNotification('Please select at least one subject before generating comments.', 'warning');
           return;
         }
-        
+
         this.generateComments();
       });
     }
@@ -556,7 +596,7 @@ class TeachersPetApp {
   generateComments() {
     // Show loading state
     this.showLoadingOverlay('Generating premium comments...');
-    
+
     // Simulate processing time for premium experience
     setTimeout(() => {
       try {
@@ -606,16 +646,16 @@ class TeachersPetApp {
         </div>
       </div>
     `;
-    
+
     document.body.insertAdjacentHTML('beforeend', commentsHTML);
-    
+
     // Add styles for comments display
     this.addCommentsStyles();
   }
 
   addCommentsStyles() {
     if (document.querySelector('#comments-styles')) return;
-    
+
     const style = document.createElement('style');
     style.id = 'comments-styles';
     style.textContent = `
@@ -722,7 +762,7 @@ class TeachersPetApp {
         justify-content: center;
       }
     `;
-    
+
     document.head.appendChild(style);
   }
 
@@ -737,7 +777,7 @@ class TeachersPetApp {
     const commentSections = document.querySelectorAll('.comment-section');
     const targetSection = type === 'male' ? commentSections[0] : commentSections[1];
     const commentText = targetSection.querySelector('.comment-text').textContent;
-    
+
     if (navigator.clipboard) {
       navigator.clipboard.writeText(commentText).then(() => {
         this.showNotification(`${type.charAt(0).toUpperCase() + type.slice(1)} teacher comment copied to clipboard!`, 'success');
@@ -758,7 +798,7 @@ class TeachersPetApp {
     document.body.appendChild(textArea);
     textArea.focus();
     textArea.select();
-    
+
     try {
       document.execCommand('copy');
       this.showNotification('Comment copied to clipboard!', 'success');
@@ -766,7 +806,7 @@ class TeachersPetApp {
       console.error('Fallback copy failed:', err);
       this.showNotification('Unable to copy to clipboard. Please copy manually.', 'error');
     }
-    
+
     document.body.removeChild(textArea);
   }
 
@@ -777,7 +817,7 @@ class TeachersPetApp {
   // UTILITY METHODS
   navigateWithTransition(url) {
     document.body.classList.add('page-exit');
-    
+
     setTimeout(() => {
       window.location.href = url;
     }, 600);
@@ -792,7 +832,7 @@ class TeachersPetApp {
         <div class="loading-message">${message}</div>
       </div>
     `;
-    
+
     overlay.style.cssText = `
       position: fixed;
       top: 0;
@@ -809,7 +849,7 @@ class TeachersPetApp {
       color: white;
       font-family: inherit;
     `;
-    
+
     const contentStyle = `
       text-align: center;
       .loading-spinner {
@@ -826,7 +866,7 @@ class TeachersPetApp {
         font-weight: 500;
       }
     `;
-    
+
     document.body.appendChild(overlay);
   }
 
@@ -841,7 +881,7 @@ class TeachersPetApp {
     const notification = document.createElement('div');
     notification.className = `notification notification-${type}`;
     notification.textContent = message;
-    
+
     notification.style.cssText = `
       position: fixed;
       top: 20px;
@@ -860,13 +900,13 @@ class TeachersPetApp {
       ${type === 'warning' ? 'background: linear-gradient(135deg, #f39c12, #e67e22);' : ''}
       ${type === 'info' ? 'background: linear-gradient(135deg, #3498db, #2980b9);' : ''}
     `;
-    
+
     document.body.appendChild(notification);
-    
+
     setTimeout(() => {
       notification.style.transform = 'translateX(0)';
     }, 100);
-    
+
     setTimeout(() => {
       notification.style.transform = 'translateX(100%)';
       setTimeout(() => {
@@ -897,14 +937,14 @@ window.startOverWithAnimation = () => {
   // Clear ALL localStorage data for a true fresh start
   localStorage.clear();
   sessionStorage.clear();
-  
+
   // Clear any cookies (if applicable)
   if (typeof document !== 'undefined') {
-    document.cookie.split(";").forEach(function(c) { 
-      document.cookie = c.replace(/^ +/, "").replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/"); 
+    document.cookie.split(";").forEach(function (c) {
+      document.cookie = c.replace(/^ +/, "").replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/");
     });
   }
-  
+
   // Reset the session data if app exists
   if (app && app.sessionData) {
     app.sessionData = {
@@ -917,9 +957,9 @@ window.startOverWithAnimation = () => {
       topicRatings: {}
     };
   }
-  
+
   console.log('🧹 All data cleared - starting fresh!');
-  
+
   // Navigate with animation
   if (app) {
     app.navigateWithTransition('index.html');

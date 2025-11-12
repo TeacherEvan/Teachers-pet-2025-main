@@ -39,7 +39,23 @@
         "textContent",
         "toggleSubject",
         "toothpaste",
-        "weaknesses"
+        "weaknesses",
+        "rgba",
+        "Vercel",
+        "Netlify",
+        "neumorphic",
+        "Orbitron",
+        "Segoe",
+        "Tahoma",
+        "Verdana",
+        "preload",
+        "stylesheet",
+        "Astral",
+        "Kindergarten",
+        "copilot",
+        "mdc",
+        "origami",
+        "zigzag"
     ],
     "cSpell.ignoreWords": [
         "conv1",
@@ -54,6 +70,10 @@
         "MD032": false,
         "MD009": false,
         "MD031": false,
-        "MD026": false
+        "MD026": false,
+        "MD036": false
+    },
+    "eslint.options": {
+        "configFile": ".eslintrc.json"
     }
 }

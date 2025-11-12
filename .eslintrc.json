@@ -1,0 +1,28 @@
+{
+    "env": {
+        "browser": true,
+        "es6": true,
+        "es2015": true,
+        "es2017": true,
+        "es2020": true
+    },
+    "parserOptions": {
+        "ecmaVersion": 2020,
+        "sourceType": "module"
+    },
+    "rules": {
+        "no-unused-vars": "warn"
+    },
+    "globals": {
+        "window": "readonly",
+        "document": "readonly",
+        "localStorage": "readonly",
+        "sessionStorage": "readonly",
+        "console": "readonly",
+        "alert": "readonly",
+        "TeachersPetApp": "writable",
+        "CurriculumLoader": "writable",
+        "PremiumCommentEngine": "writable",
+        "EnhancedCommentEngine": "writable"
+    }
+}

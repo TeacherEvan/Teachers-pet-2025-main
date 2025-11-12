@@ -12,10 +12,14 @@
     <link rel="preload" href="assets/css/components.css" as="style">
     <link rel="preload" href="assets/js/app.js" as="script">
     <link rel="preload" href="assets/js/comment-engine.js" as="script">
+    <link rel="preload" href="assets/js/curriculum/curriculum-loader.js" as="script">
 
     <!-- CSS -->
     <link rel="stylesheet" href="assets/css/main.css">
     <link rel="stylesheet" href="assets/css/components.css">
+
+    <!-- Curriculum Loader -->
+    <script src="assets/js/curriculum/curriculum-loader.js"></script>
 </head>
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap');
@@ -900,6 +904,35 @@
         </div>
 
     </div> <!-- .container -->
+
+    <!-- Load curriculum dynamically based on grade and month -->
+    <script id="dynamic-curriculum-loader">
+        // TODO: Future implementation - dynamically generate subject HTML from curriculum data
+        // For now, using hardcoded K1 August subjects below
+        // This script will be replaced with dynamic rendering when all curriculum files are ready
+
+        (async function () {
+            try {
+                // Get grade and month from session
+                const params = new URLSearchParams(window.location.search);
+                const grade = params.get('grade') || 'K1';
+                const month = params.get('month') || 'August';
+
+                console.log(`📚 Selected curriculum: ${grade} - ${month}`);
+
+                // Load curriculum data (validates file exists)
+                if (window.curriculumLoader) {
+                    const curriculum = await window.curriculumLoader.load(grade, month);
+                    console.log('✅ Curriculum data loaded:', curriculum);
+                    // Note: Currently using hardcoded HTML below
+                    // Future: Generate subject sections from curriculum.subjects array
+                }
+            } catch (error) {
+                console.warn('⚠️ Curriculum loading failed, using hardcoded subjects:', error.message);
+                // Fallback to hardcoded K1 August subjects (current implementation)
+            }
+        })();
+    </script>
 
     <script>
         let selectedTopics = [];
