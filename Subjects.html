@@ -183,6 +183,31 @@
         transform: rotate(180deg);
     }
 
+    .dropdown-hint {
+        font-size: 11px;
+        color: #FFD700;
+        margin-left: 10px;
+        font-style: italic;
+        opacity: 0.9;
+        animation: pulsate-gold 2s ease-in-out infinite;
+        font-weight: 400;
+        text-shadow: 0 0 8px rgba(255, 215, 0, 0.6);
+    }
+
+    @keyframes pulsate-gold {
+
+        0%,
+        100% {
+            opacity: 0.6;
+            text-shadow: 0 0 5px rgba(255, 215, 0, 0.4);
+        }
+
+        50% {
+            opacity: 1;
+            text-shadow: 0 0 12px rgba(255, 215, 0, 0.8);
+        }
+    }
+
     .button {
         background: linear-gradient(135deg, #3498db, #2980b9);
         color: white;
@@ -389,6 +414,7 @@
                         <input type="checkbox" class="subject-checkbox" id="subject_english" value="English"
                             onchange="handleSubjectCheck('english')">
                         <label for="subject_english">ENGLISH</label>
+                        <span class="dropdown-hint">Click to drop down</span>
                         <span class="dropdown-arrow" id="arrow_english">▼</span>
                     </div>
                 </div>
@@ -423,6 +449,7 @@
                         <input type="checkbox" class="subject-checkbox" id="subject_mathematics" value="Mathematics"
                             onchange="handleSubjectCheck('mathematics')">
                         <label for="subject_mathematics">MATHEMATICS</label>
+                        <span class="dropdown-hint">Click to drop down</span>
                         <span class="dropdown-arrow" id="arrow_mathematics">▼</span>
                     </div>
                 </div>
@@ -465,6 +492,7 @@
                         <input type="checkbox" class="subject-checkbox" id="subject_iq" value="I.Q"
                             onchange="handleSubjectCheck('iq')">
                         <label for="subject_iq">I.Q</label>
+                        <span class="dropdown-hint">Click to drop down</span>
                         <span class="dropdown-arrow" id="arrow_iq">▼</span>
                     </div>
                 </div>
@@ -500,6 +528,7 @@
                         <input type="checkbox" class="subject-checkbox" id="subject_social" value="Social Studies"
                             onchange="handleSubjectCheck('social')">
                         <label for="subject_social">SOCIAL STUDIES</label>
+                        <span class="dropdown-hint">Click to drop down</span>
                         <span class="dropdown-arrow" id="arrow_social">▼</span>
                     </div>
                 </div>
@@ -536,6 +565,7 @@
                         <input type="checkbox" class="subject-checkbox" id="subject_science" value="Science"
                             onchange="handleSubjectCheck('science')">
                         <label for="subject_science">SCIENCE</label>
+                        <span class="dropdown-hint">Click to drop down</span>
                         <span class="dropdown-arrow" id="arrow_science">▼</span>
                     </div>
                 </div>
@@ -566,6 +596,7 @@
                         <input type="checkbox" class="subject-checkbox" id="subject_cooking" value="Cooking"
                             onchange="handleSubjectCheck('cooking')">
                         <label for="subject_cooking">COOKING</label>
+                        <span class="dropdown-hint">Click to drop down</span>
                         <span class="dropdown-arrow" id="arrow_cooking">▼</span>
                     </div>
                 </div>
@@ -584,6 +615,7 @@
                         <input type="checkbox" class="subject-checkbox" id="subject_conv1" value="Conversation 1"
                             onchange="handleSubjectCheck('conv1')">
                         <label for="subject_conv1">CONVERSATION 1</label>
+                        <span class="dropdown-hint">Click to drop down</span>
                         <span class="dropdown-arrow" id="arrow_conv1">▼</span>
                     </div>
                 </div>
@@ -621,6 +653,7 @@
                         <input type="checkbox" class="subject-checkbox" id="subject_conv2" value="Conversation 2"
                             onchange="handleSubjectCheck('conv2')">
                         <label for="subject_conv2">CONVERSATION 2</label>
+                        <span class="dropdown-hint">Click to drop down</span>
                         <span class="dropdown-arrow" id="arrow_conv2">▼</span>
                     </div>
                 </div>
@@ -648,6 +681,7 @@
                         <input type="checkbox" class="subject-checkbox" id="subject_arts" value="Arts"
                             onchange="handleSubjectCheck('arts')">
                         <label for="subject_arts">ARTS</label>
+                        <span class="dropdown-hint">Click to drop down</span>
                         <span class="dropdown-arrow" id="arrow_arts">▼</span>
                     </div>
                 </div>
@@ -682,6 +716,7 @@
                         <input type="checkbox" class="subject-checkbox" id="subject_pe" value="Physical Education"
                             onchange="handleSubjectCheck('pe')">
                         <label for="subject_pe">PHYSICAL EDUCATION</label>
+                        <span class="dropdown-hint">Click to drop down</span>
                         <span class="dropdown-arrow" id="arrow_pe">▼</span>
                     </div>
                 </div>
@@ -720,6 +755,7 @@
                         <input type="checkbox" class="subject-checkbox" id="subject_puppet" value="Puppet Show"
                             onchange="handleSubjectCheck('puppet')">
                         <label for="subject_puppet">PUPPET SHOW</label>
+                        <span class="dropdown-hint">Click to drop down</span>
                         <span class="dropdown-arrow" id="arrow_puppet">▼</span>
                     </div>
                 </div>
@@ -744,6 +780,7 @@
                         <input type="checkbox" class="subject-checkbox" id="subject_safari" value="Super Safari"
                             onchange="handleSubjectCheck('safari')">
                         <label for="subject_safari">SUPER SAFARI</label>
+                        <span class="dropdown-hint">Click to drop down</span>
                         <span class="dropdown-arrow" id="arrow_safari">▼</span>
                     </div>
                 </div>
@@ -835,6 +872,7 @@
                         <input type="checkbox" class="subject-checkbox" id="subject_story" value="Story Time"
                             onchange="handleSubjectCheck('story')">
                         <label for="subject_story">STORY TIME</label>
+                        <span class="dropdown-hint">Click to drop down</span>
                         <span class="dropdown-arrow" id="arrow_story">▼</span>
                     </div>
                 </div>
@@ -938,6 +976,7 @@
                                         <input type="checkbox" class="subject-checkbox" id="subject_${subject.id}" value="${subject.name}"
                                             onchange="handleSubjectCheck('${subject.id}')">
                                         <label for="subject_${subject.id}">${subject.name.toUpperCase()}</label>
+                                        <span class="dropdown-hint">Click to drop down</span>
                                         <span class="dropdown-arrow" id="arrow_${subject.id}">▼</span>
                                     </div>
                                 </div>

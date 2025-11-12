@@ -2,6 +2,29 @@
 
 ## Recent Work (Newest First)
 
+### 2025-11-12: Added Pulsating Gold "Click to drop down" Text to Subject Headers
+**Agent:** GitHub Copilot
+
+**Changes:**
+- Added `.dropdown-hint` CSS class with pulsating gold animation
+  - Font size: 11px, italic style
+  - Color: #FFD700 (gold)
+  - Pulsates between 60% and 100% opacity with soft glow effect
+  - 2-second animation cycle
+- Added `<span class="dropdown-hint">Click to drop down</span>` to all subject headers:
+  - English, Mathematics, I.Q, Social Studies, Science
+  - Cooking, Conversation 1, Conversation 2, Arts
+  - Physical Education, Puppet Show, Super Safari, Story Time
+- Updated dynamic template for K2 November curriculum subjects
+- Text appears between subject label and dropdown arrow
+
+**Visual Effect:**
+- Subtle gold text that gently pulsates to draw attention
+- Soft text-shadow glow effect synchronized with opacity changes
+- Non-intrusive hint for user interaction
+
+---
+
 ### 2025-11-12: Student Name Display Fix
 **Agent:** GitHub Copilot
 
