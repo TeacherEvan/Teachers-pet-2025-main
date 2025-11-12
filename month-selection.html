@@ -403,7 +403,7 @@
         // Available months by grade
         const availableMonths = {
             'K1': ['August', 'November'],
-            'K2': [],
+            'K2': ['November'],
             'K3': []
         };
 
@@ -438,6 +438,9 @@
                 if (currentGrade) {
                     gradeDisplay.textContent = `${currentGrade} - Kindergarten ${currentGrade.substring(1)}`;
                     console.log('Loaded grade:', currentGrade);
+
+                    // Enable/disable months based on grade
+                    updateMonthOptionsForGrade();
                 } else {
                     console.warn('No grade selected, redirecting to grade selection');
                     alert('Please select a grade first.');
@@ -448,6 +451,30 @@
                 alert('Error loading grade information. Returning to grade selection.');
                 window.location.href = 'grade-selection.html';
             }
+        }
+
+        // Update month dropdown options based on current grade
+        function updateMonthOptionsForGrade() {
+            const monthOptions = monthSelect.querySelectorAll('option');
+            const gradeMonths = availableMonths[currentGrade] || [];
+
+            monthOptions.forEach(option => {
+                const month = option.value;
+
+                // Skip the placeholder option
+                if (!month) return;
+
+                // Enable if in availableMonths for this grade, disable otherwise
+                if (gradeMonths.includes(month)) {
+                    option.disabled = false;
+                    option.textContent = month;
+                } else {
+                    option.disabled = true;
+                    option.textContent = `${month} (Coming Soon)`;
+                }
+            });
+
+            console.log(`✅ Updated month options for ${currentGrade}:`, gradeMonths);
         }
 
         // Check if month is available for current grade
@@ -486,7 +513,9 @@
                 continueBtn.disabled = false;
             } else {
                 continueBtn.disabled = true;
-                alert(`${selectedMonth} curriculum for ${currentGrade} is coming soon. Currently, only August is available for ${currentGrade}.`);
+                const gradeMonths = availableMonths[currentGrade] || [];
+                const available = gradeMonths.join(' and ');
+                alert(`${selectedMonth} curriculum for ${currentGrade} is coming soon. Currently available: ${available}.`);
             }
         }
 

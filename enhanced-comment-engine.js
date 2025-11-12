@@ -35,6 +35,7 @@ class EnhancedCommentEngine {
                 "social studies": "Social Studies", "i.q": "I.Q",
                 "physical education": "Physical Education", cooking: "Cooking",
                 "conversation 1": "Conversation 1", "conversation 2": "Conversation 2",
+                "conversation 3": "Conversation 3",
                 arts: "Arts", "puppet show": "Puppet Show",
                 "super safari": "Super Safari", "story time": "Story Time"
             }
@@ -94,8 +95,16 @@ class EnhancedCommentEngine {
      */
     processSessionData(sessionData) {
         console.log('🔍 Processing session data:', sessionData);
+        console.log('📊 sessionData.studentName:', sessionData.studentName);
+        console.log('📊 sessionData.gender:', sessionData.gender);
         console.log('📊 sessionData.subjects:', sessionData.subjects);
         console.log('📊 sessionData.topicRatings:', sessionData.topicRatings);
+
+        // Validate student name
+        if (!sessionData.studentName || sessionData.studentName.trim() === '') {
+            console.error('❌ Missing student name in session data!');
+            throw new Error('Student name is required for comment generation');
+        }
 
         const performance = this.performanceMap[sessionData.overallRating] || this.performanceMap[5];
         const genderKey = sessionData.gender.toLowerCase();
@@ -110,8 +119,11 @@ class EnhancedCommentEngine {
             console.log(`  ✓ ${subject}: ${topics.length} topics`, topics);
         });
 
+        const studentName = sessionData.studentName.trim();
+        console.log('✅ Using student name:', studentName);
+
         return {
-            name: sessionData.studentName.trim(),
+            name: studentName,
             level: performance.level,
             descriptor: performance.descriptor,
             verb: performance.verb,

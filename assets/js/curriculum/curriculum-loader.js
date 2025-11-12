@@ -87,10 +87,9 @@ class CurriculumLoader {
      * @returns {boolean} True if curriculum is available
      */
     isAvailable(grade, month) {
-        // For now, only K1 August is available
         const availableList = {
-            'K1': ['August'],
-            'K2': [],
+            'K1': ['August', 'November'],
+            'K2': ['November'],
             'K3': []
         };
 
@@ -104,8 +103,8 @@ class CurriculumLoader {
      */
     getAvailableMonths(grade) {
         const availableList = {
-            'K1': ['August'],
-            'K2': [],
+            'K1': ['August', 'November'],
+            'K2': ['November'],
             'K3': []
         };
 

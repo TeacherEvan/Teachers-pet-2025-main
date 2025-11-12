@@ -8,10 +8,10 @@ class OptimizedCommentGenerator {
         this.engine = null;
         this.isInitialized = false;
         this.fallbackMode = false;
-        
+
         this.init();
     }
-    
+
     init() {
         try {
             // Check if EnhancedCommentEngine is available (preferred)
@@ -35,12 +35,12 @@ class OptimizedCommentGenerator {
             this.initializeFallback();
         }
     }
-    
+
     initializeFallback() {
         this.isInitialized = true;
         console.log('OptimizedCommentGenerator initialized in fallback mode');
     }
-    
+
     /**
      * Generate comments from localStorage data
      */
@@ -53,7 +53,7 @@ class OptimizedCommentGenerator {
             return this.generateErrorComments(error.message);
         }
     }
-    
+
     /**
      * Generate comments from provided session data
      */
@@ -61,14 +61,14 @@ class OptimizedCommentGenerator {
         if (!this.isInitialized) {
             throw new Error('OptimizedCommentGenerator not initialized');
         }
-        
+
         // Validate session data
         const validatedData = this.validateAndCleanSessionData(sessionData);
-        
+
         if (this.fallbackMode) {
             return this.generateFallbackComments(validatedData);
         }
-        
+
         try {
             return this.engine.generateComments(validatedData);
         } catch (error) {
@@ -76,19 +76,24 @@ class OptimizedCommentGenerator {
             return this.generateFallbackComments(validatedData);
         }
     }
-    
+
     /**
      * Collect session data from localStorage and form elements
      */
     collectSessionData() {
         // Get student data from localStorage
         const studentDataStr = localStorage.getItem('studentData');
+        console.log('📦 Raw localStorage studentData:', studentDataStr);
+
         const studentData = studentDataStr ? JSON.parse(studentDataStr) : {};
-        
+        console.log('📊 Parsed studentData:', studentData);
+        console.log('📊 studentData.studentName:', studentData.studentName);
+        console.log('📊 studentData.gender:', studentData.gender);
+
         // Get selected subjects
         const selectedSubjects = this.getSelectedSubjects();
         const topicRatings = this.getTopicRatings();
-        
+
         // Combine all data
         const sessionData = {
             studentName: studentData.studentName || '',
@@ -99,24 +104,25 @@ class OptimizedCommentGenerator {
             subjects: selectedSubjects,
             topicRatings: topicRatings
         };
-        
-        console.log('Collected session data:', sessionData);
+
+        console.log('✅ Collected session data:', sessionData);
+        console.log('✅ Final studentName value:', sessionData.studentName);
         return sessionData;
     }
-    
+
     /**
      * Get selected subjects from form
      */
     getSelectedSubjects() {
         const subjects = [];
         const subjectCheckboxes = document.querySelectorAll('.subject-checkbox:checked');
-        
+
         subjectCheckboxes.forEach(checkbox => {
             if (checkbox.value) {
                 subjects.push(checkbox.value);
             }
         });
-        
+
         // Fallback to localStorage if no form elements found
         if (subjects.length === 0) {
             const storedSubjects = localStorage.getItem('selectedSubjects');
@@ -128,65 +134,65 @@ class OptimizedCommentGenerator {
                 }
             }
         }
-        
+
         return subjects;
     }
-    
+
     /**
      * Get topic ratings from form
      */
     getTopicRatings() {
         const ratings = {};
         const topicCheckboxes = document.querySelectorAll('.topic-checkbox:checked');
-        
+
         topicCheckboxes.forEach(checkbox => {
             if (checkbox.value) {
                 // Default rating of 5 for selected topics
                 ratings[checkbox.value] = 5;
             }
         });
-        
+
         return ratings;
     }
-    
+
     /**
      * Validate and clean session data
      */
     validateAndCleanSessionData(sessionData) {
         const cleaned = { ...sessionData };
-        
+
         // Ensure required fields
         if (!cleaned.studentName || cleaned.studentName.trim() === '') {
             throw new Error('Student name is required for comment generation');
         }
-        
+
         // Clean and validate student name
         cleaned.studentName = cleaned.studentName.trim();
-        
+
         // Validate gender
         const validGenders = ['he', 'she', 'they'];
         if (!validGenders.includes(cleaned.gender.toLowerCase())) {
             console.warn('Invalid gender, defaulting to "they"');
             cleaned.gender = 'they';
         }
-        
+
         // Ensure rating is within valid range
         if (cleaned.overallRating < 1 || cleaned.overallRating > 10) {
             console.warn('Invalid rating, defaulting to 5');
             cleaned.overallRating = 5;
         }
-        
+
         // Ensure arrays exist
         cleaned.subjects = cleaned.subjects || [];
         cleaned.topicRatings = cleaned.topicRatings || {};
-        
+
         // Clean text fields
         cleaned.strengths = (cleaned.strengths || '').trim();
         cleaned.weaknesses = (cleaned.weaknesses || '').trim();
-        
+
         return cleaned;
     }
-    
+
     /**
      * Generate fallback comments when main engine is unavailable
      */
@@ -194,10 +200,10 @@ class OptimizedCommentGenerator {
         const name = sessionData.studentName;
         const pronoun = this.getPronounSet(sessionData.gender);
         const performance = this.getPerformanceDescriptor(sessionData.overallRating);
-        
+
         const maleComment = this.generateMaleFallbackComment(name, pronoun, performance, sessionData);
         const femaleComment = this.generateFemaleFallbackComment(name, pronoun, performance, sessionData);
-        
+
         return {
             male: maleComment,
             female: femaleComment,
@@ -207,55 +213,55 @@ class OptimizedCommentGenerator {
             }
         };
     }
-    
+
     generateMaleFallbackComment(name, pronoun, performance, data) {
         let comment = `${name} has demonstrated ${performance.level} performance this term, showing consistent progress across multiple learning areas. `;
-        
+
         if (data.strengths) {
             const strengths = this.processTextList(data.strengths);
             comment += `${pronoun.subject} particularly excels in ${this.naturalJoin(strengths)}, displaying strong capabilities and understanding. `;
         }
-        
+
         if (data.subjects && data.subjects.length > 0) {
             comment += `In ${this.naturalJoin(data.subjects)}, ${name} has shown steady progress and engagement with the curriculum. `;
         }
-        
+
         comment += `${pronoun.subject} maintains positive behavior in the classroom and works well with peers. `;
-        
+
         if (data.weaknesses) {
             const weaknesses = this.processTextList(data.weaknesses);
             comment += `With continued support in ${this.naturalJoin(weaknesses)}, ${name} will continue to develop these important skills. `;
         }
-        
+
         comment += `${name} is well-prepared for continued academic growth and shows excellent potential for future success.`;
-        
+
         return comment;
     }
-    
+
     generateFemaleFallbackComment(name, pronoun, performance, data) {
         let comment = `${name} has blossomed beautifully this term, bringing joy and enthusiasm to our classroom community. `;
-        
+
         if (data.strengths) {
             const strengths = this.processTextList(data.strengths);
             comment += `${pronoun.subject} shines particularly in ${this.naturalJoin(strengths)}, displaying wonderful natural abilities. `;
         }
-        
+
         if (data.subjects && data.subjects.length > 0) {
             comment += `In ${this.naturalJoin(data.subjects)}, ${name} has shown delightful progress and genuine curiosity. `;
         }
-        
+
         comment += `${pronoun.subject} brings warmth and kindness to all classroom interactions and is a treasured member of our learning community. `;
-        
+
         if (data.weaknesses) {
             const weaknesses = this.processTextList(data.weaknesses);
             comment += `With gentle encouragement in ${this.naturalJoin(weaknesses)}, ${name} will continue to flourish and grow. `;
         }
-        
+
         comment += `${name} is ready for wonderful new adventures in learning and shows beautiful potential for continued success.`;
-        
+
         return comment;
     }
-    
+
     /**
      * Get pronoun set for gender
      */
@@ -265,10 +271,10 @@ class OptimizedCommentGenerator {
             she: { subject: 'She', object: 'her', possessive: 'her' },
             they: { subject: 'They', object: 'them', possessive: 'their' }
         };
-        
+
         return pronouns[gender.toLowerCase()] || pronouns.they;
     }
-    
+
     /**
      * Get performance descriptor
      */
@@ -285,10 +291,10 @@ class OptimizedCommentGenerator {
             2: { level: 'beginning', attitude: 'responsive' },
             1: { level: 'emerging', attitude: 'guided' }
         };
-        
+
         return descriptors[rating] || descriptors[5];
     }
-    
+
     /**
      * Process text list from comma-separated string
      */
@@ -296,7 +302,7 @@ class OptimizedCommentGenerator {
         if (!text || typeof text !== 'string') return [];
         return text.split(',').map(item => item.trim()).filter(Boolean);
     }
-    
+
     /**
      * Natural language joining
      */
@@ -306,7 +312,7 @@ class OptimizedCommentGenerator {
         if (arr.length === 2) return `${arr[0]} ${conjunction} ${arr[1]}`;
         return `${arr.slice(0, -1).join(', ')}, ${conjunction} ${arr.slice(-1)}`;
     }
-    
+
     /**
      * Get word count
      */
@@ -314,13 +320,13 @@ class OptimizedCommentGenerator {
         if (!text) return 0;
         return text.trim().split(/\s+/).filter(word => word.length > 0).length;
     }
-    
+
     /**
      * Generate error comments when generation fails
      */
     generateErrorComments(errorMessage) {
         const errorComment = `Unable to generate personalized comments due to a technical issue: ${errorMessage}. Please ensure all required information is provided and try again.`;
-        
+
         return {
             male: errorComment,
             female: errorComment,
@@ -330,7 +336,7 @@ class OptimizedCommentGenerator {
             }
         };
     }
-    
+
     /**
      * Test comment generation with sample data
      */
@@ -347,7 +353,7 @@ class OptimizedCommentGenerator {
                 'letter recognition': 4
             }
         };
-        
+
         console.log('Testing comment generation with sample data...');
         const result = this.generateComments(testData);
         console.log('Test result:', result);
@@ -362,21 +368,21 @@ window.OptimizedCommentGenerator = OptimizedCommentGenerator;
 window.commentGenerator = new OptimizedCommentGenerator();
 
 // Backward compatibility functions
-window.generateCommentsFromStorage = function() {
+window.generateCommentsFromStorage = function () {
     return window.commentGenerator.generateFromStorage();
 };
 
-window.testCommentGeneration = function() {
+window.testCommentGeneration = function () {
     return window.commentGenerator.testGeneration();
 };
 
 // Auto-initialize when DOM is loaded
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
     // Ensure the generator is ready
     if (!window.commentGenerator.isInitialized) {
         window.commentGenerator.init();
     }
-    
+
     console.log('OptimizedCommentGenerator ready for use');
 });
 

@@ -317,7 +317,7 @@
                 <select id="gradeLevel" name="gradeLevel" required>
                     <option value="">Choose a grade...</option>
                     <option value="K1">K1 - Kindergarten 1</option>
-                    <option value="K2">K2 - Kindergarten 2 (Coming Soon)</option>
+                    <option value="K2">K2 - Kindergarten 2</option>
                     <option value="K3">K3 - Kindergarten 3 (Coming Soon)</option>
                 </select>
             </div>
@@ -329,8 +329,9 @@
             </div>
 
             <div id="k2Info" class="grade-info">
-                <h3>📗 Kindergarten 2 <span class="coming-soon-badge">COMING SOON</span></h3>
-                <p>Curriculum information coming soon. This level will build upon K1 foundations.</p>
+                <h3>📗 Kindergarten 2</h3>
+                <p>Building upon K1 foundations with more advanced activities in literacy, numeracy, and social
+                    awareness.</p>
             </div>
 
             <div id="k3Info" class="grade-info">
@@ -394,12 +395,12 @@
         // Update continue button state
         function updateContinueButton() {
             const selectedGrade = gradeSelect.value;
-            if (selectedGrade === 'K1') {
+            if (selectedGrade === 'K1' || selectedGrade === 'K2') {
                 continueBtn.disabled = false;
-            } else if (selectedGrade === 'K2' || selectedGrade === 'K3') {
+            } else if (selectedGrade === 'K3') {
                 // Disable for coming soon grades
                 continueBtn.disabled = true;
-                alert(`${selectedGrade} curriculum is coming soon. Currently, only K1 reports are available.`);
+                alert(`${selectedGrade} curriculum is coming soon. Currently, K1 and K2 reports are available.`);
             } else {
                 continueBtn.disabled = true;
             }
@@ -458,8 +459,8 @@
                 return;
             }
 
-            if (selectedGrade !== 'K1') {
-                alert(`${selectedGrade} is not yet available. Please select K1.`);
+            if (selectedGrade !== 'K1' && selectedGrade !== 'K2') {
+                alert(`${selectedGrade} is not yet available. Please select K1 or K2.`);
                 return;
             }
 
