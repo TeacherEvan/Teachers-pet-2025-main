@@ -3,6 +3,10 @@
  * Teachers Pet - Kindergarten 1 October-November 2025 (2nd Semester)
  * 
  * This file contains all subjects, activities, and vocabulary for K1 November curriculum.
+ * NOTE: November has DIFFERENT subjects than August:
+ * - Has Conversation 3 (NOT Conversation 2)
+ * - Does NOT have Super Safari or Story Time
+ * 
  * Used by Subjects.html to dynamically generate subject selection interface.
  */
 
@@ -104,12 +108,12 @@ window.CurriculumData.K1.November = {
             vocabulary: 'eyes, smell, Thailand, hand, school'
         },
         {
-            id: 'conversation2',
-            name: 'Conversation 2',
+            id: 'conversation3',
+            name: 'Conversation 3',
             topics: [
-                { id: 'conv2_food', name: 'Food - What do you like to eat? -I like rice' },
-                { id: 'conv2_colors', name: 'Colors - What color do you like? -I like yellow' },
-                { id: 'conv2_daily_routines', name: 'Daily routines - What do you do in the morning? -I wake up, I take a shower, I go to sleep' }
+                { id: 'conv3_food', name: 'Food - What do you like to eat? -I like rice' },
+                { id: 'conv3_colors', name: 'Colors - What color do you like? -I like yellow' },
+                { id: 'conv3_daily_routines', name: 'Daily routines - What do you do in the morning? -I wake up, I take a shower, I go to sleep' }
             ],
             vocabulary: 'Food, yellow, purple, green, orange, wake up, take a shower, go to sleep'
         },
@@ -144,7 +148,7 @@ window.CurriculumData.K1.November = {
                 { id: 'puppet_hare_tortoise', name: 'The hare and the tortoise' },
                 { id: 'puppet_dog_reflection', name: 'The dog and his reflection' }
             ],
-            vocabulary: 'hare, tortoise, race, slow, fast, dog, reflection, water, greedy'
+            vocabulary: 'hare, tortoise, dog, reflection'
         }
     ]
 };

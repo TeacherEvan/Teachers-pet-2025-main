@@ -907,10 +907,6 @@
 
     <!-- Load curriculum dynamically based on grade and month -->
     <script id="dynamic-curriculum-loader">
-        // TODO: Future implementation - dynamically generate subject HTML from curriculum data
-        // For now, using hardcoded K1 August subjects below
-        // This script will be replaced with dynamic rendering when all curriculum files are ready
-
         (async function () {
             try {
                 // Get grade and month from session
@@ -920,15 +916,52 @@
 
                 console.log(`📚 Selected curriculum: ${grade} - ${month}`);
 
-                // Load curriculum data (validates file exists)
+                // Load curriculum data
                 if (window.curriculumLoader) {
                     const curriculum = await window.curriculumLoader.load(grade, month);
                     console.log('✅ Curriculum data loaded:', curriculum);
-                    // Note: Currently using hardcoded HTML below
-                    // Future: Generate subject sections from curriculum.subjects array
+
+                    // Generate subjects HTML dynamically
+                    const subjectsForm = document.getElementById('subjectsForm');
+                    if (subjectsForm && curriculum.subjects) {
+                        let html = '';
+
+                        curriculum.subjects.forEach(subject => {
+                            html += `
+                            <!-- ${subject.name.toUpperCase()} -->
+                            <div class="subject-section">
+                                <div class="subject-header" onclick="toggleSubject('${subject.id}')">
+                                    <div class="subject-title">
+                                        <input type="checkbox" class="subject-checkbox" id="subject_${subject.id}" value="${subject.name}"
+                                            onchange="handleSubjectCheck('${subject.id}')">
+                                        <label for="subject_${subject.id}">${subject.name.toUpperCase()}</label>
+                                        <span class="dropdown-arrow" id="arrow_${subject.id}">▼</span>
+                                    </div>
+                                </div>
+                                <div class="subject-content" id="content_${subject.id}">`;
+
+                            subject.topics.forEach((topic, index) => {
+                                const topicId = `${subject.id}${index + 1}`;
+                                html += `
+                                    <div class="topic-item">
+                                        <input type="checkbox" class="topic-checkbox" id="${topicId}"
+                                            value="${topic.name.toLowerCase()}">
+                                        <label for="${topicId}" class="topic-text">${topic.name}</label>
+                                    </div>`;
+                            });
+
+                            html += `
+                                </div>
+                            </div>`;
+                        });
+
+                        // Replace hardcoded HTML with dynamic content
+                        subjectsForm.innerHTML = html;
+                        console.log('✅ Dynamically generated', curriculum.subjects.length, 'subjects');
+                    }
                 }
             } catch (error) {
-                console.warn('⚠️ Curriculum loading failed, using hardcoded subjects:', error.message);
+                console.warn('⚠️ Curriculum loading failed, keeping hardcoded subjects:', error.message);
                 // Fallback to hardcoded K1 August subjects (current implementation)
             }
         })();
