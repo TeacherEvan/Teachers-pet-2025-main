@@ -10,17 +10,57 @@
 
 class EnhancedCommentEngine {
     constructor() {
+        // Randomized descriptor pools to prevent repetition
+        this.descriptorPools = {
+            10: ["exceptional performance", "remarkable achievement", "superior mastery", "phenomenal competency", "distinguished excellence"],
+            9: ["impressive progress", "notable accomplishment", "commendable proficiency", "stellar development", "admirable growth"],
+            8: ["strong capability", "solid competence", "robust understanding", "capable performance", "proficient skills"],
+            7: ["noteworthy progress", "effective development", "sound understanding", "positive achievement", "competent work"],
+            6: ["good progress", "encouraging development", "satisfactory growth", "pleasing advancement", "favorable learning"],
+            5: ["appropriate development", "steady progress", "consistent learning", "reliable growth", "suitable advancement"],
+            4: ["emerging skills", "developing understanding", "growing capabilities", "budding competence", "promising foundation"],
+            3: ["foundational learning", "basic progress", "initial development", "beginning understanding", "early growth"],
+            2: ["exploratory learning", "starting development", "beginning journey", "initial steps", "early exploration"],
+            1: ["discovering learning", "emerging awareness", "starting exploration", "initial curiosity", "beginning discovery"]
+        };
+
+        this.verbPools = {
+            10: ["excelled magnificently", "achieved brilliantly", "performed exceptionally", "demonstrated mastery", "showcased excellence"],
+            9: ["demonstrated excellence", "performed admirably", "showed impressive skill", "exhibited strong ability", "displayed proficiency"],
+            8: ["performed well", "achieved solidly", "demonstrated capability", "showed competence", "exhibited understanding"],
+            7: ["progressed effectively", "developed well", "showed growth", "achieved consistently", "learned successfully"],
+            6: ["progressed steadily", "developed positively", "grew encouragingly", "advanced favorably", "learned reliably"],
+            5: ["developed consistently", "progressed appropriately", "grew steadily", "advanced suitably", "learned reliably"],
+            4: ["showed promise", "demonstrated growth", "exhibited development", "displayed progress", "revealed potential"],
+            3: ["made progress", "showed development", "demonstrated learning", "exhibited growth", "revealed advancement"],
+            2: ["began developing", "started learning", "initiated growth", "commenced progress", "embarked on learning"],
+            1: ["explored enthusiastically", "discovered curiously", "began investigating", "started exploring", "commenced discovering"]
+        };
+
+        this.adverbPools = {
+            10: ["remarkably", "exceptionally", "brilliantly", "magnificently", "phenomenally"],
+            9: ["consistently", "impressively", "notably", "admirably", "commendably"],
+            8: ["skillfully", "capably", "proficiently", "competently", "effectively"],
+            7: ["effectively", "successfully", "positively", "soundly", "ably"],
+            6: ["confidently", "encouragingly", "steadily", "reliably", "favorably"],
+            5: ["reliably", "appropriately", "consistently", "steadily", "suitably"],
+            4: ["steadily", "promisingly", "progressively", "developmentally", "encouragingly"],
+            3: ["gradually", "progressively", "foundationally", "basically", "initially"],
+            2: ["eagerly", "exploratively", "initially", "tentatively", "beginningly"],
+            1: ["curiously", "enthusiastically", "exploratively", "investigatively", "discoveringly"]
+        };
+
         this.performanceMap = {
-            10: { level: "exceptional", descriptor: "outstanding and exemplary", verb: "excelled magnificently", adverb: "remarkably" },
-            9: { level: "excellent", descriptor: "impressive and sophisticated", verb: "demonstrated exceptional excellence", adverb: "consistently" },
-            8: { level: "very strong", descriptor: "commendable and proficient", verb: "performed admirably", adverb: "skillfully" },
-            7: { level: "strong", descriptor: "noteworthy and capable", verb: "achieved well", adverb: "effectively" },
-            6: { level: "good", descriptor: "positive and encouraging", verb: "progressed steadily", adverb: "confidently" },
-            5: { level: "satisfactory", descriptor: "appropriate and developing", verb: "developed consistently", adverb: "reliably" },
-            4: { level: "developing", descriptor: "emerging and growing", verb: "showed promising growth", adverb: "steadily" },
-            3: { level: "basic", descriptor: "foundational and budding", verb: "made valuable progress", adverb: "gradually" },
-            2: { level: "beginning", descriptor: "initial and exploratory", verb: "began developing", adverb: "eagerly" },
-            1: { level: "emerging", descriptor: "starting and discovering", verb: "explored enthusiastically", adverb: "curiously" }
+            10: { level: "exceptional" },
+            9: { level: "excellent" },
+            8: { level: "very strong" },
+            7: { level: "strong" },
+            6: { level: "good" },
+            5: { level: "satisfactory" },
+            4: { level: "developing" },
+            3: { level: "basic" },
+            2: { level: "beginning" },
+            1: { level: "emerging" }
         };
 
         this.grammarRules = {
@@ -60,6 +100,14 @@ class EnhancedCommentEngine {
     }
 
     /**
+     * Get random item from array pool to prevent repetition
+     */
+    getRandomFromPool(pool) {
+        if (!pool || pool.length === 0) return "";
+        return pool[Math.floor(Math.random() * pool.length)];
+    }
+
+    /**
      * Main entry point - generates both male and female teacher comments
      * Now returns a Promise to support async synonym replacement
      */
@@ -81,7 +129,7 @@ class EnhancedCommentEngine {
             if (typeof window !== 'undefined' && window.synonymManager) {
                 console.log('📚 Applying synonym replacement to male comment...');
                 maleComment = await window.synonymManager.replaceOverused(maleComment, 2);
-                
+
                 console.log('📚 Applying synonym replacement to female comment...');
                 femaleComment = await window.synonymManager.replaceOverused(femaleComment, 2);
             } else {
@@ -122,6 +170,12 @@ class EnhancedCommentEngine {
         const genderKey = sessionData.gender.toLowerCase();
         const pronouns = this.grammarRules.pronouns[genderKey] || this.grammarRules.pronouns.he;
 
+        // Get randomized descriptors/verbs/adverbs from pools
+        const rating = sessionData.overallRating || 5;
+        const descriptor = this.getRandomFromPool(this.descriptorPools[rating]);
+        const verb = this.getRandomFromPool(this.verbPools[rating]);
+        const adverb = this.getRandomFromPool(this.adverbPools[rating]);
+
         // Group topics by their parent subjects
         const topicsBySubject = this.groupTopicsBySubject(sessionData.subjects || [], sessionData.topicRatings || {});
         console.log('📦 Topics grouped by subject:', topicsBySubject);
@@ -137,8 +191,9 @@ class EnhancedCommentEngine {
         return {
             name: studentName,
             level: performance.level,
-            descriptor: performance.descriptor,
-            verb: performance.verb,
+            descriptor: descriptor,
+            verb: verb,
+            adverb: adverb,
             subjects: sessionData.subjects || [],
             topicsBySubject: topicsBySubject,
             allTopics: Object.keys(sessionData.topicRatings || {}),

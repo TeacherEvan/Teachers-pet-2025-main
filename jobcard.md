@@ -1,9 +1,53 @@
 # Teachers Pet - Development Job Card
 
+## ⚠️ CRITICAL RULE FOR ALL AGENTS ⚠️
+**STOP WINGING IT - USE YOUR MCP TOOLS OR YOUR CODE WILL BE BROKEN!**
+
+Before implementing ANY feature:
+1. ✅ Use `mcp_context7_resolve-library-id` + `mcp_context7_get-library-docs` for research
+2. ✅ Use `fetch_webpage` to study MDN, GitHub repos, and authoritative sources
+3. ✅ Use `mcp_sequentialthi_sequentialthinking` to break down complex problems
+4. ✅ Use `manage_todo_list` to track progress systematically
+
+**Lesson Learned 2025-11-13:** The synonym system was initially broken because the agent didn't research proper word tracking algorithms. After using MCP tools (Context7, MDN fetch), the correct Map-based approach was found and implemented successfully. DON'T REPEAT THIS MISTAKE!
+
+---
+
 ## Recent Work (Newest First)
 
-### 2025-11-13: Synonym Manager & Enhanced Teacher Personalities
+### 2025-11-13: Synonym Manager Fix & MCP Tool Integration
 **Agent:** GitHub Copilot
+**MCP Tools Used:** ✅ mcp_context7_resolve-library-id, ✅ mcp_context7_get-library-docs, ✅ fetch_webpage (MDN Map docs), ✅ mcp_sequentialthi_sequentialthinking, ✅ manage_todo_list
+
+**Problem:** Initial synonym system implementation was broken - words weren't being tracked or replaced.
+
+**Root Cause:** Agent "winged it" without researching proper algorithms. The `replaceOverused()` method incremented usage counts AFTER checking thresholds, so words never reached the threshold to trigger replacement.
+
+**Solution (Using MCP Tools):**
+- Used Context7 to research wink-nlp library patterns for word tracking
+- Fetched MDN documentation on JavaScript Map() for O(1) lookup performance
+- Applied sequential thinking to redesign the algorithm:
+  1. Check CURRENT usage counts against threshold
+  2. Identify words to replace
+  3. Make replacements with case preservation
+  4. THEN increment usage counts for final text
+- Added comprehensive console logging at every step for debugging
+
+**Changes:**
+- Completely rewrote `replaceOverused()` method in `assets/js/synonym-manager.js`
+- Fixed duplicate script tag in `Subjects.html` (enhanced-comment-engine.js was loaded twice)
+- Usage tracking now works correctly: words used ≥2 times get replaced with least-used synonyms
+
+**Testing:**
+- Run: Open `Subjects.html` in browser, generate multiple comments
+- Expected: Console shows `🔍 📊 📝 🔄` logs, words rotate after 2nd use
+- Reset counts: `window.synonymManager.resetUsageCounts()` in console
+
+---
+
+### 2025-11-13: Synonym Manager & Enhanced Teacher Personalities (INITIAL - BROKEN)
+**Agent:** GitHub Copilot
+**MCP Tools Used:** ❌ NONE - This is why it broke!
 
 **Changes:**
 - **Synonym Manager System:**

@@ -1,4 +1,33 @@
 # Teachers Pet – Agent Guide
+
+## ⚠️ CRITICAL: MCP TOOL USAGE REQUIREMENTS ⚠️
+**DO NOT "WING IT" - USE YOUR DAMN MCP TOOLS FIRST!**
+
+Before implementing ANY complex feature, algorithm, or system:
+
+1. **MANDATORY: Use MCP Context7** to fetch up-to-date documentation and best practices:
+   - `mcp_context7_resolve-library-id` to find relevant libraries
+   - `mcp_context7_get-library-docs` to get authoritative implementation patterns
+   - Example: For synonym systems, word tracking, NLP - GET THE DOCS FIRST!
+
+2. **MANDATORY: Use fetch_webpage** to research from authoritative sources:
+   - MDN for JavaScript/DOM patterns
+   - GitHub repos for real-world implementations
+   - Stack Overflow for common pitfalls
+
+3. **MANDATORY: Use mcp_sequentialthi_sequentialthinking** for complex problem-solving:
+   - Break down the problem systematically
+   - Question your assumptions
+   - Revise approach based on research findings
+
+4. **MANDATORY: Use manage_todo_list** to track multi-step work:
+   - Create task list BEFORE coding
+   - Mark tasks in-progress and completed individually
+   - Don't batch completions - update as you go
+
+**If you skip these tools and implement broken code, you've failed the task.**
+**Research FIRST, implement SECOND, validate THIRD.**
+
 ## Non-Negotiables
 - Confirm scope with the user before coding; log every task at the top of `jobcard.md` and record new files in `Index.md`.
 - Never claim access to unseen files; follow ASCII-only edits unless the existing file uses extended characters.
