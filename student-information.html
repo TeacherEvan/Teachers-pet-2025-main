@@ -478,6 +478,138 @@
             height: 6px;
         }
     }
+
+    /* Modal Overlay */
+    .modal-overlay {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.8);
+        z-index: 1000;
+        justify-content: center;
+        align-items: center;
+        animation: fadeIn 0.3s ease;
+    }
+
+    .modal-overlay.show {
+        display: flex;
+    }
+
+    @keyframes fadeIn {
+        from {
+            opacity: 0;
+        }
+        to {
+            opacity: 1;
+        }
+    }
+
+    /* Modal Content */
+    .modal-content {
+        background: rgba(255, 255, 255, 0.95);
+        -webkit-backdrop-filter: blur(20px);
+        backdrop-filter: blur(20px);
+        border: 2px solid rgba(255, 255, 255, 0.3);
+        border-radius: 16px;
+        padding: 35px;
+        max-width: 600px;
+        width: 90%;
+        box-shadow:
+            0 20px 60px rgba(0, 0, 0, 0.5),
+            0 0 100px rgba(255, 255, 255, 0.2);
+        position: relative;
+        z-index: 1001;
+        animation: slideDown 0.4s ease;
+    }
+
+    @keyframes slideDown {
+        from {
+            transform: translateY(-50px);
+            opacity: 0;
+        }
+        to {
+            transform: translateY(0);
+            opacity: 1;
+        }
+    }
+
+    .modal-title {
+        color: #2c3e50;
+        font-size: 1.8em;
+        margin-bottom: 20px;
+        text-align: center;
+        font-weight: 700;
+        font-family: 'Segoe UI', sans-serif;
+    }
+
+    .modal-body {
+        margin-bottom: 25px;
+    }
+
+    .warning-text,
+    .info-text,
+    .tip-text {
+        color: #000;
+        font-size: 15px;
+        line-height: 1.7;
+        margin-bottom: 15px;
+        font-family: 'Segoe UI', sans-serif;
+        font-weight: 600;
+    }
+
+    .warning-text {
+        font-weight: 700;
+    }
+
+    .pulsating-red {
+        animation: pulsateRed 1.5s ease-in-out infinite;
+    }
+
+    @keyframes pulsateRed {
+        0%, 100% {
+            color: #e74c3c;
+            text-shadow: 0 0 10px rgba(231, 76, 60, 0.5);
+        }
+        50% {
+            color: #c0392b;
+            text-shadow: 0 0 20px rgba(231, 76, 60, 0.8);
+        }
+    }
+
+    .info-text {
+        color: #2c3e50;
+    }
+
+    .tip-text {
+        color: #27ae60;
+        font-style: italic;
+    }
+
+    .modal-footer {
+        text-align: center;
+    }
+
+    .button-acknowledge {
+        background: linear-gradient(135deg, #27ae60, #229954);
+        color: white;
+        padding: 14px 30px;
+        border: none;
+        border-radius: 8px;
+        cursor: pointer;
+        font-size: 16px;
+        font-weight: 700;
+        font-family: 'Segoe UI', sans-serif;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 15px rgba(39, 174, 96, 0.4);
+    }
+
+    .button-acknowledge:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(39, 174, 96, 0.6);
+    }
 </style>
 <link rel="stylesheet" href="styles/inline-fixes.css">
 <script src="missing-functions.js"></script>
@@ -592,6 +724,23 @@
             <h3>Next Steps:</h3>
             <p>After completing this form, you'll select subjects and topics to include in the report, then generate
                 personalized comments.</p>
+        </div>
+    </div>
+
+    <!-- Acknowledgment Modal -->
+    <div id="acknowledgmentModal" class="modal-overlay">
+        <div class="modal-content">
+            <h2 class="modal-title">⚠️ Important Notice</h2>
+            <div class="modal-body">
+                <p class="warning-text pulsating-red">*COMMENTS ARE NOT GENERATED USING AI. PLEASE REVIEW YOUR COMMENTS!</p>
+                <p class="info-text">*The more boxes you tick, the larger the comments. Sangsom School report only requires 75 - 80 words. Tick/select lightly.</p>
+                <p class="tip-text">**Tip - leave strengths and weaknesses empty in the previous student information page.</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="button button-acknowledge" onclick="acknowledgeAndProceed()">
+                    I Understand - Continue →
+                </button>
+            </div>
         </div>
     </div>
 
@@ -878,14 +1027,28 @@
                 return;
             }
 
-            // Persist once more before navigation, including sessionStorage fallback
+            // Persist once more before showing modal
             saveFormData();
             try {
                 const serialized = localStorage.getItem('studentData');
                 if (serialized) sessionStorage.setItem('studentData', serialized);
             } catch { }
 
-            // Get grade and month from URL parameters and pass them to Subjects.html
+            // Show acknowledgment modal instead of immediately navigating
+            showAcknowledgmentModal();
+        }
+
+        function showAcknowledgmentModal() {
+            const modal = document.getElementById('acknowledgmentModal');
+            modal.classList.add('show');
+        }
+
+        function acknowledgeAndProceed() {
+            // Hide modal
+            const modal = document.getElementById('acknowledgmentModal');
+            modal.classList.remove('show');
+
+            // Navigate to Subjects.html with grade and month parameters
             const params = new URLSearchParams(window.location.search);
             const grade = params.get('grade') || 'K1';
             const month = params.get('month') || 'August';
