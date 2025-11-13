@@ -222,8 +222,9 @@ class PremiumCommentEngine {
 
   /**
    * Main method to generate comments from session data
+   * Now returns a Promise to support async synonym replacement
    */
-  generateComments(sessionData) {
+  async generateComments(sessionData) {
     try {
       // Validate input data
       if (!sessionData || !sessionData.studentName) {
@@ -234,8 +235,19 @@ class PremiumCommentEngine {
       const processedData = this.processSessionData(sessionData);
 
       // Generate both comment styles
-      const maleComment = this.generateStyleComment('male', processedData);
-      const femaleComment = this.generateStyleComment('female', processedData);
+      let maleComment = this.generateStyleComment('male', processedData);
+      let femaleComment = this.generateStyleComment('female', processedData);
+
+      // Apply synonym replacement if SynonymManager is available
+      if (typeof window !== 'undefined' && window.synonymManager) {
+        console.log('📚 Premium Engine: Applying synonym replacement to male comment...');
+        maleComment = await window.synonymManager.replaceOverused(maleComment, 2);
+
+        console.log('📚 Premium Engine: Applying synonym replacement to female comment...');
+        femaleComment = await window.synonymManager.replaceOverused(femaleComment, 2);
+      } else {
+        console.warn('⚠️ Premium Engine: SynonymManager not available, skipping synonym replacement');
+      }
 
       return {
         male: maleComment,
@@ -247,7 +259,7 @@ class PremiumCommentEngine {
       };
     } catch (error) {
       console.error('Comment generation failed:', error);
-      return this.generateFallbackComments(sessionData.studentName || 'Student');
+      return await this.generateFallbackComments(sessionData.studentName || 'Student');
     }
   }
 
@@ -441,11 +453,18 @@ class PremiumCommentEngine {
 
   /**
    * Generate fallback comments when main generation fails
+   * Now async to support synonym replacement
    */
-  generateFallbackComments(studentName) {
-    const maleComment = `${studentName} has demonstrated satisfactory academic progress this term, showing appropriate developmental growth across multiple learning areas. ${studentName} exhibits positive engagement in classroom activities and maintains cooperative behavior with peers and teachers. With continued support and encouragement, ${studentName} will continue to develop essential skills and achieve academic success.`;
+  async generateFallbackComments(studentName) {
+    let maleComment = `${studentName} has demonstrated satisfactory academic progress this term, showing appropriate developmental growth across multiple learning areas. ${studentName} exhibits positive engagement in classroom activities and maintains cooperative behavior with peers and teachers. With continued support and encouragement, ${studentName} will continue to develop essential skills and achieve academic success.`;
 
-    const femaleComment = `${studentName} has blossomed beautifully this term, bringing joy and enthusiasm to our classroom community. ${studentName} shows wonderful progress in learning and demonstrates such a caring nature with classmates. With continued nurturing and support, ${studentName} will continue to flourish and grow in all areas of development.`;
+    let femaleComment = `${studentName} has blossomed beautifully this term, bringing joy and enthusiasm to our classroom community. ${studentName} shows wonderful progress in learning and demonstrates such a caring nature with classmates. With continued nurturing and support, ${studentName} will continue to flourish and grow in all areas of development.`;
+
+    // Apply synonym replacement if available
+    if (typeof window !== 'undefined' && window.synonymManager) {
+      maleComment = await window.synonymManager.replaceOverused(maleComment, 2);
+      femaleComment = await window.synonymManager.replaceOverused(femaleComment, 2);
+    }
 
     return {
       male: maleComment,

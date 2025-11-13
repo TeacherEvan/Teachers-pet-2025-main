@@ -363,6 +363,29 @@ The enhanced engine is **automatically used** when comments are generated:
 
 ---
 
+## 🧪 Developer Test & Validation (Quick Commands)
+
+Use these quick commands to validate or run the generator while developing:
+
+- Open browser DevTools (F12) and use the Console to run helpers:
+```javascript
+// Generate comments from current localStorage data
+window.commentGenerator.generateFromStorage();
+
+// Run the internal engine test harness
+window.testCommentGeneration();
+```
+- Check for these DevTools console messages during page load and generation:
+  - `OptimizedCommentGenerator initialized with EnhancedCommentEngine`
+  - `✅ Collected session data:` (from `OptimizedCommentGenerator.collectSessionData()`)
+  - `🎯 Enhanced Engine: Processing session data` (from `EnhancedCommentEngine.processSessionData()`)
+- After editing `assets/js/enhanced-comment-engine.js`, keep the root copy synchronized for older/test pages (PowerShell):
+```powershell
+Copy-Item "assets/js/enhanced-comment-engine.js" "enhanced-comment-engine.js" -Force
+```
+
+---
+
 ## 🎓 Educational Value
 
 ### Why This Matters

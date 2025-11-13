@@ -1,7 +1,7 @@
-# 🎓 Teacher's Pet - Kindergarten Report Generator
+# 🎓 Teachers Pet - Kindergarten Report Generator
 
 ## Overview
-Teacher's Pet is a comprehensive web application designed to help kindergarten teachers generate professional student reports, manage student sessions, and track progress. The application features a beautiful space-themed interface with full cross-browser compatibility.
+Teachers Pet is a comprehensive web application designed to help kindergarten teachers generate professional student reports, manage student sessions, and track progress. The application features a beautiful space-themed interface with full cross-browser compatibility.
 
 ## ✨ Features
 - **📝 Report Generation**: Create detailed kindergarten student reports
@@ -16,7 +16,7 @@ Teacher's Pet is a comprehensive web application designed to help kindergarten t
 
 ### Option 1: Direct File Access (Recommended)
 1. **Download/Clone** this repository to your computer
-2. **Open** `Play.html` directly in your browser by:
+2. **Open** `index.html` directly in your browser by (preferred entry point):
    - Double-clicking the file, or
    - Right-click → "Open with" → Your preferred browser, or
    - Use File → Open in your browser
@@ -30,21 +30,25 @@ Teacher's Pet is a comprehensive web application designed to help kindergarten t
 
 ## 📁 File Structure
 ```
-Teachers pet basic/
-├── Play.html              # Main application entry point
-├── student-information.html # Student data input form
-├── Subjects.html          # Subject selection page
-├── index.html             # Alternative entry point
-├── styles.css             # Main stylesheet
-├── script.js              # Main JavaScript functionality
-├── README.md              # This file
+Teachers Pet/
+├── index.html                      # Main application entry point
+├── grade-selection.html            # Grade selection page
+├── month-selection.html            # Month selection page
+├── student-information.html        # Student data input form
+├── Subjects.html                   # Subject selection page
+├── enhanced-comment-engine.js      # Root copy (backup/sync)
+├── README.md                       # This file
+├── .github/                        # GitHub config and agent instructions
+├── assets/
+│   ├── css/
+│   └── js/
 └── Other supporting files...
 ```
 
 ## 🎯 How to Use
 
 ### 1. Starting a New Report
-- Open `Play.html` in your browser
+- Open `index.html` in your browser
 - Click "🚀 Start New Report"
 - Fill in student information
 - Select subjects and topics
@@ -59,7 +63,7 @@ Teachers pet basic/
 
 ### 3. Navigation Flow
 ```
-Play.html → student-information.html → Subjects.html → Generated Report
+index.html → student-information.html → Subjects.html → Generated Report
 ```
 
 ## ⚠️ Important Deployment Notes
@@ -150,7 +154,7 @@ Copy functionality requires:
 
 ### Getting Started (New Users)
 1. **Clone/Download** this repository
-2. **Open** `Play.html` in any modern browser
+2. **Open** `index.html` in any modern browser
 3. **Bookmark** the page for easy access
 4. **No installation** required - it's ready to use!
 
@@ -195,4 +199,57 @@ This project is designed for educational use by kindergarten teachers. Feel free
 
 ---
 
-**Ready to start?** Simply open `Play.html` in your browser and begin creating professional kindergarten reports! 🎓✨
+**Ready to start?** Simply open `index.html` in your browser and begin creating professional kindergarten reports! 🎓✨
+
+## 🧑‍💻 Developer Quick Start (Dev/Test)
+
+These steps help contributors preview pages and verify comment generation behavior.
+
+### Quick preview (Open from filesystem)
+- Open `index.html` in your browser.
+
+### Local static server (if needed)
+- Python (PowerShell):
+```powershell
+python -m http.server 8080
+```
+- Node.js (PowerShell):
+```powershell
+npx http-server -p 8080
+```
+- If using VS Code Live Server, pick any port ≠ 3000.
+
+### Test pages (browser)
+- `Subjects.html` — end-to-end subject selection + comment generation
+- `test-student-name.html` — ensure student name appears correctly
+- `test-topic-only-selection.html` — validate topic-only behavior
+- `test-subject-bug.html`, `test-engine-fix.html` — regression and fix verification
+
+### Developer console helpers
+- Open DevTools (F12) → Console and run:
+```javascript
+// Generate comments from current stored session
+window.commentGenerator.generateFromStorage();
+
+// Run built-in test harness
+window.testCommentGeneration();
+```
+
+### Root engine sync after editing
+- Sync the root engine copy after editing `assets/js/enhanced-comment-engine.js` (PowerShell):
+```powershell
+Copy-Item "assets/js/enhanced-comment-engine.js" "enhanced-comment-engine.js" -Force
+```
+
+### Where to make changes
+- `assets/js/enhanced-comment-engine.js` — primary engine; edit templates, mapping, and grammar rules here
+- `optimized-comment-generator.js` — selection & fallback logic; ensure it prioritizes Enhanced engine
+- `assets/js/curriculum/{grade}/{month}.js` — add curriculum files for new grade/month
+
+### Debugging Tips
+- Open DevTools and look for these messages:
+  - `OptimizedCommentGenerator initialized with EnhancedCommentEngine`
+  - `✅ Collected session data:` followed by the session object
+  - `🎯 Enhanced Engine: Processing session data`
+- If the name isn't present in comments, verify `localStorage.studentData` and `app.sessionData` contents.
+- If the engine doesn't load, verify `assets/js/enhanced-comment-engine.js` and `enhanced-comment-engine.js` script tags are being loaded (check `Subjects.html` script imports).

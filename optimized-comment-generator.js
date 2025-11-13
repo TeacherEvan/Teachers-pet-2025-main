@@ -43,11 +43,12 @@ class OptimizedCommentGenerator {
 
     /**
      * Generate comments from localStorage data
+     * Now returns a Promise to support async engines
      */
-    generateFromStorage() {
+    async generateFromStorage() {
         try {
             const sessionData = this.collectSessionData();
-            return this.generateComments(sessionData);
+            return await this.generateComments(sessionData);
         } catch (error) {
             console.error('Failed to generate comments from storage:', error);
             return this.generateErrorComments(error.message);
@@ -56,8 +57,9 @@ class OptimizedCommentGenerator {
 
     /**
      * Generate comments from provided session data
+     * Now returns a Promise to support async engines
      */
-    generateComments(sessionData) {
+    async generateComments(sessionData) {
         if (!this.isInitialized) {
             throw new Error('OptimizedCommentGenerator not initialized');
         }
@@ -70,9 +72,10 @@ class OptimizedCommentGenerator {
         }
 
         try {
-            return this.engine.generateComments(validatedData);
+            // Both engines now return Promises
+            return await this.engine.generateComments(validatedData);
         } catch (error) {
-            console.error('PremiumCommentEngine failed, using fallback:', error);
+            console.error('Engine failed, using fallback:', error);
             return this.generateFallbackComments(validatedData);
         }
     }

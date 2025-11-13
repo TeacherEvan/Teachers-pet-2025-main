@@ -248,14 +248,7 @@
         font-family: 'Segoe UI', sans-serif;
     }
 
-    .bulk-actions {
-        margin-bottom: 20px;
-        padding: 15px;
-        background: #f8f9fa;
-        border: 1px solid #e0e6ed;
-        border-radius: 8px;
-        text-align: center;
-    }
+    /* bulk-actions toolbar removed */
 
     .comment-option {
         margin: 15px 0;
@@ -394,13 +387,7 @@
             Select subjects and rate student performance (0-5 scale, 5 being excellent).
         </p>
 
-        <div class="bulk-actions">
-            <button type="button" class="button" onclick="selectAll()">Select All</button>
-            <button type="button" class="button" onclick="clearAll()">Clear All</button>
-            <button type="button" class="button" onclick="debugToggleSubjects()">🔧 Debug Toggle</button>
-            <button type="button" class="button" onclick="expandAllSubjects()">📖 Expand All</button>
-            <button type="button" class="button" onclick="collapseAllSubjects()">📘 Collapse All</button>
-        </div>
+        <!-- bulk-actions toolbar removed per UX request -->
 
         <div class="selection-summary">
             <strong>Selected Topics: </strong><span id="selectionCount">0</span>
@@ -1073,47 +1060,6 @@
             }
         };
 
-        // Debug functions
-        window.debugToggleSubjects = function () {
-            console.log('🔧 Debug: Testing toggle functionality');
-            const subjects = ['english', 'mathematics', 'iq', 'social', 'science', 'cooking', 'conv1', 'conv2', 'arts', 'pe', 'puppet', 'safari', 'story'];
-            subjects.forEach(subject => {
-                const content = document.getElementById('content_' + subject);
-                const arrow = document.getElementById('arrow_' + subject);
-                console.log(`Subject ${subject}:`, {
-                    content: content ? 'Found' : 'Missing',
-                    arrow: arrow ? 'Found' : 'Missing',
-                    active: content ? content.classList.contains('active') : 'N/A'
-                });
-            });
-        };
-
-        window.expandAllSubjects = function () {
-            console.log('📖 Expanding all subjects');
-            const subjects = ['english', 'mathematics', 'iq', 'social', 'science', 'cooking', 'conv1', 'conv2', 'arts', 'pe', 'puppet', 'safari', 'story'];
-            subjects.forEach(subject => {
-                const content = document.getElementById('content_' + subject);
-                const arrow = document.getElementById('arrow_' + subject);
-                if (content && arrow) {
-                    content.classList.add('active');
-                    arrow.classList.add('rotated');
-                }
-            });
-        };
-
-        window.collapseAllSubjects = function () {
-            console.log('📘 Collapsing all subjects');
-            const subjects = ['english', 'mathematics', 'iq', 'social', 'science', 'cooking', 'conv1', 'conv2', 'arts', 'pe', 'puppet', 'safari', 'story'];
-            subjects.forEach(subject => {
-                const content = document.getElementById('content_' + subject);
-                const arrow = document.getElementById('arrow_' + subject);
-                if (content && arrow) {
-                    content.classList.remove('active');
-                    arrow.classList.remove('rotated');
-                }
-            });
-        };
-
         // Functions are now loaded from missing-functions.js
 
         // On load, log what student data we can see and try a gentle restore
@@ -1342,6 +1288,7 @@
             console.log('Subjects page JavaScript initialized');
         });
     </script>
+    <script src="assets/js/synonym-manager.js"></script>
     <script src="localstorage-monitor.js"></script>
     <script src="assets/js/comment-engine.js"></script>
     <script src="assets/js/enhanced-comment-engine.js"></script>

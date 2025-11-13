@@ -2,7 +2,7 @@
 
 ## Overview
 
-This design document outlines enhancements to the Teacher's Pet comment generation system to improve grammar quality, create distinct personality differences between male and female teacher styles, ensure comprehensive utilization of all user-provided information, and eliminate generic references in favor of personalized student names.
+This design document outlines enhancements to the Teachers Pet comment generation system to improve grammar quality, create distinct personality differences between male and female teacher styles, ensure comprehensive utilization of all user-provided information, and eliminate generic references in favor of personalized student names.
 
 ## Current System Analysis
 
@@ -85,6 +85,7 @@ graph LR
 ## Comprehensive Data Integration
 
 ### User Information Mapping
+
 | Data Element | Current Usage | Enhanced Usage |
 |--------------|---------------|----------------|
 | Student Name | Inconsistent referencing | Primary subject in all sentences |
@@ -267,6 +268,7 @@ graph LR
 ## Comprehensive Data Integration
 
 ### User Information Mapping
+
 | Data Element | Current Usage | Enhanced Usage |
 |--------------|---------------|----------------|
 | Student Name | Inconsistent referencing | Primary subject in all sentences |
@@ -372,193 +374,3 @@ flowchart TD
 - **Template application**: Style-appropriate template selection
 - **Grammar processing**: Comprehensive grammar rule application
 - **Post-generation review**: Final quality and completeness check
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-

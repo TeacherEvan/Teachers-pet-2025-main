@@ -79,24 +79,6 @@ function handleSubjectCheck(subjectId) {
     }
 }
 
-function selectAll() {
-    const allCheckboxes = document.querySelectorAll('input[type="checkbox"]');
-    allCheckboxes.forEach(cb => cb.checked = true);
-
-    if (typeof updateSelectionCount === 'function') {
-        updateSelectionCount();
-    }
-}
-
-function clearAll() {
-    const allCheckboxes = document.querySelectorAll('input[type="checkbox"]');
-    allCheckboxes.forEach(cb => cb.checked = false);
-
-    if (typeof updateSelectionCount === 'function') {
-        updateSelectionCount();
-    }
-}
-
 function refreshReport() {
     if (confirm('This will clear all current data and start over. Are you sure?')) {
         localStorage.clear();
@@ -132,7 +114,7 @@ function inferSubjectsFromTopics(topicRatings, selectedSubjects) {
 
     topicList.forEach(topic => {
         const topicLower = topic.toLowerCase();
-        
+
         // Try to match topic with subject using keywords
         for (const [subject, keywords] of Object.entries(topicToSubjectMap)) {
             if (keywords.some(keyword => topicLower.includes(keyword.toLowerCase()))) {
@@ -255,37 +237,43 @@ function ensureCommentGeneration() {
             };
         }
 
-        // Generate comments using Enhanced engine if available, otherwise use original
-        let comments;
-        if (typeof EnhancedCommentEngine !== 'undefined') {
-            console.log('✅ Using Enhanced Comment Engine');
-            const enhancedEngine = new EnhancedCommentEngine();
-            comments = enhancedEngine.generateComments(sessionData);
-        } else if (typeof PremiumCommentEngine !== 'undefined') {
-            console.log('✅ Using Premium Comment Engine');
-            const engine = new PremiumCommentEngine();
-            comments = engine.generateComments(sessionData);
-        } else {
-            console.error('❌ No comment engine available');
-            alert('Comment generation engine not available. Please check that all required files are loaded.');
-            return;
-        }
+        // Generate comments using Enhanced engine (now async)
+        (async () => {
+            let comments;
+            if (typeof EnhancedCommentEngine !== 'undefined') {
+                console.log('✅ Using Enhanced Comment Engine');
+                const enhancedEngine = new EnhancedCommentEngine();
+                comments = await enhancedEngine.generateComments(sessionData);
+            } else if (typeof PremiumCommentEngine !== 'undefined') {
+                console.log('✅ Using Premium Comment Engine');
+                const engine = new PremiumCommentEngine();
+                comments = await engine.generateComments(sessionData);
+            } else {
+                console.error('❌ No comment engine available');
+                alert('Comment generation engine not available. Please check that all required files are loaded.');
+                return;
+            }
 
-        console.log('✅ Comments generated successfully:', comments);
+            console.log('✅ Comments generated successfully:', comments);
 
-        // Validate that user data appears in comments
-        const validationResult = validateUserDataInComments(comments, sessionData);
-        console.log('🔍 Validation result:', validationResult);
+            // Validate that user data appears in comments
+            const validationResult = validateUserDataInComments(comments, sessionData);
+            console.log('🔍 Validation result:', validationResult);
 
-        if (!validationResult.isValid) {
-            console.warn('⚠️ Some user data missing from comments:', validationResult.missing);
-        }
+            if (!validationResult.isValid) {
+                console.warn('⚠️ Some user data missing from comments:', validationResult.missing);
+            }
 
-        // Display generated comments
-        displayGeneratedComments(comments);
+            // Display generated comments
+            displayGeneratedComments(comments);
+
+        })().catch(error => {
+            console.error('❌ Async comment generation failed:', error);
+            alert('An error occurred during comment generation: ' + error.message);
+        });
 
     } catch (error) {
-        console.error('❌ Comment generation failed:', error);
+        console.error('❌ Comment generation setup failed:', error);
         alert('An error occurred during comment generation: ' + error.message);
     }
 }

@@ -2,14 +2,100 @@
 
 ## Recent Work (Newest First)
 
+### 2025-11-13: Synonym Manager & Enhanced Teacher Personalities
+**Agent:** GitHub Copilot
+
+**Changes:**
+- **Synonym Manager System:**
+  - Created `assets/js/synonym-manager.js` with intelligent word variation tracking.
+  - Created `assets/data/synonyms.json` with 100+ professional synonyms across 5 categories (adjectives, verbs, adverbs, educational_terms, phrases).
+  - Integrated async synonym replacement into `EnhancedCommentEngine` and `PremiumCommentEngine`.
+  - Tracks word usage in sessionStorage; replaces words used ≥2 times with least-used synonyms.
+  - Preserves capitalization (Title Case, UPPERCASE, lowercase).
+  - Added script tag to `Subjects.html` to load synonym-manager.js before engines.
+  - Updated `OptimizedCommentGenerator` and `missing-functions.js` to support async generation.
+
+- **Enhanced Teacher Personality Differentiation:**
+  - **Male voice:** Added 4 new templates per section (opening, strengths, weaknesses, conclusion). Uses formal, structured, metrics-focused, achievement-oriented language ("demonstrated competencies", "measurable proficiency", "systematic approach").
+  - **Female voice:** Added 4 new templates per section. Uses warm, nurturing, relationship-focused, emotionally supportive language ("blossomed beautifully", "touching hearts", "radiates joy", "nurturing atmosphere").
+  - Doubled template variety from 4 to 8 options per section for each voice.
+
+- **Code Cleanup:**
+  - Removed unused bulk action functions: `selectAll`, `clearAll`, `debugToggleSubjects`, `expandAllSubjects`, `collapseAllSubjects` from `missing-functions.js` and `Subjects.html`.
+
+**Files Created:**
+- `assets/js/synonym-manager.js`
+- `assets/data/synonyms.json`
+
+**Files Modified:**
+- `assets/js/enhanced-comment-engine.js` — async generation, synonym integration, 32 new templates
+- `assets/js/comment-engine.js` — async generation, synonym integration
+- `optimized-comment-generator.js` — async support
+- `missing-functions.js` — async support, removed unused functions
+- `Subjects.html` — synonym-manager script tag, removed unused functions
+- `enhanced-comment-engine.js` (root) — synced from assets/js
+
+**Testing:**
+- Generate multiple comments in one session to verify synonym rotation.
+- Compare male vs female comments to confirm distinct personalities.
+- Console logs show synonym replacements: `🔄 SynonymManager: Replacing "word"...`
+- Test command: `window.synonymManager.exportState()` to view usage statistics.
+- Reset command: `window.synonymManager.resetUsageCounts()`
+
+**Notes:**
+- Synonym manager uses sessionStorage (resets on browser close).
+- Both engines now return Promises; all callers updated to use `await`.
+- Male/female voices now sound significantly more distinct and authentic.
+
+### 2025-11-13: Refreshed AI Agent Instructions
+**Agent:** GitHub Copilot
+
+**Changes:**
+- Replaced `.github/copilot-instructions.md` with a concise 20-50 line guide focused on current architecture, workflows, and testing assets.
+- Highlighted mandatory jobcard/Index logging, curriculum loader usage, comment engine sync steps, and available browser-based test harnesses.
+- Called out glassmorphism UI conventions and deployment constraints to keep assistants aligned with project norms.
+
+### 2025-11-13: Documentation updates — README & Dev Quick Start
+**Agent:** GitHub Copilot
+
+**Changes:**
+- Updated `README.md` to use `index.html` as the primary entry point and added a Developer Quick Start section (local server commands, console helpers, and testing pages).
+- Added quick developer tests to `COMMENT-INTEGRATION-SUMMARY.md` and kept test commands in README.
+
+**Notes:**
+- Sync `assets/js/enhanced-comment-engine.js` to `enhanced-comment-engine.js` after edits for legacy test pages using the PowerShell command included in README.
+
+### 2025-11-13: Documentation audit & small fixes
+**Agent:** GitHub Copilot
+
+**Changes:**
+- Standardized project title to `Teachers Pet` in README and key doc files.
+- Replaced `Play.html` references in README and developer guidance with `index.html`.
+- Removed duplicate `index.html` entry in README file structure and updated File Structure to match actual layout.
+- Refactored Developer Quick Start section to simplify nested lists and added debug/test commands.
+- Updated `.qoder` docs to mention `Teachers Pet` consistently.
+
+**Notes:**
+- Left historical references to `Play.html` in project design docs where used intentionally as a transition note.
+
+### 2025-11-13: UI cleanup - remove bulk action toolbar
+**Agent:** GitHub Copilot
+
+**Changes:**
+- Removed the bulk action toolbar (Select All / Clear All / Debug Toggle / Expand All / Collapse All) from `Subjects.html` to simplify UX per feedback.
+- Left supporting JS functions intact (selectAll/clearAll/debugToggleSubjects/expandAllSubjects/collapseAllSubjects) in case they are re-introduced or used in automated tests.
+
+**Notes:**
+- `missing-functions.js` still contains `selectAll()` and `clearAll()` for compatibility; we may remove these helper functions if you want them gone.
+
+**Notes:**
+- No functional application code changed; documentation update only.
+
 ### 2025-11-13: Added Popup Acknowledgment Message
 **Agent:** GitHub Copilot
 
 **Changes:**
 - Added modal overlay with acknowledgment message to `student-information.html`
-- Modal displays when user clicks "Continue to Subject Selection →" button
-- User must acknowledge the message before proceeding to Subjects.html
-
 **Modal Content:**
 - Warning text with pulsating red effect: "*COMMENTS ARE NOT GENERATED USING AI. PLEASE REVIEW YOUR COMMENTS!"
 - Information text: "*The more boxes you tick, the larger the comments. Sangsom School report only requires 75 - 80 words. Tick/select lightly."

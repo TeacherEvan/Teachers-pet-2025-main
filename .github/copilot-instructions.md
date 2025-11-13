@@ -1,190 +1,94 @@
-# Teachers Pet - AI Agent Instructions
+# Teachers Pet – Agent Guide
+## Non-Negotiables
+- Confirm scope with the user before coding; log every task at the top of `jobcard.md` and record new files in `Index.md`.
+- Never claim access to unseen files; follow ASCII-only edits unless the existing file uses extended characters.
+- This is a static HTML/CSS/JS site—do not add build tooling, servers, or external APIs without explicit approval.
 
-## Project Overview
-A **static web application** (no backend/server) for kindergarten teachers to generate AI-powered student report comments. Pure HTML/CSS/JS running directly from filesystem with localStorage for persistence.
+## Architecture & Flow
+- Wizard path: `index.html` → `grade-selection.html` → `month-selection.html` → `student-information.html` → `Subjects.html`.
+- `TeachersPetApp` (`assets/js/app.js`) is the main controller. It bootstraps per page, manages navigation and animations, validates forms, and stores in-memory `sessionData`.
 
-## Critical Development Rules (READ FIRST)
-From `RULES.mdc` - **VIOLATION LOGS EXIST**:
-- **NEVER implement features before clarifying requirements** - Ask first, code second
-- **NEVER assume user wants immediate implementation** - Get explicit confirmation
-- **NO feature enhancements without approval** - If improving, REPLACE don't add parallel features
-- **NEVER pretend to read files you can't access** - State limitations immediately
-- **Log all work in `jobcard.md`** - New entries at top (newest first), track work/notes/suggestions
-- **Log new files in `Index.md`** - Columns: date, agent, file, status (active/deleted)
+Important nuance: `OptimizedCommentGenerator` and the comment engines (Enhanced / Premium) read from `localStorage.studentData` and DOM elements; keep in-memory `sessionData` and `localStorage` synced when making changes.
+- `startOverWithAnimation()` clears storage, resets `sessionData`, and redirects to `index.html`; keep behaviour intact.
 
-## Architecture & Data Flow
+## State & Persistence
+- Treat `TeachersPetApp.sessionData` as the in-memory source of truth. To generate comments reliably, ensure persistent values are also set in `localStorage.studentData` (the comment generator reads localStorage).
+- Stored keys (`studentName`, `gender`, `overallAttributes`, `strengths`, `weaknesses`, subjects/topic selections) feed `OptimizedCommentGenerator.collectSessionData()` and `EnhancedCommentEngine.processSessionData()`.
+- Avoid introducing new storage keys or backend calls—everything must remain client-side.
 
-### Application Flow (5-Page Wizard)
-```
-index.html (launcher) → grade-selection.html → month-selection.html → student-information.html → Subjects.html (generates comments)
-```
+## Curriculum & Subjects
+- `CurriculumLoader` (`assets/js/curriculum/curriculum-loader.js`) dynamically injects `/assets/js/curriculum/{grade}/{month}.js`. When adding months/grades, add a new JS file under `/assets/js/curriculum/{grade}/` and update `getAvailableMonths()` and the `availableList` lookup inside the loader.
 
-### State Management
-- **In-memory first**: `TeachersPetApp.sessionData` object holds active session
-- **LocalStorage fallback**: Used for cross-page persistence only
-- **SessionStorage backup**: Fallback when localStorage fails
-- **No backend/database**: Everything runs client-side
+Example: add `/assets/js/curriculum/k2/november.js` and add `'K2': ['November']` in `getAvailableMonths()` to enable it.
+- K1 (August, November) and K2 (November) datasets live under `assets/js/curriculum`; mirror topic changes in the matching `curriculum-*.md` documents.
+- `Subjects.html` builds collapsible sections from the loaded curriculum; preserve dropdown hints and bulk-select helpers.
 
-### Core Classes
-- **`TeachersPetApp`** (`assets/js/app.js`): Page-specific initialization, form handling, navigation
-  - `getCurrentPage()` determines context (launcher/grade-selection/month-selection/student-info/subjects)
-  - `sessionData` object: `{grade, month, studentName, gender, overallRating, strengths, weaknesses, subjects[], topicRatings{}}`
-  
-- **`EnhancedCommentEngine`** (`assets/js/enhanced-comment-engine.js`): **CURRENT** AI comment generator (Oct 2025)
-  - Replaces `PremiumCommentEngine` - ensures ALL user selections mentioned in comments
-  - Subject-topic grouping: Intelligently maps topics to parent subjects (e.g., "finger painting" → Arts)
-  - Comprehensive coverage: Details 3 subjects WITH specific activities + lists remaining subjects
-  - ALL strengths/weaknesses mentioned (up to 5 each)
-  - Dual teacher personas preserved: `male` (formal/structured) vs `female` (warm/nurturing)
-  - See `COMMENT-INTEGRATION-SUMMARY.md` for implementation details
-  
-- **`PremiumCommentEngine`** (`assets/js/comment-engine.js`): Legacy comment generator
-  - Performance mapping: 1-10 ratings → descriptive language levels
-  - Grammar rules: Pronoun conjugation system (he/she/they)
-  - Template-based generation with natural language joining
-  - ⚠️ Known limitation: Only mentions 2-3 subjects, doesn't integrate specific topics
+## Comment Generation
+ - Primary files:
+	 - `assets/js/enhanced-comment-engine.js` — the enhanced engine and the **single source of truth** for generation logic.
+	 - `optimized-comment-generator.js` — compatibility bridge and safe initialization wrapper; used by `app.js`.
+	 - `assets/js/comment-engine.js` — legacy/premium fallback; keep behavior consistent when editing.
+	 - `assets/js/synonym-manager.js` — intelligent word variation system that prevents overuse of vocabulary.
+	 - `assets/data/synonyms.json` — comprehensive synonym database (100+ words across 5 categories).
 
-## Comment Generation System
+ - Edit `assets/js/enhanced-comment-engine.js` for improvements. After changes, keep the root copy synchronized (used in some test pages):
+	 - PowerShell example (run from repo root):
+		 Copy-Item "assets/js/enhanced-comment-engine.js" "enhanced-comment-engine.js" -Force
 
-### Key Algorithm Details (EnhancedCommentEngine)
-- **Target**: Exactly 100-word comments
-- **Input Integration**: Name, gender, strengths, weaknesses, overall rating (1-10), subjects, topic ratings
-- **Dual Output**: Generates both male and female teacher style simultaneously
-- **Structure**: Opening → Strengths (all) → Detailed Subjects (3) → Remaining Subjects (list) → Weaknesses (all) → Conclusion
-- **Grammar**: Dynamic pronoun substitution with proper conjugation (see `grammarRules.pronouns`)
-- **Topic Grouping**: Uses `subjectTopicMap` to intelligently group topics under parent subjects
-  - Example: ["finger painting", "ladybug"] in Arts → "In Arts, she delighted us with finger painting and ladybug"
+ - What to change and where:
+	 - Subject/topic behavior (keyword mapping): edit `subjectTopicMap` (line near top of the file).
+	 - Subject capitalization rules: edit `grammarRules.subjectCapitalization`.
+	 - Add or change templates for male/female styles in the `generate...` functions.
+	 - Add new synonyms: edit `assets/data/synonyms.json` under appropriate category (adjectives, verbs, adverbs, educational_terms, phrases).
+- The enhanced engine must mention every selected subject/topic, start with the student name, and finish on an encouraging note while targeting ~100 words.
+- **Synonym Manager** automatically tracks word usage in sessionStorage and swaps overused words (threshold: 2 uses) with least-used synonyms, maintaining professional variety across multiple comment generations.
+- Update `subjectTopicMap` and `grammarRules.subjectCapitalization` whenever subjects or activities change; reflect the same in `assets/js/comment-engine.js` fallback.
+- `optimized-comment-generator.js` orchestrates the generation flow: Enhanced → Premium → fallback. Keep its public helpers (`generateFromStorage`, `testCommentGeneration`) stable.
 
-### Critical Rules (from `RULES.mdc`)
-- AI comments **MUST start with student's name**
-- AI comments **MUST end with positive/encouraging note**
-- AI comments **MUST incorporate ALL selected subjects**
-- AI comments **SHOULD mention specific topic activities** (e.g., "Harry frog", "counting 1-10")
+## Synonym System (Word Variation)
+- **Purpose:** Prevents repetitive vocabulary across multiple student reports by intelligently rotating synonyms.
+- **How it works:**
+  1. `SynonymManager` loads synonym data from `assets/data/synonyms.json` on first use.
+  2. Tracks word usage counts in `sessionStorage` (resets when browser closes).
+  3. During comment generation, replaces words used ≥2 times with least-used synonyms from the same category.
+  4. Preserves original capitalization (Title Case, UPPERCASE, lowercase).
+  5. Both `EnhancedCommentEngine` and `PremiumCommentEngine` call `synonymManager.replaceOverused()` after generating comments.
+- **Adding synonyms:** Edit `assets/data/synonyms.json` and add words to appropriate category. Each entry is `"word": ["synonym1", "synonym2", ...]`.
+- **Testing:** Generate multiple comments in one session; check console for `📚 SynonymManager:` logs showing replacements.
+- **Reset usage:** Call `window.synonymManager.resetUsageCounts()` in console or close browser (clears sessionStorage).
 
-### Performance Map Example
-```javascript
-10: "exceptional", "outstanding mastery", "exemplary engagement"
-5: "satisfactory", "appropriate developmental progress", "willing participation"
-1: "emerging", "initial learning exploration", "benefits from guidance"
-```
+## UI Conventions
+- Maintain glassmorphism styling and tokens in `assets/css/main.css` and `assets/css/components.css`. Keep interactive elements accessible (collapsible headers keyboard-accessible, visible focus states).
+- Reuse tokens from `assets/css/main.css` and `assets/css/components.css`; place quick overrides in `styles/inline-fixes.css` if absolutely necessary.
+- Preserve accessibility: collapsible headers must remain keyboard operable and buttons need visible focus states.
 
-## Design System
+## Testing & Debug
+ - Quick checks:
+	 - Open `Subjects.html` and use the wizard; generate comments to verify correctly mention all subjects and topics in the console logs.
+	 - Use `test-student-name.html` to verify student name flows into comment output and confirm console logs printed from `OptimizedCommentGenerator.collectSessionData()` and `EnhancedCommentEngine.processSessionData()`.
+	 - Use `test-topic-only-selection.html` to validate that topics without explicit subject selections are assigned/fallback correctly.
 
-### Glassmorphism Theme
-- **Background**: Space/Milky Way theme with animated star field (`body::before` twinkle animation)
-- **Container Transparency**: 30% transparent (`rgba(255, 255, 255, 0.3)`)
-- **Text**: White with shadows for contrast against space background
-- **CSS Variables**: See `:root` in `assets/css/main.css` for complete design tokens
-- **Cross-browser**: Vendor prefixes (`-webkit-backdrop-filter`) for Safari compatibility
+ - Debugging tips:
+	 - Open Developer Tools (F12), watch console logs for strings like `✅ Collected session data:` or `🎯 Enhanced Engine: Processing session data`.
+	 - Call the global helper from the console: `window.commentGenerator.generateFromStorage()` or `window.testCommentGeneration()` to invoke generation without clicking UI.
+	 - If comments show unexpected text, check both `sessionData` (in-memory) and `localStorage.studentData` (persistence). Keep both in sync when testing.
 
-### Animation System
-- Loading screen fade transitions (`fade-out`, `fade-in` classes)
-- Particle floating effects (`.particles-container`)
-- Slider interactions (only on overall rating - topic sliders removed)
-- Collapsible dropdowns (subject-based topic organization)
+## Deployment & Docs
+ - This repository is intended to be served static-only (GitHub Pages, Netlify, Vercel). Avoid using `localhost:3000` by default — the site expects to be opened from file system or a standard static server; some features (clipboard API) may require HTTPS/secure contexts.
+ - Note significant behavior changes in `COMMENT-INTEGRATION-SUMMARY.md` and `jobcard.md` or the `Index.md` so teachers, reviewers, and test harnesses stay in sync.
 
-## File Organization
+## Key Files & Patterns (Quick Reference)
+- `assets/js/app.js` — application controller and wizard routing; `TeachersPetApp.sessionData` is in-memory state.
+- `optimized-comment-generator.js` — initializes Enhanced/Premium engines and provides `generateFromStorage()` and `testCommentGeneration()` helpers.
+- `assets/js/enhanced-comment-engine.js` — main comment generation logic: `subjectTopicMap`, `grammarRules`, and templates for male/female output.
+- `assets/js/curriculum/curriculum-loader.js` — dynamic curriculum loader and availability list for grades/months.
+- `assets/js/curriculum/{grade}/{month}.js` — curriculum definitions (subject/topic structure) used by `Subjects.html`.
+- `Subjects.html` — dynamic subject/topic rendering; ensures all selected subjects are included in generated comments.
+- `test-student-name.html` and `test-topic-only-selection.html` — go-to browser test pages for common regressions.
 
-### Entry Points
-- **`index.html`**: Launcher with "Start New Report" and "Fresh Start" cards
-- **`grade-selection.html`**: Grade level selection (K1/K2/K3) - K2/K3 coming soon
-- **`month-selection.html`**: Month selection (Jan-Dec) - Only August available for K1
-- **`student-information.html`**: Student data input form (name, gender, rating, strengths/weaknesses)
-- **`Subjects.html`**: Subject/topic selection + comment generation button
-  - **Current subjects** (as of Oct 2025): English, Mathematics, I.Q, Social Studies, Science, Cooking, Conversation 1, Conversation 2, Arts, Physical Education, Puppet Show, Super Safari, Story Time
-  - **Removed subjects**: Phonics (merged into English), Conversation 3 (replaced by Conversation 2)
+## Collaboration & PR Rules
+- Before implementing behavior changes or adding features, confirm scope with the product owner and add an entry in `jobcard.md` (newest first). Log new files in `Index.md`.
+- Keep changes isolated: fix bugs in place, prefer edits to `assets/js/` files, and avoid introducing new server-side dependencies.
+- Include short instructions for QA reviewing: which test page to open and example student data that should regenerate consistent comments.
 
-### Assets
-- `assets/css/main.css`: Core design system, variables, glassmorphism
-- `assets/css/components.css`: Reusable UI components
-- `assets/js/app.js`: Application controller, form validation, navigation
-- `assets/js/curriculum/curriculum-loader.js`: Dynamic curriculum loading utility
-- `assets/js/curriculum/k1/august.js`: K1 August curriculum data (JavaScript object)
-- `assets/js/enhanced-comment-engine.js`: **PRIMARY** comment generator engine
-- `enhanced-comment-engine.js`: **ROOT COPY** - MUST stay synchronized with assets/js version
-  - ⚠️ CRITICAL: Both files must be identical (root loads after assets, overwrites window.EnhancedCommentEngine)
-  - Use `Copy-Item` PowerShell command to sync after editing assets version
-- `assets/js/comment-engine.js`: Legacy PremiumCommentEngine (maintained for reference)
-  - Update `subjectCapitalization` object when adding new subjects in ALL engines
-
-### Reference Documents
-- `curriculum-data.md`: Current kindergarten curriculum with all marking points (Oct 2025)
-- `COMMENT-INTEGRATION-SUMMARY.md`: Detailed explanation of enhanced comment engine improvements
-- `BEFORE-AFTER-COMPARISON.md`: Real examples comparing old vs new comment output
-- `curriculum-update-plan.md`: Implementation plan for curriculum changes
-- `CURRICULUM-UPDATE-SUMMARY.md`: Completed curriculum migration notes
-
-### Debug/Test Files
-- `test-*.html`: Testing harnesses (localStorage, comments, etc.)
-- `debug-*.html`: Debugging tools
-- `*-monitor.js`: Development utilities
-- `test-fixed-comments.html`: **Primary test harness** for comment engine validation
-  - Contains realistic and minimal data scenarios
-  - Tests both engines side-by-side
-  - Use this to verify comment generation changes
-
-### Common Workflows
-
-### Editing Enhanced Comment Engine
-1. **ALWAYS edit** `assets/js/enhanced-comment-engine.js` (PRIMARY source)
-2. **IMMEDIATELY sync** to root using PowerShell:
-   ```powershell
-   Copy-Item "assets/js/enhanced-comment-engine.js" "enhanced-comment-engine.js" -Force
-   ```
-3. **Test with** `test-fixed-comments.html` to verify changes
-4. **Update jobcard.md** with changes made
-
-### Adding New Features
-1. **Get user approval** (check RULES.mdc violations)
-2. Update `jobcard.md` with plan at top
-3. If new file, log in `Index.md`
-4. Implement and test in multiple browsers
-5. Document changes in jobcard.md
-
-### Debugging Comment Generation
-- Check `Subjects.html` line ~797 region (past syntax error location)
-- Verify `PremiumCommentEngine` instantiation
-- Inspect `sessionData` object in console
-- Test with `test-fixed-comments.html` for isolated testing
-
-### Fixing UI Issues
-- Maintain 30% transparency on all `.container` elements
-- Ensure white text with shadows on space backgrounds
-- Test star animation performance (`twinkle` keyframes)
-- Verify glassmorphism works in Safari (`-webkit-backdrop-filter`)
-
-### Storage Debugging
-Use `localstorage-monitor.js` or check:
-```javascript
-localStorage.getItem('studentData')
-sessionStorage.getItem('studentData')
-```
-
-## Browser Compatibility
-- **Target**: Chrome, Edge, Firefox, Safari, Opera, IE9+
-- **Strategy**: Progressive enhancement with vendor prefixes
-- **Fallbacks**: Included for Clipboard API, backdrop-filter, etc.
-- **Testing**: Multi-browser validation required for UI changes
-
-## Deployment
-- **Primary**: Direct filesystem access (double-click HTML files)
-- **Sharing**: GitHub Pages, Netlify, Vercel
-- **⚠️ AVOID**: localhost:3000 (documented in README as problematic)
-- **Local server**: Use Python `http.server` or VS Code Live Server on port 8080
-
-## Project History Insights
-- **October 13, 2025**: Major curriculum update - replaced old subjects with current kindergarten standards
-  - **Removed**: Phonics (merged into English), Conversation 3
-  - **Added**: Cooking, Conversation 2, Puppet Show, Super Safari (19 activities), Story Time
-  - **Updated**: All subject topics aligned to new marking points from curriculum screenshot
-- **July 2, 2025**: Fixed critical bug - extra `}` on line 797 broke generateComments()
-- **June 27, 2025**: UI consistency fixes, collapsible dropdown system
-- **Key Fix**: Topics now hidden by default, only show when parent subject checked
-- **Optimization**: Removed all topic rating sliders except student overall rating
-
-## Conventions
-- **No localStorage dependencies in core logic** - use in-memory `sessionData` first
-- **Gender-neutral support**: Includes "they" pronouns with proper conjugation
-- **Word count targeting**: Algorithm optimized for ~100 words (check `generateStyleComment()`)
-- **Template randomization**: Uses `Math.random()` to select from template arrays
-- **Natural language joining**: Custom `naturalJoin()` with Oxford comma support
+If anything is unclear or you want examples of how to extend the comment templates or curriculum, tell me which part you want clarified and I’ll expand the document with code examples.

@@ -1,8 +1,8 @@
-# Spring Launcher Optimization - Teacher's Pet
+# Spring Launcher Optimization - Teachers Pet
 
 ## Overview
 
-The Teacher's Pet kindergarten report generator requires a Spring-style launcher optimization to create a clean, single entry point while removing redundant files and ensuring optimal comment generation with complete user input integration.
+The Teachers Pet kindergarten report generator requires a Spring-style launcher optimization to create a clean, single entry point while removing redundant files and ensuring optimal comment generation with complete user input integration.
 
 ## Technology Stack & Dependencies
 
@@ -226,6 +226,7 @@ graph LR
 ```
 
 ### Input Integration Matrix
+
 | Input Type | Integration Method | Storage Method |
 |------------|-------------------|----------------|
 | Student Name | Mandatory usage throughout comments | In-memory variable |

@@ -1,0 +1,742 @@
+{
+    "adjectives": {
+        "exemplary": [
+            "outstanding",
+            "exceptional",
+            "commendable",
+            "remarkable",
+            "stellar",
+            "admirable",
+            "noteworthy",
+            "superior"
+        ],
+        "excellent": [
+            "superb",
+            "impressive",
+            "admirable",
+            "stellar",
+            "splendid",
+            "first-rate",
+            "exceptional",
+            "distinguished"
+        ],
+        "outstanding": [
+            "exceptional",
+            "remarkable",
+            "extraordinary",
+            "impressive",
+            "exemplary",
+            "distinguished",
+            "notable",
+            "superior"
+        ],
+        "wonderful": [
+            "delightful",
+            "marvelous",
+            "splendid",
+            "magnificent",
+            "terrific",
+            "fabulous",
+            "lovely",
+            "fantastic"
+        ],
+        "remarkable": [
+            "extraordinary",
+            "notable",
+            "impressive",
+            "striking",
+            "exceptional",
+            "outstanding",
+            "noteworthy",
+            "significant"
+        ],
+        "proficient": [
+            "skilled",
+            "competent",
+            "capable",
+            "adept",
+            "accomplished",
+            "expert",
+            "masterful",
+            "practiced"
+        ],
+        "exceptional": [
+            "extraordinary",
+            "outstanding",
+            "remarkable",
+            "superior",
+            "phenomenal",
+            "impressive",
+            "rare",
+            "uncommon"
+        ],
+        "impressive": [
+            "striking",
+            "remarkable",
+            "notable",
+            "commanding",
+            "notable",
+            "powerful",
+            "compelling",
+            "significant"
+        ],
+        "strong": [
+            "robust",
+            "solid",
+            "vigorous",
+            "capable",
+            "firm",
+            "substantial",
+            "sound",
+            "sturdy"
+        ],
+        "good": [
+            "positive",
+            "satisfactory",
+            "commendable",
+            "pleasing",
+            "favorable",
+            "promising",
+            "encouraging",
+            "productive"
+        ],
+        "great": [
+            "excellent",
+            "superb",
+            "wonderful",
+            "terrific",
+            "fantastic",
+            "marvelous",
+            "tremendous",
+            "magnificent"
+        ],
+        "beautiful": [
+            "lovely",
+            "charming",
+            "graceful",
+            "delightful",
+            "elegant",
+            "attractive",
+            "pleasing",
+            "appealing"
+        ],
+        "lovely": [
+            "charming",
+            "delightful",
+            "beautiful",
+            "pleasant",
+            "graceful",
+            "appealing",
+            "enchanting",
+            "captivating"
+        ],
+        "delightful": [
+            "charming",
+            "pleasant",
+            "enjoyable",
+            "lovely",
+            "pleasing",
+            "gratifying",
+            "satisfying",
+            "wonderful"
+        ],
+        "promising": [
+            "encouraging",
+            "hopeful",
+            "favorable",
+            "positive",
+            "bright",
+            "optimistic",
+            "auspicious",
+            "propitious"
+        ],
+        "confident": [
+            "self-assured",
+            "assured",
+            "poised",
+            "certain",
+            "secure",
+            "composed",
+            "positive",
+            "bold"
+        ],
+        "enthusiastic": [
+            "eager",
+            "keen",
+            "passionate",
+            "animated",
+            "spirited",
+            "energetic",
+            "ardent",
+            "zealous"
+        ],
+        "curious": [
+            "inquisitive",
+            "interested",
+            "questioning",
+            "inquiring",
+            "investigative",
+            "probing",
+            "searching",
+            "exploring"
+        ],
+        "capable": [
+            "competent",
+            "able",
+            "skilled",
+            "qualified",
+            "proficient",
+            "adept",
+            "accomplished",
+            "efficient"
+        ],
+        "talented": [
+            "gifted",
+            "skilled",
+            "accomplished",
+            "able",
+            "expert",
+            "adept",
+            "masterful",
+            "proficient"
+        ]
+    },
+    "verbs": {
+        "demonstrates": [
+            "shows",
+            "exhibits",
+            "displays",
+            "manifests",
+            "illustrates",
+            "reveals",
+            "presents",
+            "evidences"
+        ],
+        "shows": [
+            "demonstrates",
+            "exhibits",
+            "displays",
+            "reveals",
+            "presents",
+            "indicates",
+            "manifests",
+            "reflects"
+        ],
+        "exhibits": [
+            "displays",
+            "demonstrates",
+            "shows",
+            "manifests",
+            "presents",
+            "reveals",
+            "expresses",
+            "illustrates"
+        ],
+        "displays": [
+            "exhibits",
+            "shows",
+            "demonstrates",
+            "presents",
+            "manifests",
+            "reveals",
+            "expresses",
+            "showcases"
+        ],
+        "achieved": [
+            "accomplished",
+            "attained",
+            "reached",
+            "secured",
+            "gained",
+            "realized",
+            "completed",
+            "fulfilled"
+        ],
+        "excelled": [
+            "thrived",
+            "succeeded",
+            "flourished",
+            "triumphed",
+            "prospered",
+            "shone",
+            "distinguished",
+            "surpassed"
+        ],
+        "performed": [
+            "executed",
+            "accomplished",
+            "completed",
+            "carried out",
+            "fulfilled",
+            "achieved",
+            "delivered",
+            "conducted"
+        ],
+        "developed": [
+            "cultivated",
+            "advanced",
+            "progressed",
+            "evolved",
+            "improved",
+            "enhanced",
+            "grew",
+            "matured"
+        ],
+        "progressed": [
+            "advanced",
+            "developed",
+            "improved",
+            "evolved",
+            "moved forward",
+            "grew",
+            "proceeded",
+            "flourished"
+        ],
+        "maintained": [
+            "sustained",
+            "kept",
+            "preserved",
+            "continued",
+            "upheld",
+            "retained",
+            "supported",
+            "carried on"
+        ],
+        "approached": [
+            "tackled",
+            "addressed",
+            "handled",
+            "dealt with",
+            "engaged with",
+            "undertook",
+            "managed",
+            "confronted"
+        ],
+        "participated": [
+            "engaged",
+            "contributed",
+            "involved",
+            "took part",
+            "joined in",
+            "shared",
+            "collaborated",
+            "cooperated"
+        ],
+        "contributed": [
+            "added",
+            "provided",
+            "gave",
+            "offered",
+            "supplied",
+            "brought",
+            "participated",
+            "shared"
+        ],
+        "explored": [
+            "investigated",
+            "examined",
+            "discovered",
+            "studied",
+            "researched",
+            "probed",
+            "delved into",
+            "ventured"
+        ],
+        "mastered": [
+            "conquered",
+            "perfected",
+            "excelled at",
+            "became proficient in",
+            "commanded",
+            "dominated",
+            "grasped",
+            "learned"
+        ],
+        "embraced": [
+            "welcomed",
+            "accepted",
+            "adopted",
+            "took on",
+            "engaged with",
+            "received",
+            "greeted",
+            "pursued"
+        ],
+        "flourished": [
+            "thrived",
+            "prospered",
+            "blossomed",
+            "bloomed",
+            "succeeded",
+            "grew",
+            "developed",
+            "advanced"
+        ],
+        "blossomed": [
+            "flourished",
+            "bloomed",
+            "developed",
+            "matured",
+            "grew",
+            "thrived",
+            "evolved",
+            "progressed"
+        ]
+    },
+    "adverbs": {
+        "consistently": [
+            "regularly",
+            "steadily",
+            "reliably",
+            "continuously",
+            "constantly",
+            "persistently",
+            "uniformly",
+            "dependably"
+        ],
+        "regularly": [
+            "consistently",
+            "routinely",
+            "frequently",
+            "habitually",
+            "often",
+            "customarily",
+            "commonly",
+            "typically"
+        ],
+        "effectively": [
+            "successfully",
+            "efficiently",
+            "productively",
+            "competently",
+            "capably",
+            "skillfully",
+            "proficiently",
+            "ably"
+        ],
+        "successfully": [
+            "effectively",
+            "productively",
+            "efficiently",
+            "fruitfully",
+            "favorably",
+            "positively",
+            "victoriously",
+            "triumphantly"
+        ],
+        "actively": [
+            "energetically",
+            "vigorously",
+            "enthusiastically",
+            "dynamically",
+            "eagerly",
+            "keenly",
+            "spiritedly",
+            "zealously"
+        ],
+        "eagerly": [
+            "enthusiastically",
+            "keenly",
+            "actively",
+            "avidly",
+            "ardently",
+            "fervently",
+            "passionately",
+            "zealously"
+        ],
+        "confidently": [
+            "assuredly",
+            "self-assuredly",
+            "positively",
+            "boldly",
+            "securely",
+            "certainly",
+            "firmly",
+            "decidedly"
+        ],
+        "positively": [
+            "favorably",
+            "constructively",
+            "optimistically",
+            "encouragingly",
+            "affirmatively",
+            "beneficially",
+            "helpfully",
+            "supportively"
+        ],
+        "beautifully": [
+            "wonderfully",
+            "marvelously",
+            "splendidly",
+            "magnificently",
+            "gracefully",
+            "elegantly",
+            "charmingly",
+            "delightfully"
+        ],
+        "remarkably": [
+            "notably",
+            "exceptionally",
+            "extraordinarily",
+            "impressively",
+            "strikingly",
+            "outstandingly",
+            "significantly",
+            "unusually"
+        ],
+        "skillfully": [
+            "expertly",
+            "adeptly",
+            "proficiently",
+            "competently",
+            "ably",
+            "masterfully",
+            "capably",
+            "deftly"
+        ],
+        "thoroughly": [
+            "completely",
+            "fully",
+            "comprehensively",
+            "entirely",
+            "exhaustively",
+            "extensively",
+            "meticulously",
+            "carefully"
+        ],
+        "diligently": [
+            "industriously",
+            "assiduously",
+            "conscientiously",
+            "earnestly",
+            "persistently",
+            "attentively",
+            "carefully",
+            "methodically"
+        ],
+        "enthusiastically": [
+            "eagerly",
+            "keenly",
+            "ardently",
+            "passionately",
+            "fervently",
+            "zealously",
+            "avidly",
+            "spiritedly"
+        ],
+        "naturally": [
+            "instinctively",
+            "inherently",
+            "spontaneously",
+            "intuitively",
+            "innately",
+            "organically",
+            "effortlessly",
+            "genuinely"
+        ]
+    },
+    "educational_terms": {
+        "progress": [
+            "advancement",
+            "development",
+            "growth",
+            "improvement",
+            "evolution",
+            "headway",
+            "achievement",
+            "gain"
+        ],
+        "development": [
+            "growth",
+            "progress",
+            "advancement",
+            "evolution",
+            "maturation",
+            "improvement",
+            "expansion",
+            "cultivation"
+        ],
+        "achievement": [
+            "accomplishment",
+            "attainment",
+            "success",
+            "feat",
+            "triumph",
+            "victory",
+            "gain",
+            "realization"
+        ],
+        "performance": [
+            "execution",
+            "achievement",
+            "accomplishment",
+            "delivery",
+            "work",
+            "output",
+            "results",
+            "showing"
+        ],
+        "engagement": [
+            "involvement",
+            "participation",
+            "commitment",
+            "interaction",
+            "contribution",
+            "interest",
+            "attention",
+            "focus"
+        ],
+        "understanding": [
+            "comprehension",
+            "grasp",
+            "knowledge",
+            "insight",
+            "awareness",
+            "perception",
+            "recognition",
+            "appreciation"
+        ],
+        "mastery": [
+            "command",
+            "proficiency",
+            "expertise",
+            "skill",
+            "competence",
+            "excellence",
+            "fluency",
+            "control"
+        ],
+        "competency": [
+            "proficiency",
+            "capability",
+            "ability",
+            "skill",
+            "aptitude",
+            "expertise",
+            "facility",
+            "qualification"
+        ],
+        "ability": [
+            "capability",
+            "capacity",
+            "skill",
+            "competence",
+            "aptitude",
+            "talent",
+            "facility",
+            "potential"
+        ],
+        "skills": [
+            "abilities",
+            "competencies",
+            "capabilities",
+            "proficiencies",
+            "talents",
+            "aptitudes",
+            "expertise",
+            "techniques"
+        ],
+        "potential": [
+            "promise",
+            "capability",
+            "capacity",
+            "possibility",
+            "prospect",
+            "talent",
+            "aptitude",
+            "ability"
+        ],
+        "growth": [
+            "development",
+            "progress",
+            "advancement",
+            "evolution",
+            "expansion",
+            "improvement",
+            "maturation",
+            "flourishing"
+        ],
+        "learning": [
+            "education",
+            "study",
+            "instruction",
+            "training",
+            "development",
+            "knowledge acquisition",
+            "comprehension",
+            "understanding"
+        ],
+        "foundation": [
+            "basis",
+            "groundwork",
+            "fundamentals",
+            "base",
+            "cornerstone",
+            "bedrock",
+            "footing",
+            "underpinning"
+        ],
+        "effort": [
+            "work",
+            "endeavor",
+            "exertion",
+            "application",
+            "commitment",
+            "dedication",
+            "energy",
+            "attempt"
+        ]
+    },
+    "phrases": {
+        "made progress": [
+            "advanced",
+            "developed skills",
+            "moved forward",
+            "grew",
+            "improved",
+            "evolved",
+            "matured",
+            "flourished"
+        ],
+        "showed improvement": [
+            "developed",
+            "advanced",
+            "progressed",
+            "grew",
+            "evolved",
+            "enhanced skills",
+            "matured",
+            "strengthened"
+        ],
+        "worked hard": [
+            "applied effort",
+            "dedicated energy",
+            "committed fully",
+            "persevered",
+            "strived",
+            "endeavored",
+            "exerted effort",
+            "tried diligently"
+        ],
+        "did well": [
+            "succeeded",
+            "performed admirably",
+            "achieved success",
+            "excelled",
+            "thrived",
+            "accomplished goals",
+            "prospered",
+            "triumphed"
+        ],
+        "needs improvement": [
+            "requires development",
+            "would benefit from practice",
+            "is developing",
+            "is emerging",
+            "is progressing",
+            "is evolving",
+            "is strengthening",
+            "is advancing"
+        ]
+    }
+}
