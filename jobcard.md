@@ -2,6 +2,40 @@
 
 ## Recent Work (Newest First)
 
+### 2025-11-13: Added Popup Acknowledgment Message
+**Agent:** GitHub Copilot
+
+**Changes:**
+- Added modal overlay with acknowledgment message to `student-information.html`
+- Modal displays when user clicks "Continue to Subject Selection →" button
+- User must acknowledge the message before proceeding to Subjects.html
+
+**Modal Content:**
+- Warning text with pulsating red effect: "*COMMENTS ARE NOT GENERATED USING AI. PLEASE REVIEW YOUR COMMENTS!"
+- Information text: "*The more boxes you tick, the larger the comments. Sangsom School report only requires 75 - 80 words. Tick/select lightly."
+- Tip text in green italic: "**Tip - leave strengths and weaknesses empty in the previous student information page."
+
+**Technical Implementation:**
+- Modal HTML structure added before closing container div
+- CSS styles using glassmorphism theme (matching existing design):
+  - Semi-transparent white background with backdrop-filter blur
+  - Pulsating red animation for warning text (1.5s cycle)
+  - Slide-down animation on display
+  - Fade-in overlay background
+- JavaScript functions:
+  - Modified `goToSubjects()` to show modal instead of immediate navigation
+  - Added `showAcknowledgmentModal()` to display modal
+  - Added `acknowledgeAndProceed()` to hide modal and navigate to Subjects.html
+- Modal triggered before navigation, ensuring user reads important instructions
+
+**Visual Design:**
+- Consistent with space theme background
+- Warning emoji (⚠️) in title
+- Green "I Understand - Continue →" button with hover effects
+- Dark overlay (80% opacity) behind modal for focus
+
+---
+
 ### 2025-11-12: Added Pulsating Gold "Click to drop down" Text to Subject Headers
 **Agent:** GitHub Copilot
 
