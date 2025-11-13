@@ -195,57 +195,85 @@ class SynonymManager {
 
         console.log('🔍 SynonymManager: Processing text for overused words...');
         console.log('📏 Current usage threshold:', this.maxUsageThreshold);
+        console.log('📊 Current usage counts BEFORE processing:', { ...this.usageCounts });
 
-        // Track words in current text for replacement
-        const wordsToReplace = new Map(); // word -> replacement
+        // Extract all words from text (case-insensitive matching)
+        const wordMatches = text.match(/\b[\w']+\b/g) || [];
+        const wordsInText = new Map(); // normalized -> [original forms with positions]
 
-        // Split into words while preserving structure
-        const words = text.match(/\b[\w']+\b/g) || [];
-
-        // First pass: identify overused words and find replacements
-        for (const word of words) {
+        // Build word frequency map for this specific text
+        for (let i = 0; i < wordMatches.length; i++) {
+            const word = wordMatches[i];
             const normalized = word.toLowerCase().trim();
 
-            // Skip if already processed or too short
-            if (wordsToReplace.has(normalized) || normalized.length < 4) {
-                continue;
+            if (normalized.length >= 4) { // Only process substantial words
+                if (!wordsInText.has(normalized)) {
+                    wordsInText.set(normalized, []);
+                }
+                wordsInText.get(normalized).push(word);
             }
+        }
 
-            // Check if word is overused
-            if (this.shouldReplace(normalized)) {
+        console.log('📝 Words found in current text:', Array.from(wordsInText.keys()));
+
+        // Track replacements to make
+        const replacements = new Map(); // original word -> replacement word
+
+        // Check each unique word against usage threshold
+        for (const [normalized, instances] of wordsInText.entries()) {
+            const currentUsage = this.getUsageCount(normalized);
+
+            console.log(`🔍 Checking "${normalized}": current usage = ${currentUsage}, threshold = ${this.maxUsageThreshold}`);
+
+            // If word has been used >= threshold times, try to replace it
+            if (currentUsage >= this.maxUsageThreshold) {
                 const synonyms = this.findSynonyms(normalized);
 
-                if (synonyms.length > 0) {
-                    const replacement = this.selectBestSynonym(normalized, synonyms);
-                    if (replacement !== normalized) {
-                        wordsToReplace.set(normalized, replacement);
+                if (synonyms && synonyms.length > 0) {
+                    console.log(`📖 Found ${synonyms.length} synonyms for "${normalized}":`, synonyms);
+
+                    const bestSynonym = this.selectBestSynonym(normalized, synonyms);
+
+                    if (bestSynonym && bestSynonym.toLowerCase() !== normalized) {
+                        replacements.set(normalized, bestSynonym);
+                        console.log(`✅ Will replace "${normalized}" with "${bestSynonym}"`);
                     }
+                } else {
+                    console.log(`⚠️ No synonyms found for "${normalized}"`);
                 }
             }
         }
 
-        console.log('🎯 SynonymManager: Found overused words to replace:',
-            Array.from(wordsToReplace.entries()));
+        console.log('🎯 Total replacements planned:', replacements.size);
 
-        // Second pass: replace words while preserving case
+        // Apply replacements with case preservation
         let processedText = text;
 
-        for (const [original, replacement] of wordsToReplace.entries()) {
-            // Create regex to match word with word boundaries
+        for (const [original, replacement] of replacements.entries()) {
+            // Use word boundary regex for accurate replacement
             const regex = new RegExp(`\\b${this.escapeRegex(original)}\\b`, 'gi');
 
             processedText = processedText.replace(regex, (match) => {
-                // Preserve original capitalization
-                return this.matchCase(match, replacement);
+                const replaced = this.matchCase(match, replacement);
+                console.log(`🔄 Replacing "${match}" → "${replaced}"`);
+                return replaced;
             });
         }
 
-        // Third pass: update usage counts for all words in final text
+        // NOW update usage counts for ALL words in the FINAL processed text
         const finalWords = processedText.match(/\b[\w']+\b/g) || [];
+        const uniqueFinalWords = new Set();
+
         for (const word of finalWords) {
-            if (word.length >= 4) { // Only track substantial words
-                this.incrementUsage(word);
+            const normalized = word.toLowerCase().trim();
+            if (normalized.length >= 4) {
+                uniqueFinalWords.add(normalized);
             }
+        }
+
+        // Increment usage for each unique word
+        for (const word of uniqueFinalWords) {
+            this.incrementUsage(word);
         }
 
         console.log('✅ SynonymManager: Text processing complete');
