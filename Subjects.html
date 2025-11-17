@@ -1197,6 +1197,49 @@
 
         // selectAll function moved to top of script
 
+        // ⚡ PERFORMANCE OPTIMIZATION: Storage Namespace Pattern (Week 2)
+        const TeachersPetStorage = {
+            namespace: (prefix) => ({
+                get: (key) => {
+                    try {
+                        const val = localStorage.getItem(`${prefix}.${key}`);
+                        return val ? JSON.parse(val) : null;
+                    } catch { return null; }
+                },
+                set: (key, value) => {
+                    try {
+                        localStorage.setItem(`${prefix}.${key}`, JSON.stringify(value));
+                    } catch (e) { console.error('Storage set failed:', e); }
+                },
+                setAll: (obj) => {
+                    Object.entries(obj).forEach(([k, v]) => {
+                        try {
+                            localStorage.setItem(`${prefix}.${k}`, JSON.stringify(v));
+                        } catch (e) { console.error(`Storage setAll failed for ${k}:`, e); }
+                    });
+                },
+                getAll: (keys) => {
+                    const result = {};
+                    keys.forEach(k => {
+                        try {
+                            const val = localStorage.getItem(`${prefix}.${k}`);
+                            result[k] = val ? JSON.parse(val) : null;
+                        } catch { result[k] = null; }
+                    });
+                    return result;
+                },
+                transact: (fn) => {
+                    try {
+                        fn();
+                    } catch (e) { console.error('Transaction failed:', e); }
+                }
+            })
+        };
+
+        // Initialize storage namespaces
+        const studentStore = TeachersPetStorage.namespace('student');
+        const selectionStore = TeachersPetStorage.namespace('selection');
+
         // clearAll function moved to top of script
 
         // saveSelections function moved to top of script
@@ -1210,7 +1253,15 @@
 
         // goBack function is now loaded from missing-functions.js
 
-        function generateComment(studentData, selectedTopics, selectedSubjects, variant) {
+        // ❌ REMOVED: Legacy generateComment() function - ALL comment generation now in enhanced-comment-engine.js
+        // This function was creating fake subject data (I.Q appearing when not selected)
+
+        function generateComment_DISABLED_DO_NOT_USE(studentData, selectedTopics, selectedSubjects, variant) {
+            console.error('❌ CRITICAL: Legacy generateComment() called - this should NEVER happen!');
+            console.error('All comment generation must use enhanced-comment-engine.js');
+            return 'ERROR: Legacy comment generator called. Please refresh and try again.';
+
+            /* ORIGINAL CODE DISABLED - DO NOT RE-ENABLE
             const name = studentData.studentName || 'The student';
             const gender = studentData.gender || 'they';
 
@@ -1265,44 +1316,44 @@
                 if (arr.length === 0) return '';
                 if (arr.length === 1) return arr[0];
                 if (arr.length === 2) return arr.join(' and ');
-                return `${arr.slice(0, -1).join(', ')}, and ${arr.slice(-1)}`;
+                return arr.slice(0, -1).join(', ') + ', and ' + arr.slice(-1);
             }
 
             // Generate concise comment with maximum 80 words
             let comment;
 
             if (isMaleTeacher) {
-                comment = `${name} demonstrated ${perf.level} performance this term across multiple learning areas.`;
+                comment = name + ' demonstrated ' + perf.level + ' performance this term across multiple learning areas.';
 
                 if (strengths.trim()) {
                     const strengthList = strengths.split(',').map(s => s.trim().toLowerCase()).filter(Boolean).slice(0, 2);
                     if (strengthList.length > 0) {
-                        comment += ` ${p.subject} shows strong capabilities in ${naturalJoin(strengthList)}.`;
+                        comment += ' ' + p.subject + ' shows strong capabilities in ' + naturalJoin(strengthList) + '.';
                     }
                 }
 
                 if (subjectData.length > 0) {
                     const capitalizedSubjects = capitalizeSubjects(subjectData.slice(0, 2));
-                    comment += ` In ${naturalJoin(capitalizedSubjects)}, ${name} shows consistent growth.`;
+                    comment += ' In ' + naturalJoin(capitalizedSubjects) + ', ' + name + ' shows consistent growth.';
                 }
 
-                comment += ` ${name} shows excellent potential for continued learning success.`;
+                comment += ' ' + name + ' shows excellent potential for continued learning success.';
             } else {
-                comment = `It has been a pleasure watching ${name} grow this term.`;
+                comment = 'It has been a pleasure watching ' + name + ' grow this term.';
 
                 if (strengths.trim()) {
                     const strengthList = strengths.split(',').map(s => s.trim().toLowerCase()).filter(Boolean).slice(0, 2);
                     if (strengthList.length > 0) {
-                        comment += ` ${p.possessive} talent for ${naturalJoin(strengthList)} truly shines.`;
+                        comment += ' ' + p.possessive + ' talent for ' + naturalJoin(strengthList) + ' truly shines.';
                     }
                 }
 
                 if (subjectData.length > 0) {
                     const capitalizedSubjects = capitalizeSubjects(subjectData.slice(0, 2));
-                    comment += ` ${p.subject} has shown wonderful progress in ${naturalJoin(capitalizedSubjects)}.`;
+                    comment += ' ' + p.subject + ' has shown wonderful progress in ' + naturalJoin(capitalizedSubjects) + '.';
                 }
 
-                comment += ` ${name} brings joy to learning and shows wonderful potential for future success.`;
+                comment += ' ' + name + ' brings joy to learning and shows wonderful potential for future success.';
             }
 
             // Ensure proper ending punctuation
@@ -1311,6 +1362,7 @@
             }
 
             return comment;
+            END OF DISABLED CODE */
         }
 
         // generateComments function is now handled by optimized-comment-generator.js

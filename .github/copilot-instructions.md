@@ -167,6 +167,10 @@ Copy-Item "assets/js/enhanced-comment-engine.js" "enhanced-comment-engine.js" -F
 2. **Name flow:** `test-student-name.html` - verify student name appears in output
 3. **Topic inference:** `test-topic-only-selection.html` - validate topics without subject checkboxes
 4. **Data integrity:** `test-data-integrity.html` - ensure no fake data injection
+5. **Complete audit:** `test-all-subjects-audit.html` - **NEW: Comprehensive cross-grade/month testing**
+   - Quick Audit: 5 critical test cases (Cooking, Physical Education, I.Q isolation)
+   - Full Audit: 50+ tests covering ALL 34 subjects across K1 August (13), K1 November (11), K2 November (10)
+   - Automated violation detection with visual pass/fail indicators
 
 ### Console Debugging
 Open Developer Tools (F12), watch for:
