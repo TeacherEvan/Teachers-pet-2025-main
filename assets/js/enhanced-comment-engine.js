@@ -83,7 +83,13 @@ class EnhancedCommentEngine {
 
         // Subject-to-topic mapping for intelligent grouping
         this.subjectTopicMap = {
-            "English": ["draw lines", "trace", "match", "circle", "letter"],
+            // Expanded English to include K1 phonics items (Nancy, Oscar, Penny, Queenie, Rev N/O/P)
+            "English": [
+                "draw lines", "trace", "match", "circle", "letter", "alphabet", "phonics",
+                "nancy", "nurse", "nose", "oscar", "octopus", "on",
+                "penny", "panda", "pen", "queenie", "quick", "quiet",
+                "rev", "n/o/p", "n o p"
+            ],
             "Mathematics": ["count", "number", "match", "trace", "dotted"],
             "I.Q": ["color", "same", "fatter", "taller", "hot", "cold", "shape"],
             "Social Studies": ["identify", "animal", "sounds", "habits", "hygiene", "gestures"],
@@ -91,6 +97,11 @@ class EnhancedCommentEngine {
             "Cooking": ["look chop", "sugar", "bean", "salt", "coconut"],
             "Conversation 1": ["pet", "feel", "lunch", "want to be", "like to go"],
             "Conversation 2": ["drink", "going", "school"],
+            // Added Conversation 3 for K1 November
+            "Conversation 3": [
+                "food", "eat", "rice", "colors", "color", "yellow", "purple", "green", "orange",
+                "daily routines", "wake", "take a shower", "sleep", "go to sleep", "morning"
+            ],
             "Arts": ["finger painting", "ladybug", "play dough", "sponge", "origami"],
             "Physical Education": ["football", "balance", "ball", "ring", "jump", "zigzag", "hurdle"],
             "Puppet Show": ["noond", "vegetables", "panicked rabbit"],

@@ -15,6 +15,23 @@ Before implementing ANY feature:
 
 ## Recent Work (Newest First)
 
+### 2025-11-17: Subject mentions not appearing (K1 November phonics)
+**Agent:** GitHub Copilot
+**MCP Tools Used:** ✅ mcp_context7_resolve-library-id, ✅ mcp_context7_get-library-docs (MDN localStorage/querySelectorAll), ✅ manage_todo_list, ✅ mcp_memory_add_observations
+
+**Problem:** Final comments were not referencing selected subjects when only phonics topics (e.g., “Nancy Nurse”, “Oscar Octopus”) were ticked.
+
+**Root Cause:** Subject inference and topic grouping lacked keywords for K1 November English phonics topics, and there was no mapping for “Conversation 3”. When the parent subject checkbox wasn’t checked, no subjects reached the engine, so the subject section was omitted.
+
+**Fix:**
+- Expanded `subjectTopicMap` in `assets/js/enhanced-comment-engine.js` to include phonics keywords and added mapping for `Conversation 3`.
+- Mirrored the same keywords in `topicToSubjectMap` within `missing-functions.js` (used by `inferSubjectsFromTopics`).
+- Synced the root copy `enhanced-comment-engine.js`.
+
+**Expected Result:** Selecting phonics-only English topics now infers the English subject, groups those topics, and comments explicitly mention English and sampled topics.
+
+**QA:** Open `Subjects.html` → select English phonics items (without checking the English header) → Generate Comments → verify comments include “English” and topic mentions.
+
 ### 2025-11-13: Synonym Manager Fix & MCP Tool Integration
 **Agent:** GitHub Copilot
 **MCP Tools Used:** ✅ mcp_context7_resolve-library-id, ✅ mcp_context7_get-library-docs, ✅ fetch_webpage (MDN Map docs), ✅ mcp_sequentialthi_sequentialthinking, ✅ manage_todo_list
