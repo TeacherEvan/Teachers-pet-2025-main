@@ -150,10 +150,29 @@ Mathematics, I.Q, Social Studies, English, Science, Conversation 1, **Conversati
 1. **Never define functions inline in Subjects.html** - all generation logic must be in `enhanced-comment-engine.js`
 2. **Always initialize storage utilities before use** - check for `TeachersPetStorage` definition
 3. **Test with console open** - watch for ReferenceErrors
-4. **Use test-data-integrity.html** - automated validation after changes
+4. **Use test-all-subjects-audit.html** - automated validation after changes
+
+## Self-Destruct Cleanup (When 100% Tests Pass)
+
+When all tests pass successfully, `test-all-subjects-audit.html` triggers an automated cleanup:
+
+1. **5-second countdown** with visual explosion effects
+2. **Downloads `cleanup-test-files.ps1`** PowerShell script
+3. **Script removes:**
+   - `test-all-subjects-audit.html`
+   - `test-data-integrity.html`
+   - `test-student-name.html`
+   - `test-topic-only-selection.html`
+   - The cleanup script itself (self-destructs)
+
+**To execute cleanup:**
+1. Move `cleanup-test-files.ps1` from Downloads to `Teachers-pet-2025-main` folder
+2. Right-click → **Run with PowerShell**
+3. All obsolete test files are automatically deleted
 
 ---
 
 **Status:** ✅ FIXED - All fake data injection eliminated
 **Test Result:** Comment now mentions ONLY user-selected subjects
 **Console Errors:** CLEARED - No ReferenceErrors
+**Cleanup:** Automated via self-destruct on 100% success

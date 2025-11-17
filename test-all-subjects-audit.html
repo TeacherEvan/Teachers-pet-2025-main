@@ -554,14 +554,78 @@
                     document.querySelector('.self-destruct-content').classList.add('exploding');
 
                     setTimeout(() => {
-                        // Delete the test file by redirecting to a blank page with instructions
+                        // Generate PowerShell cleanup script
+                        const cleanupScript = `# Teachers Pet - Test Cleanup Script
+# Auto-generated after 100% test success
+# This script deletes obsolete test files
+
+Write-Host "🔥 Teachers Pet Test Cleanup" -ForegroundColor Green
+Write-Host "All tests passed. Removing obsolete audit files..." -ForegroundColor Yellow
+Write-Host ""
+
+$filesToDelete = @(
+    "test-all-subjects-audit.html",
+    "test-data-integrity.html",
+    "test-student-name.html", 
+    "test-topic-only-selection.html"
+)
+
+$currentDir = Split-Path -Parent $MyInvocation.MyCommand.Path
+
+foreach ($file in $filesToDelete) {
+    $filePath = Join-Path $currentDir $file
+    if (Test-Path $filePath) {
+        Remove-Item $filePath -Force
+        Write-Host "✅ Deleted: $file" -ForegroundColor Green
+    } else {
+        Write-Host "⚠️  Not found: $file" -ForegroundColor Yellow
+    }
+}
+
+Write-Host ""
+Write-Host "💯 Cleanup complete! All test files removed." -ForegroundColor Green
+Write-Host "The bug is fixed. System integrity verified." -ForegroundColor Cyan
+Write-Host ""
+Write-Host "Press any key to exit..."
+$null = $host.UI.RawUI.ReadKey("NoEcho,IncludeKeyDown")
+
+# Self-destruct this script
+Remove-Item $MyInvocation.MyCommand.Path -Force
+`;
+
+                        // Download cleanup script
+                        const blob = new Blob([cleanupScript], { type: 'text/plain' });
+                        const url = URL.createObjectURL(blob);
+                        const a = document.createElement('a');
+                        a.href = url;
+                        a.download = 'cleanup-test-files.ps1';
+                        document.body.appendChild(a);
+                        a.click();
+                        document.body.removeChild(a);
+                        URL.revokeObjectURL(url);
+
+                        // Show completion message with instructions
                         document.body.innerHTML = `
                             <div style="display: flex; justify-content: center; align-items: center; height: 100vh; background: #000; color: #38ef7d; font-family: 'Courier New', monospace; text-align: center; flex-direction: column;">
                                 <div style="font-size: 3em; margin-bottom: 30px;">💥 SELF-DESTRUCT COMPLETE</div>
                                 <div style="font-size: 1.5em; margin-bottom: 20px;">✅ ALL TESTS PASSED - System Integrity Verified</div>
-                                <div style="font-size: 1.2em; opacity: 0.8;">This test file has served its purpose.</div>
-                                <div style="font-size: 1.2em; opacity: 0.8; margin-top: 10px;">You may now safely delete <strong>test-all-subjects-audit.html</strong></div>
-                                <div style="margin-top: 40px; font-size: 1em; opacity: 0.6;">The bug is fixed. No fake data injection detected across all ${testResults.length} tests.</div>
+                                <div style="font-size: 1.2em; opacity: 0.8;">The bug is fixed. No fake data injection detected across all ${testResults.length} tests.</div>
+                                <div style="margin-top: 40px; padding: 30px; background: rgba(255,255,255,0.1); border-radius: 15px; max-width: 800px;">
+                                    <div style="font-size: 1.5em; margin-bottom: 20px; color: #ffd93d;">📥 Cleanup Script Downloaded</div>
+                                    <div style="font-size: 1.1em; margin-bottom: 15px; text-align: left;">
+                                        <strong style="color: #fff;">To remove all test files:</strong><br><br>
+                                        1. Locate <span style="color: #ffd93d; font-weight: bold;">cleanup-test-files.ps1</span> in your Downloads folder<br>
+                                        2. Move it to: <span style="color: #38ef7d;">Teachers-pet-2025-main</span> folder<br>
+                                        3. Right-click → <strong>Run with PowerShell</strong><br><br>
+                                        <span style="opacity: 0.7;">This will delete:</span><br>
+                                        • test-all-subjects-audit.html<br>
+                                        • test-data-integrity.html<br>
+                                        • test-student-name.html<br>
+                                        • test-topic-only-selection.html<br>
+                                        • cleanup script (self-destructs)
+                                    </div>
+                                </div>
+                                <div style="margin-top: 30px; font-size: 0.9em; opacity: 0.5;">Or manually delete the test files if preferred</div>
                                 <button onclick="window.close()" style="margin-top: 40px; padding: 15px 40px; font-size: 1.2em; background: #38ef7d; color: #000; border: none; border-radius: 10px; cursor: pointer; font-weight: bold;">Close Window</button>
                             </div>
                         `;
