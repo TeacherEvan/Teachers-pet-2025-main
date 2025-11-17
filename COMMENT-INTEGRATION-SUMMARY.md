@@ -384,6 +384,12 @@ window.testCommentGeneration();
 Copy-Item "assets/js/enhanced-comment-engine.js" "enhanced-comment-engine.js" -Force
 ```
 
+### Keyword Mapping Updates (2025-11-17)
+- Added phonics keywords for K1 November to map English topics such as "Nancy Nurse (Nose)", "Oscar Octopus (On)", "Penny Panda (pen)", "Queenie Quick (quiet)", and "Rev N/O/P" to the `English` subject.
+- Added support for `Conversation 3` (used in K1 November) so its topics infer the correct subject.
+- Mirrored the same keywords in `missing-functions.js` within `inferSubjectsFromTopics()` to keep inference consistent with the engine’s `subjectTopicMap`.
+- Tip: When introducing new months/grades or renaming activities, update both maps and keep the root engine file in sync using the PowerShell command above.
+
 ---
 
 ## 🎓 Educational Value

@@ -37,6 +37,33 @@ const remainingSubjects = data.subjects
     .filter(subj => !subjectsWithTopics.find(([s]) => s === subj));
 ```
 
+---
+
+## Addendum — November 17, 2025: K1 November Phonics & Conversation 3
+
+### Issue
+When only K1 November phonics topics were selected (e.g., "Nancy Nurse (Nose)", "Oscar Octopus (On)") and the English header checkbox was not ticked, the final comments sometimes omitted the English subject. Also, `Conversation 3` topics weren’t recognized for K1 November.
+
+### Root Cause
+The keyword maps for subject inference and grouping lacked coverage for these phonics items and did not include `Conversation 3`. Without the header checkbox checked, topics could not infer their parent subject.
+
+### Fix
+- Expanded keyword mappings in two places:
+   1) `assets/js/enhanced-comment-engine.js` → `subjectTopicMap`
+   2) `missing-functions.js` → `inferSubjectsFromTopics()` internal map
+- Added phonics keywords (nancy/nurse/nose, oscar/octopus/on, penny/panda/pen, queenie/quick/quiet, rev N/O/P), and full mapping for `Conversation 3` (food/colors/daily routines).
+- Synced the root engine copy `enhanced-comment-engine.js`.
+
+### Validation
+Open `Subjects.html`, select only phonics topics (leave the English header unchecked), then click "Generate Comments". The generated comments should explicitly mention English and sample selected topics. Repeat with `Conversation 3` topics.
+
+### Maintenance Tip
+When curriculum subjects or activities change for a month/grade, update both the engine `subjectTopicMap` and the inference map in `missing-functions.js`. Re-sync the root engine file after edits using:
+
+```powershell
+Copy-Item "assets/js/enhanced-comment-engine.js" "enhanced-comment-engine.js" -Force
+```
+
 **After**:
 ```javascript
 const subjectsWithTopicsNames = subjectsWithTopics.map(([s]) => s);

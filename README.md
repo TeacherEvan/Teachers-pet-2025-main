@@ -241,6 +241,13 @@ window.testCommentGeneration();
 Copy-Item "assets/js/enhanced-comment-engine.js" "enhanced-comment-engine.js" -Force
 ```
 
+### Mapping maintenance (subjects ↔ topics)
+- If you add a new month/grade or rename activities, update the engine’s keyword map and the Subjects page inference map:
+  - `assets/js/enhanced-comment-engine.js` → `subjectTopicMap`
+  - `missing-functions.js` → `inferSubjectsFromTopics()` internal map
+- Keep these two maps in sync to ensure topic-only selections still infer the correct parent subject and appear in comments.
+- For K1 November we added phonics keywords (Nancy/Oscar/Penny/Queenie, Rev N/O/P) and `Conversation 3`.
+
 ### Where to make changes
 - `assets/js/enhanced-comment-engine.js` — primary engine; edit templates, mapping, and grammar rules here
 - `optimized-comment-generator.js` — selection & fallback logic; ensure it prioritizes Enhanced engine
