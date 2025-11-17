@@ -104,8 +104,8 @@ function inferSubjectsFromTopics(topicRatings, selectedSubjects) {
         "Mathematics": ["count", "number", "match", "trace", "dotted"],
         "I.Q": ["color", "same", "fatter", "taller", "hot", "cold", "shape"],
         "Social Studies": ["identify", "animal", "sounds", "habits", "hygiene", "gestures"],
-        "Science": ["tissue", "lava", "magnet", "volcano", "experiment"],
-        "Cooking": ["look chop", "sugar", "bean", "salt", "coconut"],
+        "Science": ["tissue", "lava", "magnet", "volcano", "experiment", "surface tension", "parachute", "float", "sink", "walking water"],
+        "Cooking": ["look chop", "sugar", "bean", "salt", "coconut", "thai", "fried", "wonton", "wontons", "minced", "egg", "oil", "carrot", "seasoning"],
         "Conversation 1": ["pet", "feel", "lunch", "want to be", "like to go"],
         "Conversation 2": ["drink", "going", "school"],
         // Added for K1 November
@@ -113,9 +113,9 @@ function inferSubjectsFromTopics(topicRatings, selectedSubjects) {
             "food", "eat", "rice", "colors", "color", "yellow", "purple", "green", "orange",
             "daily routines", "wake", "take a shower", "sleep", "go to sleep", "morning"
         ],
-        "Arts": ["finger painting", "ladybug", "play dough", "sponge", "origami"],
-        "Physical Education": ["football", "balance", "ball", "ring", "jump", "zigzag", "hurdle"],
-        "Puppet Show": ["noond", "vegetables", "panicked rabbit"],
+        "Arts": ["finger painting", "ladybug", "play dough", "sponge", "origami", "ring craft", "pig", "banana", "painting", "stem", "paper bag", "fathers", "father's day", "card", "flower"],
+        "Physical Education": ["football", "balance", "ball", "ring", "jump", "zigzag", "hurdle", "snakes", "ladders", "trampoline", "balancing", "game", "rubber", "shape", "dice", "step", "straw", "jumping"],
+        "Puppet Show": ["noond", "vegetables", "panicked rabbit", "hare", "tortoise", "dog", "reflection"],
         "Super Safari": ["listen", "colour", "numbers", "circle", "pets", "food", "maze", "train", "mask"],
         "Story Time": ["harry frog", "bird", "lovely animals", "ox and the frog"]
     };

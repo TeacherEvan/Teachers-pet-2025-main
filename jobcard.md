@@ -15,6 +15,31 @@ Before implementing ANY feature:
 
 ## Recent Work (Newest First)
 
+### 2025-11-17: CRITICAL FIX #2 - Incorrect Subject-Topic Keyword Mappings (K1 November)
+**Agent:** GitHub Copilot
+**MCP Tools Used:** ✅ mcp_sequentialthi_sequentialthinking for diagnosis
+
+**Problem:** Topics mapped to WRONG subjects - "Thai fried wontons" appearing under English instead of Cooking, "Snakes and ladders" appearing under Cooking instead of Physical Education.
+
+**Root Cause:**
+Keyword maps (`subjectTopicMap`) missing K1 November curriculum-specific terms:
+- Cooking had ["look chop", "sugar", "bean"...] but NO "thai"/"wonton" keywords
+- PE had ["football", "balance"...] but NO "snakes"/"ladders"/"trampoline" keywords
+- Arts missing "ring craft", "banana painting", "fathers day" keywords
+
+**Fix:**
+- Updated `assets/js/enhanced-comment-engine.js` subjectTopicMap:
+  - **Cooking:** Added thai, fried, wonton, wontons, minced, egg, oil, carrot, seasoning
+  - **Physical Education:** Added snakes, ladders, trampoline, balancing, game, rubber, shape, dice, step, straw, jumping
+  - **Arts:** Added ring craft, pig, banana, painting, stem, paper bag, fathers, father's day, card, flower
+  - **Science:** Added surface tension, parachute, float, sink, walking water
+  - **Puppet Show:** Added hare, tortoise, dog, reflection
+
+- Mirrored updates in `missing-functions.js` topicToSubjectMap
+- Synced root `enhanced-comment-engine.js` copy
+
+**Testing:** Select specific subjects only, verify comments mention ONLY those subjects with correct topics.
+
 ### 2025-11-17: CRITICAL FIX - Remove Fake Default Subjects
 **Agent:** GitHub Copilot
 **MCP Tools Used:** ✅ User feedback analysis
