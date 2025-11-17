@@ -87,71 +87,50 @@ function refreshReport() {
 }
 
 /**
- * Infer parent subjects from selected topics
+ * Infer parent subjects from selected topics using DOM structure
  * This ensures that if a user only checks topics without checking the parent subject,
  * the parent subject is still included in the comment
+ * 
+ * FIXED 2025-11-17: Use DOM hierarchy instead of keyword matching to avoid false positives
+ * (e.g., "shape" keyword was matching both I.Q and Physical Education)
  */
 function inferSubjectsFromTopics(topicRatings, selectedSubjects) {
-    // Map of keywords to subjects (matches the subjectTopicMap in enhanced-comment-engine.js)
-    const topicToSubjectMap = {
-        // Expanded to mirror EnhancedCommentEngine.subjectTopicMap
-        "English": [
-            "draw lines", "trace", "match", "circle", "letter", "alphabet", "phonics",
-            "nancy", "nurse", "nose", "oscar", "octopus", "on",
-            "penny", "panda", "pen", "queenie", "quick", "quiet",
-            "rev", "n/o/p", "n o p"
-        ],
-        "Mathematics": ["count", "number", "match", "trace", "dotted"],
-        "I.Q": ["color", "same", "fatter", "taller", "hot", "cold", "shape"],
-        "Social Studies": ["identify", "animal", "sounds", "habits", "hygiene", "gestures"],
-        "Science": ["tissue", "lava", "magnet", "volcano", "experiment", "surface tension", "parachute", "float", "sink", "walking water"],
-        "Cooking": ["look chop", "sugar", "bean", "salt", "coconut", "thai", "fried", "wonton", "wontons", "minced", "egg", "oil", "carrot", "seasoning"],
-        "Conversation 1": ["pet", "feel", "lunch", "want to be", "like to go"],
-        "Conversation 2": ["drink", "going", "school"],
-        // Added for K1 November
-        "Conversation 3": [
-            "food", "eat", "rice", "colors", "color", "yellow", "purple", "green", "orange",
-            "daily routines", "wake", "take a shower", "sleep", "go to sleep", "morning"
-        ],
-        "Arts": ["finger painting", "ladybug", "play dough", "sponge", "origami", "ring craft", "pig", "banana", "painting", "stem", "paper bag", "fathers", "father's day", "card", "flower"],
-        "Physical Education": ["football", "balance", "ball", "ring", "jump", "zigzag", "hurdle", "snakes", "ladders", "trampoline", "balancing", "game", "rubber", "shape", "dice", "step", "straw", "jumping"],
-        "Puppet Show": ["noond", "vegetables", "panicked rabbit", "hare", "tortoise", "dog", "reflection"],
-        "Super Safari": ["listen", "colour", "numbers", "circle", "pets", "food", "maze", "train", "mask"],
-        "Story Time": ["harry frog", "bird", "lovely animals", "ox and the frog"]
-    };
-
-    const topicList = Object.keys(topicRatings);
     const inferredSubjects = new Set();
 
-    topicList.forEach(topic => {
-        const topicLower = topic.toLowerCase();
-
-        // Try to match topic with subject using keywords
-        for (const [subject, keywords] of Object.entries(topicToSubjectMap)) {
-            if (keywords.some(keyword => topicLower.includes(keyword.toLowerCase()))) {
-                inferredSubjects.add(subject);
-                break;
-            }
+    // For each selected topic, find its parent subject using DOM structure
+    document.querySelectorAll('.topic-checkbox:checked').forEach(checkbox => {
+        // Find the parent subject-content div
+        const contentDiv = checkbox.closest('.subject-content');
+        if (!contentDiv) {
+            console.warn('⚠️ Could not find parent subject-content for topic:', checkbox.value);
+            return;
         }
 
-        // Try direct subject name matching
-        for (const subject of Object.keys(topicToSubjectMap)) {
-            if (topicLower.includes(subject.toLowerCase())) {
-                inferredSubjects.add(subject);
-                break;
-            }
+        // Extract subject ID from content div ID (e.g., 'content_iq' -> 'iq')
+        const subjectId = contentDiv.id.replace('content_', '');
+        
+        // Find the corresponding subject checkbox to get the subject name
+        const subjectCheckbox = document.getElementById('subject_' + subjectId);
+        if (!subjectCheckbox) {
+            console.warn('⚠️ Could not find subject checkbox for ID:', subjectId);
+            return;
+        }
+
+        const subjectName = subjectCheckbox.value;
+        if (subjectName && subjectName.trim() !== '') {
+            inferredSubjects.add(subjectName);
         }
     });
 
     // Add inferred subjects to selectedSubjects if not already present
     inferredSubjects.forEach(subject => {
         if (!selectedSubjects.some(s => s.toLowerCase() === subject.toLowerCase())) {
-            console.log('✅ Inferred subject from topic:', subject);
+            console.log('✅ Inferred subject from topic (DOM-based):', subject);
             selectedSubjects.push(subject);
         }
     });
 
-    console.log('📋 Final subjects after inference:', selectedSubjects);
+    console.log('📋 Final subjects after DOM-based inference:', selectedSubjects);
 }
 
 function ensureCommentGeneration() {
