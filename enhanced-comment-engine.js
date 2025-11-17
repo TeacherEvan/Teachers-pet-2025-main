@@ -260,7 +260,10 @@ class EnhancedCommentEngine {
 
             // Still not assigned? Add to first subject as fallback
             if (!assigned && subjects.length > 0) {
+                console.warn(`⚠️ Topic "${topic}" could not be matched to any subject - assigning to first subject "${subjects[0]}" as fallback`);
                 grouped[subjects[0]].push(topic);
+            } else if (!assigned) {
+                console.warn(`⚠️ Topic "${topic}" could not be matched to any subject and no subjects selected - ORPHANED TOPIC`);
             }
         });
 

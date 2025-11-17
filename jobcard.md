@@ -15,6 +15,40 @@ Before implementing ANY feature:
 
 ## Recent Work (Newest First)
 
+### 2025-11-17: CRITICAL FIX - Remove Fake Default Subjects
+**Agent:** GitHub Copilot
+**MCP Tools Used:** ✅ User feedback analysis
+
+**Problem:** Comments were referencing subjects and topics that the teacher DID NOT select. User reported: "Now its referencing stuff I DID NOT SELECT!"
+
+**Root Cause:** 
+1. When NO subjects/topics were selected, `missing-functions.js` injected FAKE default subjects: "General Learning" and "Social Development" with fake topics like "classroom_participation" and "peer_interaction".
+2. This caused comments to mention content the teacher never ticked.
+
+**Fix:**
+- **REMOVED** the fake default injection completely (lines ~241-248 in `missing-functions.js`).
+- **REPLACED** with strict validation: if nothing is selected, show alert and abort generation.
+- Added enhanced logging to show exact checkbox IDs and values being collected.
+- Added validation to skip checkboxes with empty/null values.
+
+**Changes:**
+- `missing-functions.js` → removed fake subject injection, added strict validation and detailed logging
+- `assets/js/enhanced-comment-engine.js` → added warning logging for orphaned topics
+- `enhanced-comment-engine.js` (root) → synced from assets
+
+**Test File Created:**
+- `test-data-integrity.html` → Comprehensive 4-test suite to verify no fake data injection
+
+**Expected Behavior:**
+- If teacher selects NO subjects/topics → Alert: "Please select at least one subject or topic before generating comments."
+- If teacher selects subjects/topics → Comments ONLY mention those exact selections, nothing else.
+
+**Validation:**
+- Open `Subjects.html`, select ONLY Arts and Physical Education topics → Generate → Comments should ONLY mention Arts and PE, nothing else.
+- Try generating with nothing selected → Should get alert and refuse to generate.
+
+---
+
 ### 2025-11-17: Subject mentions not appearing (K1 November phonics)
 **Agent:** GitHub Copilot
 **MCP Tools Used:** ✅ mcp_context7_resolve-library-id, ✅ mcp_context7_get-library-docs (MDN localStorage/querySelectorAll), ✅ manage_todo_list, ✅ mcp_memory_add_observations

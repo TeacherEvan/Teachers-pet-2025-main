@@ -178,10 +178,14 @@ function ensureCommentGeneration() {
         const selectedSubjects = [];
         const topicRatings = {};
 
-        // Collect selected subjects and topics
+        // Collect selected subjects and topics - STRICT: only what user actually checked
         document.querySelectorAll('.subject-checkbox:checked').forEach(cb => {
-            console.log('✅ Found checked subject:', cb.value, cb);
-            selectedSubjects.push(cb.value);
+            if (cb.value && cb.value.trim() !== '') {
+                console.log('✅ Found checked subject checkbox:', cb.id, '→ value:', cb.value);
+                selectedSubjects.push(cb.value);
+            } else {
+                console.warn('⚠️ Subject checkbox checked but has no value:', cb.id, cb);
+            }
         });
 
         console.log('📋 Total subject checkboxes found:', document.querySelectorAll('.subject-checkbox').length);
@@ -189,8 +193,12 @@ function ensureCommentGeneration() {
         console.log('📋 Selected subjects array:', selectedSubjects);
 
         document.querySelectorAll('.topic-checkbox:checked').forEach(cb => {
-            console.log('✅ Found checked topic:', cb.value, cb);
-            topicRatings[cb.value] = 5; // Default rating
+            if (cb.value && cb.value.trim() !== '') {
+                console.log('✅ Found checked topic checkbox:', cb.id, '→ value:', cb.value);
+                topicRatings[cb.value] = 5; // Default rating
+            } else {
+                console.warn('⚠️ Topic checkbox checked but has no value:', cb.id, cb);
+            }
         });
 
         console.log('📋 Total topic checkboxes found:', document.querySelectorAll('.topic-checkbox').length);
@@ -238,14 +246,11 @@ function ensureCommentGeneration() {
             hasTopics
         });
 
-        // If no subjects or topics selected, add defaults for better comments
+        // STRICT: Do NOT inject fake subjects/topics - only use what teacher actually selected
         if (!hasSubjects && !hasTopics) {
-            console.log('⚠️ No subjects/topics selected, adding defaults');
-            sessionData.subjects = ['General Learning', 'Social Development'];
-            sessionData.topicRatings = {
-                'classroom_participation': 5,
-                'peer_interaction': 5
-            };
+            console.warn('⚠️ No subjects/topics selected by teacher');
+            alert('Please select at least one subject or topic before generating comments.');
+            return;
         }
 
         // Generate comments using Enhanced engine (now async)

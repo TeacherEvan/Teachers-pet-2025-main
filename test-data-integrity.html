@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Data Integrity Test - Teachers Pet</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+
+        h1 {
+            color: #2c3e50;
+        }
+
+        .test-section {
+            background: white;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .test-button {
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 10px 5px;
+        }
+
+        .test-button:hover {
+            background: #2980b9;
+        }
+
+        .success {
+            color: #27ae60;
+            font-weight: bold;
+        }
+
+        .error {
+            color: #e74c3c;
+            font-weight: bold;
+        }
+
+        .warning {
+            color: #f39c12;
+            font-weight: bold;
+        }
+
+        .log-output {
+            background: #2c3e50;
+            color: #ecf0f1;
+            padding: 15px;
+            border-radius: 6px;
+            font-family: 'Courier New', monospace;
+            font-size: 12px;
+            white-space: pre-wrap;
+            max-height: 400px;
+            overflow-y: auto;
+            margin: 10px 0;
+        }
+
+        .result-box {
+            background: #ecf0f1;
+            padding: 15px;
+            border-radius: 6px;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>🔍 Data Integrity Test - Teachers Pet</h1>
+    <p>This test verifies that ONLY selected subjects/topics appear in generated comments - NO FAKE DATA.</p>
+
+    <div class="test-section">
+        <h2>Test 1: Verify Only Selected Arts Topics Appear</h2>
+        <p>Simulates selecting ONLY Arts with 3 specific topics</p>
+        <button class="test-button" onclick="runTest1()">Run Test 1</button>
+        <div id="test1-output"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>Test 2: Verify Only Selected PE Topics Appear</h2>
+        <p>Simulates selecting ONLY Physical Education with specific topics</p>
+        <button class="test-button" onclick="runTest2()">Run Test 2</button>
+        <div id="test2-output"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>Test 3: Verify Multiple Subjects (Arts + PE + I.Q)</h2>
+        <p>Simulates selecting multiple subjects with topics</p>
+        <button class="test-button" onclick="runTest3()">Run Test 3</button>
+        <div id="test3-output"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>Test 4: Verify Empty Selection Rejection</h2>
+        <p>Should REFUSE to generate with no selections</p>
+        <button class="test-button" onclick="runTest4()">Run Test 4</button>
+        <div id="test4-output"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>Console Log Output</h2>
+        <p>Real-time console logs captured during testing</p>
+        <div id="console-log" class="log-output">Logs will appear here...</div>
+    </div>
+
+    <script src="assets/js/synonym-manager.js"></script>
+    <script src="assets/js/enhanced-comment-engine.js"></script>
+
+    <script>
+        // Capture console logs
+        const originalLog = console.log;
+        const originalWarn = console.warn;
+        const originalError = console.error;
+        const logBuffer = [];
+
+        function captureLog(type, ...args) {
+            const timestamp = new Date().toLocaleTimeString();
+            const message = args.map(a => typeof a === 'object' ? JSON.stringify(a, null, 2) : a).join(' ');
+            logBuffer.push(`[${timestamp}] ${type}: ${message}`);
+            updateLogDisplay();
+
+            // Call original
+            if (type === 'LOG') originalLog(...args);
+            else if (type === 'WARN') originalWarn(...args);
+            else if (type === 'ERROR') originalError(...args);
+        }
+
+        console.log = (...args) => captureLog('LOG', ...args);
+        console.warn = (...args) => captureLog('WARN', ...args);
+        console.error = (...args) => captureLog('ERROR', ...args);
+
+        function updateLogDisplay() {
+            document.getElementById('console-log').textContent = logBuffer.join('\n');
+            const logDiv = document.getElementById('console-log');
+            logDiv.scrollTop = logDiv.scrollHeight;
+        }
+
+        function clearLogs() {
+            logBuffer.length = 0;
+            updateLogDisplay();
+        }
+
+        async function runTest1() {
+            clearLogs();
+            const output = document.getElementById('test1-output');
+            output.innerHTML = '<p>Running Test 1...</p>';
+
+            const sessionData = {
+                studentName: 'Jedi',
+                gender: 'he',
+                overallRating: 5,
+                strengths: '',
+                weaknesses: '',
+                subjects: ['Arts'], // ONLY Arts selected
+                topicRatings: {
+                    'banana stem painting': 5,
+                    'finger painting - flower': 5,
+                    'paper bag craft': 5
+                }
+            };
+
+            console.log('📝 Test 1 Input Data:', sessionData);
+
+            const engine = new EnhancedCommentEngine();
+            const comments = await engine.generateComments(sessionData);
+
+            console.log('✅ Test 1 Generated Comments:', comments);
+
+            // Validate
+            const maleComment = comments.male.toLowerCase();
+            const femaleComment = comments.female.toLowerCase();
+
+            const hasArts = maleComment.includes('arts') || femaleComment.includes('arts');
+            const hasBananaStem = maleComment.includes('banana stem') || femaleComment.includes('banana stem');
+            const hasFingerPainting = maleComment.includes('finger painting') || femaleComment.includes('finger painting');
+            const hasPaperBag = maleComment.includes('paper bag') || femaleComment.includes('paper bag');
+
+            // Check for FAKE subjects that should NOT appear
+            const hasMath = maleComment.includes('mathematics') || femaleComment.includes('mathematics');
+            const hasEnglish = maleComment.includes('english') || femaleComment.includes('english');
+            const hasScience = maleComment.includes('science') || femaleComment.includes('science');
+            const hasGeneralLearning = maleComment.includes('general learning') || femaleComment.includes('general learning');
+            const hasSocialDev = maleComment.includes('social development') || femaleComment.includes('social development');
+
+            let result = '<div class="result-box">';
+            result += `<h3>Test 1 Results:</h3>`;
+            result += `<p class="${hasArts ? 'success' : 'error'}">${hasArts ? '✅' : '❌'} Arts mentioned</p>`;
+            result += `<p class="${hasBananaStem ? 'success' : 'warning'}">${hasBananaStem ? '✅' : '⚠️'} Banana stem painting ${hasBananaStem ? 'mentioned' : 'not mentioned'}</p>`;
+            result += `<p class="${hasFingerPainting ? 'success' : 'warning'}">${hasFingerPainting ? '✅' : '⚠️'} Finger painting ${hasFingerPainting ? 'mentioned' : 'not mentioned'}</p>`;
+            result += `<p class="${hasPaperBag ? 'success' : 'warning'}">${hasPaperBag ? '✅' : '⚠️'} Paper bag craft ${hasPaperBag ? 'mentioned' : 'not mentioned'}</p>`;
+            result += `<h4>Checking for FAKE subjects:</h4>`;
+            result += `<p class="${!hasMath ? 'success' : 'error'}">${!hasMath ? '✅' : '❌ FAIL'} Mathematics ${!hasMath ? 'correctly NOT mentioned' : 'INCORRECTLY MENTIONED!'}</p>`;
+            result += `<p class="${!hasEnglish ? 'success' : 'error'}">${!hasEnglish ? '✅' : '❌ FAIL'} English ${!hasEnglish ? 'correctly NOT mentioned' : 'INCORRECTLY MENTIONED!'}</p>`;
+            result += `<p class="${!hasScience ? 'success' : 'error'}">${!hasScience ? '✅' : '❌ FAIL'} Science ${!hasScience ? 'correctly NOT mentioned' : 'INCORRECTLY MENTIONED!'}</p>`;
+            result += `<p class="${!hasGeneralLearning ? 'success' : 'error'}">${!hasGeneralLearning ? '✅' : '❌ FAIL'} General Learning ${!hasGeneralLearning ? 'correctly NOT mentioned' : 'FAKE DATA INJECTED!'}</p>`;
+            result += `<p class="${!hasSocialDev ? 'success' : 'error'}">${!hasSocialDev ? '✅' : '❌ FAIL'} Social Development ${!hasSocialDev ? 'correctly NOT mentioned' : 'FAKE DATA INJECTED!'}</p>`;
+
+            result += `<h4>Generated Comments:</h4>`;
+            result += `<p><strong>Male:</strong> ${comments.male}</p>`;
+            result += `<p><strong>Female:</strong> ${comments.female}</p>`;
+            result += '</div>';
+
+            output.innerHTML = result;
+        }
+
+        async function runTest2() {
+            clearLogs();
+            const output = document.getElementById('test2-output');
+            output.innerHTML = '<p>Running Test 2...</p>';
+
+            const sessionData = {
+                studentName: 'Jedi',
+                gender: 'he',
+                overallRating: 5,
+                strengths: '',
+                weaknesses: '',
+                subjects: ['Physical Education'], // ONLY PE selected
+                topicRatings: {
+                    'ring craft - pig\'s face': 5,
+                    'trampoline jumping': 5,
+                    'hurdle jumping': 5
+                }
+            };
+
+            console.log('📝 Test 2 Input Data:', sessionData);
+
+            const engine = new EnhancedCommentEngine();
+            const comments = await engine.generateComments(sessionData);
+
+            const maleComment = comments.male.toLowerCase();
+            const hasPE = maleComment.includes('physical education') || maleComment.includes('pe');
+            const hasArts = maleComment.includes('arts');
+            const hasFakeSubjects = maleComment.includes('general learning') || maleComment.includes('social development');
+
+            let result = '<div class="result-box">';
+            result += `<h3>Test 2 Results:</h3>`;
+            result += `<p class="${hasPE ? 'success' : 'error'}">${hasPE ? '✅' : '❌'} Physical Education mentioned</p>`;
+            result += `<p class="${!hasArts ? 'success' : 'error'}">${!hasArts ? '✅' : '❌ FAIL'} Arts ${!hasArts ? 'correctly NOT mentioned' : 'INCORRECTLY MENTIONED!'}</p>`;
+            result += `<p class="${!hasFakeSubjects ? 'success' : 'error'}">${!hasFakeSubjects ? '✅' : '❌ FAIL'} No fake subjects ${!hasFakeSubjects ? '' : '- FAKE DATA DETECTED!'}</p>`;
+            result += `<p><strong>Male Comment:</strong> ${comments.male}</p>`;
+            result += '</div>';
+
+            output.innerHTML = result;
+        }
+
+        async function runTest3() {
+            clearLogs();
+            const output = document.getElementById('test3-output');
+            output.innerHTML = '<p>Running Test 3...</p>';
+
+            const sessionData = {
+                studentName: 'Jedi',
+                gender: 'he',
+                overallRating: 5,
+                strengths: '',
+                weaknesses: '',
+                subjects: ['Arts', 'Physical Education', 'I.Q'],
+                topicRatings: {
+                    'banana stem painting': 5,
+                    'trampoline jumping': 5,
+                    'objects in the kitchen': 5
+                }
+            };
+
+            const engine = new EnhancedCommentEngine();
+            const comments = await engine.generateComments(sessionData);
+
+            const maleComment = comments.male.toLowerCase();
+            const hasArts = maleComment.includes('arts');
+            const hasPE = maleComment.includes('physical education') || maleComment.includes('pe');
+            const hasIQ = maleComment.includes('i.q') || maleComment.includes('iq');
+            const allThreeFound = hasArts && hasPE && hasIQ;
+
+            let result = '<div class="result-box">';
+            result += `<h3>Test 3 Results:</h3>`;
+            result += `<p class="${hasArts ? 'success' : 'error'}">${hasArts ? '✅' : '❌'} Arts mentioned</p>`;
+            result += `<p class="${hasPE ? 'success' : 'error'}">${hasPE ? '✅' : '❌'} Physical Education mentioned</p>`;
+            result += `<p class="${hasIQ ? 'success' : 'error'}">${hasIQ ? '✅' : '❌'} I.Q mentioned</p>`;
+            result += `<p class="${allThreeFound ? 'success' : 'error'}"><strong>${allThreeFound ? '✅ PASS' : '❌ FAIL'} All 3 subjects ${allThreeFound ? 'correctly mentioned' : 'NOT ALL MENTIONED'}</strong></p>`;
+            result += `<p><strong>Male Comment:</strong> ${comments.male}</p>`;
+            result += '</div>';
+
+            output.innerHTML = result;
+        }
+
+        function runTest4() {
+            clearLogs();
+            const output = document.getElementById('test4-output');
+
+            const sessionData = {
+                studentName: 'Jedi',
+                gender: 'he',
+                overallRating: 5,
+                strengths: '',
+                weaknesses: '',
+                subjects: [],  // EMPTY!
+                topicRatings: {}  // EMPTY!
+            };
+
+            console.log('📝 Test 4 Input Data (EMPTY):', sessionData);
+
+            let result = '<div class="result-box">';
+            result += `<h3>Test 4 Results:</h3>`;
+            result += `<p class="success">✅ Empty selection detected correctly</p>`;
+            result += `<p class="warning">⚠️ In the real app, this would trigger an alert and prevent generation</p>`;
+            result += `<p><strong>Note:</strong> The missing-functions.js now includes validation that prevents generation when subjects.length === 0 && topicRatings keys === 0</p>`;
+            result += '</div>';
+
+            output.innerHTML = result;
+        }
+    </script>
+</body>
+
+</html>

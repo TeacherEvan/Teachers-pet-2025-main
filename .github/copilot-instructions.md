@@ -59,6 +59,7 @@ Example: add `/assets/js/curriculum/k2/november.js` and add `'K2': ['November']`
 	 - `assets/js/comment-engine.js` — legacy/premium fallback; keep behavior consistent when editing.
 	 - `assets/js/synonym-manager.js` — intelligent word variation system that prevents overuse of vocabulary.
 	 - `assets/data/synonyms.json` — comprehensive synonym database (100+ words across 5 categories).
+	 - `missing-functions.js` — handlers for Subjects.html including `ensureCommentGeneration()` which collects form data and calls the engine.
 
  - Edit `assets/js/enhanced-comment-engine.js` for improvements. After changes, keep the root copy synchronized (used in some test pages):
 	 - PowerShell example (run from repo root):
@@ -69,6 +70,15 @@ Example: add `/assets/js/curriculum/k2/november.js` and add `'K2': ['November']`
 	 - Subject capitalization rules: edit `grammarRules.subjectCapitalization`.
 	 - Add or change templates for male/female styles in the `generate...` functions.
 	 - Add new synonyms: edit `assets/data/synonyms.json` under appropriate category (adjectives, verbs, adverbs, educational_terms, phrases).
+	 - Topic-to-subject inference: edit `topicToSubjectMap` in `missing-functions.js` (must match engine's `subjectTopicMap`).
+
+ - **CRITICAL DATA INTEGRITY RULES (2025-11-17):**
+	 - **NEVER inject fake subjects/topics** - Only reference what the teacher actually selected
+	 - `missing-functions.js` validates selections and REJECTS generation if nothing is selected (shows alert)
+	 - The engine logs warnings for orphaned topics that can't be matched to subjects
+	 - All checkbox collections must verify `value` is not empty/null before adding to arrays
+	 - Test with `test-data-integrity.html` to verify no fake data appears in comments
+
 - The enhanced engine must mention every selected subject/topic, start with the student name, and finish on an encouraging note while targeting ~100 words.
 - **Synonym Manager** automatically tracks word usage in sessionStorage and swaps overused words (threshold: 2 uses) with least-used synonyms, maintaining professional variety across multiple comment generations.
 - Update `subjectTopicMap` and `grammarRules.subjectCapitalization` whenever subjects or activities change; reflect the same in `assets/js/comment-engine.js` fallback.
