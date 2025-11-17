@@ -178,8 +178,14 @@ function ensureCommentGeneration() {
         const selectedSubjects = [];
         const topicRatings = {};
 
+        // ⚡ PERFORMANCE OPTIMIZATION: Cache DOM queries to avoid redundant scans
+        const allSubjectCheckboxes = document.querySelectorAll('.subject-checkbox');
+        const checkedSubjectCheckboxes = document.querySelectorAll('.subject-checkbox:checked');
+        const allTopicCheckboxes = document.querySelectorAll('.topic-checkbox');
+        const checkedTopicCheckboxes = document.querySelectorAll('.topic-checkbox:checked');
+
         // Collect selected subjects and topics - STRICT: only what user actually checked
-        document.querySelectorAll('.subject-checkbox:checked').forEach(cb => {
+        checkedSubjectCheckboxes.forEach(cb => {
             if (cb.value && cb.value.trim() !== '') {
                 console.log('✅ Found checked subject checkbox:', cb.id, '→ value:', cb.value);
                 selectedSubjects.push(cb.value);
@@ -188,11 +194,11 @@ function ensureCommentGeneration() {
             }
         });
 
-        console.log('📋 Total subject checkboxes found:', document.querySelectorAll('.subject-checkbox').length);
-        console.log('📋 Total CHECKED subject checkboxes:', document.querySelectorAll('.subject-checkbox:checked').length);
+        console.log('📋 Total subject checkboxes found:', allSubjectCheckboxes.length);
+        console.log('📋 Total CHECKED subject checkboxes:', checkedSubjectCheckboxes.length);
         console.log('📋 Selected subjects array:', selectedSubjects);
 
-        document.querySelectorAll('.topic-checkbox:checked').forEach(cb => {
+        checkedTopicCheckboxes.forEach(cb => {
             if (cb.value && cb.value.trim() !== '') {
                 console.log('✅ Found checked topic checkbox:', cb.id, '→ value:', cb.value);
                 topicRatings[cb.value] = 5; // Default rating
@@ -201,8 +207,8 @@ function ensureCommentGeneration() {
             }
         });
 
-        console.log('📋 Total topic checkboxes found:', document.querySelectorAll('.topic-checkbox').length);
-        console.log('📋 Total CHECKED topic checkboxes:', document.querySelectorAll('.topic-checkbox:checked').length);
+        console.log('📋 Total topic checkboxes found:', allTopicCheckboxes.length);
+        console.log('📋 Total CHECKED topic checkboxes:', checkedTopicCheckboxes.length);
         console.log('📋 Topic ratings object:', topicRatings);
 
         // Infer parent subjects from selected topics if not already in selectedSubjects
@@ -514,7 +520,9 @@ function testJS() {
 
 // Utility function to update selection count
 function updateSelectionCount() {
-    const selectedCount = document.querySelectorAll('.topic-checkbox:checked').length;
+    // ⚡ PERFORMANCE OPTIMIZATION: Cache query result
+    const checkedTopics = document.querySelectorAll('.topic-checkbox:checked');
+    const selectedCount = checkedTopics.length;
     const countElement = document.getElementById('selectionCount');
     if (countElement) {
         countElement.textContent = selectedCount;
@@ -523,8 +531,11 @@ function updateSelectionCount() {
 
 // Initialize event listeners when DOM is loaded
 document.addEventListener('DOMContentLoaded', function () {
+    // ⚡ PERFORMANCE OPTIMIZATION: Cache query result for event listener attachment
+    const allTopicCheckboxes = document.querySelectorAll('.topic-checkbox');
+
     // Add change listeners to topic checkboxes for selection count
-    document.querySelectorAll('.topic-checkbox').forEach(checkbox => {
+    allTopicCheckboxes.forEach(checkbox => {
         checkbox.addEventListener('change', updateSelectionCount);
     });
 

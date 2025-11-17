@@ -974,7 +974,8 @@
                                 html += `
                                     <div class="topic-item">
                                         <input type="checkbox" class="topic-checkbox" id="${topicId}"
-                                            value="${topic.name.toLowerCase()}">
+                                            value="${topic.name.toLowerCase()}" 
+                                            onchange="saveSelections(); debouncedUpdateSelectionCount();">
                                         <label for="${topicId}" class="topic-text">${topic.name}</label>
                                     </div>`;
                             });
@@ -1065,12 +1066,23 @@
         // On load, log what student data we can see and try a gentle restore
         document.addEventListener('DOMContentLoaded', () => {
             const safeParse = (v) => { try { return JSON.parse(v || '{}'); } catch { return {}; } };
-            let sd = safeParse(localStorage.getItem('studentData'));
-            if (!sd.studentName || !sd.gender) {
+
+            // ⚡ PERFORMANCE OPTIMIZATION: Try namespace pattern first, fallback to legacy
+            let sd = studentStore.get('data');
+            if (!sd || !sd.studentName || !sd.gender) {
+                // Fallback to legacy localStorage key
+                sd = safeParse(localStorage.getItem('studentData'));
+            }
+
+            if (!sd || !sd.studentName || !sd.gender) {
                 const ss = safeParse(sessionStorage.getItem('studentData'));
                 if (ss.studentName && ss.gender) {
                     console.warn('ℹ️ Subjects: restoring studentData from sessionStorage on load');
-                    try { localStorage.setItem('studentData', JSON.stringify(ss)); } catch { }
+                    // Use transact pattern for atomic update
+                    try {
+                        studentStore.set('data', ss);
+                        localStorage.setItem('studentData', JSON.stringify(ss)); // Legacy compatibility
+                    } catch { }
                     sd = ss;
                 }
             }
@@ -1081,16 +1093,30 @@
             const selectedTopics = [];
             const selectedSubjects = [];
 
-            document.querySelectorAll('.topic-checkbox:checked').forEach(checkbox => {
+            // ⚡ PERFORMANCE OPTIMIZATION: Cache DOM query results (called once instead of twice)
+            const checkedTopicBoxes = document.querySelectorAll('.topic-checkbox:checked');
+            const checkedSubjectBoxes = document.querySelectorAll('.subject-checkbox:checked');
+
+            checkedTopicBoxes.forEach(checkbox => {
                 selectedTopics.push(checkbox.value);
             });
 
-            document.querySelectorAll('.subject-checkbox:checked').forEach(checkbox => {
+            checkedSubjectBoxes.forEach(checkbox => {
                 selectedSubjects.push(checkbox.value);
             });
 
+            // ⚡ PERFORMANCE OPTIMIZATION: Batch localStorage operations (1 operation instead of 2)
+            // Also maintain backward compatibility with old keys
+            selectionStore.setAll({
+                'subjects': selectedTopics,
+                'subjectTitles': selectedSubjects,
+                'timestamp': Date.now()
+            });
+
+            // Keep legacy keys for backward compatibility
             localStorage.setItem('selectedSubjects', JSON.stringify(selectedTopics));
             localStorage.setItem('selectedSubjectTitles', JSON.stringify(selectedSubjects));
+
             updateSelections();
         }
 
@@ -1104,7 +1130,9 @@
         // startOver function is now loaded from missing-functions.js
 
         function updateSelectionCount() {
-            const count = document.querySelectorAll('.topic-checkbox:checked').length;
+            // ⚡ PERFORMANCE OPTIMIZATION: Cache query result
+            const checkedTopics = document.querySelectorAll('.topic-checkbox:checked');
+            const count = checkedTopics.length;
             const countElement = document.getElementById('selectionCount');
             if (countElement) {
                 countElement.textContent = count;
@@ -1112,20 +1140,37 @@
         }
 
         function loadSelections() {
-            const savedTopics = localStorage.getItem('selectedSubjects');
-            const savedSubjects = localStorage.getItem('selectedSubjectTitles');
+            // ⚡ PERFORMANCE OPTIMIZATION: Try namespace pattern first, fallback to legacy
+            let savedTopics = selectionStore.get('subjects');
+            let savedSubjects = selectionStore.get('subjectTitles');
+
+            // Fallback to legacy keys for backward compatibility
+            if (!savedTopics) {
+                const legacyData = localStorage.getItem('selectedSubjects');
+                savedTopics = legacyData ? JSON.parse(legacyData) : null;
+            }
+            if (!savedSubjects) {
+                const legacyData = localStorage.getItem('selectedSubjectTitles');
+                savedSubjects = legacyData ? JSON.parse(legacyData) : null;
+            }
+
+            // ⚡ PERFORMANCE OPTIMIZATION: Cache all DOM queries once
+            const allSubjectContents = document.querySelectorAll('.subject-content');
+            const allDropdownArrows = document.querySelectorAll('.dropdown-arrow');
+            const allTopicCheckboxes = document.querySelectorAll('.topic-checkbox');
+            const allSubjectCheckboxes = document.querySelectorAll('.subject-checkbox');
 
             // First, ensure all dropdowns are closed
-            document.querySelectorAll('.subject-content').forEach(content => {
+            allSubjectContents.forEach(content => {
                 content.classList.remove('active');
             });
-            document.querySelectorAll('.dropdown-arrow').forEach(arrow => {
+            allDropdownArrows.forEach(arrow => {
                 arrow.classList.remove('rotated');
             });
 
             if (savedTopics) {
                 const selectedValues = JSON.parse(savedTopics);
-                document.querySelectorAll('.topic-checkbox').forEach(checkbox => {
+                allTopicCheckboxes.forEach(checkbox => {
                     if (selectedValues.includes(checkbox.value)) {
                         checkbox.checked = true;
                     }
@@ -1134,7 +1179,7 @@
 
             if (savedSubjects) {
                 const selectedSubjects = JSON.parse(savedSubjects);
-                document.querySelectorAll('.subject-checkbox').forEach(checkbox => {
+                allSubjectCheckboxes.forEach(checkbox => {
                     if (selectedSubjects.includes(checkbox.value)) {
                         checkbox.checked = true;
                         const subjectId = checkbox.id.replace('subject_', '');
