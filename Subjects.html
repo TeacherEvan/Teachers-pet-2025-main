@@ -936,8 +936,22 @@
             try {
                 // Get grade and month from session
                 const params = new URLSearchParams(window.location.search);
-                const grade = params.get('grade') || 'K1';
-                const month = params.get('month') || 'August';
+                let grade = params.get('grade');
+                let month = params.get('month');
+                // Fallback to localStorage.studentData if missing
+                if (!grade || !month) {
+                    try {
+                        const saved = localStorage.getItem('studentData');
+                        if (saved) {
+                            const data = JSON.parse(saved);
+                            grade = grade || data.grade || 'K1';
+                            month = month || data.month || 'August';
+                        }
+                    } catch (e) {
+                        grade = grade || 'K1';
+                        month = month || 'August';
+                    }
+                }
 
                 console.log(`📚 Selected curriculum: ${grade} - ${month}`);
 

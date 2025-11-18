@@ -15,6 +15,32 @@ Before implementing ANY feature:
 
 ## Recent Work (Newest First)
 
+### 2025-11-18: Curriculum Persistence Fix - Grade/Month Lost on Back Navigation
+**Agent:** GitHub Copilot
+**MCP Tools Used:** ✅ Subagent for comprehensive flow research
+
+**Problem:** When users clicked "Back to Student Info" from Subjects page, the selected grade/month curriculum was lost. On next forward navigation, system defaulted to K1/August instead of user's actual selection (e.g., K2/November).
+
+**Root Cause:**
+1. `assets/js/app.js` `submitStudentInfo()` only passed student fields (name, gender, rating) in URL to Subjects.html, NOT grade/month
+2. `missing-functions.js` `goBack()` navigated to student-information.html without query params, dropping curriculum context
+3. `Subjects.html` curriculum loader had no localStorage fallback when URL params missing
+
+**Fix (4 touchpoints):**
+1. **assets/js/app.js** `submitStudentInfo()`: Read grade/month from localStorage.studentData, mirror into sessionData, include in Subjects URL params
+2. **missing-functions.js** `goBack()`: Preserve grade/month when navigating back (localStorage → URL fallback pattern)
+3. **Subjects.html** curriculum loader: Add localStorage.studentData fallback before defaulting to K1/August
+4. **student-information.html** + **assets/js/app.js** `initStudentInfo()`: Show "Current: K2 · November" tracker pill with "Change" link
+
+**Testing:** 
+- Select K2 November → fill student info → continue to Subjects → verify K2 Nov loads
+- Click "Back to Student Info" → verify URL has `?grade=K2&month=November`
+- Continue forward → verify K2 Nov persists (not reset to K1 Aug)
+- Click "Change" link → verify navigates to month-selection with K2 pre-selected
+
+**Files Modified:** `assets/js/app.js`, `missing-functions.js`, `Subjects.html`, `student-information.html`
+**Documentation:** `docs/CURRICULUM-PERSISTENCE-FIX.md`
+
 ### 2025-11-17: CRITICAL FIX #2 - Incorrect Subject-Topic Keyword Mappings (K1 November)
 **Agent:** GitHub Copilot
 **MCP Tools Used:** ✅ mcp_sequentialthi_sequentialthinking for diagnosis

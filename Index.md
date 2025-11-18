@@ -2,6 +2,7 @@
 
 | Date | Agent | File | Status |
 |------|-------|------|--------|
+| 2025-11-18 | GitHub Copilot | docs/CURRICULUM-PERSISTENCE-FIX.md | active |
 | 2025-11-13 | GitHub Copilot | assets/js/synonym-manager.js | active |
 | 2025-11-13 | GitHub Copilot | assets/data/synonyms.json | active |
 | 2025-11-13 | GitHub Copilot | assets/js/enhanced-comment-engine.js (personality enhancements) | active |

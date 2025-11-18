@@ -248,6 +248,30 @@ class TeachersPetApp {
 
   // STUDENT INFORMATION PAGE METHODS
   initStudentInfo() {
+    // Show current curriculum tracker
+    try {
+      let grade = '';
+      let month = '';
+      // Prefer URL params, fallback to localStorage
+      const params = new URLSearchParams(window.location.search);
+      grade = params.get('grade') || '';
+      month = params.get('month') || '';
+      if (!grade || !month) {
+        const saved = localStorage.getItem('studentData');
+        if (saved) {
+          const data = JSON.parse(saved);
+          grade = grade || data.grade || '';
+          month = month || data.month || '';
+        }
+      }
+      if (grade && month) {
+        const tracker = document.getElementById('curriculumTracker');
+        if (tracker) {
+          tracker.innerHTML = `<span style="background:rgba(0,0,0,0.07);border-radius:16px;padding:4px 12px;font-weight:600;display:inline-block;">Current: <span style='color:#2a7cff'>${grade}</span> · <span style='color:#ff7c2a'>${month}</span> <a href='month-selection.html?grade=${encodeURIComponent(grade)}' style='margin-left:8px;font-size:13px;'>Change</a></span>`;
+        }
+      }
+    } catch (e) { }
+
     this.setupFormValidation();
     this.setupProgressTracking();
     this.initSlider();
@@ -401,7 +425,23 @@ class TeachersPetApp {
     }
 
     // Store session data (in memory only)
+    // Get grade/month from localStorage.studentData (persisted from previous steps)
+    let grade = '';
+    let month = '';
+    try {
+      const saved = localStorage.getItem('studentData');
+      if (saved) {
+        const data = JSON.parse(saved);
+        grade = data.grade || '';
+        month = data.month || '';
+      }
+    } catch (e) {
+      console.warn('Could not load grade/month from localStorage:', e);
+    }
+
     this.sessionData = {
+      grade: grade,
+      month: month,
       studentName: formData.get('studentName') || '',
       gender: formData.get('gender') || '',
       overallRating: parseInt(formData.get('overallRating')) || 5,

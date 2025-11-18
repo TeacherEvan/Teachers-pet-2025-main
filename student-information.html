@@ -502,6 +502,7 @@
         from {
             opacity: 0;
         }
+
         to {
             opacity: 1;
         }
@@ -530,6 +531,7 @@
             transform: translateY(-50px);
             opacity: 0;
         }
+
         to {
             transform: translateY(0);
             opacity: 1;
@@ -569,10 +571,13 @@
     }
 
     @keyframes pulsateRed {
-        0%, 100% {
+
+        0%,
+        100% {
             color: #e74c3c;
             text-shadow: 0 0 10px rgba(231, 76, 60, 0.5);
         }
+
         50% {
             color: #c0392b;
             text-shadow: 0 0 20px rgba(231, 76, 60, 0.8);
@@ -618,6 +623,9 @@
 <body>
     <div class="container">
         <h1>Kindergarten Report Generator</h1>
+
+        <!-- Curriculum Tracker -->
+        <div id="curriculumTracker" style="margin-bottom:12px;"></div>
 
         <!-- Progress Indicator -->
         <div class="form-progress">
@@ -732,9 +740,12 @@
         <div class="modal-content">
             <h2 class="modal-title">⚠️ Important Notice</h2>
             <div class="modal-body">
-                <p class="warning-text pulsating-red">*COMMENTS ARE NOT GENERATED USING AI. PLEASE REVIEW YOUR COMMENTS!</p>
-                <p class="info-text">*The more boxes you tick, the larger the comments. Sangsom School report only requires 75 - 80 words. Tick/select lightly.</p>
-                <p class="tip-text">**Tip - leave strengths and weaknesses empty in the previous student information page.</p>
+                <p class="warning-text pulsating-red">*COMMENTS ARE NOT GENERATED USING AI. PLEASE REVIEW YOUR COMMENTS!
+                </p>
+                <p class="info-text">*The more boxes you tick, the larger the comments. Sangsom School report only
+                    requires 75 - 80 words. Tick/select lightly.</p>
+                <p class="tip-text">**Tip - leave strengths and weaknesses empty in the previous student information
+                    page.</p>
             </div>
             <div class="modal-footer">
                 <button type="button" class="button button-acknowledge" onclick="acknowledgeAndProceed()">
