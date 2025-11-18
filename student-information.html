@@ -758,6 +758,33 @@
     <script>
         let autoSaveTimeout;
 
+        function updateCurriculumTracker() {
+            // Get grade and month from URL params or localStorage
+            const urlParams = new URLSearchParams(window.location.search);
+            let grade = urlParams.get('grade');
+            let month = urlParams.get('month');
+            
+            if (!grade || !month) {
+                try {
+                    const savedData = localStorage.getItem('studentData');
+                    if (savedData) {
+                        const data = JSON.parse(savedData);
+                        grade = grade || data.grade;
+                        month = month || data.month;
+                    }
+                } catch (e) {
+                    console.warn('Could not read curriculum info:', e);
+                }
+            }
+            
+            // Display curriculum tracker if grade and month are available
+            const tracker = document.getElementById('curriculumTracker');
+            if (tracker && grade && month) {
+                tracker.innerHTML = `<span style="background:rgba(0,0,0,0.07);border-radius:16px;padding:4px 12px;font-weight:600;display:inline-block;">Current: <span style='color:#2a7cff'>${grade}</span> · <span style='color:#ff7c2a'>${month}</span> <a href='month-selection.html?grade=${encodeURIComponent(grade)}' style='margin-left:8px;font-size:13px;'>Change</a></span>`;
+                console.log(`📚 Curriculum tracker updated: ${grade} - ${month}`);
+            }
+        }
+
         document.getElementById('overallAttributes').addEventListener('input', function () {
             document.getElementById('sliderValue').textContent = this.value;
             autoSaveFormData();
@@ -840,8 +867,29 @@
 
         function saveFormData() {
             try {
+                // Get grade and month from URL params or existing localStorage
+                const urlParams = new URLSearchParams(window.location.search);
+                let grade = urlParams.get('grade');
+                let month = urlParams.get('month');
+                
+                // Fallback to existing localStorage if URL params missing
+                if (!grade || !month) {
+                    try {
+                        const existingData = localStorage.getItem('studentData');
+                        if (existingData) {
+                            const parsed = JSON.parse(existingData);
+                            grade = grade || parsed.grade;
+                            month = month || parsed.month;
+                        }
+                    } catch (e) {
+                        console.warn('Could not parse existing studentData:', e);
+                    }
+                }
+
                 // Collect all form fields with proper validation
                 const formData = {
+                    grade: grade || '',
+                    month: month || '',
                     studentName: document.getElementById('studentName').value.trim(),
                     gender: document.getElementById('gender').value,
                     strengths: document.getElementById('strengths').value.trim(),
@@ -911,6 +959,9 @@
                     window.history.replaceState({}, document.title, window.location.pathname);
                 }
             }
+
+            // Update curriculum tracker display
+            updateCurriculumTracker();
 
             try {
                 const saved = localStorage.getItem('studentData');
@@ -1059,10 +1110,30 @@
             const modal = document.getElementById('acknowledgmentModal');
             modal.classList.remove('show');
 
-            // Navigate to Subjects.html with grade and month parameters
-            const params = new URLSearchParams(window.location.search);
-            const grade = params.get('grade') || 'K1';
-            const month = params.get('month') || 'August';
+            // Get grade and month from URL params, localStorage, or defaults
+            const urlParams = new URLSearchParams(window.location.search);
+            let grade = urlParams.get('grade');
+            let month = urlParams.get('month');
+            
+            // Fallback to localStorage if URL params missing
+            if (!grade || !month) {
+                try {
+                    const savedData = localStorage.getItem('studentData');
+                    if (savedData) {
+                        const data = JSON.parse(savedData);
+                        grade = grade || data.grade;
+                        month = month || data.month;
+                    }
+                } catch (e) {
+                    console.warn('Could not read grade/month from localStorage:', e);
+                }
+            }
+            
+            // Final fallback to defaults only if still not set
+            grade = grade || 'K1';
+            month = month || 'August';
+            
+            console.log(`📚 Navigating to Subjects.html with: ${grade} - ${month}`);
             window.location.href = `Subjects.html?grade=${grade}&month=${month}`;
         }
 

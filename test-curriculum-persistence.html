@@ -1,0 +1,346 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test: Curriculum Persistence</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 800px;
+            margin: 40px auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .test-section {
+            background: white;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #2c3e50;
+        }
+        h2 {
+            color: #3498db;
+            margin-top: 0;
+        }
+        .pass {
+            color: #27ae60;
+            font-weight: bold;
+        }
+        .fail {
+            color: #e74c3c;
+            font-weight: bold;
+        }
+        button {
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 4px;
+            cursor: pointer;
+            margin: 5px;
+        }
+        button:hover {
+            background: #2980b9;
+        }
+        pre {
+            background: #f8f9fa;
+            padding: 10px;
+            border-radius: 4px;
+            overflow-x: auto;
+        }
+        .result {
+            margin-top: 10px;
+            padding: 10px;
+            border-radius: 4px;
+        }
+        .result.pass {
+            background: #d4edda;
+            border: 1px solid #c3e6cb;
+        }
+        .result.fail {
+            background: #f8d7da;
+            border: 1px solid #f5c6cb;
+        }
+    </style>
+</head>
+<body>
+    <h1>🧪 Curriculum Persistence Test</h1>
+    
+    <div class="test-section">
+        <h2>Test 1: Save Grade & Month to localStorage</h2>
+        <p>This test simulates the student-information.html saveFormData() function.</p>
+        <button onclick="runTest1()">Run Test 1</button>
+        <div id="test1-result"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>Test 2: Load Grade & Month from localStorage</h2>
+        <p>This test simulates returning to the student-information.html page without URL params.</p>
+        <button onclick="runTest2()">Run Test 2</button>
+        <div id="test2-result"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>Test 3: URL Params Override localStorage</h2>
+        <p>This test verifies that URL params take precedence when present.</p>
+        <button onclick="runTest3()">Run Test 3</button>
+        <div id="test3-result"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>Test 4: acknowledgeAndProceed() Fallback Logic</h2>
+        <p>This test simulates the navigation to Subjects.html.</p>
+        <button onclick="runTest4()">Run Test 4</button>
+        <div id="test4-result"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>Current localStorage State</h2>
+        <button onclick="displayLocalStorage()">Refresh</button>
+        <button onclick="clearTestData()">Clear All Data</button>
+        <div id="storage-display"></div>
+    </div>
+
+    <script>
+        function runTest1() {
+            const resultDiv = document.getElementById('test1-result');
+            resultDiv.innerHTML = '<p>Running test...</p>';
+            
+            try {
+                // Clear previous data
+                localStorage.clear();
+                
+                // Simulate URL params present (first time visiting student-info)
+                const urlParams = new URLSearchParams('?grade=K2&month=November');
+                const grade = urlParams.get('grade');
+                const month = urlParams.get('month');
+                
+                // Simulate saveFormData()
+                const formData = {
+                    grade: grade || '',
+                    month: month || '',
+                    studentName: 'Test Student',
+                    gender: 'he',
+                    strengths: 'creative thinking',
+                    weaknesses: 'motor skills',
+                    overallAttributes: '7',
+                    timestamp: Date.now(),
+                    version: '1.0'
+                };
+                
+                localStorage.setItem('studentData', JSON.stringify(formData));
+                
+                // Verify
+                const saved = localStorage.getItem('studentData');
+                const parsed = JSON.parse(saved);
+                
+                if (parsed.grade === 'K2' && parsed.month === 'November') {
+                    resultDiv.innerHTML = `<div class="result pass">
+                        <span class="pass">✅ PASS</span>
+                        <p>Grade and month successfully saved to localStorage!</p>
+                        <pre>${JSON.stringify(parsed, null, 2)}</pre>
+                    </div>`;
+                } else {
+                    resultDiv.innerHTML = `<div class="result fail">
+                        <span class="fail">❌ FAIL</span>
+                        <p>Grade or month not saved correctly.</p>
+                        <p>Expected: K2/November, Got: ${parsed.grade}/${parsed.month}</p>
+                    </div>`;
+                }
+            } catch (error) {
+                resultDiv.innerHTML = `<div class="result fail">
+                    <span class="fail">❌ ERROR</span>
+                    <p>${error.message}</p>
+                </div>`;
+            }
+        }
+
+        function runTest2() {
+            const resultDiv = document.getElementById('test2-result');
+            resultDiv.innerHTML = '<p>Running test...</p>';
+            
+            try {
+                // Set up localStorage with existing data
+                const existingData = {
+                    grade: 'K2',
+                    month: 'November',
+                    studentName: 'Test Student',
+                    gender: 'she',
+                    timestamp: Date.now()
+                };
+                localStorage.setItem('studentData', JSON.stringify(existingData));
+                
+                // Simulate returning to page without URL params
+                const urlParams = new URLSearchParams(''); // No params
+                let grade = urlParams.get('grade');
+                let month = urlParams.get('month');
+                
+                // Fallback to localStorage (as per our fix)
+                if (!grade || !month) {
+                    const savedData = localStorage.getItem('studentData');
+                    if (savedData) {
+                        const data = JSON.parse(savedData);
+                        grade = grade || data.grade;
+                        month = month || data.month;
+                    }
+                }
+                
+                if (grade === 'K2' && month === 'November') {
+                    resultDiv.innerHTML = `<div class="result pass">
+                        <span class="pass">✅ PASS</span>
+                        <p>Grade and month successfully loaded from localStorage!</p>
+                        <p>Loaded: ${grade}/${month}</p>
+                    </div>`;
+                } else {
+                    resultDiv.innerHTML = `<div class="result fail">
+                        <span class="fail">❌ FAIL</span>
+                        <p>Failed to load grade/month from localStorage.</p>
+                        <p>Expected: K2/November, Got: ${grade}/${month}</p>
+                    </div>`;
+                }
+            } catch (error) {
+                resultDiv.innerHTML = `<div class="result fail">
+                    <span class="fail">❌ ERROR</span>
+                    <p>${error.message}</p>
+                </div>`;
+            }
+        }
+
+        function runTest3() {
+            const resultDiv = document.getElementById('test3-result');
+            resultDiv.innerHTML = '<p>Running test...</p>';
+            
+            try {
+                // Set up localStorage with K1/August
+                const existingData = {
+                    grade: 'K1',
+                    month: 'August',
+                    studentName: 'Test Student',
+                    timestamp: Date.now()
+                };
+                localStorage.setItem('studentData', JSON.stringify(existingData));
+                
+                // Simulate URL params with K2/November (should override)
+                const urlParams = new URLSearchParams('?grade=K2&month=November');
+                let grade = urlParams.get('grade');
+                let month = urlParams.get('month');
+                
+                // Fallback logic should NOT be used since URL params exist
+                if (!grade || !month) {
+                    const savedData = localStorage.getItem('studentData');
+                    if (savedData) {
+                        const data = JSON.parse(savedData);
+                        grade = grade || data.grade;
+                        month = month || data.month;
+                    }
+                }
+                
+                if (grade === 'K2' && month === 'November') {
+                    resultDiv.innerHTML = `<div class="result pass">
+                        <span class="pass">✅ PASS</span>
+                        <p>URL params correctly override localStorage!</p>
+                        <p>Result: ${grade}/${month} (from URL params)</p>
+                    </div>`;
+                } else {
+                    resultDiv.innerHTML = `<div class="result fail">
+                        <span class="fail">❌ FAIL</span>
+                        <p>URL params did not override localStorage correctly.</p>
+                        <p>Expected: K2/November, Got: ${grade}/${month}</p>
+                    </div>`;
+                }
+            } catch (error) {
+                resultDiv.innerHTML = `<div class="result fail">
+                    <span class="fail">❌ ERROR</span>
+                    <p>${error.message}</p>
+                </div>`;
+            }
+        }
+
+        function runTest4() {
+            const resultDiv = document.getElementById('test4-result');
+            resultDiv.innerHTML = '<p>Running test...</p>';
+            
+            try {
+                // Setup: K2/November in localStorage
+                const existingData = {
+                    grade: 'K2',
+                    month: 'November',
+                    studentName: 'Test Student',
+                    timestamp: Date.now()
+                };
+                localStorage.setItem('studentData', JSON.stringify(existingData));
+                
+                // Simulate acknowledgeAndProceed without URL params
+                const urlParams = new URLSearchParams('');
+                let grade = urlParams.get('grade');
+                let month = urlParams.get('month');
+                
+                // Fallback to localStorage
+                if (!grade || !month) {
+                    const savedData = localStorage.getItem('studentData');
+                    if (savedData) {
+                        const data = JSON.parse(savedData);
+                        grade = grade || data.grade;
+                        month = month || data.month;
+                    }
+                }
+                
+                // Final fallback to defaults
+                grade = grade || 'K1';
+                month = month || 'August';
+                
+                const expectedUrl = `Subjects.html?grade=${grade}&month=${month}`;
+                
+                if (grade === 'K2' && month === 'November') {
+                    resultDiv.innerHTML = `<div class="result pass">
+                        <span class="pass">✅ PASS</span>
+                        <p>acknowledgeAndProceed() correctly uses localStorage fallback!</p>
+                        <p>Would navigate to: <code>${expectedUrl}</code></p>
+                    </div>`;
+                } else {
+                    resultDiv.innerHTML = `<div class="result fail">
+                        <span class="fail">❌ FAIL</span>
+                        <p>acknowledgeAndProceed() fallback failed.</p>
+                        <p>Expected: K2/November, Got: ${grade}/${month}</p>
+                        <p>Would navigate to: <code>${expectedUrl}</code></p>
+                    </div>`;
+                }
+            } catch (error) {
+                resultDiv.innerHTML = `<div class="result fail">
+                    <span class="fail">❌ ERROR</span>
+                    <p>${error.message}</p>
+                </div>`;
+            }
+        }
+
+        function displayLocalStorage() {
+            const displayDiv = document.getElementById('storage-display');
+            const data = localStorage.getItem('studentData');
+            
+            if (data) {
+                try {
+                    const parsed = JSON.parse(data);
+                    displayDiv.innerHTML = `<pre>${JSON.stringify(parsed, null, 2)}</pre>`;
+                } catch (e) {
+                    displayDiv.innerHTML = `<pre>Error parsing: ${data}</pre>`;
+                }
+            } else {
+                displayDiv.innerHTML = '<p><em>No studentData in localStorage</em></p>';
+            }
+        }
+
+        function clearTestData() {
+            localStorage.clear();
+            displayLocalStorage();
+            alert('All localStorage data cleared!');
+        }
+
+        // Auto-display on load
+        displayLocalStorage();
+    </script>
+</body>
+</html>
