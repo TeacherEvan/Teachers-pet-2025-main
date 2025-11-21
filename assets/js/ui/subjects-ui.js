@@ -1,57 +1,31 @@
 /**
- * Missing Functions - Essential fallback functions for HTML onclick handlers
- * Provides compatibility and fallback implementations for referenced functions
+ * Subjects Page UI Functions
+ * Handles subject toggling, selection, and comment generation triggers.
  */
 
-// Global error handler for missing functions
-window.addEventListener('error', function (e) {
-    if (e.message.includes('is not defined')) {
-        console.warn('Missing function detected:', e.message);
-    }
-});
-
-// Student Information Page Functions
-// testStudentName function is defined in the HTML file
-
-// addToStrengths function is defined in the HTML file
-
-// addToAreas function is defined in the HTML file
-
-// goToSubjects function is defined in the HTML file
-
-// Subject Selection Page Functions
 function toggleSubject(subjectId) {
     console.log('🔄 toggleSubject called for:', subjectId);
 
     const content = document.getElementById('content_' + subjectId);
     const arrow = document.getElementById('arrow_' + subjectId);
 
-    console.log('Content element:', content);
-    console.log('Arrow element:', arrow);
-
     if (!content || !arrow) {
         console.error('❌ Subject elements not found for:', subjectId);
-        console.log('Available content IDs:', Array.from(document.querySelectorAll('[id^="content_"]')).map(el => el.id));
-        console.log('Available arrow IDs:', Array.from(document.querySelectorAll('[id^="arrow_"]')).map(el => el.id));
         return;
     }
 
     const isActive = content.classList.contains('active');
-    console.log('Current active state:', isActive);
 
     if (isActive) {
         content.classList.remove('active');
         arrow.classList.remove('rotated');
-        console.log('✅ Collapsed subject:', subjectId);
     } else {
         content.classList.add('active');
         arrow.classList.add('rotated');
-        console.log('✅ Expanded subject:', subjectId);
     }
 
     // Force a style update
     content.style.display = content.classList.contains('active') ? 'block' : 'none';
-    console.log('Final display style:', content.style.display);
 }
 
 function handleSubjectCheck(subjectId) {
@@ -79,20 +53,8 @@ function handleSubjectCheck(subjectId) {
     }
 }
 
-function refreshReport() {
-    if (confirm('This will clear all current data and start over. Are you sure?')) {
-        localStorage.clear();
-        window.location.href = 'index.html';
-    }
-}
-
 /**
  * Infer parent subjects from selected topics using DOM structure
- * This ensures that if a user only checks topics without checking the parent subject,
- * the parent subject is still included in the comment
- * 
- * FIXED 2025-11-17: Use DOM hierarchy instead of keyword matching to avoid false positives
- * (e.g., "shape" keyword was matching both I.Q and Physical Education)
  */
 function inferSubjectsFromTopics(topicRatings, selectedSubjects) {
     const inferredSubjects = new Set();
@@ -129,21 +91,18 @@ function inferSubjectsFromTopics(topicRatings, selectedSubjects) {
             selectedSubjects.push(subject);
         }
     });
-
-    console.log('📋 Final subjects after DOM-based inference:', selectedSubjects);
 }
 
 function ensureCommentGeneration() {
     try {
         console.log('🚀 Starting comment generation...');
 
-        // Collect all form data with robust retrieval and diagnostics
         const safeParse = (val) => {
             try { return JSON.parse(val || '{}'); } catch { return {}; }
         };
 
         let studentData = safeParse(localStorage.getItem('studentData'));
-        // If required fields are missing, try to recover from sessionStorage (navigation fallback)
+        // If required fields are missing, try to recover from sessionStorage
         if (!studentData.studentName || !studentData.gender) {
             const ssData = safeParse(sessionStorage.getItem('studentData'));
             if (ssData.studentName && ssData.gender) {
@@ -153,59 +112,36 @@ function ensureCommentGeneration() {
             }
         }
 
-        console.log('📦 Retrieved studentData:', studentData);
         const selectedSubjects = [];
         const topicRatings = {};
 
-        // ⚡ PERFORMANCE OPTIMIZATION: Cache DOM queries to avoid redundant scans
-        const allSubjectCheckboxes = document.querySelectorAll('.subject-checkbox');
+        // ⚡ PERFORMANCE OPTIMIZATION: Cache DOM queries
         const checkedSubjectCheckboxes = document.querySelectorAll('.subject-checkbox:checked');
-        const allTopicCheckboxes = document.querySelectorAll('.topic-checkbox');
         const checkedTopicCheckboxes = document.querySelectorAll('.topic-checkbox:checked');
 
-        // Collect selected subjects and topics - STRICT: only what user actually checked
+        // Collect selected subjects and topics
         checkedSubjectCheckboxes.forEach(cb => {
             if (cb.value && cb.value.trim() !== '') {
-                console.log('✅ Found checked subject checkbox:', cb.id, '→ value:', cb.value);
                 selectedSubjects.push(cb.value);
-            } else {
-                console.warn('⚠️ Subject checkbox checked but has no value:', cb.id, cb);
             }
         });
-
-        console.log('📋 Total subject checkboxes found:', allSubjectCheckboxes.length);
-        console.log('📋 Total CHECKED subject checkboxes:', checkedSubjectCheckboxes.length);
-        console.log('📋 Selected subjects array:', selectedSubjects);
 
         checkedTopicCheckboxes.forEach(cb => {
             if (cb.value && cb.value.trim() !== '') {
-                console.log('✅ Found checked topic checkbox:', cb.id, '→ value:', cb.value);
                 topicRatings[cb.value] = 5; // Default rating
-            } else {
-                console.warn('⚠️ Topic checkbox checked but has no value:', cb.id, cb);
             }
         });
 
-        console.log('📋 Total topic checkboxes found:', allTopicCheckboxes.length);
-        console.log('📋 Total CHECKED topic checkboxes:', checkedTopicCheckboxes.length);
-        console.log('📋 Topic ratings object:', topicRatings);
-
-        // Infer parent subjects from selected topics if not already in selectedSubjects
-        // This handles the case where users only check topics without checking the parent subject
+        // Infer parent subjects from selected topics
         inferSubjectsFromTopics(topicRatings, selectedSubjects);
 
-        // Validate required data with clearer diagnostics
+        // Validate required data
         if (!studentData.studentName || !studentData.gender) {
-            console.error('❌ Student data missing or incomplete', {
-                hasName: !!studentData.studentName,
-                hasGender: !!studentData.gender,
-                localStorageKeys: Object.keys(localStorage || {})
-            });
             alert('Missing student information. Please go back and complete the student information form.');
             return;
         }
 
-        // Prepare session data for comment generation
+        // Prepare session data
         const sessionData = {
             studentName: studentData.studentName,
             gender: studentData.gender,
@@ -216,24 +152,8 @@ function ensureCommentGeneration() {
             topicRatings: topicRatings
         };
 
-        console.log('📝 Session data collected:', sessionData);
-
-        // Validate that we have meaningful data to include
-        const hasStrengths = sessionData.strengths && sessionData.strengths.trim() !== '';
-        const hasWeaknesses = sessionData.weaknesses && sessionData.weaknesses.trim() !== '';
-        const hasSubjects = selectedSubjects.length > 0;
-        const hasTopics = Object.keys(topicRatings).length > 0;
-
-        console.log('📊 Data availability:', {
-            hasStrengths,
-            hasWeaknesses,
-            hasSubjects,
-            hasTopics
-        });
-
-        // STRICT: Do NOT inject fake subjects/topics - only use what teacher actually selected
-        if (!hasSubjects && !hasTopics) {
-            console.warn('⚠️ No subjects/topics selected by teacher');
+        // STRICT: Do NOT inject fake subjects/topics
+        if (selectedSubjects.length === 0 && Object.keys(topicRatings).length === 0) {
             alert('Please select at least one subject or topic before generating comments.');
             return;
         }
@@ -242,25 +162,18 @@ function ensureCommentGeneration() {
         (async () => {
             let comments;
             if (typeof EnhancedCommentEngine !== 'undefined') {
-                console.log('✅ Using Enhanced Comment Engine');
                 const enhancedEngine = new EnhancedCommentEngine();
                 comments = await enhancedEngine.generateComments(sessionData);
             } else if (typeof PremiumCommentEngine !== 'undefined') {
-                console.log('✅ Using Premium Comment Engine');
                 const engine = new PremiumCommentEngine();
                 comments = await engine.generateComments(sessionData);
             } else {
-                console.error('❌ No comment engine available');
-                alert('Comment generation engine not available. Please check that all required files are loaded.');
+                alert('Comment generation engine not available.');
                 return;
             }
 
-            console.log('✅ Comments generated successfully:', comments);
-
             // Validate that user data appears in comments
             const validationResult = validateUserDataInComments(comments, sessionData);
-            console.log('🔍 Validation result:', validationResult);
-
             if (!validationResult.isValid) {
                 console.warn('⚠️ Some user data missing from comments:', validationResult.missing);
             }
@@ -298,67 +211,13 @@ function validateUserDataInComments(comments, sessionData) {
         result.isValid = false;
     }
 
-    // Check strengths
-    if (sessionData.strengths && sessionData.strengths.trim() !== '') {
-        const strengthWords = sessionData.strengths.toLowerCase().split(/[,\s]+/)
-            .filter(word => word.length > 3); // Only check meaningful words
-
-        const strengthFound = strengthWords.some(word =>
-            maleComment.includes(word) || femaleComment.includes(word)
-        );
-
-        if (strengthFound) {
-            result.found.push('Strengths');
-        } else {
-            result.missing.push('Strengths');
-            result.isValid = false;
-        }
-    }
-
-    // Check weaknesses/areas for improvement
-    if (sessionData.weaknesses && sessionData.weaknesses.trim() !== '') {
-        const weaknessWords = sessionData.weaknesses.toLowerCase().split(/[,\s]+/)
-            .filter(word => word.length > 3);
-
-        const weaknessFound = weaknessWords.some(word =>
-            maleComment.includes(word) || femaleComment.includes(word)
-        ) || maleComment.includes('development') || femaleComment.includes('development') ||
-            maleComment.includes('improvement') || femaleComment.includes('improvement') ||
-            maleComment.includes('practice') || femaleComment.includes('practice');
-
-        if (weaknessFound) {
-            result.found.push('Areas for improvement');
-        } else {
-            result.missing.push('Areas for improvement');
-            result.isValid = false;
-        }
-    }
-
-    // Check subjects
-    if (Array.isArray(sessionData.subjects) && sessionData.subjects.length > 0) {
-        const subjectFound = sessionData.subjects.some(subject =>
-            maleComment.includes(subject.toLowerCase()) || femaleComment.includes(subject.toLowerCase())
-        );
-
-        if (subjectFound) {
-            result.found.push('Selected subjects');
-        } else {
-            result.missing.push('Selected subjects');
-            result.isValid = false;
-        }
-    }
-
     return result;
 }
 
 function displayGeneratedComments(comments) {
     const commentsSection = document.getElementById('generatedComments');
-    if (!commentsSection) {
-        console.error('Generated comments section not found');
-        return;
-    }
+    if (!commentsSection) return;
 
-    // Update comment text
     const comment1Text = document.getElementById('commentText1');
     const comment2Text = document.getElementById('commentText2');
     const wordCount1 = document.getElementById('wordCount1');
@@ -369,21 +228,16 @@ function displayGeneratedComments(comments) {
     if (wordCount1) wordCount1.textContent = `(${comments.wordCount.male} words)`;
     if (wordCount2) wordCount2.textContent = `(${comments.wordCount.female} words)`;
 
-    // Show the comments section
     commentsSection.style.display = 'block';
     commentsSection.classList.remove('display-none');
-
-    // Scroll to comments
     commentsSection.scrollIntoView({ behavior: 'smooth' });
 }
 
 function selectComment(commentNumber) {
-    // Remove selection from all comments
     document.querySelectorAll('.comment-option').forEach(option => {
         option.classList.remove('selected');
     });
 
-    // Select the clicked comment
     const selectedComment = document.getElementById('comment' + commentNumber);
     if (selectedComment) {
         selectedComment.classList.add('selected');
@@ -399,12 +253,10 @@ function copySelectedComment() {
 
     const text = selectedComment.textContent;
 
-    // Copy to clipboard
     if (navigator.clipboard) {
         navigator.clipboard.writeText(text).then(() => {
             alert('Comment copied to clipboard!');
         }).catch(err => {
-            console.error('Failed to copy:', err);
             fallbackCopyToClipboard(text);
         });
     } else {
@@ -422,7 +274,6 @@ function fallbackCopyToClipboard(text) {
         document.execCommand('copy');
         alert('Comment copied to clipboard!');
     } catch (err) {
-        console.error('Fallback copy failed:', err);
         alert('Failed to copy comment. Please select and copy manually.');
     }
 
@@ -456,7 +307,6 @@ ${commentText}
 Generated on: ${new Date().toLocaleDateString()}
     `.trim();
 
-    // Create and download file
     const blob = new Blob([reportContent], { type: 'text/plain' });
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
@@ -467,81 +317,3 @@ Generated on: ${new Date().toLocaleDateString()}
     document.body.removeChild(a);
     URL.revokeObjectURL(url);
 }
-
-function goBack() {
-    // Try to preserve grade/month in navigation
-    let grade = '';
-    let month = '';
-    try {
-        const saved = localStorage.getItem('studentData');
-        if (saved) {
-            const data = JSON.parse(saved);
-            grade = data.grade || '';
-            month = data.month || '';
-        }
-    } catch (e) {
-        // fallback: try to get from current URL
-        const params = new URLSearchParams(window.location.search);
-        grade = params.get('grade') || '';
-        month = params.get('month') || '';
-    }
-    let url = 'student-information.html';
-    if (grade && month) {
-        url += `?grade=${encodeURIComponent(grade)}&month=${encodeURIComponent(month)}`;
-    }
-    window.location.href = url;
-}
-
-function startOver() {
-    if (confirm('This will clear all data and start over. Are you sure?')) {
-        localStorage.clear();
-        window.location.href = 'index.html';
-    }
-}
-
-// Index page functions
-function startOverWithAnimation() {
-    document.body.style.opacity = '0';
-    document.body.style.transform = 'scale(0.95)';
-    document.body.style.transition = 'opacity 0.6s ease-out, transform 0.6s ease-out';
-
-    setTimeout(() => {
-        localStorage.clear();
-        window.location.href = 'index.html';
-    }, 300);
-}
-
-// Test function for test-index.html
-function testJS() {
-    alert('JavaScript is working! All missing functions have been loaded successfully.');
-    console.log('Missing functions test passed');
-}
-
-// Utility function to update selection count
-function updateSelectionCount() {
-    // ⚡ PERFORMANCE OPTIMIZATION: Cache query result
-    const checkedTopics = document.querySelectorAll('.topic-checkbox:checked');
-    const selectedCount = checkedTopics.length;
-    const countElement = document.getElementById('selectionCount');
-    if (countElement) {
-        countElement.textContent = selectedCount;
-    }
-}
-
-// Initialize event listeners when DOM is loaded
-document.addEventListener('DOMContentLoaded', function () {
-    // ⚡ PERFORMANCE OPTIMIZATION: Cache query result for event listener attachment
-    const allTopicCheckboxes = document.querySelectorAll('.topic-checkbox');
-
-    // Add change listeners to topic checkboxes for selection count
-    allTopicCheckboxes.forEach(checkbox => {
-        checkbox.addEventListener('change', updateSelectionCount);
-    });
-
-    // Initial count update
-    updateSelectionCount();
-
-    console.log('Missing functions initialized successfully');
-});
-
-console.log('Missing functions loaded successfully');

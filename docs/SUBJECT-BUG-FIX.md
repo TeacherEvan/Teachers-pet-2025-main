@@ -11,7 +11,7 @@ User reported that **subjects were NOT appearing in generated comments** even af
    - Subject checkboxes were being read properly: `document.querySelectorAll('.subject-checkbox:checked')`
 
 2. **Subject Grouping** ⚠️ Partially problematic
-   - `groupTopicsBySubject()` created empty arrays for subjects without topics
+   - `groupTopicsBySubjewct()` created empty arrays for subjects without topics
    - Example: User checks "Mathematics" but no topics → `topicsBySubject["Mathematics"] = []`
 
 3. **Subject Section Generation** ❌ **FAILED HERE**

@@ -763,7 +763,7 @@
             const urlParams = new URLSearchParams(window.location.search);
             let grade = urlParams.get('grade');
             let month = urlParams.get('month');
-            
+
             if (!grade || !month) {
                 try {
                     const savedData = localStorage.getItem('studentData');
@@ -776,7 +776,7 @@
                     console.warn('Could not read curriculum info:', e);
                 }
             }
-            
+
             // Display curriculum tracker if grade and month are available
             const tracker = document.getElementById('curriculumTracker');
             if (tracker && grade && month) {
@@ -871,7 +871,7 @@
                 const urlParams = new URLSearchParams(window.location.search);
                 let grade = urlParams.get('grade');
                 let month = urlParams.get('month');
-                
+
                 // Fallback to existing localStorage if URL params missing
                 if (!grade || !month) {
                     try {
@@ -1114,7 +1114,7 @@
             const urlParams = new URLSearchParams(window.location.search);
             let grade = urlParams.get('grade');
             let month = urlParams.get('month');
-            
+
             // Fallback to localStorage if URL params missing
             if (!grade || !month) {
                 try {
@@ -1128,11 +1128,11 @@
                     console.warn('Could not read grade/month from localStorage:', e);
                 }
             }
-            
+
             // Final fallback to defaults only if still not set
             grade = grade || 'K1';
             month = month || 'August';
-            
+
             console.log(`📚 Navigating to Subjects.html with: ${grade} - ${month}`);
             window.location.href = `Subjects.html?grade=${grade}&month=${month}`;
         }
@@ -1219,8 +1219,8 @@
         });
     </script>
 
-    <!-- Include missing functions -->
-    <script src="missing-functions.js"></script>
+    <!-- Include shared UI functions -->
+    <script src="assets/js/ui/shared-ui.js"></script>
 </body>
 
 </html>
