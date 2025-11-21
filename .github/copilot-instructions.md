@@ -38,7 +38,7 @@ student-information.html → Subjects.html → Generated Comments
 ```
 
 ### State Management (Dual-Layer System)
-- **In-Memory:** `TeachersPetApp.sessionData` (assets/js/app.js) - source of truth during session
+- **In-Memory:** `TeachersPetApp.sessionData` (assets/js/controllers/app-controller.js) - source of truth during session
 - **Persistence:** `localStorage.studentData` - read by comment generators
 - **CRITICAL:** Keep both in sync! Comment engines read from localStorage, not sessionData
 
@@ -211,7 +211,7 @@ Log all changes in:
 
 
 ## Key Files & Patterns (Quick Reference)
-- `assets/js/app.js` — application controller and wizard routing; `TeachersPetApp.sessionData` is in-memory state.
+- `assets/js/controllers/app-controller.js` — application controller and wizard routing; `TeachersPetApp.sessionData` is in-memory state.
 - `optimized-comment-generator.js` — initializes Enhanced/Premium engines and provides `generateFromStorage()` and `testCommentGeneration()` helpers.
 - `assets/js/enhanced-comment-engine.js` — main comment generation logic: `subjectTopicMap`, `grammarRules`, and templates for male/female output.
 - `assets/js/curriculum/curriculum-loader.js` — dynamic curriculum loader and availability list for grades/months.

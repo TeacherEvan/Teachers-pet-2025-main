@@ -15,6 +15,37 @@ Before implementing ANY feature:
 
 ## Recent Work (Newest First)
 
+### 2025-11-21: Fix Critical 404 Error - app.js File Path Correction
+**Agent:** GitHub Copilot
+**MCP Tools Used:** ✅ mcp_sequentialthi_sequentialthinking, manage_todo_list
+
+**Problem:** Browser console showing 404 error for `assets/js/app.js` on all pages, preventing application initialization. Error appeared in deployed version (Vercel) and confirmed in Firefox developer tools.
+
+**Root Cause:** 
+HTML files referenced `assets/js/app.js` but actual file was renamed/moved to `assets/js/controllers/app-controller.js` during refactoring. This caused:
+- Failed script loading (404 HTTP status)
+- Broken `TeachersPetApp` initialization
+- Potential wizard flow interruptions
+
+**Fix (7 files updated):**
+1. **index.html** - Updated preload href
+2. **grade-selection.html** - Updated preload href
+3. **month-selection.html** - Updated preload href AND script src (2 references)
+4. **student-information.html** - Updated preload href
+5. **Subjects.html** - Updated preload href
+6. **.github/copilot-instructions.md** - Updated documentation references (2 locations: State Management section and Key Files & Patterns section)
+
+**Changes:** Replaced all `assets/js/app.js` references with `assets/js/controllers/app-controller.js`
+
+**Non-Issues Identified:** 
+- CSS warnings about `-moz-` prefixes, `orphans`, `widows`, `text-size-adjust` - All from Vercel's feedback widget (third-party), not our code
+- "Ruleset ignored due to bad selector" errors - Also from Vercel injected styles at `teachers-pet-2025-main.vercel.app:1:*`
+
+**Testing:** Verify no 404 errors in browser console after deployment, confirm TeachersPetApp loads successfully
+
+**Files Modified:** 5 HTML files, 1 documentation file
+**Performance Impact:** Eliminates failed HTTP request on every page load
+
 ### 2025-11-18: Curriculum Persistence Fix - Grade/Month Lost on Back Navigation
 **Agent:** GitHub Copilot
 **MCP Tools Used:** ✅ Subagent for comprehensive flow research
