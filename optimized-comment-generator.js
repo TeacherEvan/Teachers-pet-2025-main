@@ -101,8 +101,9 @@ class OptimizedCommentGenerator {
         console.log('📊 ⭐ Raw overallAttributes from localStorage:', studentData.overallAttributes, 'Type:', typeof studentData.overallAttributes);
         const parsedRating = parseInt(studentData.overallAttributes);
         console.log('📊 ⭐ After parseInt:', parsedRating, 'Type:', typeof parsedRating, 'isNaN:', isNaN(parsedRating));
-        const finalRating = parsedRating || 5;
-        console.log('📊 ⭐ Final rating (with || 5 fallback):', finalRating);
+        // Use parsed rating if it's a valid number, otherwise default to 5
+        const finalRating = (isNaN(parsedRating) || parsedRating < 1 || parsedRating > 10) ? 5 : parsedRating;
+        console.log('📊 ⭐ Final rating (validated, defaults to 5 if invalid):', finalRating);
         
         const sessionData = {
             studentName: studentData.studentName || '',

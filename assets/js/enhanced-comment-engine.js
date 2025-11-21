@@ -95,7 +95,8 @@ class EnhancedCommentEngine {
         }
 
         // CRITICAL: Track rating value through entire pipeline
-        const rating = sessionData.overallRating || 5;
+        // Use rating if valid (1-10), otherwise default to 5
+        const rating = (sessionData.overallRating >= 1 && sessionData.overallRating <= 10) ? sessionData.overallRating : 5;
         console.log('📊 ⭐ RATING VALUE BEING USED:', rating, 'Type:', typeof rating);
         console.log('📊 ⭐ Available rating pools:', Object.keys(this.performanceMap).join(', '));
         
@@ -110,7 +111,7 @@ class EnhancedCommentEngine {
         const verb = this.getRandomFromPool(this.verbPools[rating]);
         const adverb = this.getRandomFromPool(this.adverbPools[rating]);
         
-        console.log('📊 ⭐ Selected from pools for rating', rating + ':');
+        console.log(`📊 ⭐ Selected from pools for rating ${rating}:`);
         console.log('   - descriptor:', descriptor);
         console.log('   - verb:', verb);
         console.log('   - adverb:', adverb);
