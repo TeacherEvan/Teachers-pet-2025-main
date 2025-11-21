@@ -99,10 +99,10 @@ class EnhancedCommentEngine {
         const rating = (sessionData.overallRating >= 1 && sessionData.overallRating <= 10) ? sessionData.overallRating : 5;
         console.log('📊 ⭐ RATING VALUE BEING USED:', rating, 'Type:', typeof rating);
         console.log('📊 ⭐ Available rating pools:', Object.keys(this.performanceMap).join(', '));
-        
+
         const performance = this.performanceMap[rating] || this.performanceMap[5];
         console.log('📊 ⭐ Performance level selected:', performance.level);
-        
+
         const genderKey = sessionData.gender.toLowerCase();
         const pronouns = this.grammarRules.pronouns[genderKey] || this.grammarRules.pronouns.he;
 
@@ -110,7 +110,7 @@ class EnhancedCommentEngine {
         const descriptor = this.getRandomFromPool(this.descriptorPools[rating]);
         const verb = this.getRandomFromPool(this.verbPools[rating]);
         const adverb = this.getRandomFromPool(this.adverbPools[rating]);
-        
+
         console.log(`📊 ⭐ Selected from pools for rating ${rating}:`);
         console.log('   - descriptor:', descriptor);
         console.log('   - verb:', verb);
@@ -130,6 +130,8 @@ class EnhancedCommentEngine {
 
         return {
             name: studentName,
+            grade: sessionData.grade || 'K1',
+            month: sessionData.month || 'August',
             level: performance.level,
             descriptor: descriptor,
             verb: verb,
@@ -240,24 +242,26 @@ class EnhancedCommentEngine {
      * Generate opening sentence
      */
     generateOpening(data, isMale) {
+        // REVERTED 2025-11-21: Removed grade/month display (logic only)
+        
         const templates = isMale ? [
             `${data.name} demonstrated ${data.level} performance this term, achieving consistent and ${data.descriptor} progress across multiple developmental areas.`,
-            `${data.name} has shown ${data.level} academic development throughout this period, displaying structured and ${data.descriptor} engagement with learning objectives.`,
-            `${data.name} ${data.verb} this term, establishing strong foundational competencies and ${data.descriptor} mastery in essential educational areas.`,
-            `Throughout this term, ${data.name} exhibited ${data.level} performance, demonstrating ${data.descriptor} growth in key developmental domains.`,
+            `${data.name} has shown ${data.level} academic development throughout the term, displaying structured and ${data.descriptor} engagement with learning objectives.`,
+            `${data.name} ${data.verb} during this term, establishing strong foundational competencies and ${data.descriptor} mastery in essential educational areas.`,
+            `Throughout the term, ${data.name} exhibited ${data.level} performance, demonstrating ${data.descriptor} growth in key developmental domains.`,
             `${data.name} has met ${data.level} benchmarks this term with focused determination and systematic approach to learning activities.`,
-            `This term, ${data.name} attained ${data.level} results through methodical effort and consistent application to curriculum objectives.`,
-            `${data.name}'s performance this period reflects ${data.level} achievement with measurable advancement across core competency areas.`,
-            `The academic record shows ${data.name} accomplished ${data.level} standards through dedicated focus and persistent effort.`
+            `In class, ${data.name} attained ${data.level} results through methodical effort and consistent application to objectives.`,
+            `${data.name}'s performance this term reflects ${data.level} achievement with measurable advancement across core competency areas.`,
+            `The academic record shows ${data.name} accomplished ${data.level} standards this term through dedicated focus and persistent effort.`
         ] : [
-            `${data.name} has had an enriching term, bringing energy and enthusiastic participation to our classroom community.`,
-            `It has been a pleasure watching ${data.name} grow and develop ${data.adverb}, making ${data.level} progress this term.`,
-            `${data.name} has developed into a confident learner, embracing each day with curiosity and ${data.level} engagement.`,
-            `${data.name} has shown ${data.level} development with ${data.descriptor} enthusiasm throughout this term.`,
-            `${data.name} has engaged positively this term, bringing warmth and energy to learning activities.`,
-            `It has been rewarding to watch ${data.name} develop as a learner, showing enthusiasm and ${data.level} spirit each day.`,
+            `${data.name} has had an enriching time this term, bringing energy and enthusiastic participation to our classroom community.`,
+            `It has been a pleasure watching ${data.name} grow and develop ${data.adverb} throughout the term, making ${data.level} progress.`,
+            `${data.name} has developed into a confident learner this term, embracing each day with curiosity and ${data.level} engagement.`,
+            `${data.name} has shown ${data.level} development with ${data.descriptor} enthusiasm throughout the term.`,
+            `${data.name} has engaged positively in class activities, bringing warmth and energy to learning activities.`,
+            `It has been rewarding to watch ${data.name} develop as a learner throughout the term, showing enthusiasm and ${data.level} spirit each day.`,
             `${data.name} has contributed meaningfully this term, approaching activities with genuine curiosity and interest.`,
-            `${data.name} has grown considerably this term, exploring with interest and achieving ${data.level} milestones.`
+            `${data.name} has grown considerably throughout the term, exploring with interest and achieving ${data.level} milestones.`
         ];
 
         return this.selectRandom(templates);
@@ -311,8 +315,8 @@ class EnhancedCommentEngine {
 
         // Detailed subject mentions with topics - mention ALL subjects with topics
         subjectsWithTopics.forEach(([subject, topics], index) => {
-            const topicSample = topics.slice(0, 3); // Mention up to 3 topics per subject
-            const topicsText = this.naturalJoin(topicSample);
+            // FIXED 2025-11-21: Mention ALL topics, not just 3 - ensures complete data integration
+            const topicsText = this.naturalJoin(topics);
 
             if (isMale) {
                 const templates = [

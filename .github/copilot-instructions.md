@@ -144,6 +144,7 @@ Copy-Item "assets/js/enhanced-comment-engine.js" "enhanced-comment-engine.js" -F
 
 ### Generation Requirements
 - Mention EVERY selected subject/topic
+- **CRITICAL:** Grade/Month is for curriculum selection ONLY. Do not include in generated text.
 - Start with student name
 - End with encouragement
 - Target ~100 words
