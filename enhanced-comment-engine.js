@@ -86,6 +86,7 @@ class EnhancedCommentEngine {
         console.log('📊 sessionData.gender:', sessionData.gender);
         console.log('📊 sessionData.subjects:', sessionData.subjects);
         console.log('📊 sessionData.topicRatings:', sessionData.topicRatings);
+        console.log('📊 ⭐ sessionData.overallRating (RAW):', sessionData.overallRating, 'Type:', typeof sessionData.overallRating);
 
         // Validate student name
         if (!sessionData.studentName || sessionData.studentName.trim() === '') {
@@ -93,15 +94,27 @@ class EnhancedCommentEngine {
             throw new Error('Student name is required for comment generation');
         }
 
-        const performance = this.performanceMap[sessionData.overallRating] || this.performanceMap[5];
+        // CRITICAL: Track rating value through entire pipeline
+        // Use rating if valid (1-10), otherwise default to 5
+        const rating = (sessionData.overallRating >= 1 && sessionData.overallRating <= 10) ? sessionData.overallRating : 5;
+        console.log('📊 ⭐ RATING VALUE BEING USED:', rating, 'Type:', typeof rating);
+        console.log('📊 ⭐ Available rating pools:', Object.keys(this.performanceMap).join(', '));
+        
+        const performance = this.performanceMap[rating] || this.performanceMap[5];
+        console.log('📊 ⭐ Performance level selected:', performance.level);
+        
         const genderKey = sessionData.gender.toLowerCase();
         const pronouns = this.grammarRules.pronouns[genderKey] || this.grammarRules.pronouns.he;
 
         // Get randomized descriptors/verbs/adverbs from pools
-        const rating = sessionData.overallRating || 5;
         const descriptor = this.getRandomFromPool(this.descriptorPools[rating]);
         const verb = this.getRandomFromPool(this.verbPools[rating]);
         const adverb = this.getRandomFromPool(this.adverbPools[rating]);
+        
+        console.log(`📊 ⭐ Selected from pools for rating ${rating}:`);
+        console.log('   - descriptor:', descriptor);
+        console.log('   - verb:', verb);
+        console.log('   - adverb:', adverb);
 
         // Group topics by their parent subjects
         const topicsBySubject = this.groupTopicsBySubject(sessionData.subjects || [], sessionData.topicRatings || {});
