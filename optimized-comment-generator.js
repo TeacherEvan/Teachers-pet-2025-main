@@ -98,10 +98,16 @@ class OptimizedCommentGenerator {
         const topicRatings = this.getTopicRatings();
 
         // Combine all data
+        console.log('📊 ⭐ Raw overallAttributes from localStorage:', studentData.overallAttributes, 'Type:', typeof studentData.overallAttributes);
+        const parsedRating = parseInt(studentData.overallAttributes);
+        console.log('📊 ⭐ After parseInt:', parsedRating, 'Type:', typeof parsedRating, 'isNaN:', isNaN(parsedRating));
+        const finalRating = parsedRating || 5;
+        console.log('📊 ⭐ Final rating (with || 5 fallback):', finalRating);
+        
         const sessionData = {
             studentName: studentData.studentName || '',
             gender: studentData.gender || 'they',
-            overallRating: parseInt(studentData.overallAttributes) || 5,
+            overallRating: finalRating,
             strengths: studentData.strengths || '',
             weaknesses: studentData.weaknesses || '',
             subjects: selectedSubjects,
@@ -110,6 +116,7 @@ class OptimizedCommentGenerator {
 
         console.log('✅ Collected session data:', sessionData);
         console.log('✅ Final studentName value:', sessionData.studentName);
+        console.log('✅ ⭐ Final overallRating value:', sessionData.overallRating);
         return sessionData;
     }
 
@@ -162,6 +169,9 @@ class OptimizedCommentGenerator {
      * Validate and clean session data
      */
     validateAndCleanSessionData(sessionData) {
+        console.log('🔍 ⭐ validateAndCleanSessionData - INPUT:', sessionData);
+        console.log('🔍 ⭐ Input overallRating:', sessionData.overallRating, 'Type:', typeof sessionData.overallRating);
+        
         const cleaned = { ...sessionData };
 
         // Ensure required fields
@@ -180,9 +190,15 @@ class OptimizedCommentGenerator {
         }
 
         // Ensure rating is within valid range
-        if (cleaned.overallRating < 1 || cleaned.overallRating > 10) {
-            console.warn('Invalid rating, defaulting to 5');
+        console.log('🔍 ⭐ Rating validation - value:', cleaned.overallRating, 'Type:', typeof cleaned.overallRating);
+        console.log('🔍 ⭐ Is < 1?', cleaned.overallRating < 1, 'Is > 10?', cleaned.overallRating > 10);
+        console.log('🔍 ⭐ Is NaN?', isNaN(cleaned.overallRating), 'Is undefined?', cleaned.overallRating === undefined);
+        
+        if (isNaN(cleaned.overallRating) || cleaned.overallRating < 1 || cleaned.overallRating > 10) {
+            console.warn('⚠️ ⭐ Invalid rating detected! Value:', cleaned.overallRating, '- Defaulting to 5');
             cleaned.overallRating = 5;
+        } else {
+            console.log('✅ ⭐ Rating validation PASSED - using value:', cleaned.overallRating);
         }
 
         // Ensure arrays exist
