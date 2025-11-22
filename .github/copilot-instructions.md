@@ -27,6 +27,14 @@ Before implementing ANY complex feature, algorithm, or system:
 
 **Research FIRST, implement SECOND, validate THIRD.**
 
+## 🗺️ Documentation Map (START HERE)
+
+To understand the project quickly, read these files in order:
+
+1. **`docs/PROJECT_STATUS.md`**: The "Agent Dashboard". High-level architecture, current state, and key file map. **Read this first.**
+2. **`docs/jobcard.md`**: Chronological log of recent work. Check the top 3 entries to see what just happened.
+3. **`docs/archive/`**: Old fix logs and summaries. Only check if digging into history.
+
 ## Project Structure & Constraints
 
 **Static HTML/CSS/JS Application** - No build tools, no servers, no external APIs without approval.

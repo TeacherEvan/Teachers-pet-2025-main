@@ -1,0 +1,21 @@
+{
+    "name": "teachers-pet-2025",
+    "version": "1.0.0",
+    "description": "Static HTML/JS application for generating student comments",
+    "scripts": {
+        "verify": "node scripts/verify.js",
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "prepare": "husky"
+    },
+    "lint-staged": {
+        "*.js": "eslint"
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "devDependencies": {
+        "eslint": "^8.57.1",
+        "husky": "^9.1.7",
+        "lint-staged": "^16.2.7"
+    }
+}

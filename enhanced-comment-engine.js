@@ -243,7 +243,7 @@ class EnhancedCommentEngine {
      */
     generateOpening(data, isMale) {
         // REVERTED 2025-11-21: Removed grade/month display (logic only)
-        
+
         const templates = isMale ? [
             `${data.name} demonstrated ${data.level} performance this term, achieving consistent and ${data.descriptor} progress across multiple developmental areas.`,
             `${data.name} has shown ${data.level} academic development throughout the term, displaying structured and ${data.descriptor} engagement with learning objectives.`,
