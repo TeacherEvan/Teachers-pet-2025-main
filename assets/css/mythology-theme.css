@@ -234,18 +234,39 @@ body.mythology-mode {
 .mythology-tablet h1 {
     font-family: 'Cinzel', serif;
     font-weight: 900;
-    color: #1a1a1a;
-    text-shadow: 1px 1px 0px rgba(255, 255, 255, 0.5), -1px -1px 0px rgba(0, 0, 0, 0.2);
+
+    /* Gold Gradient Text */
+    background: linear-gradient(90deg, #8a6e2f 0%, #fcf6ba 25%, #aa771c 50%, #fcf6ba 75%, #8a6e2f 100%);
+    background-size: 200% auto;
+    color: #bf953f;
+    /* Fallback */
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: gold-shine 3s linear infinite;
+
     letter-spacing: 2px;
     text-transform: uppercase;
-    border-bottom: 2px solid #555;
+    border-bottom: 2px solid #aa771c;
     padding-bottom: 15px;
+    text-shadow: none;
 }
 
 .mythology-tablet label {
     font-family: 'Cinzel', serif;
     font-weight: 700;
-    color: #333;
+    display: inline-block;
+    /* Ensure background renders correctly */
+
+    /* Gold Gradient Text */
+    background: linear-gradient(90deg, #8a6e2f 0%, #fcf6ba 25%, #aa771c 50%, #fcf6ba 75%, #8a6e2f 100%);
+    background-size: 200% auto;
+    color: #bf953f;
+    /* Fallback */
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: gold-shine 3s linear infinite;
 }
 
 /* Inputs: Carved In Look */
@@ -326,6 +347,17 @@ body.mythology-mode {
 
     100% {
         transform: translate(0, 0);
+    }
+}
+
+/* Gold Shine Animation */
+@keyframes gold-shine {
+    0% {
+        background-position: 200% center;
+    }
+
+    100% {
+        background-position: 0% center;
     }
 }
 
