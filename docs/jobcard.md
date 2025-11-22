@@ -15,6 +15,54 @@ Before implementing ANY feature:
 
 ## Recent Work (Newest First)
 
+### 2025-11-22: Monthly Acknowledgment Timer
+**Agent:** GitHub Copilot
+
+**Context:** User requested that the notification popup (acknowledgment modal) after inserting student information only appears once a month instead of every time.
+
+**Problem:** The acknowledgment modal was showing every time the user clicked "Next" on the student information page, which is repetitive for frequent users.
+
+**Solution:**
+- Implemented a 30-day timer using `localStorage` (`acknowledgmentTimestamp`).
+- Modified `showAcknowledgmentModal` in `student-information.html` to check this timestamp.
+- If the timestamp exists and is less than 30 days old, the modal is skipped and navigation proceeds automatically.
+- Modified `acknowledgeAndProceed` to update the timestamp when the user manually acknowledges the modal.
+
+**Files Modified:**
+- `student-information.html`
+
+**Verification:**
+- First run: Modal appears.
+- Subsequent runs (within 30 days): Modal is skipped.
+- After 30 days (or clearing localStorage): Modal appears again.
+
+---
+
+### 2025-11-22: Mythology UI Theme (Visual Optimization)
+**Agent:** GitHub Copilot
+
+**Context:** User requested a "Stoic/Greek God mythology stone carving" theme for the `student-information.html` page, including interactive effects.
+
+**Features Implemented:**
+- **Stone Tablet UI:** Replaced glassmorphism with a procedural noise-based stone texture, chiseled borders, and 'Cinzel'/'Cormorant Garamond' typography.
+- **Interactive Shake:** The container shakes subtly on input interaction.
+- **Debris Particles:** Small "stone chips" fall from the input area when typing.
+- **Shatter Transition:** On clicking "Next" (Proceed), the entire UI "shatters" into a grid of falling stone tiles for 3 seconds before navigating.
+
+**Files Created:**
+- `assets/css/mythology-theme.css`
+- `assets/js/mythology-effects.js`
+
+**Files Modified:**
+- `student-information.html` (Included new assets)
+
+**Technical Details:**
+- Used SVG filters for noise texture (lightweight, no external images).
+- Used `requestAnimationFrame` for particle physics.
+- Intercepted `app.navigateWithTransition` to inject the shatter animation sequence.
+
+---
+
 ### 2025-11-21: Grade/Month Display Correction
 **Agent:** GitHub Copilot
 

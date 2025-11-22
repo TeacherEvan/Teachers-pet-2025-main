@@ -16,6 +16,8 @@
     <!-- CSS -->
     <link rel="stylesheet" href="assets/css/main.css">
     <link rel="stylesheet" href="assets/css/components.css">
+    <!-- Mythology Theme -->
+    <link rel="stylesheet" href="assets/css/mythology-theme.css">
 </head>
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap');
@@ -1101,11 +1103,27 @@
         }
 
         function showAcknowledgmentModal() {
+            // Check if user has already acknowledged recently (within 30 days)
+            const lastAck = localStorage.getItem('acknowledgmentTimestamp');
+            if (lastAck) {
+                const daysSince = (Date.now() - parseInt(lastAck)) / (1000 * 60 * 60 * 24);
+                if (daysSince < 30) {
+                    console.log('Skipping acknowledgment modal (acknowledged ' + Math.round(daysSince) + ' days ago)');
+                    acknowledgeAndProceed(true);
+                    return;
+                }
+            }
+
             const modal = document.getElementById('acknowledgmentModal');
             modal.classList.add('show');
         }
 
-        function acknowledgeAndProceed() {
+        function acknowledgeAndProceed(skipUpdate) {
+            // Save timestamp to prevent showing again for 30 days
+            if (skipUpdate !== true) {
+                localStorage.setItem('acknowledgmentTimestamp', Date.now().toString());
+            }
+
             // Hide modal
             const modal = document.getElementById('acknowledgmentModal');
             modal.classList.remove('show');
@@ -1221,6 +1239,8 @@
 
     <!-- Include shared UI functions -->
     <script src="assets/js/ui/shared-ui.js"></script>
+    <!-- Mythology Effects -->
+    <script src="assets/js/mythology-effects.js"></script>
 </body>
 
 </html>

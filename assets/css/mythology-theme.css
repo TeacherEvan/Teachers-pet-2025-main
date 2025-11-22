@@ -1,0 +1,187 @@
+/* Mythology Theme - Stoic Stone Carving */
+@import url('https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700;900&family=Cormorant+Garamond:ital,wght@0,400;0,600;1,400&display=swap');
+
+:root {
+    --stone-base: #dcdcdc;
+    --stone-dark: #a9a9a9;
+    --stone-shadow: #555;
+    --stone-highlight: #fff;
+    --myth-gold: #c5a059;
+}
+
+/* Override Body Background */
+body.mythology-mode {
+    background:
+        linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.8)),
+        url('https://images.unsplash.com/photo-1524995997946-a1c2e315a42f?ixlib=rb-4.0.3&auto=format&fit=crop&w=2070&q=80') center/cover fixed !important;
+}
+
+/* The "Tablet" Container */
+.container.mythology-tablet {
+    background-color: var(--stone-base);
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.15'/%3E%3C/svg%3E");
+    border: none;
+    border-radius: 4px;
+    box-shadow:
+        inset 2px 2px 5px rgba(255, 255, 255, 0.7),
+        inset -2px -2px 5px rgba(0, 0, 0, 0.3),
+        10px 10px 30px rgba(0, 0, 0, 0.6),
+        0 0 0 8px #5a5a5a,
+        /* Outer rim */
+        0 0 0 10px #333;
+    /* Deep edge */
+    color: #2c2c2c;
+    font-family: 'Cormorant Garamond', serif;
+    transform-style: preserve-3d;
+    transition: transform 0.1s;
+    position: relative;
+    overflow: visible !important;
+    /* Allow particles to fall out */
+}
+
+/* Greek Meander Pattern Border (Top/Bottom) */
+.container.mythology-tablet::before,
+.container.mythology-tablet::after {
+    content: '';
+    position: absolute;
+    left: 20px;
+    right: 20px;
+    height: 20px;
+    background-image:
+        linear-gradient(45deg, transparent 48%, #555 48%, #555 52%, transparent 52%),
+        linear-gradient(-45deg, transparent 48%, #555 48%, #555 52%, transparent 52%);
+    background-size: 20px 20px;
+    opacity: 0.3;
+    pointer-events: none;
+}
+
+.container.mythology-tablet::before {
+    top: 10px;
+}
+
+.container.mythology-tablet::after {
+    bottom: 10px;
+}
+
+/* Typography Overrides */
+.mythology-tablet h1 {
+    font-family: 'Cinzel', serif;
+    font-weight: 900;
+    color: #1a1a1a;
+    text-shadow: 1px 1px 0px rgba(255, 255, 255, 0.5), -1px -1px 0px rgba(0, 0, 0, 0.2);
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    border-bottom: 2px solid #555;
+    padding-bottom: 15px;
+}
+
+.mythology-tablet label {
+    font-family: 'Cinzel', serif;
+    font-weight: 700;
+    color: #333;
+}
+
+/* Inputs: Carved In Look */
+.mythology-tablet input[type="text"],
+.mythology-tablet select,
+.mythology-tablet textarea {
+    background: #d0d0d0;
+    border: 1px solid #999;
+    border-radius: 2px;
+    box-shadow:
+        inset 3px 3px 6px rgba(0, 0, 0, 0.3),
+        inset -1px -1px 2px rgba(255, 255, 255, 0.5);
+    font-family: 'Cormorant Garamond', serif;
+    font-size: 1.1em;
+    color: #111;
+    transition: all 0.2s;
+}
+
+.mythology-tablet input:focus,
+.mythology-tablet select:focus,
+.mythology-tablet textarea:focus {
+    background: #e0e0e0;
+    outline: none;
+    box-shadow:
+        inset 4px 4px 8px rgba(0, 0, 0, 0.4),
+        0 0 10px rgba(197, 160, 89, 0.3);
+    /* Gold glow */
+    border-color: var(--myth-gold);
+}
+
+/* Buttons: Raised Stone */
+.mythology-tablet .nav-button,
+.mythology-tablet .action-button {
+    background: linear-gradient(145deg, #e6e6e6, #cccccc);
+    border: 1px solid #999;
+    border-radius: 2px;
+    box-shadow:
+        3px 3px 6px rgba(0, 0, 0, 0.3),
+        -1px -1px 2px rgba(255, 255, 255, 0.8);
+    color: #222;
+    font-family: 'Cinzel', serif;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transform: translateY(0);
+    transition: all 0.1s;
+}
+
+.mythology-tablet .nav-button:active {
+    transform: translateY(2px);
+    box-shadow:
+        inset 2px 2px 5px rgba(0, 0, 0, 0.3);
+}
+
+.mythology-tablet .nav-button.primary {
+    background: linear-gradient(145deg, #4a4a4a, #2a2a2a);
+    color: var(--myth-gold);
+    border: 1px solid #111;
+}
+
+/* Shake Animation */
+@keyframes myth-shake {
+    0% {
+        transform: translate(0, 0);
+    }
+
+    25% {
+        transform: translate(-2px, 2px);
+    }
+
+    50% {
+        transform: translate(2px, -1px);
+    }
+
+    75% {
+        transform: translate(-1px, 1px);
+    }
+
+    100% {
+        transform: translate(0, 0);
+    }
+}
+
+.myth-shaking {
+    animation: myth-shake 0.15s ease-in-out;
+}
+
+/* Debris Particles */
+.myth-debris {
+    position: absolute;
+    background: #555;
+    pointer-events: none;
+    z-index: 100;
+    box-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+}
+
+/* Shatter Tiles */
+.myth-shatter-tile {
+    position: absolute;
+    background-color: var(--stone-base);
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)' opacity='0.15'/%3E%3C/svg%3E");
+    z-index: 9999;
+    box-shadow: inset 1px 1px 2px rgba(255, 255, 255, 0.3), inset -1px -1px 2px rgba(0, 0, 0, 0.2);
+    transform-origin: center center;
+    will-change: transform, opacity;
+}
