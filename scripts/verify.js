@@ -16,25 +16,25 @@ function log(type, message) {
 
 let hasError = false;
 
-// 1. Check File Synchronization
-const rootEnginePath = path.join(__dirname, '..', 'enhanced-comment-engine.js');
-const assetsEnginePath = path.join(__dirname, '..', 'assets', 'js', 'enhanced-comment-engine.js');
+// 1. Check File Synchronization (Legacy check removed for modular engine)
+// const rootEnginePath = path.join(__dirname, '..', 'enhanced-comment-engine.js');
+// const assetsEnginePath = path.join(__dirname, '..', 'assets', 'js', 'enhanced-comment-engine.js');
 
-if (fs.existsSync(rootEnginePath) && fs.existsSync(assetsEnginePath)) {
-    const rootContent = fs.readFileSync(rootEnginePath, 'utf8');
-    const assetsContent = fs.readFileSync(assetsEnginePath, 'utf8');
+// if (fs.existsSync(rootEnginePath) && fs.existsSync(assetsEnginePath)) {
+//     const rootContent = fs.readFileSync(rootEnginePath, 'utf8');
+//     const assetsContent = fs.readFileSync(assetsEnginePath, 'utf8');
 
-    if (rootContent !== assetsContent) {
-        log('error', 'File Sync Mismatch: "enhanced-comment-engine.js" in root does not match "assets/js/enhanced-comment-engine.js".');
-        log('info', 'Run: Copy-Item "assets/js/enhanced-comment-engine.js" "enhanced-comment-engine.js" -Force');
-        hasError = true;
-    } else {
-        log('success', 'Engine files are in sync.');
-    }
-} else {
-    log('error', 'Missing critical engine files.');
-    hasError = true;
-}
+//     if (rootContent !== assetsContent) {
+//         log('error', 'File Sync Mismatch: "enhanced-comment-engine.js" in root does not match "assets/js/enhanced-comment-engine.js".');
+//         log('info', 'Run: Copy-Item "assets/js/enhanced-comment-engine.js" "enhanced-comment-engine.js" -Force');
+//         hasError = true;
+//     } else {
+//         log('success', 'Engine files are in sync.');
+//     }
+// } else {
+//     // log('error', 'Missing critical engine files.');
+//     // hasError = true;
+// }
 
 // 2. Check for Forbidden Hardcoded Curriculum in Templates
 // We want to avoid "K1", "K2", "August", "November" in the generation logic, 
@@ -45,11 +45,12 @@ const forbiddenPatterns = [
     { pattern: /const opening = \".*(K1|K2|August|November).*\"/g, message: 'Potential hardcoded grade/month in opening variable' }
 ];
 
-if (fs.existsSync(assetsEnginePath)) {
-    const content = fs.readFileSync(assetsEnginePath, 'utf8');
+const templatesPath = path.join(__dirname, '..', 'assets', 'js', 'engine', 'templates.js');
+if (fs.existsSync(templatesPath)) {
+    const content = fs.readFileSync(templatesPath, 'utf8');
     forbiddenPatterns.forEach(({ pattern, message }) => {
         if (pattern.test(content)) {
-            log('warn', `${message} detected in enhanced-comment-engine.js. Verify this is intentional.`);
+            log('warn', `${message} detected in templates.js. Verify this is intentional.`);
             // Warning only, not error, as it might be a false positive
         }
     });
@@ -72,7 +73,10 @@ requiredDocs.forEach(doc => {
 // 4. Check for "console.log" in production files (optional, but good practice)
 // We'll just warn
 const jsFilesToCheck = [
-    'assets/js/enhanced-comment-engine.js',
+    'assets/js/engine/core.js',
+    'assets/js/engine/processor.js',
+    'assets/js/engine/templates.js',
+    'assets/js/engine/utils.js',
     'assets/js/synonym-manager.js'
 ];
 

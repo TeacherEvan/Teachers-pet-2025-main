@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -12,39 +13,111 @@
             padding: 20px;
             background: #f5f5f5;
         }
+
         .test-container {
             background: white;
             padding: 20px;
             margin: 20px 0;
             border-radius: 8px;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
-        h1 { color: #e74c3c; }
-        h2 { color: #2c3e50; border-bottom: 2px solid #3498db; padding-bottom: 10px; }
-        .issue { background: #fee; border-left: 4px solid #e74c3c; padding: 15px; margin: 20px 0; }
-        .expected { background: #efe; border-left: 4px solid #27ae60; padding: 15px; margin: 20px 0; }
-        .actual { background: #fef5e7; border-left: 4px solid #f39c12; padding: 15px; margin: 20px 0; }
-        .console-log { background: #2c3e50; color: #ecf0f1; padding: 15px; font-family: monospace; font-size: 12px; margin: 10px 0; border-radius: 4px; max-height: 400px; overflow-y: auto; }
-        button { background: #3498db; color: white; border: none; padding: 12px 24px; border-radius: 4px; cursor: pointer; font-size: 14px; margin: 5px; }
-        button:hover { background: #2980b9; }
-        .warning { color: #e74c3c; font-weight: bold; }
-        .success { color: #27ae60; font-weight: bold; }
-        pre { background: #f8f9fa; padding: 10px; border-radius: 4px; overflow-x: auto; }
+
+        h1 {
+            color: #e74c3c;
+        }
+
+        h2 {
+            color: #2c3e50;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 10px;
+        }
+
+        .issue {
+            background: #fee;
+            border-left: 4px solid #e74c3c;
+            padding: 15px;
+            margin: 20px 0;
+        }
+
+        .expected {
+            background: #efe;
+            border-left: 4px solid #27ae60;
+            padding: 15px;
+            margin: 20px 0;
+        }
+
+        .actual {
+            background: #fef5e7;
+            border-left: 4px solid #f39c12;
+            padding: 15px;
+            margin: 20px 0;
+        }
+
+        .console-log {
+            background: #2c3e50;
+            color: #ecf0f1;
+            padding: 15px;
+            font-family: monospace;
+            font-size: 12px;
+            margin: 10px 0;
+            border-radius: 4px;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        button {
+            background: #3498db;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            margin: 5px;
+        }
+
+        button:hover {
+            background: #2980b9;
+        }
+
+        .warning {
+            color: #e74c3c;
+            font-weight: bold;
+        }
+
+        .success {
+            color: #27ae60;
+            font-weight: bold;
+        }
+
+        pre {
+            background: #f8f9fa;
+            padding: 10px;
+            border-radius: 4px;
+            overflow-x: auto;
+        }
     </style>
-    
+
     <!-- Load required scripts -->
     <script src="assets/js/data/engine-data.js"></script>
-    <script src="assets/js/enhanced-comment-engine.js"></script>
+    <!-- Engine Modules (Refactored) -->
+    <script src="assets/js/engine/utils.js"></script>
+    <script src="assets/js/engine/processor.js"></script>
+    <script src="assets/js/engine/templates.js"></script>
+    <script src="assets/js/engine/core.js"></script>
     <script src="assets/js/synonym-manager.js"></script>
     <script src="optimized-comment-generator.js"></script>
 </head>
+
 <body>
     <h1>🔴 Issue Reproduction: Rating 1/10 Produces Rating 10 Comments</h1>
-    
+
     <div class="issue">
         <h3>⚠️ Reported Issue</h3>
-        <p><strong>User complaint:</strong> "This was the comment generated after overall performance was ranked at 1 out of 10!!!!!!"</p>
-        <p><strong>Generated text contained:</strong> "excelled <strong>magnificently</strong>" and "<strong>phenomenal competency</strong> mastery"</p>
+        <p><strong>User complaint:</strong> "This was the comment generated after overall performance was ranked at 1
+            out of 10!!!!!!"</p>
+        <p><strong>Generated text contained:</strong> "excelled <strong>magnificently</strong>" and "<strong>phenomenal
+                competency</strong> mastery"</p>
         <p><strong>Problem:</strong> These phrases are from Rating 10 pool, not Rating 1!</p>
     </div>
 
@@ -52,23 +125,26 @@
         <h2>Test Case 1: Rating = 1 (Munkorn Example)</h2>
         <button onclick="testRating1()">🧪 Run Test with Rating 1</button>
         <button onclick="clearStorage()">🗑️ Clear Storage</button>
-        
+
         <h3>Test Data:</h3>
         <pre id="testData1">Loading...</pre>
-        
+
         <h3>Console Logs (Rating Pipeline):</h3>
         <div class="console-log" id="console1">Click "Run Test" to see debug output...</div>
-        
+
         <div class="expected">
             <h3>✅ Expected for Rating 1:</h3>
             <ul>
                 <li><strong>Performance Level:</strong> "emerging"</li>
-                <li><strong>Verbs:</strong> "explored enthusiastically", "discovered curiously", "began investigating", "started exploring", "commenced discovering"</li>
-                <li><strong>Descriptors:</strong> "discovering learning", "emerging awareness", "starting exploration", "initial curiosity", "beginning discovery"</li>
-                <li><strong>Adverbs:</strong> "curiously", "enthusiastically", "exploratively", "investigatively", "discoveringly"</li>
+                <li><strong>Verbs:</strong> "explored enthusiastically", "discovered curiously", "began investigating",
+                    "started exploring", "commenced discovering"</li>
+                <li><strong>Descriptors:</strong> "discovering learning", "emerging awareness", "starting exploration",
+                    "initial curiosity", "beginning discovery"</li>
+                <li><strong>Adverbs:</strong> "curiously", "enthusiastically", "exploratively", "investigatively",
+                    "discoveringly"</li>
             </ul>
         </div>
-        
+
         <div class="actual">
             <h3>📊 Generated Comment:</h3>
             <div id="result1" style="padding: 10px; background: white; border-radius: 4px; margin-top: 10px;">
@@ -80,7 +156,7 @@
     <div class="test-container">
         <h2>Test Case 2: All Ratings (1-10 Verification)</h2>
         <button onclick="testAllRatings()">🧪 Test All Ratings (1-10)</button>
-        
+
         <h3>Results:</h3>
         <div id="allRatingsResults"></div>
     </div>
@@ -89,7 +165,7 @@
         // Intercept console.log for display
         let consoleLogs = [];
         const originalLog = console.log;
-        console.log = function(...args) {
+        console.log = function (...args) {
             consoleLogs.push(args.map(a => typeof a === 'object' ? JSON.stringify(a, null, 2) : String(a)).join(' '));
             originalLog.apply(console, args);
         };
@@ -102,7 +178,7 @@
 
         async function testRating1() {
             consoleLogs = []; // Clear logs
-            
+
             // Set up exact test data from issue
             const testData = {
                 studentName: 'Munkorn',
@@ -120,10 +196,10 @@
                 grade: 'K1',
                 month: 'November'
             };
-            
+
             // Display test data
             document.getElementById('testData1').textContent = JSON.stringify(testData, null, 2);
-            
+
             // Save to localStorage
             localStorage.setItem('studentData', JSON.stringify(testData));
             console.log('=== TEST SETUP ===');
@@ -131,12 +207,12 @@
             console.log('overallAttributes value:', testData.overallAttributes, 'Type:', typeof testData.overallAttributes);
             console.log('Expected rating after parseInt:', parseInt(testData.overallAttributes));
             console.log('===================\n');
-            
+
             // Generate comment using the system
             try {
                 const generator = new OptimizedCommentGenerator();
                 const result = await generator.generateFromStorage();
-                
+
                 // Display result
                 const resultDiv = document.getElementById('result1');
                 resultDiv.innerHTML = `
@@ -148,12 +224,12 @@
                     <p style="line-height: 1.6;">${result.female}</p>
                     <p><strong>Word count:</strong> ${result.wordCount.female}</p>
                 `;
-                
+
                 // Check for rating 10 phrases (the bug)
                 const maleText = result.male.toLowerCase();
                 const rating10Phrases = ['magnificently', 'phenomenal', 'exceptional', 'excelled magnificently', 'remarkable'];
                 const foundBugPhrases = rating10Phrases.filter(phrase => maleText.includes(phrase));
-                
+
                 if (foundBugPhrases.length > 0) {
                     resultDiv.innerHTML += `
                         <div style="background: #fee; color: #c0392b; padding: 15px; margin-top: 20px; border-radius: 4px; border: 2px solid #e74c3c;">
@@ -164,10 +240,10 @@
                         </div>
                     `;
                 }
-                
+
                 // Display console logs
                 document.getElementById('console1').innerHTML = consoleLogs.join('<br>');
-                
+
             } catch (error) {
                 document.getElementById('result1').innerHTML = `<p style="color: red;">❌ Error: ${error.message}</p>`;
                 console.error('Test failed:', error);
@@ -177,7 +253,7 @@
         async function testAllRatings() {
             const resultsDiv = document.getElementById('allRatingsResults');
             resultsDiv.innerHTML = '<p>Testing all ratings 1-10... Please wait...</p>';
-            
+
             const expectedLevels = {
                 1: 'emerging',
                 2: 'beginning',
@@ -190,9 +266,9 @@
                 9: 'excellent',
                 10: 'exceptional'
             };
-            
+
             let results = '<table style="width: 100%; border-collapse: collapse;"><tr><th>Rating</th><th>Expected Level</th><th>Sample Phrase</th><th>Status</th></tr>';
-            
+
             for (let rating = 1; rating <= 10; rating++) {
                 const testData = {
                     studentName: 'TestStudent',
@@ -203,22 +279,22 @@
                     strengths: '',
                     weaknesses: ''
                 };
-                
+
                 localStorage.setItem('studentData', JSON.stringify(testData));
-                
+
                 const generator = new OptimizedCommentGenerator();
                 const result = await generator.generateFromStorage();
-                
+
                 // Extract a sample phrase (first 50 chars)
                 const sample = result.male.substring(0, 80) + '...';
-                
+
                 // Check if expected level word appears
                 const expectedLevel = expectedLevels[rating];
                 const hasCorrectLevel = result.male.toLowerCase().includes(expectedLevel);
-                
+
                 const status = hasCorrectLevel ? '✅ PASS' : '❌ FAIL';
                 const rowColor = hasCorrectLevel ? '#d4edda' : '#f8d7da';
-                
+
                 results += `<tr style="background: ${rowColor};">
                     <td style="padding: 10px; border: 1px solid #ddd;"><strong>${rating}</strong></td>
                     <td style="padding: 10px; border: 1px solid #ddd;">${expectedLevel}</td>
@@ -226,13 +302,13 @@
                     <td style="padding: 10px; border: 1px solid #ddd;">${status}</td>
                 </tr>`;
             }
-            
+
             results += '</table>';
             resultsDiv.innerHTML = results;
         }
 
         // Display available data on load
-        window.addEventListener('load', function() {
+        window.addEventListener('load', function () {
             const saved = localStorage.getItem('studentData');
             if (saved) {
                 const data = JSON.parse(saved);
@@ -243,4 +319,5 @@
         });
     </script>
 </body>
+
 </html>

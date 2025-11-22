@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -12,22 +13,26 @@
             padding: 20px;
             background: #f5f5f5;
         }
+
         h1 {
             color: #333;
             border-bottom: 3px solid #4CAF50;
             padding-bottom: 10px;
         }
+
         .test-case {
             background: white;
             border-radius: 8px;
             padding: 20px;
             margin: 20px 0;
-            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
+
         .test-case h3 {
             margin-top: 0;
             color: #2196F3;
         }
+
         .test-result {
             padding: 15px;
             margin: 10px 0;
@@ -35,16 +40,19 @@
             font-family: monospace;
             white-space: pre-wrap;
         }
+
         .pass {
             background: #d4edda;
             border: 1px solid #c3e6cb;
             color: #155724;
         }
+
         .fail {
             background: #f8d7da;
             border: 1px solid #f5c6cb;
             color: #721c24;
         }
+
         .comment-output {
             background: #f8f9fa;
             border: 1px solid #dee2e6;
@@ -53,6 +61,7 @@
             border-radius: 4px;
             line-height: 1.6;
         }
+
         button {
             background: #4CAF50;
             color: white;
@@ -63,9 +72,11 @@
             font-size: 16px;
             margin: 5px;
         }
+
         button:hover {
             background: #45a049;
         }
+
         .info {
             background: #d1ecf1;
             border: 1px solid #bee5eb;
@@ -74,6 +85,7 @@
             border-radius: 4px;
             margin: 20px 0;
         }
+
         .summary {
             background: #fff3cd;
             border: 2px solid #ffc107;
@@ -81,21 +93,26 @@
             border-radius: 8px;
             margin: 20px 0;
         }
+
         .summary h2 {
             margin-top: 0;
             color: #856404;
         }
     </style>
 </head>
+
 <body>
     <h1>🔬 I.Q Isolation Test</h1>
-    
+
     <div class="info">
-        <strong>Purpose:</strong> Verify that "I.Q" only appears in generated comments when explicitly selected by the teacher.
+        <strong>Purpose:</strong> Verify that "I.Q" only appears in generated comments when explicitly selected by the
+        teacher.
         <br><br>
-        <strong>Bug:</strong> I.Q was appearing in comments due to keyword overlap ("shape" keyword appears in both I.Q and Physical Education mappings).
+        <strong>Bug:</strong> I.Q was appearing in comments due to keyword overlap ("shape" keyword appears in both I.Q
+        and Physical Education mappings).
         <br><br>
-        <strong>Fix:</strong> Modified <code>inferSubjectsFromTopics()</code> to use DOM structure instead of keyword matching.
+        <strong>Fix:</strong> Modified <code>inferSubjectsFromTopics()</code> to use DOM structure instead of keyword
+        matching.
     </div>
 
     <button onclick="runAllTests()">▶️ Run All Tests</button>
@@ -103,49 +120,53 @@
 
     <div id="results"></div>
 
-    <script src="assets/js/enhanced-comment-engine.js"></script>
+    <!-- Engine Modules (Refactored) -->
+    <script src="assets/js/engine/utils.js"></script>
+    <script src="assets/js/engine/processor.js"></script>
+    <script src="assets/js/engine/templates.js"></script>
+    <script src="assets/js/engine/core.js"></script>
     <script>
         async function testCase(testName, sessionData, shouldContainIQ) {
             const resultsDiv = document.getElementById('results');
             const testDiv = document.createElement('div');
             testDiv.className = 'test-case';
-            
+
             testDiv.innerHTML = `<h3>Test: ${testName}</h3>`;
-            
+
             // Display test inputs
             testDiv.innerHTML += `<div><strong>Subjects:</strong> ${sessionData.subjects.join(', ')}</div>`;
             testDiv.innerHTML += `<div><strong>Topics:</strong> ${Object.keys(sessionData.topicRatings).join(', ')}</div>`;
-            
+
             // Generate comment
             const engine = new EnhancedCommentEngine();
             const comments = await engine.generateComments(sessionData);
             const comment = comments.male || comments.female || '';
-            
+
             testDiv.innerHTML += `<div class="comment-output"><strong>Generated Comment:</strong><br>${comment}</div>`;
-            
+
             // Check if I.Q appears in the comment
             const containsIQ = comment.includes('I.Q');
             const passed = containsIQ === shouldContainIQ;
-            
+
             const resultDiv = document.createElement('div');
             resultDiv.className = `test-result ${passed ? 'pass' : 'fail'}`;
-            
+
             if (passed) {
                 resultDiv.textContent = `✅ PASS: I.Q ${shouldContainIQ ? 'correctly appeared' : 'correctly did NOT appear'} in comment`;
             } else {
                 resultDiv.textContent = `❌ FAIL: I.Q ${containsIQ ? 'appeared' : 'did NOT appear'} but ${shouldContainIQ ? 'should have' : 'should NOT have'}`;
             }
-            
+
             testDiv.appendChild(resultDiv);
             resultsDiv.appendChild(testDiv);
-            
+
             return passed;
         }
 
         async function runAllTests() {
             clearResults();
             const results = [];
-            
+
             // Test 1: I.Q NOT selected, should NOT appear
             results.push(await testCase(
                 'Arts + Physical Education (NO I.Q selected)',
@@ -253,9 +274,9 @@
                     ${passCount === totalCount ? '🎉' : '⚠️'}
                 </div>
                 <div style="margin-top: 10px;">
-                    ${passCount === totalCount 
-                        ? '✅ All tests passed! The I.Q false-positive bug is fixed.' 
-                        : '❌ Some tests failed. The bug may not be fully resolved.'}
+                    ${passCount === totalCount
+                    ? '✅ All tests passed! The I.Q false-positive bug is fixed.'
+                    : '❌ Some tests failed. The bug may not be fully resolved.'}
                 </div>
             `;
             document.getElementById('results').insertBefore(summaryDiv, document.getElementById('results').firstChild);
@@ -266,4 +287,5 @@
         }
     </script>
 </body>
+
 </html>

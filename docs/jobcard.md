@@ -620,6 +620,20 @@ Keyword maps (`subjectTopicMap`) missing K1 November curriculum-specific terms:
 
 ---
 
+### 2025-11-22: Critical Refactoring - Modular Engine
+**Agent:** GitHub Copilot
+
+- **Task:** Split monolithic `enhanced-comment-engine.js` into specialized modules.
+- **Changes:**
+  - Created `assets/js/engine/` directory.
+  - Split logic into `utils.js`, `processor.js`, `templates.js`, and `core.js`.
+  - Updated `Subjects.html` and all test pages to load modules in correct order.
+  - Updated `scripts/verify.js` to validate new structure.
+- **Verification:** `npm run verify` passed. `test-all-subjects-audit.html` updated.
+- **Status:** ✅ Complete.
+
+---
+
 ## Notes & Suggestions
 
 ### Current Curriculum Availability (2025-11-12)

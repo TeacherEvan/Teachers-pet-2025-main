@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -12,22 +13,26 @@
             padding: 20px;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
         }
+
         .container {
             background: white;
             padding: 30px;
             border-radius: 10px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
         }
+
         h1 {
             color: #667eea;
             text-align: center;
         }
+
         h2 {
             color: #764ba2;
             border-bottom: 2px solid #667eea;
             padding-bottom: 10px;
             margin-top: 30px;
         }
+
         .test-case {
             background: #f8f9fa;
             padding: 20px;
@@ -35,6 +40,7 @@
             border-radius: 8px;
             border-left: 4px solid #667eea;
         }
+
         .comment-box {
             background: white;
             padding: 15px;
@@ -42,16 +48,20 @@
             border-radius: 5px;
             border: 1px solid #ddd;
         }
+
         .comment-box h3 {
             margin-top: 0;
             color: #555;
         }
+
         .male-comment {
             border-left: 4px solid #3498db;
         }
+
         .female-comment {
             border-left: 4px solid #e91e63;
         }
+
         .stats {
             background: #e8f4f8;
             padding: 10px;
@@ -60,10 +70,12 @@
             font-size: 0.9em;
             color: #555;
         }
+
         .adjective-count {
             font-weight: bold;
             color: #e91e63;
         }
+
         button {
             background: #667eea;
             color: white;
@@ -74,9 +86,11 @@
             font-size: 16px;
             margin: 10px 5px;
         }
+
         button:hover {
             background: #764ba2;
         }
+
         .loading {
             text-align: center;
             color: #667eea;
@@ -84,6 +98,7 @@
         }
     </style>
 </head>
+
 <body>
     <div class="container">
         <h1>🎯 Adjective Reduction Test</h1>
@@ -100,7 +115,11 @@
         <div id="analysis"></div>
     </div>
 
-    <script src="assets/js/enhanced-comment-engine.js"></script>
+    <!-- Engine Modules (Refactored) -->
+    <script src="assets/js/engine/utils.js"></script>
+    <script src="assets/js/engine/processor.js"></script>
+    <script src="assets/js/engine/templates.js"></script>
+    <script src="assets/js/engine/core.js"></script>
     <script src="assets/js/synonym-manager.js"></script>
     <script>
         const testCases = [
@@ -168,7 +187,7 @@
 
             for (const testCase of testCases) {
                 const result = await engine.generateComments(testCase.data);
-                
+
                 html += `
                     <div class="test-case">
                         <h3>📋 ${testCase.name}</h3>
@@ -206,7 +225,7 @@
                 'vibrant', 'precious', 'gorgeous', 'fabulous', 'marvelous', 'splendid',
                 'brilliant', 'magnificent', 'phenomenal'
             ];
-            
+
             let count = 0;
             emotionalAdjectives.forEach(adj => {
                 const regex = new RegExp('\\b' + adj + '\\b', 'gi');
@@ -270,4 +289,5 @@
         });
     </script>
 </body>
+
 </html>

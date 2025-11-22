@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -24,7 +25,7 @@
             background: white;
             border-radius: 12px;
             padding: 30px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
         }
 
         h1 {
@@ -165,16 +166,19 @@
         }
     </style>
 </head>
+
 <body>
     <div class="container">
         <h1>🧪 Topic-Only Selection Test</h1>
-        <p class="subtitle">Testing comment generation when users select only topics without checking parent subject checkbox</p>
+        <p class="subtitle">Testing comment generation when users select only topics without checking parent subject
+            checkbox</p>
 
         <!-- Test 1: Only topics selected, no subject checkboxes -->
         <div class="test-section">
             <div class="test-title">Test 1: Topic-Only Selection (Core Bug Fix)</div>
             <div class="test-description">
-                User checks only "counting from 1 to 10" under Mathematics without checking the Mathematics subject checkbox itself.
+                User checks only "counting from 1 to 10" under Mathematics without checking the Mathematics subject
+                checkbox itself.
                 <br><strong>Expected:</strong> Comment should mention "In Mathematics, counting from 1 to 10..."
             </div>
             <div class="test-data">
@@ -202,7 +206,8 @@
                 <strong>Strengths:</strong> good listening, helpful attitude<br>
                 <strong>Weaknesses:</strong> concentration<br>
                 <strong>Selected Subjects:</strong> None (empty array)<br>
-                <strong>Selected Topics:</strong> "counting from 1 to 10", "color pictures that are the same", "finger painting"
+                <strong>Selected Topics:</strong> "counting from 1 to 10", "color pictures that are the same", "finger
+                painting"
             </div>
             <button onclick="runTest2()">🚀 Run Test 2</button>
             <div id="result2" class="result"></div>
@@ -212,7 +217,8 @@
         <div class="test-section">
             <div class="test-title">Test 3: Mixed Selection (Subject + Topic-Only)</div>
             <div class="test-description">
-                User checks "English" subject checkbox AND selects only topics from Mathematics (without checking Math checkbox).
+                User checks "English" subject checkbox AND selects only topics from Mathematics (without checking Math
+                checkbox).
                 <br><strong>Expected:</strong> Both English and Mathematics should appear in comments.
             </div>
             <div class="test-data">
@@ -221,7 +227,8 @@
                 <strong>Strengths:</strong> enthusiasm, participation<br>
                 <strong>Weaknesses:</strong> following instructions<br>
                 <strong>Selected Subjects:</strong> English<br>
-                <strong>Selected Topics:</strong> "trace letters starting from the dot", "counting from 1 to 10", "mark picture with correct amount"
+                <strong>Selected Topics:</strong> "trace letters starting from the dot", "counting from 1 to 10", "mark
+                picture with correct amount"
             </div>
             <button onclick="runTest3()">🚀 Run Test 3</button>
             <div id="result3" class="result"></div>
@@ -252,8 +259,11 @@
     </div>
 
     <!-- Load comment engines -->
-    <script src="assets/js/enhanced-comment-engine.js"></script>
-    <script src="enhanced-comment-engine.js"></script>
+    <!-- Engine Modules (Refactored) -->
+    <script src="assets/js/engine/utils.js"></script>
+    <script src="assets/js/engine/processor.js"></script>
+    <script src="assets/js/engine/templates.js"></script>
+    <script src="assets/js/engine/core.js"></script>
 
     <script>
         // Helper function to infer subjects from topics (same as in missing-functions.js)
@@ -279,7 +289,7 @@
 
             topicList.forEach(topic => {
                 const topicLower = topic.toLowerCase();
-                
+
                 for (const [subject, keywords] of Object.entries(topicToSubjectMap)) {
                     if (keywords.some(keyword => topicLower.includes(keyword.toLowerCase()))) {
                         if (!selectedSubjects.some(s => s.toLowerCase() === subject.toLowerCase()) &&
@@ -341,7 +351,7 @@
 
             // Display comments
             html += '<h3>Generated Comments:</h3>';
-            
+
             html += `<div class="comment-box male-comment">
                 <strong>👨‍🏫 Male Teacher Style:</strong><br>
                 ${comments.male}<br>
@@ -366,9 +376,9 @@
             } else {
                 html += `<div class="validation error">
                     <strong>❌ VALIDATION FAILED</strong><br>
-                    Missing subjects: ${missing.map(m => 
-                        `${m.subject} (Male: ${m.inMale ? '✓' : '✗'}, Female: ${m.inFemale ? '✓' : '✗'})`
-                    ).join(', ')}
+                    Missing subjects: ${missing.map(m =>
+                    `${m.subject} (Male: ${m.inMale ? '✓' : '✗'}, Female: ${m.inFemale ? '✓' : '✗'})`
+                ).join(', ')}
                 </div>`;
             }
 
@@ -378,7 +388,7 @@
 
         function runTest1() {
             console.log('🧪 Running Test 1...');
-            
+
             const selectedSubjects = [];
             const topicRatings = {
                 'counting from 1 to 10': 5
@@ -405,7 +415,7 @@
 
         function runTest2() {
             console.log('🧪 Running Test 2...');
-            
+
             const selectedSubjects = [];
             const topicRatings = {
                 'counting from 1 to 10': 5,
@@ -433,7 +443,7 @@
 
         function runTest3() {
             console.log('🧪 Running Test 3...');
-            
+
             const selectedSubjects = ['English'];
             const topicRatings = {
                 'trace letters starting from the dot': 5,
@@ -461,7 +471,7 @@
 
         function runTest4() {
             console.log('🧪 Running Test 4...');
-            
+
             const selectedSubjects = ['Mathematics', 'Science'];
             const topicRatings = {
                 'counting from 1 to 10': 5,
@@ -494,4 +504,5 @@
         }
     </script>
 </body>
+
 </html>
