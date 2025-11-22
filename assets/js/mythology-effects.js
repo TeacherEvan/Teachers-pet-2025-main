@@ -109,115 +109,16 @@ class MythologyTheme {
     }
 
     interceptNavigation() {
-        // We need to hook into the app's navigation
-        // Since we can't easily overwrite the class method instance directly without access to the instance variable 'app'
-        // We will rely on the fact that 'app' is a global variable in student-information.html
-
-        const checkApp = setInterval(() => {
-            if (window.app && window.app.navigateWithTransition) {
-                clearInterval(checkApp);
-                const originalNavigate = window.app.navigateWithTransition.bind(window.app);
-
-                window.app.navigateWithTransition = (url) => {
-                    // Check if we are navigating to Subjects.html (the "Proceed" action)
-                    if (url.includes('Subjects.html')) {
-                        this.shatterAndNavigate(() => originalNavigate(url));
-                    } else {
-                        originalNavigate(url);
-                    }
-                };
-                console.log('🏛️ Mythology Theme: Navigation intercepted');
-            }
-        }, 100);
+        // Shatter effect disabled by user request
+        // Keeping method stub for potential future use
+        console.log('🏛️ Mythology Theme: Navigation intercept disabled');
     }
 
     shatterAndNavigate(callback) {
-        if (this.isShattering) return;
-        this.isShattering = true;
-
-        console.log('🏛️ Mythology Theme: Shattering...');
-
-        // 1. Create Grid
-        const rect = this.container.getBoundingClientRect();
-        const tileSize = 40; // 40x40px tiles
-        const cols = Math.ceil(rect.width / tileSize);
-        const rows = Math.ceil(rect.height / tileSize);
-
-        const containerStyle = window.getComputedStyle(this.container);
-        const bgImage = containerStyle.backgroundImage;
-        const bgColor = containerStyle.backgroundColor;
-
-        // Create a container for tiles to avoid body scroll issues
-        const tileContainer = document.createElement('div');
-        tileContainer.style.position = 'fixed';
-        tileContainer.style.top = '0';
-        tileContainer.style.left = '0';
-        tileContainer.style.width = '100%';
-        tileContainer.style.height = '100%';
-        tileContainer.style.pointerEvents = 'none';
-        tileContainer.style.zIndex = '9999';
-        document.body.appendChild(tileContainer);
-
-        for (let r = 0; r < rows; r++) {
-            for (let c = 0; c < cols; c++) {
-                const tile = document.createElement('div');
-                tile.classList.add('myth-shatter-tile');
-
-                const width = Math.min(tileSize, rect.width - c * tileSize);
-                const height = Math.min(tileSize, rect.height - r * tileSize);
-
-                tile.style.width = `${width}px`;
-                tile.style.height = `${height}px`;
-                tile.style.left = `${rect.left + c * tileSize}px`;
-                tile.style.top = `${rect.top + r * tileSize}px`;
-
-                // Attempt to match background (tricky with noise, but we'll use the generic stone style)
-                // We rely on the CSS class .myth-shatter-tile having the same texture
-
-                tileContainer.appendChild(tile);
-
-                // Animate
-                // Calculate distance from center for explosion direction
-                const centerX = rect.left + rect.width / 2;
-                const centerY = rect.top + rect.height / 2;
-                const tileX = rect.left + c * tileSize + width / 2;
-                const tileY = rect.top + r * tileSize + height / 2;
-
-                const dirX = (tileX - centerX) / (rect.width / 2);
-                const dirY = (tileY - centerY) / (rect.height / 2);
-
-                // Randomize slightly
-                const destX = dirX * 200 + (Math.random() - 0.5) * 100;
-                const destY = dirY * 200 + 500; // Fall down
-                const rotateX = Math.random() * 720;
-                const rotateY = Math.random() * 720;
-                const delay = Math.random() * 0.5; // Random start delay
-
-                tile.style.transition = `transform 2s cubic-bezier(0.25, 1, 0.5, 1) ${delay}s, opacity 2s ease-in ${delay}s`;
-
-                // Trigger reflow
-                void tile.offsetWidth;
-
-                // Apply transform
-                requestAnimationFrame(() => {
-                    tile.style.transform = `translate(${destX}px, ${destY}px) rotate3d(1, 1, 1, ${rotateX}deg)`;
-                    tile.style.opacity = '0';
-                });
-            }
-        }
-
-        // Hide original container
-        this.container.style.opacity = '0';
-        this.container.style.transition = 'opacity 0.1s';
-
-        // Wait 3 seconds then navigate
-        setTimeout(() => {
-            callback();
-        }, 3000);
+        // Disabled
+        callback();
     }
-}
-
-// Initialize when DOM is ready
+}// Initialize when DOM is ready
 document.addEventListener('DOMContentLoaded', () => {
     // Small delay to ensure main app is ready
     setTimeout(() => {
