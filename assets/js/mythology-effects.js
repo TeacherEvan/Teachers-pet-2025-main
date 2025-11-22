@@ -25,8 +25,50 @@ class MythologyTheme {
             input.addEventListener('focus', (e) => this.handleFocus(e));
         });
 
+        // Initialize Energy Slider
+        this.initEnergySlider();
+
         // Intercept navigation
         this.interceptNavigation();
+    }
+
+    initEnergySlider() {
+        const slider = document.getElementById('overallAttributes');
+        const container = document.querySelector('.slider-container');
+
+        if (slider && container) {
+            // Create energy beam element
+            const beam = document.createElement('div');
+            beam.classList.add('energy-beam');
+            container.insertBefore(beam, slider); // Insert behind slider
+
+            // Update function
+            const updateEnergy = () => {
+                const val = parseInt(slider.value);
+                const max = parseInt(slider.max) || 10;
+                const percentage = (val / max) * 100;
+
+                // Calculate intensity (0.2 to 1.0)
+                const intensity = 0.2 + (val / max) * 0.8;
+
+                // Calculate color (Pale Blue -> Gold -> White/Electric)
+                // We'll use CSS variables for this, but set the width/opacity here
+                container.style.setProperty('--energy-width', `${percentage}%`);
+                container.style.setProperty('--energy-intensity', intensity);
+                container.style.setProperty('--energy-level', val);
+
+                // Add shake effect to slider thumb at high levels
+                if (val >= 8) {
+                    slider.classList.add('high-energy');
+                } else {
+                    slider.classList.remove('high-energy');
+                }
+            };
+
+            slider.addEventListener('input', updateEnergy);
+            // Initial call
+            updateEnergy();
+        }
     }
 
     handleInput(e) {

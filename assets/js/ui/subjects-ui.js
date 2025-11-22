@@ -247,7 +247,11 @@ function selectComment(commentNumber) {
 function copySelectedComment() {
     const selectedComment = document.querySelector('.comment-option.selected .comment-box');
     if (!selectedComment) {
-        alert('Please select a comment first.');
+        if (typeof app !== 'undefined' && app.showNotification) {
+            app.showNotification('Please select a comment first.', 'warning');
+        } else {
+            alert('Please select a comment first.');
+        }
         return;
     }
 
@@ -255,7 +259,12 @@ function copySelectedComment() {
 
     if (navigator.clipboard) {
         navigator.clipboard.writeText(text).then(() => {
-            alert('Comment copied to clipboard!');
+            if (typeof app !== 'undefined' && app.showNotification) {
+                app.showNotification('Comment copied to clipboard!', 'success');
+            } else {
+                // Fallback toast if app is missing
+                showFallbackToast('Comment copied to clipboard!');
+            }
         }).catch(err => {
             fallbackCopyToClipboard(text);
         });
@@ -272,12 +281,43 @@ function fallbackCopyToClipboard(text) {
 
     try {
         document.execCommand('copy');
-        alert('Comment copied to clipboard!');
+        if (typeof app !== 'undefined' && app.showNotification) {
+            app.showNotification('Comment copied to clipboard!', 'success');
+        } else {
+            showFallbackToast('Comment copied to clipboard!');
+        }
     } catch (err) {
-        alert('Failed to copy comment. Please select and copy manually.');
+        if (typeof app !== 'undefined' && app.showNotification) {
+            app.showNotification('Failed to copy comment. Please select and copy manually.', 'error');
+        } else {
+            alert('Failed to copy comment. Please select and copy manually.');
+        }
     }
 
     document.body.removeChild(textArea);
+}
+
+function showFallbackToast(message) {
+    const toast = document.createElement('div');
+    toast.textContent = message;
+    toast.style.cssText = `
+        position: fixed;
+        top: 20px;
+        right: 20px;
+        background: #2ecc71;
+        color: white;
+        padding: 15px 25px;
+        border-radius: 8px;
+        box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        z-index: 10000;
+        animation: slideIn 0.3s ease forwards;
+    `;
+    document.body.appendChild(toast);
+    setTimeout(() => {
+        toast.style.opacity = '0';
+        toast.style.transition = 'opacity 0.5s';
+        setTimeout(() => toast.remove(), 500);
+    }, 3000);
 }
 
 function exportReport() {

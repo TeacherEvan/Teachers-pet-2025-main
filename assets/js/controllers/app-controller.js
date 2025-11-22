@@ -240,16 +240,20 @@ document.addEventListener('DOMContentLoaded', () => {
 
 // Global functions for backward compatibility
 window.startOverWithAnimation = () => {
-    if (app && app.controllers.launcher) {
-        app.controllers.launcher.setupStartOver();
-        // The setupStartOver method in LauncherController defines window.startOverWithAnimation
-        // So we might need to call it directly or let it redefine this global
-        // Actually, the LauncherController redefines this global. 
-        // But if we are here, it means the global might not have been redefined yet if we are not on the launcher page.
-        // So we should keep a fallback here.
-    }
+    // 1. Capture current context (Grade/Month) to preserve it
+    let currentGrade = '';
+    let currentMonth = '';
 
-    // Fallback implementation
+    try {
+        const saved = localStorage.getItem('studentData');
+        if (saved) {
+            const data = JSON.parse(saved);
+            currentGrade = data.grade;
+            currentMonth = data.month;
+        }
+    } catch (e) { }
+
+    // 2. Clear everything
     localStorage.clear();
     sessionStorage.clear();
     if (typeof document !== 'undefined') {
@@ -258,13 +262,28 @@ window.startOverWithAnimation = () => {
         });
     }
     if (app) app.resetSessionData();
-    console.log('🧹 All data cleared - starting fresh!');
-    if (app) {
-        app.navigateWithTransition('index.html');
+
+    // 3. Restore context if it existed and navigate to Student Info
+    if (currentGrade && currentMonth) {
+        const preservedData = { grade: currentGrade, month: currentMonth };
+        localStorage.setItem('studentData', JSON.stringify(preservedData));
+        console.log('🧹 Data cleared (Grade/Month preserved)');
+
+        const target = `student-information.html?grade=${currentGrade}&month=${currentMonth}`;
+        if (app) {
+            app.navigateWithTransition(target);
+        } else {
+            document.body.style.opacity = '0';
+            setTimeout(() => { window.location.href = target; }, 300);
+        }
     } else {
-        document.body.style.opacity = '0';
-        setTimeout(() => {
-            window.location.href = 'index.html';
-        }, 300);
+        // Full reset if no context
+        console.log('🧹 All data cleared - starting fresh!');
+        if (app) {
+            app.navigateWithTransition('index.html');
+        } else {
+            document.body.style.opacity = '0';
+            setTimeout(() => { window.location.href = 'index.html'; }, 300);
+        }
     }
 };

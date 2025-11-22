@@ -115,7 +115,20 @@ class LauncherController {
     setupStartOver() {
         // Global start over function
         window.startOverWithAnimation = () => {
-            // Clear ALL localStorage data for a true fresh start
+            // 1. Capture current context (Grade/Month) to preserve it
+            let currentGrade = '';
+            let currentMonth = '';
+
+            try {
+                const saved = localStorage.getItem('studentData');
+                if (saved) {
+                    const data = JSON.parse(saved);
+                    currentGrade = data.grade;
+                    currentMonth = data.month;
+                }
+            } catch (e) { }
+
+            // 2. Clear ALL localStorage data for a true fresh start
             localStorage.clear();
             sessionStorage.clear();
 
@@ -131,13 +144,23 @@ class LauncherController {
                 this.app.resetSessionData();
             }
 
-            console.log('🧹 All data cleared - starting fresh!');
+            // 3. Restore context if it existed and navigate to Student Info
+            if (currentGrade && currentMonth) {
+                const preservedData = { grade: currentGrade, month: currentMonth };
+                localStorage.setItem('studentData', JSON.stringify(preservedData));
+                console.log('🧹 Data cleared (Grade/Month preserved)');
 
-            document.body.classList.add('page-exit');
-
-            setTimeout(() => {
-                window.location.href = 'index.html';
-            }, 600);
+                document.body.classList.add('page-exit');
+                setTimeout(() => {
+                    window.location.href = `student-information.html?grade=${currentGrade}&month=${currentMonth}`;
+                }, 600);
+            } else {
+                console.log('🧹 All data cleared - starting fresh!');
+                document.body.classList.add('page-exit');
+                setTimeout(() => {
+                    window.location.href = 'index.html';
+                }, 600);
+            }
         };
     }
 }

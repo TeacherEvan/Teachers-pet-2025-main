@@ -600,6 +600,26 @@ Keyword maps (`subjectTopicMap`) missing K1 November curriculum-specific terms:
 
 ---
 
+### 2025-11-22: Start Over Workflow Optimization
+**Agent:** GitHub Copilot
+
+**Context:** User requested that "Start Over" should preserve the current Grade/Month selection and return to `student-information.html` instead of resetting completely to `index.html`.
+
+**Changes:**
+- Modified `window.startOverWithAnimation` in both `app-controller.js` and `launcher-controller.js`.
+- **Logic:**
+    1. Reads `grade` and `month` from `localStorage` before clearing.
+    2. Clears all storage (resetting student name, subjects, etc.).
+    3. Restores `grade` and `month` to `localStorage`.
+    4. Redirects to `student-information.html` with query parameters.
+- **Fallback:** If no grade/month is found (e.g., first run), it still redirects to `index.html`.
+
+**Files Modified:**
+- `assets/js/controllers/app-controller.js`
+- `assets/js/controllers/launcher-controller.js`
+
+---
+
 ## Notes & Suggestions
 
 ### Current Curriculum Availability (2025-11-12)
