@@ -6,7 +6,7 @@
 Before implementing ANY feature:
 1. ✅ Use `mcp_context7_resolve-library-id` + `mcp_context7_get-library-docs` for research
 2. ✅ Use `fetch_webpage` to study MDN, GitHub repos, and authoritative sources
-3. ✅ Use `mcp_sequentialthi_sequentialthinking` to break down complex problems
+3. ✅ Use `mcp_sequentialthinking` to break down complex problems
 4. ✅ Use `manage_todo_list` to track progress systematically
 
 **Lesson Learned 2025-11-13:** The synonym system was initially broken because the agent didn't research proper word tracking algorithms. After using MCP tools (Context7, MDN fetch), the correct Map-based approach was found and implemented successfully. DON'T REPEAT THIS MISTAKE!
@@ -107,7 +107,7 @@ Before implementing ANY feature:
 
 ### 2025-11-21: Data Integration Quality Audit - 100% User Input Coverage
 **Agent:** GitHub Copilot
-**MCP Tools Used:** ✅ mcp_context7 (JustValidate research), mcp_sequentialthi_sequentialthinking, manage_todo_list
+**MCP Tools Used:** ✅ mcp_context7 (JustValidate research), mcp_sequentialthinking, manage_todo_list
 
 **Objective:** Audit and verify that EVERY single user input appears in generated comments - no data loss
 

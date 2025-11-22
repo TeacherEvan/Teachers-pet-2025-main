@@ -30,9 +30,10 @@
 
     body {
         font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        /* Dark Space Background */
         background:
-            url('https://images.unsplash.com/photo-1502134249126-9f3755a50d78?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2070&q=80') center/cover no-repeat fixed,
-            radial-gradient(ellipse at center, rgba(30, 39, 70, 0.8) 0%, rgba(15, 15, 35, 0.9) 50%, rgba(0, 0, 0, 0.95) 100%);
+            linear-gradient(rgba(0, 0, 0, 0.7), rgba(0, 0, 0, 0.8)),
+            url('https://images.unsplash.com/photo-1536514498073-50e69d39c6cf?q=80&w=2000&auto=format&fit=crop') center/cover no-repeat fixed;
         min-height: 100vh;
         padding: 20px;
         margin: 0;
@@ -432,21 +433,6 @@
         float: right;
     }
 
-    .test-button {
-        margin-top: 5px;
-        padding: 5px 10px;
-        background: #007bff;
-        color: white;
-        border: none;
-        border-radius: 3px;
-        cursor: pointer;
-        font-size: 12px;
-    }
-
-    .test-button:hover {
-        background: #0056b3;
-    }
-
     .font-weight-600 {
         font-weight: 600;
     }
@@ -647,7 +633,6 @@
                     <label for="studentName">Student Name:</label>
                     <input type="text" id="studentName" name="studentName">
                     <div class="auto-save-indicator" id="nameIndicator">Saved</div>
-                    <button type="button" onclick="testStudentName()" class="test-button">🧪 Test Student Name</button>
                 </div>
                 <div class="form-group margin-bottom-0">
                     <label for="gender">Gender:</label>
@@ -1177,27 +1162,6 @@
             autoSaveFormData();
         }
 
-        function testStudentName() {
-            const studentNameInput = document.getElementById('studentName');
-            const currentValue = studentNameInput.value;
-
-            console.log('🧪 Testing student name:');
-            console.log('  Input value:', currentValue);
-
-            // Force save the form data
-            saveFormData();
-
-            // Check what was saved to localStorage
-            const savedData = localStorage.getItem('studentData');
-            if (savedData) {
-                const parsed = JSON.parse(savedData);
-                console.log('  Saved to localStorage:', parsed.studentName);
-                alert(`✅ Test Results:\n\nInput field value: "${currentValue}"\nSaved to localStorage: "${parsed.studentName}"\n\n${currentValue === parsed.studentName ? '✅ Values match!' : '❌ Values do not match!'}`);
-            } else {
-                alert('❌ No data found in localStorage!');
-            }
-        }
-
         // Enhanced auto-save with better error handling
         function autoSaveFormData() {
             clearTimeout(autoSaveTimeout);
@@ -1241,6 +1205,16 @@
     <script src="assets/js/ui/shared-ui.js"></script>
     <!-- Mythology Effects -->
     <script src="assets/js/mythology-effects.js"></script>
+    <script src="assets/js/controllers/app-controller.js"></script>
+    <script src="assets/js/controllers/student-info-controller.js"></script>
+    <script>
+        // Initialize App
+        document.addEventListener('DOMContentLoaded', () => {
+            window.app = new TeachersPetApp();
+            window.studentInfoController = new StudentInfoController(window.app);
+            window.studentInfoController.init();
+        });
+    </script>
 </body>
 
 </html>
