@@ -114,6 +114,31 @@
         background-color: #229954;
     }
 
+    .recommendation-button {
+        position: absolute;
+        top: 20px;
+        right: 180px;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 14px;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+    }
+
+    .recommendation-button:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+    }
+
+    .recommendation-button:active {
+        transform: translateY(0);
+    }
+
     h1 {
         color: white;
         font-size: 2.2em;
@@ -381,6 +406,7 @@
 
 <body>
     <div class="container">
+        <button type="button" class="recommendation-button" onclick="ensureCommentGeneration()">✨ Make Recommendation</button>
         <button type="button" class="refresh-button" onclick="refreshReport()">🔄 Refresh Report</button>
         <h1>Subject Selection</h1>
         <p class="text-center color-secondary margin-bottom-25 font-family-segoe">
@@ -922,11 +948,6 @@
                 </div>
             </div>
         </div> <!-- .comments-section -->
-
-        <!-- back-button navigation -->
-        <div class="navigation">
-            <button type="button" class="button" onclick="goBack()">← Back to Student Info</button>
-        </div>
 
     </div> <!-- .container -->
 
