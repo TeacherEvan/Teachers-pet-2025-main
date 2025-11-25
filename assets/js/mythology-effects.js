@@ -8,6 +8,7 @@ class MythologyTheme {
         this.container = document.querySelector('.container');
         this.inputs = document.querySelectorAll('input, textarea, select');
         this.isShattering = false;
+        this.debrisThrottle = false; // Initialize throttle flag
 
         if (this.container) {
             this.init();
@@ -23,6 +24,7 @@ class MythologyTheme {
         this.inputs.forEach(input => {
             input.addEventListener('input', (e) => this.handleInput(e));
             input.addEventListener('focus', (e) => this.handleFocus(e));
+            input.addEventListener('blur', (e) => this.handleBlur(e));
         });
 
         // Initialize Energy Slider
@@ -74,10 +76,15 @@ class MythologyTheme {
     handleInput(e) {
         if (this.isShattering) return;
 
-        // 1. Shake Effect
-        this.triggerShake();
+        // No shake on typing - only debris effect
+        // Shake is now only triggered on focus/blur (jumping between fields)
 
-        // 2. Debris Effect
+        // Throttle debris spawning to avoid performance issues when typing fast
+        if (this.debrisThrottle) return;
+        this.debrisThrottle = true;
+        setTimeout(() => { this.debrisThrottle = false; }, 50); // 50ms throttle
+
+        // Debris Effect - Increased particle count for more dramatic "rock breaking"
         // Get input coordinates
         const rect = e.target.getBoundingClientRect();
         // Estimate caret position (rough approximation for performance)
@@ -87,11 +94,16 @@ class MythologyTheme {
         // Actually, "breaking off" implies from the carving action.
         // Let's spawn from the bottom-right of the input, as if chips are falling.
 
-        this.spawnDebris(x, y, 3); // Spawn 3 particles
+        this.spawnDebris(x, y, 6); // Increased from 3 to 6 particles for more dramatic effect (throttled)
     }
 
     handleFocus(e) {
-        // Subtle shake on focus
+        // Shake effect ONLY on focus (jumping to next field)
+        this.triggerShake();
+    }
+
+    handleBlur(e) {
+        // Shake effect also on blur (leaving a field)
         this.triggerShake();
     }
 
