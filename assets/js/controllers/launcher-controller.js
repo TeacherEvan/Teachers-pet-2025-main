@@ -118,6 +118,8 @@ class LauncherController {
             // 1. Capture current context (Grade/Month) to preserve it
             let currentGrade = '';
             let currentMonth = '';
+            // Capture acknowledgment timestamp to preserve it (so modal doesn't reappear unnecessarily)
+            const ackTimestamp = localStorage.getItem('acknowledgmentTimestamp');
 
             try {
                 const saved = localStorage.getItem('studentData');
@@ -144,18 +146,23 @@ class LauncherController {
                 this.app.resetSessionData();
             }
 
+            // Restore acknowledgment timestamp (preserved across all resets)
+            if (ackTimestamp) {
+                localStorage.setItem('acknowledgmentTimestamp', ackTimestamp);
+            }
+
             // 3. Restore context if it existed and navigate to Student Info
             if (currentGrade && currentMonth) {
                 const preservedData = { grade: currentGrade, month: currentMonth };
                 localStorage.setItem('studentData', JSON.stringify(preservedData));
-                console.log('🧹 Data cleared (Grade/Month preserved)');
+                console.log('🧹 Data cleared (Grade/Month & Acknowledgment preserved)');
 
                 document.body.classList.add('page-exit');
                 setTimeout(() => {
                     window.location.href = `student-information.html?grade=${currentGrade}&month=${currentMonth}`;
                 }, 600);
             } else {
-                console.log('🧹 All data cleared - starting fresh!');
+                console.log('🧹 All data cleared - starting fresh! (Acknowledgment preserved)');
                 document.body.classList.add('page-exit');
                 setTimeout(() => {
                     window.location.href = 'index.html';

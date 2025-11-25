@@ -257,8 +257,10 @@
         // Fallback start over function
         window.startOverWithAnimation = window.startOverWithAnimation || function () {
             console.log('Using fallback startOverWithAnimation');
-            // Clear all storage
+            // Clear all storage (preserve acknowledgment timestamp)
+            const ackTimestamp = localStorage.getItem('acknowledgmentTimestamp');
             localStorage.clear();
+            if (ackTimestamp) localStorage.setItem('acknowledgmentTimestamp', ackTimestamp);
             sessionStorage.clear();
             console.log('🧹 All data cleared - starting fresh!');
 

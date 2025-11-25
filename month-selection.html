@@ -616,8 +616,10 @@
         window.addEventListener('load', function () {
             const urlParams = new URLSearchParams(window.location.search);
             if (urlParams.has('fresh')) {
-                // Clear existing data for fresh start
+                // Clear existing data for fresh start (preserve acknowledgment timestamp)
+                const ackTimestamp = localStorage.getItem('acknowledgmentTimestamp');
                 localStorage.clear();
+                if (ackTimestamp) localStorage.setItem('acknowledgmentTimestamp', ackTimestamp);
                 sessionStorage.clear();
                 // Redirect to grade selection
                 window.location.href = 'grade-selection.html?fresh=1';

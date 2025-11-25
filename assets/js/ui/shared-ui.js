@@ -10,7 +10,7 @@
 function captureGradeMonth() {
     let grade = '';
     let month = '';
-    
+
     try {
         const saved = localStorage.getItem('studentData');
         if (saved) {
@@ -24,8 +24,39 @@ function captureGradeMonth() {
         grade = params.get('grade') || '';
         month = params.get('month') || '';
     }
-    
+
     return { grade, month };
+}
+
+/**
+ * Keys to preserve during storage clear operations (persist across "Start Over")
+ * These keys represent user preferences that should survive session resets
+ */
+const PRESERVED_STORAGE_KEYS = ['acknowledgmentTimestamp'];
+
+/**
+ * Smart localStorage clear that preserves specified keys
+ * @param {string[]} keysToPreserve - Array of localStorage keys to preserve
+ */
+function smartClearLocalStorage(keysToPreserve = PRESERVED_STORAGE_KEYS) {
+    // Save values we want to preserve
+    const preserved = {};
+    keysToPreserve.forEach(key => {
+        const value = localStorage.getItem(key);
+        if (value !== null) {
+            preserved[key] = value;
+        }
+    });
+
+    // Clear all
+    localStorage.clear();
+
+    // Restore preserved values
+    Object.entries(preserved).forEach(([key, value]) => {
+        localStorage.setItem(key, value);
+    });
+
+    return preserved;
 }
 
 /**
@@ -34,19 +65,19 @@ function captureGradeMonth() {
  * @param {string} month - Month to preserve
  */
 function clearAndNavigate(grade, month) {
-    // Clear all storage
-    localStorage.clear();
+    // Clear localStorage while preserving user preference keys
+    const preserved = smartClearLocalStorage();
     sessionStorage.clear();
-    
+
     // Restore grade/month if they existed and navigate to student-information
     if (grade && month) {
         const preservedData = { grade: grade, month: month };
         localStorage.setItem('studentData', JSON.stringify(preservedData));
-        console.log('🧹 Data cleared (Grade/Month preserved)');
+        console.log('🧹 Data cleared (Grade/Month preserved, acknowledgment state preserved:', Object.keys(preserved).join(', ') || 'none', ')');
         window.location.href = `student-information.html?grade=${grade}&month=${month}`;
     } else {
         // Full reset if no curriculum was selected
-        console.log('🧹 All data cleared - starting fresh!');
+        console.log('🧹 All data cleared - starting fresh! (acknowledgment state preserved:', Object.keys(preserved).join(', ') || 'none', ')');
         window.location.href = 'index.html';
     }
 }
@@ -62,15 +93,13 @@ function goBack() {
 }
 
 function startOver() {
-    if (confirm('This will clear all data and start over. Are you sure?')) {
-        const { grade, month } = captureGradeMonth();
-        clearAndNavigate(grade, month);
-    }
+    // Removed browser confirm dialog - proceeds directly
+    const { grade, month } = captureGradeMonth();
+    clearAndNavigate(grade, month);
 }
 
 function refreshReport() {
-    if (confirm('This will clear all current data and start over. Are you sure?')) {
-        const { grade, month } = captureGradeMonth();
-        clearAndNavigate(grade, month);
-    }
+    // Removed browser confirm dialog - proceeds directly
+    const { grade, month } = captureGradeMonth();
+    clearAndNavigate(grade, month);
 }

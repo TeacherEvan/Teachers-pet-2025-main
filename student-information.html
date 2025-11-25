@@ -50,11 +50,11 @@
         width: 100%;
         height: 100%;
         background:
-            radial-gradient(2px 2px at 20px 30px, rgba(255, 255, 255, 0.8), transparent),
-            radial-gradient(2px 2px at 40px 70px, rgba(255, 255, 255, 0.6), transparent),
-            radial-gradient(1px 1px at 90px 40px, rgba(255, 255, 255, 0.5), transparent),
-            radial-gradient(1px 1px at 130px 80px, rgba(255, 255, 255, 0.4), transparent),
-            radial-gradient(2px 2px at 160px 30px, rgba(255, 255, 255, 0.7), transparent);
+            radial-gradient(2px 2px at 20px 30px, rgba(255, 255, 255, 1.8), transparent),
+            radial-gradient(2px 2px at 40px 70px, rgba(255, 255, 255, 1.6), transparent),
+            radial-gradient(1px 1px at 90px 40px, rgba(255, 255, 255, 1.5), transparent),
+            radial-gradient(1px 1px at 130px 80px, rgba(255, 255, 255, 1.4), transparent),
+            radial-gradient(2px 2px at 160px 30px, rgba(255, 255, 255, 1.7), transparent);
         background-repeat: repeat;
         background-size: 200px 200px;
         animation: twinkle 20s linear infinite;
@@ -184,7 +184,8 @@
         padding: 12px;
         border: 2px solid #e0e6ed;
         border-radius: 8px;
-        font-size: 14px;
+        font-size: 20px;
+        /* was 14px */
         box-sizing: border-box;
         background: #fff;
         color: #2c3e50;
@@ -939,7 +940,10 @@
             // If coming from index page or URL has fresh parameter, clear any existing data
             if (fromIndex || urlParams.has('fresh')) {
                 console.log('🧹 Fresh start detected - clearing any existing data');
+                // Preserve acknowledgment timestamp across resets
+                const ackTimestamp = localStorage.getItem('acknowledgmentTimestamp');
                 localStorage.clear();
+                if (ackTimestamp) localStorage.setItem('acknowledgmentTimestamp', ackTimestamp);
                 sessionStorage.clear();
                 // Remove the URL parameter if it exists
                 if (urlParams.has('fresh')) {

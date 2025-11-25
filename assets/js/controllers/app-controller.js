@@ -243,6 +243,8 @@ window.startOverWithAnimation = () => {
     // 1. Capture current context (Grade/Month) to preserve it
     let currentGrade = '';
     let currentMonth = '';
+    // Capture acknowledgment timestamp to preserve it (so modal doesn't reappear unnecessarily)
+    let ackTimestamp = localStorage.getItem('acknowledgmentTimestamp');
 
     try {
         const saved = localStorage.getItem('studentData');
@@ -267,7 +269,13 @@ window.startOverWithAnimation = () => {
     if (currentGrade && currentMonth) {
         const preservedData = { grade: currentGrade, month: currentMonth };
         localStorage.setItem('studentData', JSON.stringify(preservedData));
-        console.log('🧹 Data cleared (Grade/Month preserved)');
+
+        // Restore acknowledgment timestamp
+        if (ackTimestamp) {
+            localStorage.setItem('acknowledgmentTimestamp', ackTimestamp);
+        }
+
+        console.log('🧹 Data cleared (Grade/Month & Ack Timestamp preserved)');
 
         const target = `student-information.html?grade=${currentGrade}&month=${currentMonth}`;
         if (app) {
@@ -277,8 +285,11 @@ window.startOverWithAnimation = () => {
             setTimeout(() => { window.location.href = target; }, 300);
         }
     } else {
-        // Full reset if no context
-        console.log('🧹 All data cleared - starting fresh!');
+        // Full reset if no context - still restore ackTimestamp
+        if (ackTimestamp) {
+            localStorage.setItem('acknowledgmentTimestamp', ackTimestamp);
+        }
+        console.log('🧹 All data cleared - starting fresh! (Ack Timestamp preserved)');
         if (app) {
             app.navigateWithTransition('index.html');
         } else {

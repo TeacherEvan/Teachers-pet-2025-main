@@ -15,6 +15,44 @@ Before implementing ANY feature:
 
 ## Recent Work (Newest First)
 
+### 2025-11-25: Start Over - Remove Browser Confirm & Preserve Acknowledgment Timer
+**Agent:** GitHub Copilot
+
+**Context:** User reported two issues:
+1. Browser native `confirm()` dialog appearing when clicking "Start Over" - user wanted it removed
+2. "Important Notice" acknowledgment modal was resetting every time "Start Over" was clicked because `localStorage.clear()` erased the 30-day timer
+
+**Problem:** The "Start Over" flow was clearing ALL localStorage data including the `acknowledgmentTimestamp` key that tracks when the user last acknowledged the Important Notice modal.
+
+**Solution:**
+- **Removed browser confirm dialogs** from `startOver()` and `refreshReport()` functions
+- **Created `smartClearLocalStorage()` helper** in `shared-ui.js` with `PRESERVED_STORAGE_KEYS` array
+- **Updated all 7 files** with `localStorage.clear()` calls to preserve `acknowledgmentTimestamp`:
+  - `assets/js/ui/shared-ui.js` - Added smart clear helper, removed confirm()
+  - `assets/js/controllers/app-controller.js` - Fixed both branches to restore ackTimestamp
+  - `assets/js/controllers/launcher-controller.js` - Added ackTimestamp preservation
+  - `student-information.html` - Fresh start detection preserves ackTimestamp
+  - `month-selection.html` - Fresh start handler preserves ackTimestamp
+  - `grade-selection.html` - Fresh start handler preserves ackTimestamp
+  - `index.html` - Fallback startOverWithAnimation preserves ackTimestamp
+
+**Pattern Used:**
+```javascript
+// Save before clear
+const ackTimestamp = localStorage.getItem('acknowledgmentTimestamp');
+localStorage.clear();
+// Restore after clear
+if (ackTimestamp) localStorage.setItem('acknowledgmentTimestamp', ackTimestamp);
+```
+
+**Verification:**
+1. Click "I Understand - Continue" on Important Notice modal
+2. Click "Start Over" button - NO browser confirm dialog appears
+3. Modal should NOT appear again (timestamp preserved)
+4. After 30 days, modal will reappear
+
+---
+
 ### 2025-11-22: Monthly Acknowledgment Timer
 **Agent:** GitHub Copilot
 
