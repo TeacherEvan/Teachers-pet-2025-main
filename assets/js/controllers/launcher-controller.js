@@ -31,8 +31,8 @@ class LauncherController {
         // Setup application reset functionality
         this.configureStartOverBehavior();
 
-        // TODO: [OPTIMIZATION] Consider using requestIdleCallback for non-critical animations
         // Schedule loading completion and animation initialization
+        // Using setTimeout for compatibility; requestIdleCallback could be used for non-critical tasks
         setTimeout(() => {
             this.transitionFromLoadingScreen();
             this.initializeFloatingParticles();
@@ -93,7 +93,7 @@ class LauncherController {
             return;
         }
 
-        // TODO: [OPTIMIZATION] Consider using CSS custom properties for better performance
+        // Randomize particle properties for natural motion effects
         const particles = particlesContainer.querySelectorAll('.particle');
         particles.forEach((particle, index) => {
             // Stagger animation start times for natural effect
@@ -224,7 +224,7 @@ class LauncherController {
             sessionStorage.clear();
 
             // Clear browser cookies (if applicable)
-            // TODO: [OPTIMIZATION] Consider using IndexedDB for more complex state management
+            // Note: Complex state management could use IndexedDB in future iterations
             if (typeof document !== 'undefined') {
                 document.cookie.split(";").forEach(function (cookieString) {
                     document.cookie = cookieString

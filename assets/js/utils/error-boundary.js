@@ -69,8 +69,21 @@ class ErrorBoundary {
         // Show user-friendly error message
         this.displayUserFriendlyError(errorInfo);
 
-        // TODO: [OPTIMIZATION] Send errors to monitoring service (e.g., Sentry, LogRocket)
-        // this.sendToMonitoringService(errorInfo);
+        // Send errors to monitoring service in production
+        if (this.isProduction && window.location.hostname !== 'localhost') {
+            this.sendErrorToMonitoring(errorInfo);
+        }
+    }
+
+    /**
+     * Send error to monitoring service (extensibility point)
+     * @param {Object} errorInfo - Error information to send
+     */
+    sendErrorToMonitoring(errorInfo) {
+        // Extensibility point for external monitoring services
+        // Examples: Sentry, LogRocket, Datadog, New Relic
+        // Implementation would depend on which service is chosen
+        console.log('📊 Error would be sent to monitoring service:', errorInfo.message);
     }
 
     /**

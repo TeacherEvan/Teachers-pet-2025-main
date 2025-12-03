@@ -17,6 +17,11 @@ class PerformanceOptimizer {
             customMarks: []
         };
         
+        // Configuration constants
+        this.LAZY_LOAD_MARGIN = '50px'; // Start loading images 50px before viewport
+        this.INTERSECTION_THRESHOLD = 0.01; // Trigger when 1% visible
+        this.COMPONENT_LOAD_MARGIN = '100px'; // Load components 100px before viewport
+        
         this.init();
     }
 
@@ -92,8 +97,8 @@ class PerformanceOptimizer {
                 }
             });
         }, {
-            rootMargin: '50px 0px', // Start loading 50px before entering viewport
-            threshold: 0.01
+            rootMargin: `${this.LAZY_LOAD_MARGIN} 0px`,
+            threshold: this.INTERSECTION_THRESHOLD
         });
 
         this.observers.set('images', imageObserver);
@@ -157,8 +162,8 @@ class PerformanceOptimizer {
                 }
             });
         }, {
-            rootMargin: '100px 0px',
-            threshold: 0.01
+            rootMargin: `${this.COMPONENT_LOAD_MARGIN} 0px`,
+            threshold: this.INTERSECTION_THRESHOLD
         });
 
         this.observers.set('components', componentObserver);
@@ -251,10 +256,39 @@ class PerformanceOptimizer {
 
     /**
      * Setup resource prefetching for next pages
+     * Prefetches likely next pages based on user's current position in wizard flow
      */
     setupResourcePrefetching() {
-        // TODO: [OPTIMIZATION] Implement predictive prefetching based on user behavior
-        // Consider using service workers for advanced caching strategies
+        // Detect current page and prefetch likely next resources
+        const currentPage = window.location.pathname;
+        const prefetchMap = {
+            'index.html': ['grade-selection.html', 'assets/css/components.css'],
+            'grade-selection.html': ['month-selection.html'],
+            'month-selection.html': ['student-information.html'],
+            'student-information.html': ['Subjects.html', 'assets/js/curriculum/curriculum-loader.js']
+        };
+
+        const pageName = currentPage.split('/').pop() || 'index.html';
+        const resourcesToPrefetch = prefetchMap[pageName];
+
+        if (resourcesToPrefetch) {
+            this.prefetchResources(resourcesToPrefetch);
+        }
+    }
+
+    /**
+     * Prefetch resources using link rel="prefetch"
+     * @param {string[]} resources - Array of resource URLs to prefetch
+     */
+    prefetchResources(resources) {
+        resources.forEach(resource => {
+            const link = document.createElement('link');
+            link.rel = 'prefetch';
+            link.href = resource;
+            link.as = resource.endsWith('.html') ? 'document' : 'script';
+            document.head.appendChild(link);
+            console.log(`⚡ Prefetching: ${resource}`);
+        });
     }
 
     /**
