@@ -1,54 +1,119 @@
+/**
+ * Launcher Controller - Main Landing Page Controller
+ * Manages initialization, animations, and user interactions on the landing page
+ * @class LauncherController
+ */
 class LauncherController {
-    constructor(app) {
-        this.app = app;
+    constructor(appInstance) {
+        this.app = appInstance;
+        this.LOADING_SCREEN_DURATION_MS = 1200; // Premium loading experience duration
+        this.isInitialized = false;
     }
 
+    /**
+     * Initialize the launcher page with premium loading experience
+     * Orchestrates loading screen, particles, and micro-interactions
+     */
     init() {
-        // Initialize premium loading screen
-        this.showLoadingScreen();
+        if (this.isInitialized) {
+            console.warn('LauncherController already initialized');
+            return;
+        }
 
-        // Setup start over functionality
-        this.setupStartOver();
+        // Mark performance point
+        if (window.performanceOptimizer) {
+            window.performanceOptimizer.mark('launcher-init-start');
+        }
 
-        // Initialize particles and animations
+        // Show premium loading screen
+        this.displayLoadingScreen();
+
+        // Setup application reset functionality
+        this.configureStartOverBehavior();
+
+        // Schedule loading completion and animation initialization
+        // Using setTimeout for compatibility; requestIdleCallback could be used for non-critical tasks
         setTimeout(() => {
-            this.hideLoadingScreen();
-            this.initParticles();
-            this.setupMicroInteractions();
-        }, 1200);
+            this.transitionFromLoadingScreen();
+            this.initializeFloatingParticles();
+            this.enhanceInteractiveElements();
+            
+            if (window.performanceOptimizer) {
+                window.performanceOptimizer.mark('launcher-init-complete');
+                window.performanceOptimizer.measure(
+                    'launcher-initialization',
+                    'launcher-init-start',
+                    'launcher-init-complete'
+                );
+            }
+        }, this.LOADING_SCREEN_DURATION_MS);
+
+        this.isInitialized = true;
     }
 
-    showLoadingScreen() {
+    /**
+     * Display the premium loading screen with fade-in effect
+     */
+    displayLoadingScreen() {
         const loadingScreen = document.getElementById('loadingScreen');
         if (loadingScreen) {
             loadingScreen.style.display = 'flex';
+            loadingScreen.setAttribute('aria-busy', 'true');
+            loadingScreen.setAttribute('role', 'status');
         }
     }
 
-    hideLoadingScreen() {
+    /**
+     * Transition from loading screen to main content with smooth animations
+     */
+    transitionFromLoadingScreen() {
         const loadingScreen = document.getElementById('loadingScreen');
         const appContainer = document.getElementById('appContainer');
 
         if (loadingScreen && appContainer) {
             loadingScreen.classList.add('fade-out');
+            loadingScreen.setAttribute('aria-busy', 'false');
             appContainer.classList.add('fade-in');
+            
+            // Remove loading screen from DOM after animation completes
+            setTimeout(() => {
+                loadingScreen.style.display = 'none';
+            }, 600);
         }
     }
 
-    initParticles() {
+    /**
+     * Initialize floating particle animations with randomized properties
+     * Creates dynamic background effects for premium visual experience
+     */
+    initializeFloatingParticles() {
         const particlesContainer = document.querySelector('.particles-container');
-        if (!particlesContainer) return;
+        if (!particlesContainer) {
+            console.warn('Particles container not found');
+            return;
+        }
 
+        // Randomize particle properties for natural motion effects
         const particles = particlesContainer.querySelectorAll('.particle');
         particles.forEach((particle, index) => {
+            // Stagger animation start times for natural effect
             particle.style.animationDelay = `${index * 0.5}s`;
+            
+            // Randomize horizontal position
             particle.style.left = `${Math.random() * 100}%`;
-            particle.style.animationDuration = `${8 + Math.random() * 4}s`;
+            
+            // Vary animation duration for depth effect (8-12 seconds)
+            const duration = 8 + Math.random() * 4;
+            particle.style.animationDuration = `${duration}s`;
         });
     }
 
-    setupMicroInteractions() {
-        // Add hover effects to action cards
+    /**
+     * Enhance interactive elements with premium micro-interactions
+     * Adds hover effects and ripple animations to buttons and cards
+     */
+    enhanceInteractiveElements() {
+        // Enhance action cards with smooth transform effects
         const actionCards = document.querySelectorAll('.action-card');
         actionCards.forEach(card => {
             card.addEventListener('mouseenter', () => {
@@ -60,27 +125,36 @@ class LauncherController {
             });
         });
 
-        // Add click ripple effect to buttons
-        const buttons = document.querySelectorAll('.btn-primary, .btn-secondary');
-        buttons.forEach(button => {
-            button.addEventListener('click', (e) => this.createRippleEffect(e));
+        // Add Material Design ripple effect to all interactive buttons
+        const interactiveButtons = document.querySelectorAll('.btn-primary, .btn-secondary');
+        interactiveButtons.forEach(button => {
+            button.addEventListener('click', (event) => this.createMaterialRippleEffect(event));
         });
     }
 
-    createRippleEffect(event) {
+    /**
+     * Create Material Design ripple effect on button click
+     * Provides tactile feedback for user interactions
+     * @param {MouseEvent} event - The click event containing coordinates
+     */
+    createMaterialRippleEffect(event) {
         const button = event.currentTarget;
-        const ripple = document.createElement('span');
-        const rect = button.getBoundingClientRect();
-        const size = Math.max(rect.width, rect.height);
-        const x = event.clientX - rect.left - size / 2;
-        const y = event.clientY - rect.top - size / 2;
+        const rippleElement = document.createElement('span');
+        const buttonRect = button.getBoundingClientRect();
+        
+        // Calculate ripple size (diameter of the button's largest dimension)
+        const rippleSize = Math.max(buttonRect.width, buttonRect.height);
+        
+        // Calculate ripple position relative to button (centered on click point)
+        const clickX = event.clientX - buttonRect.left - rippleSize / 2;
+        const clickY = event.clientY - buttonRect.top - rippleSize / 2;
 
-        ripple.style.cssText = `
+        rippleElement.style.cssText = `
       position: absolute;
-      width: ${size}px;
-      height: ${size}px;
-      left: ${x}px;
-      top: ${y}px;
+      width: ${rippleSize}px;
+      height: ${rippleSize}px;
+      left: ${clickX}px;
+      top: ${clickY}px;
       background: rgba(255, 255, 255, 0.3);
       border-radius: 50%;
       transform: scale(0);
@@ -88,11 +162,29 @@ class LauncherController {
       pointer-events: none;
     `;
 
-        // Add ripple animation keyframes if not exists
-        if (!document.querySelector('#ripple-styles')) {
-            const style = document.createElement('style');
-            style.id = 'ripple-styles';
-            style.textContent = `
+        // Inject ripple animation CSS if not already present
+        this.injectRippleAnimationStyles();
+
+        // Ensure button has proper positioning context
+        button.style.position = 'relative';
+        button.style.overflow = 'hidden';
+        button.appendChild(rippleElement);
+
+        // Remove ripple element after animation completes
+        setTimeout(() => {
+            rippleElement.remove();
+        }, 600);
+    }
+
+    /**
+     * Inject CSS animation styles for ripple effect
+     * Only adds styles once to avoid duplication
+     */
+    injectRippleAnimationStyles() {
+        if (!document.querySelector('#ripple-animation-styles')) {
+            const styleElement = document.createElement('style');
+            styleElement.id = 'ripple-animation-styles';
+            styleElement.textContent = `
         @keyframes ripple {
           to {
             transform: scale(4);
@@ -100,67 +192,80 @@ class LauncherController {
           }
         }
       `;
-            document.head.appendChild(style);
+            document.head.appendChild(styleElement);
         }
-
-        button.style.position = 'relative';
-        button.style.overflow = 'hidden';
-        button.appendChild(ripple);
-
-        setTimeout(() => {
-            ripple.remove();
-        }, 600);
     }
 
-    setupStartOver() {
-        // Global start over function
+    /**
+     * Configure "Start Over" functionality with context preservation
+     * Clears application data while optionally preserving grade/month context
+     * Provides smooth page transition for better UX
+     */
+    configureStartOverBehavior() {
+        // Global function accessible from all pages
         window.startOverWithAnimation = () => {
-            // 1. Capture current context (Grade/Month) to preserve it
-            let currentGrade = '';
-            let currentMonth = '';
+            // Step 1: Capture current curriculum context for preservation
+            let preservedGrade = '';
+            let preservedMonth = '';
 
             try {
-                const saved = localStorage.getItem('studentData');
-                if (saved) {
-                    const data = JSON.parse(saved);
-                    currentGrade = data.grade;
-                    currentMonth = data.month;
+                const savedData = localStorage.getItem('studentData');
+                if (savedData) {
+                    const parsedData = JSON.parse(savedData);
+                    preservedGrade = parsedData.grade;
+                    preservedMonth = parsedData.month;
                 }
-            } catch (e) { }
+            } catch (error) {
+                console.warn('Could not parse saved data:', error);
+            }
 
-            // 2. Clear ALL localStorage data for a true fresh start
+            // Step 2: Perform comprehensive data cleanup
             localStorage.clear();
             sessionStorage.clear();
 
-            // Clear any cookies (if applicable)
+            // Clear browser cookies (if applicable)
+            // Note: Complex state management could use IndexedDB in future iterations
             if (typeof document !== 'undefined') {
-                document.cookie.split(";").forEach(function (c) {
-                    document.cookie = c.replace(/^ +/, "").replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/");
+                document.cookie.split(";").forEach(function (cookieString) {
+                    document.cookie = cookieString
+                        .replace(/^ +/, "")
+                        .replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/");
                 });
             }
 
-            // Reset the session data
-            if (this.app) {
+            // Reset application session state
+            if (this.app && typeof this.app.resetSessionData === 'function') {
                 this.app.resetSessionData();
             }
 
-            // 3. Restore context if it existed and navigate to Student Info
-            if (currentGrade && currentMonth) {
-                const preservedData = { grade: currentGrade, month: currentMonth };
-                localStorage.setItem('studentData', JSON.stringify(preservedData));
-                console.log('🧹 Data cleared (Grade/Month preserved)');
+            // Step 3: Restore curriculum context and navigate appropriately
+            if (preservedGrade && preservedMonth) {
+                // Preserve grade/month for continuity
+                const contextData = { grade: preservedGrade, month: preservedMonth };
+                localStorage.setItem('studentData', JSON.stringify(contextData));
+                console.log('🧹 Data cleared (Grade/Month preserved for context)');
 
-                document.body.classList.add('page-exit');
-                setTimeout(() => {
-                    window.location.href = `student-information.html?grade=${currentGrade}&month=${currentMonth}`;
-                }, 600);
+                // Navigate to student information page with preserved context
+                this.navigateWithPageTransition(
+                    `student-information.html?grade=${preservedGrade}&month=${preservedMonth}`
+                );
             } else {
+                // Complete fresh start - return to landing page
                 console.log('🧹 All data cleared - starting fresh!');
-                document.body.classList.add('page-exit');
-                setTimeout(() => {
-                    window.location.href = 'index.html';
-                }, 600);
+                this.navigateWithPageTransition('index.html');
             }
         };
+    }
+
+    /**
+     * Navigate to a new page with smooth exit animation
+     * @param {string} targetUrl - The URL to navigate to
+     */
+    navigateWithPageTransition(targetUrl) {
+        document.body.classList.add('page-exit');
+        
+        setTimeout(() => {
+            window.location.href = targetUrl;
+        }, 600); // Match CSS transition duration
     }
 }

@@ -1,0 +1,528 @@
+/**
+ * Premium Micro-Interactions & Advanced Animations
+ * Enhanced glassmorphism with modern interaction patterns
+ */
+
+/* ===========================
+   PREMIUM GLASSMORPHISM ENHANCEMENTS
+   =========================== */
+
+.glass-card,
+.action-card,
+.glass-container {
+    position: relative;
+    overflow: hidden;
+}
+
+/* Hover glow effect */
+.glass-card::before,
+.action-card::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 200px;
+    height: 200px;
+    background: radial-gradient(circle, rgba(102, 126, 234, 0.4) 0%, transparent 70%);
+    transform: translate(-50%, -50%) scale(0);
+    transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+    pointer-events: none;
+    z-index: 0;
+}
+
+.glass-card:hover::before,
+.action-card:hover::before {
+    transform: translate(-50%, -50%) scale(2);
+}
+
+/* Enhanced border shimmer on hover */
+.glass-card::after,
+.action-card::after {
+    content: '';
+    position: absolute;
+    inset: -2px;
+    border-radius: inherit;
+    background: linear-gradient(
+        60deg,
+        transparent 0%,
+        rgba(102, 126, 234, 0.5) 50%,
+        transparent 100%
+    );
+    background-size: 200% 100%;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    pointer-events: none;
+    z-index: -1;
+    animation: shimmer-border 3s linear infinite;
+}
+
+.glass-card:hover::after,
+.action-card:hover::after {
+    opacity: 1;
+}
+
+@keyframes shimmer-border {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+}
+
+/* ===========================
+   SMOOTH TRANSITIONS & TRANSFORMS
+   =========================== */
+
+/* Premium scale and lift on hover */
+.hover-scale {
+    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+                box-shadow 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.hover-scale:hover {
+    transform: translateY(-8px) scale(1.03);
+    box-shadow: 
+        0 20px 60px rgba(31, 38, 135, 0.4),
+        0 0 30px rgba(102, 126, 234, 0.3),
+        inset 0 0 40px rgba(255, 255, 255, 0.1);
+}
+
+.hover-scale:active {
+    transform: translateY(-4px) scale(1.01);
+    transition: transform 0.1s ease;
+}
+
+/* Smooth button press effect */
+.btn-primary,
+.btn-secondary {
+    position: relative;
+    transform-style: preserve-3d;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.btn-primary:active,
+.btn-secondary:active {
+    transform: scale(0.96);
+}
+
+/* Button glow pulse on hover */
+.btn-primary:hover,
+.btn-secondary:hover {
+    animation: button-glow-pulse 2s ease-in-out infinite;
+}
+
+@keyframes button-glow-pulse {
+    0%, 100% {
+        box-shadow: 
+            0 8px 25px rgba(0, 0, 0, 0.3),
+            0 0 20px rgba(102, 126, 234, 0.4);
+    }
+    50% {
+        box-shadow: 
+            0 12px 35px rgba(0, 0, 0, 0.4),
+            0 0 35px rgba(102, 126, 234, 0.6);
+    }
+}
+
+/* ===========================
+   LOADING & SKELETON STATES
+   =========================== */
+
+.skeleton-loading {
+    pointer-events: none;
+    user-select: none;
+}
+
+.skeleton-wrapper {
+    padding: 20px;
+    animation: skeleton-fade-in 0.3s ease-out;
+}
+
+@keyframes skeleton-fade-in {
+    from {
+        opacity: 0;
+        transform: translateY(10px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.skeleton-line {
+    background: linear-gradient(
+        90deg,
+        rgba(255, 255, 255, 0.08) 0%,
+        rgba(255, 255, 255, 0.18) 50%,
+        rgba(255, 255, 255, 0.08) 100%
+    );
+    background-size: 200% 100%;
+    animation: skeleton-shimmer 1.5s ease-in-out infinite;
+    border-radius: 8px;
+    height: 20px;
+    margin: 12px 0;
+}
+
+@keyframes skeleton-shimmer {
+    0% { background-position: -200% 0; }
+    100% { background-position: 200% 0; }
+}
+
+/* Content fade-in after loading */
+.skeleton-loaded {
+    animation: content-fade-in 0.5s ease-out;
+}
+
+@keyframes content-fade-in {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* ===========================
+   FOCUS STATES & ACCESSIBILITY
+   =========================== */
+
+/* Premium focus ring */
+*:focus-visible {
+    outline: 3px solid rgba(102, 126, 234, 0.6);
+    outline-offset: 4px;
+    border-radius: 4px;
+}
+
+/* Enhanced focus for interactive elements */
+button:focus-visible,
+a:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+    outline: 3px solid rgba(102, 126, 234, 0.8);
+    outline-offset: 4px;
+    box-shadow: 
+        0 0 0 6px rgba(102, 126, 234, 0.2),
+        0 4px 20px rgba(102, 126, 234, 0.3);
+    transition: all 0.2s ease-out;
+}
+
+/* ===========================
+   OPTIMISTIC UI PATTERNS
+   =========================== */
+
+/* Loading state for buttons */
+button.loading {
+    position: relative;
+    color: transparent;
+    pointer-events: none;
+}
+
+button.loading::before {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 20px;
+    height: 20px;
+    margin: -10px 0 0 -10px;
+    border: 3px solid transparent;
+    border-top-color: currentColor;
+    border-radius: 50%;
+    color: white;
+    animation: button-spinner 0.8s linear infinite;
+}
+
+@keyframes button-spinner {
+    to { transform: rotate(360deg); }
+}
+
+/* Success state animation */
+button.success {
+    background: linear-gradient(135deg, #27ae60, #229954) !important;
+    animation: success-pulse 0.6s ease-out;
+}
+
+@keyframes success-pulse {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.05); }
+}
+
+button.success::after {
+    content: '✓';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    font-size: 20px;
+    animation: success-check 0.4s ease-out;
+}
+
+@keyframes success-check {
+    from {
+        opacity: 0;
+        transform: translate(-50%, -50%) scale(0);
+    }
+    to {
+        opacity: 1;
+        transform: translate(-50%, -50%) scale(1);
+    }
+}
+
+/* Error state animation */
+button.error {
+    background: linear-gradient(135deg, #e74c3c, #c0392b) !important;
+    animation: error-shake 0.5s ease-out;
+}
+
+@keyframes error-shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-10px); }
+    75% { transform: translateX(10px); }
+}
+
+/* ===========================
+   PAGE TRANSITIONS
+   =========================== */
+
+/* Fade and slide transitions */
+.page-enter {
+    opacity: 0;
+    transform: translateY(30px) scale(0.98);
+}
+
+.page-enter-active {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+    transition: opacity 0.6s cubic-bezier(0.4, 0, 0.2, 1),
+                transform 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.page-exit {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+}
+
+.page-exit-active {
+    opacity: 0;
+    transform: translateY(-30px) scale(0.98);
+    transition: opacity 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+                transform 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* ===========================
+   FLOATING PARTICLES
+   =========================== */
+
+.particles-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    overflow: hidden;
+    z-index: 1;
+}
+
+.particle {
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.8), transparent);
+    border-radius: 50%;
+    animation: float-particle 20s infinite ease-in-out;
+    opacity: 0.6;
+}
+
+.particle:nth-child(1) {
+    left: 10%;
+    animation-delay: 0s;
+    animation-duration: 18s;
+}
+
+.particle:nth-child(2) {
+    left: 30%;
+    animation-delay: 2s;
+    animation-duration: 22s;
+}
+
+.particle:nth-child(3) {
+    left: 50%;
+    animation-delay: 4s;
+    animation-duration: 20s;
+}
+
+.particle:nth-child(4) {
+    left: 70%;
+    animation-delay: 6s;
+    animation-duration: 24s;
+}
+
+.particle:nth-child(5) {
+    left: 90%;
+    animation-delay: 8s;
+    animation-duration: 19s;
+}
+
+@keyframes float-particle {
+    0% {
+        transform: translateY(100vh) translateX(0) scale(0);
+        opacity: 0;
+    }
+    10% {
+        opacity: 0.6;
+    }
+    90% {
+        opacity: 0.6;
+    }
+    100% {
+        transform: translateY(-100px) translateX(100px) scale(1);
+        opacity: 0;
+    }
+}
+
+/* ===========================
+   PROGRESSIVE ENHANCEMENT
+   =========================== */
+
+/* Reduce motion for accessibility */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+    
+    .particle {
+        display: none;
+    }
+}
+
+/* High contrast mode support */
+@media (prefers-contrast: high) {
+    .glass-card,
+    .action-card,
+    .glass-container {
+        border: 2px solid currentColor;
+    }
+    
+    button:focus-visible {
+        outline: 4px solid currentColor;
+    }
+}
+
+/* Dark mode enhancements */
+@media (prefers-color-scheme: dark) {
+    .skeleton-line {
+        background: linear-gradient(
+            90deg,
+            rgba(255, 255, 255, 0.05) 0%,
+            rgba(255, 255, 255, 0.15) 50%,
+            rgba(255, 255, 255, 0.05) 100%
+        );
+    }
+}
+
+/* ===========================
+   TOOLTIP ENHANCEMENTS
+   =========================== */
+
+.premium-tooltip {
+    font-family: 'Inter', 'Segoe UI', system-ui, sans-serif;
+    letter-spacing: 0.3px;
+    text-align: center;
+}
+
+.premium-tooltip::after {
+    content: '';
+    position: absolute;
+    bottom: -6px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 0;
+    height: 0;
+    border-left: 6px solid transparent;
+    border-right: 6px solid transparent;
+    border-top: 6px solid rgba(0, 0, 0, 0.9);
+}
+
+/* ===========================
+   INPUT ENHANCEMENTS
+   =========================== */
+
+/* Floating label effect */
+.form-group-floating {
+    position: relative;
+}
+
+.form-group-floating label {
+    position: absolute;
+    top: 50%;
+    left: 16px;
+    transform: translateY(-50%);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    pointer-events: none;
+    background: transparent;
+    padding: 0 4px;
+}
+
+.form-group-floating input:focus + label,
+.form-group-floating input:not(:placeholder-shown) + label {
+    top: -8px;
+    font-size: 12px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    padding: 2px 8px;
+    border-radius: 4px;
+}
+
+/* Input validation states */
+.form-input.valid {
+    border-color: #27ae60;
+    box-shadow: 0 0 0 3px rgba(39, 174, 96, 0.2);
+}
+
+.form-input.invalid {
+    border-color: #e74c3c;
+    box-shadow: 0 0 0 3px rgba(231, 76, 60, 0.2);
+    animation: input-shake 0.4s ease-out;
+}
+
+@keyframes input-shake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-8px); }
+    75% { transform: translateX(8px); }
+}
+
+/* ===========================
+   PERFORMANCE OPTIMIZATIONS
+   =========================== */
+
+/* GPU acceleration for animations */
+.gpu-accelerated,
+.glass-card,
+.action-card,
+.btn-primary,
+.btn-secondary,
+.particle {
+    will-change: transform;
+    transform: translateZ(0);
+    backface-visibility: hidden;
+}
+
+/* Lazy load optimization */
+img[loading="lazy"] {
+    opacity: 0;
+    transition: opacity 0.3s ease-in;
+}
+
+img[loading="lazy"].loaded {
+    opacity: 1;
+}
+
+/* Content visibility for off-screen content */
+.lazy-section {
+    content-visibility: auto;
+    contain-intrinsic-size: 500px;
+}

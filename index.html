@@ -25,10 +25,13 @@
     <link rel="preload" href="assets/css/components.css" as="style">
     <link rel="preload" href="assets/js/controllers/app-controller.js" as="script">
     <link rel="preload" href="assets/js/comment-engine.js" as="script">
+    <link rel="preload" href="assets/js/utils/performance-optimizer.js" as="script">
+    <link rel="preload" href="assets/js/utils/ui-enhancements.js" as="script">
 
     <!-- CSS -->
     <link rel="stylesheet" href="assets/css/main.css">
     <link rel="stylesheet" href="assets/css/components.css">
+    <link rel="stylesheet" href="assets/css/micro-interactions.css">
     <style>
         /* Critical CSS for instant loading */
 
@@ -268,6 +271,10 @@
             }, 300);
         };
     </script>
+    <!-- Performance & UX Enhancement Scripts -->
+    <script src="assets/js/utils/error-boundary.js" defer></script>
+    <script src="assets/js/utils/performance-optimizer.js" defer></script>
+    <script src="assets/js/utils/ui-enhancements.js" defer></script>
     <script src="assets/js/comment-engine.js?v=2" defer></script>
     <script src="assets/js/controllers/launcher-controller.js" defer></script>
     <script src="assets/js/controllers/app-controller.js" defer></script>
