@@ -1,7 +1,8 @@
 /**
- * Performance Optimization Utilities
- * Implements lazy loading, code splitting, and progressive enhancement
+ * Performance Optimization Utilities - Production Grade 2024
+ * Implements lazy loading, code splitting, progressive enhancement, and Core Web Vitals optimization
  * @module PerformanceOptimizer
+ * @version 2.0.0
  */
 
 /* eslint-env browser */
@@ -11,16 +12,27 @@ class PerformanceOptimizer {
     constructor() {
         this.observers = new Map();
         this.loadedModules = new Map();
+        this.resourcePrefetchQueue = [];
+        this.idleCallbacks = new Map();
         this.performanceMetrics = {
             startTime: performance.now(),
             resourceTimings: [],
-            customMarks: []
+            customMarks: [],
+            coreWebVitals: {
+                LCP: null,
+                FID: null,
+                CLS: null,
+                FCP: null,
+                TTFB: null
+            }
         };
         
-        // Configuration constants
+        // Configuration constants optimized for 2024 best practices
         this.LAZY_LOAD_MARGIN = '50px'; // Start loading images 50px before viewport
         this.INTERSECTION_THRESHOLD = 0.01; // Trigger when 1% visible
         this.COMPONENT_LOAD_MARGIN = '100px'; // Load components 100px before viewport
+        this.PREFETCH_PRIORITY = ['high', 'medium', 'low'];
+        this.IDLE_CALLBACK_TIMEOUT = 2000; // Max wait time for idle callback
         
         this.init();
     }
@@ -208,27 +220,35 @@ class PerformanceOptimizer {
     }
 
     /**
-     * Monitor Core Web Vitals (LCP, FID, CLS)
+     * Monitor Core Web Vitals (LCP, FID, CLS, FCP, TTFB) - Enhanced 2024 version
      */
     monitorCoreWebVitals() {
-        // Monitor Largest Contentful Paint (LCP)
+        // Monitor Largest Contentful Paint (LCP) - Target: <2.5s
         if ('PerformanceObserver' in window) {
             try {
                 const lcpObserver = new PerformanceObserver((entryList) => {
                     const entries = entryList.getEntries();
                     const lastEntry = entries[entries.length - 1];
-                    console.log(`📊 LCP: ${lastEntry.renderTime || lastEntry.loadTime}ms`);
+                    const lcpValue = lastEntry.renderTime || lastEntry.loadTime;
+                    this.performanceMetrics.coreWebVitals.LCP = lcpValue;
+                    
+                    const rating = lcpValue <= 2500 ? '✅ Good' : lcpValue <= 4000 ? '⚠️ Needs Improvement' : '❌ Poor';
+                    console.log(`📊 LCP: ${lcpValue.toFixed(2)}ms ${rating}`);
                 });
                 lcpObserver.observe({ entryTypes: ['largest-contentful-paint'] });
             } catch (e) {
                 console.warn('Could not observe LCP:', e);
             }
 
-            // Monitor First Input Delay (FID)
+            // Monitor First Input Delay (FID) - Target: <100ms
             try {
                 const fidObserver = new PerformanceObserver((entryList) => {
                     entryList.getEntries().forEach(entry => {
-                        console.log(`📊 FID: ${entry.processingStart - entry.startTime}ms`);
+                        const fidValue = entry.processingStart - entry.startTime;
+                        this.performanceMetrics.coreWebVitals.FID = fidValue;
+                        
+                        const rating = fidValue <= 100 ? '✅ Good' : fidValue <= 300 ? '⚠️ Needs Improvement' : '❌ Poor';
+                        console.log(`📊 FID: ${fidValue.toFixed(2)}ms ${rating}`);
                     });
                 });
                 fidObserver.observe({ entryTypes: ['first-input'] });
@@ -236,7 +256,7 @@ class PerformanceOptimizer {
                 console.warn('Could not observe FID:', e);
             }
 
-            // Monitor Cumulative Layout Shift (CLS)
+            // Monitor Cumulative Layout Shift (CLS) - Target: <0.1
             try {
                 let clsScore = 0;
                 const clsObserver = new PerformanceObserver((entryList) => {
@@ -245,49 +265,155 @@ class PerformanceOptimizer {
                             clsScore += entry.value;
                         }
                     });
-                    console.log(`📊 CLS: ${clsScore.toFixed(4)}`);
+                    this.performanceMetrics.coreWebVitals.CLS = clsScore;
+                    
+                    const rating = clsScore <= 0.1 ? '✅ Good' : clsScore <= 0.25 ? '⚠️ Needs Improvement' : '❌ Poor';
+                    console.log(`📊 CLS: ${clsScore.toFixed(4)} ${rating}`);
                 });
                 clsObserver.observe({ entryTypes: ['layout-shift'] });
             } catch (e) {
                 console.warn('Could not observe CLS:', e);
             }
+
+            // Monitor First Contentful Paint (FCP) - Target: <1.8s
+            try {
+                const fcpObserver = new PerformanceObserver((entryList) => {
+                    const entries = entryList.getEntries();
+                    const fcpEntry = entries[0];
+                    if (fcpEntry) {
+                        const fcpValue = fcpEntry.startTime;
+                        this.performanceMetrics.coreWebVitals.FCP = fcpValue;
+                        
+                        const rating = fcpValue <= 1800 ? '✅ Good' : fcpValue <= 3000 ? '⚠️ Needs Improvement' : '❌ Poor';
+                        console.log(`📊 FCP: ${fcpValue.toFixed(2)}ms ${rating}`);
+                    }
+                });
+                fcpObserver.observe({ entryTypes: ['paint'] });
+            } catch (e) {
+                console.warn('Could not observe FCP:', e);
+            }
+
+            // Monitor Time to First Byte (TTFB) - Target: <600ms
+            try {
+                const navigationTiming = performance.getEntriesByType('navigation')[0];
+                if (navigationTiming) {
+                    const ttfbValue = navigationTiming.responseStart - navigationTiming.requestStart;
+                    this.performanceMetrics.coreWebVitals.TTFB = ttfbValue;
+                    
+                    const rating = ttfbValue <= 600 ? '✅ Good' : ttfbValue <= 1500 ? '⚠️ Needs Improvement' : '❌ Poor';
+                    console.log(`📊 TTFB: ${ttfbValue.toFixed(2)}ms ${rating}`);
+                }
+            } catch (e) {
+                console.warn('Could not measure TTFB:', e);
+            }
         }
     }
 
     /**
-     * Setup resource prefetching for next pages
+     * Setup resource prefetching for next pages - Enhanced with priority hints
      * Prefetches likely next pages based on user's current position in wizard flow
      */
     setupResourcePrefetching() {
         // Detect current page and prefetch likely next resources
         const currentPage = window.location.pathname;
         const prefetchMap = {
-            'index.html': ['grade-selection.html', 'assets/css/components.css'],
-            'grade-selection.html': ['month-selection.html'],
-            'month-selection.html': ['student-information.html'],
-            'student-information.html': ['Subjects.html', 'assets/js/curriculum/curriculum-loader.js']
+            'index.html': [
+                { url: 'grade-selection.html', priority: 'high', type: 'document' },
+                { url: 'assets/css/components.css', priority: 'medium', type: 'style' }
+            ],
+            'grade-selection.html': [
+                { url: 'month-selection.html', priority: 'high', type: 'document' }
+            ],
+            'month-selection.html': [
+                { url: 'student-information.html', priority: 'high', type: 'document' }
+            ],
+            'student-information.html': [
+                { url: 'Subjects.html', priority: 'high', type: 'document' },
+                { url: 'assets/js/curriculum/curriculum-loader.js', priority: 'medium', type: 'script' }
+            ]
         };
 
         const pageName = currentPage.split('/').pop() || 'index.html';
         const resourcesToPrefetch = prefetchMap[pageName];
 
         if (resourcesToPrefetch) {
-            this.prefetchResources(resourcesToPrefetch);
+            // Use requestIdleCallback for non-critical prefetching
+            this.requestIdleCallback(() => {
+                this.prefetchResources(resourcesToPrefetch);
+            });
         }
+        
+        // Add DNS prefetch for external resources
+        this.setupDNSPrefetch();
+        
+        // Add preconnect for critical third-party origins
+        this.setupPreconnect();
     }
 
     /**
-     * Prefetch resources using link rel="prefetch"
-     * @param {string[]} resources - Array of resource URLs to prefetch
+     * Setup DNS prefetch for external resources
+     */
+    setupDNSPrefetch() {
+        const externalDomains = [
+            'https://fonts.googleapis.com',
+            'https://fonts.gstatic.com',
+            'https://images.unsplash.com'
+        ];
+        
+        externalDomains.forEach(domain => {
+            const link = document.createElement('link');
+            link.rel = 'dns-prefetch';
+            link.href = domain;
+            document.head.appendChild(link);
+        });
+        
+        console.log('🔗 DNS prefetch configured for external domains');
+    }
+
+    /**
+     * Setup preconnect for critical third-party origins
+     */
+    setupPreconnect() {
+        const criticalOrigins = [
+            'https://fonts.googleapis.com',
+            'https://fonts.gstatic.com'
+        ];
+        
+        criticalOrigins.forEach(origin => {
+            const link = document.createElement('link');
+            link.rel = 'preconnect';
+            link.href = origin;
+            link.crossOrigin = 'anonymous';
+            document.head.appendChild(link);
+        });
+        
+        console.log('🔗 Preconnect configured for critical origins');
+    }
+
+    /**
+     * Prefetch resources using link rel="prefetch" with priority hints
+     * @param {Array<{url: string, priority: string, type: string}>} resources - Array of resource objects to prefetch
      */
     prefetchResources(resources) {
-        resources.forEach(resource => {
+        // Sort by priority
+        const sortedResources = resources.sort((a, b) => {
+            const priorityOrder = { high: 0, medium: 1, low: 2 };
+            return priorityOrder[a.priority] - priorityOrder[b.priority];
+        });
+        
+        sortedResources.forEach(resource => {
             const link = document.createElement('link');
             link.rel = 'prefetch';
-            link.href = resource;
-            link.as = resource.endsWith('.html') ? 'document' : 'script';
+            link.href = resource.url;
+            link.as = resource.type;
+            
+            // Add fetchpriority for supported browsers
+            if ('fetchPriority' in link) {
+                link.fetchPriority = resource.priority;
+            }
+            
             document.head.appendChild(link);
-            console.log(`⚡ Prefetching: ${resource}`);
+            console.log(`⚡ Prefetching (${resource.priority}): ${resource.url}`);
         });
     }
 
@@ -321,42 +447,164 @@ class PerformanceOptimizer {
     }
 
     /**
-     * Request idle callback wrapper with fallback
+     * Request idle callback wrapper with fallback and timeout support
+     * @param {Function} callback - Function to execute when idle
+     * @param {Object} options - Options including timeout
+     * @returns {number} - Callback ID
      */
-    requestIdleCallback(callback) {
+    requestIdleCallback(callback, options = {}) {
+        const timeout = options.timeout || this.IDLE_CALLBACK_TIMEOUT;
+        
         if ('requestIdleCallback' in window) {
-            return window.requestIdleCallback(callback);
+            const id = window.requestIdleCallback(callback, { timeout });
+            this.idleCallbacks.set(id, { callback, timestamp: Date.now() });
+            return id;
         }
+        
         // Fallback for browsers without requestIdleCallback
-        return setTimeout(() => callback({ didTimeout: false, timeRemaining: () => 50 }), 1);
+        const id = setTimeout(() => {
+            callback({ 
+                didTimeout: false, 
+                timeRemaining: () => 50 
+            });
+        }, 1);
+        
+        this.idleCallbacks.set(id, { callback, timestamp: Date.now() });
+        return id;
+    }
+    
+    /**
+     * Cancel idle callback
+     * @param {number} id - Callback ID to cancel
+     */
+    cancelIdleCallback(id) {
+        if ('cancelIdleCallback' in window) {
+            window.cancelIdleCallback(id);
+        } else {
+            clearTimeout(id);
+        }
+        this.idleCallbacks.delete(id);
+    }
+    
+    /**
+     * Schedule non-critical task to run when browser is idle
+     * @param {Function} task - Task to execute
+     * @param {string} taskName - Name for logging
+     */
+    scheduleIdleTask(task, taskName = 'idle-task') {
+        this.requestIdleCallback((deadline) => {
+            this.mark(`${taskName}-start`);
+            
+            try {
+                task(deadline);
+                this.mark(`${taskName}-end`);
+                this.measure(taskName, `${taskName}-start`, `${taskName}-end`);
+            } catch (error) {
+                console.error(`Error in idle task ${taskName}:`, error);
+            }
+        });
     }
 
     /**
-     * Get performance report
+     * Get comprehensive performance report with Core Web Vitals
+     * @returns {Object} - Detailed performance metrics
      */
     getPerformanceReport() {
         const endTime = performance.now();
         const totalTime = endTime - this.performanceMetrics.startTime;
+        const navigationTiming = performance.getEntriesByType('navigation')[0];
 
         return {
             totalTime: totalTime.toFixed(2),
+            coreWebVitals: {
+                LCP: this.performanceMetrics.coreWebVitals.LCP?.toFixed(2) || 'N/A',
+                FID: this.performanceMetrics.coreWebVitals.FID?.toFixed(2) || 'N/A',
+                CLS: this.performanceMetrics.coreWebVitals.CLS?.toFixed(4) || 'N/A',
+                FCP: this.performanceMetrics.coreWebVitals.FCP?.toFixed(2) || 'N/A',
+                TTFB: this.performanceMetrics.coreWebVitals.TTFB?.toFixed(2) || 'N/A'
+            },
             marks: this.performanceMetrics.customMarks,
-            resources: performance.getEntriesByType('resource'),
-            navigation: performance.getEntriesByType('navigation')[0],
-            loadedModules: Array.from(this.loadedModules.keys())
+            resources: {
+                total: performance.getEntriesByType('resource').length,
+                scripts: performance.getEntriesByType('resource').filter(r => r.initiatorType === 'script').length,
+                stylesheets: performance.getEntriesByType('resource').filter(r => r.initiatorType === 'link' || r.initiatorType === 'css').length,
+                images: performance.getEntriesByType('resource').filter(r => r.initiatorType === 'img').length,
+                fonts: performance.getEntriesByType('resource').filter(r => r.name.includes('.woff') || r.name.includes('.ttf')).length
+            },
+            navigation: navigationTiming ? {
+                domContentLoaded: (navigationTiming.domContentLoadedEventEnd - navigationTiming.domContentLoadedEventStart).toFixed(2),
+                loadComplete: (navigationTiming.loadEventEnd - navigationTiming.loadEventStart).toFixed(2),
+                domInteractive: navigationTiming.domInteractive?.toFixed(2) || 'N/A'
+            } : null,
+            loadedModules: Array.from(this.loadedModules.keys()),
+            idleCallbacks: this.idleCallbacks.size,
+            observersActive: this.observers.size
         };
     }
 
     /**
-     * Log performance report to console
+     * Log comprehensive performance report to console
      */
     logPerformanceReport() {
         const report = this.getPerformanceReport();
-        console.group('⚡ Performance Report');
-        console.log(`Total Time: ${report.totalTime}ms`);
+        console.group('⚡ Performance Report - Production Grade 2024');
+        console.log(`%c🕐 Total Runtime: ${report.totalTime}ms`, 'color: #4CAF50; font-weight: bold');
+        
+        console.group('📊 Core Web Vitals');
+        console.log(`LCP (Largest Contentful Paint): ${report.coreWebVitals.LCP}ms`);
+        console.log(`FID (First Input Delay): ${report.coreWebVitals.FID}ms`);
+        console.log(`CLS (Cumulative Layout Shift): ${report.coreWebVitals.CLS}`);
+        console.log(`FCP (First Contentful Paint): ${report.coreWebVitals.FCP}ms`);
+        console.log(`TTFB (Time to First Byte): ${report.coreWebVitals.TTFB}ms`);
+        console.groupEnd();
+        
+        console.group('📦 Resources Loaded');
+        console.log(`Total: ${report.resources.total}`);
+        console.log(`Scripts: ${report.resources.scripts}`);
+        console.log(`Stylesheets: ${report.resources.stylesheets}`);
+        console.log(`Images: ${report.resources.images}`);
+        console.log(`Fonts: ${report.resources.fonts}`);
+        console.groupEnd();
+        
+        if (report.navigation) {
+            console.group('🚀 Navigation Timing');
+            console.log(`DOM Content Loaded: ${report.navigation.domContentLoaded}ms`);
+            console.log(`Load Complete: ${report.navigation.loadComplete}ms`);
+            console.log(`DOM Interactive: ${report.navigation.domInteractive}ms`);
+            console.groupEnd();
+        }
+        
+        console.group('🔧 Optimization Status');
         console.log(`Loaded Modules: ${report.loadedModules.length}`);
+        console.log(`Active Observers: ${report.observersActive}`);
+        console.log(`Idle Callbacks: ${report.idleCallbacks}`);
+        console.groupEnd();
+        
         console.log('Custom Marks:', report.marks);
         console.groupEnd();
+        
+        return report;
+    }
+    
+    /**
+     * Export performance metrics for analytics
+     * @returns {Object} - Metrics formatted for analytics
+     */
+    exportMetrics() {
+        const report = this.getPerformanceReport();
+        return {
+            timestamp: new Date().toISOString(),
+            page: window.location.pathname,
+            metrics: {
+                totalTime: parseFloat(report.totalTime),
+                lcp: report.coreWebVitals.LCP !== 'N/A' ? parseFloat(report.coreWebVitals.LCP) : null,
+                fid: report.coreWebVitals.FID !== 'N/A' ? parseFloat(report.coreWebVitals.FID) : null,
+                cls: report.coreWebVitals.CLS !== 'N/A' ? parseFloat(report.coreWebVitals.CLS) : null,
+                fcp: report.coreWebVitals.FCP !== 'N/A' ? parseFloat(report.coreWebVitals.FCP) : null,
+                ttfb: report.coreWebVitals.TTFB !== 'N/A' ? parseFloat(report.coreWebVitals.TTFB) : null
+            },
+            resources: report.resources
+        };
     }
 }
 

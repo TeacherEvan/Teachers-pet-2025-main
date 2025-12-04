@@ -2,6 +2,7 @@
     "name": "teachers-pet-2025",
     "version": "1.0.0",
     "description": "Static HTML/JS application for generating student comments",
+    "type": "module",
     "scripts": {
         "verify": "node scripts/verify.js",
         "test": "echo \"Error: no test specified\" && exit 1",
