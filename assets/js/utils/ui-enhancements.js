@@ -1,7 +1,8 @@
 /**
- * Premium UI Enhancements
- * Implements micro-interactions, animations, and premium visual effects
+ * Premium UI Enhancements - Production Grade 2024
+ * Implements micro-interactions, animations, glassmorphism effects, and accessibility
  * @module UIEnhancements
+ * @version 2.0.0
  */
 
 /* eslint-env browser */
@@ -11,7 +12,41 @@ class UIEnhancements {
     constructor() {
         this.activeAnimations = new Set();
         this.interactionHandlers = new Map();
+        this.darkMode = false;
+        this.reducedMotion = false;
+        this.hapticSupported = 'vibrate' in navigator;
+        
+        this.detectUserPreferences();
         this.init();
+    }
+
+    /**
+     * Detect user preferences for accessibility
+     */
+    detectUserPreferences() {
+        // Detect prefers-reduced-motion
+        if (window.matchMedia) {
+            const reducedMotionQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+            this.reducedMotion = reducedMotionQuery.matches;
+            
+            reducedMotionQuery.addEventListener('change', (e) => {
+                this.reducedMotion = e.matches;
+                console.log(`🎯 Reduced motion ${this.reducedMotion ? 'enabled' : 'disabled'}`);
+            });
+        }
+        
+        // Detect prefers-color-scheme
+        if (window.matchMedia) {
+            const darkModeQuery = window.matchMedia('(prefers-color-scheme: dark)');
+            this.darkMode = darkModeQuery.matches;
+            
+            darkModeQuery.addEventListener('change', (e) => {
+                this.darkMode = e.matches;
+                this.applyColorScheme(e.matches);
+            });
+        }
+        
+        console.log(`🎨 User preferences: Dark mode ${this.darkMode ? 'on' : 'off'}, Reduced motion ${this.reducedMotion ? 'on' : 'off'}`);
     }
 
     /**
@@ -24,11 +59,146 @@ class UIEnhancements {
         this.setupSmoothScrolling();
         this.setupFocusEnhancements();
         this.setupTooltips();
-        console.log('✨ UI Enhancements initialized');
+        this.setupHapticFeedback();
+        this.setupKeyboardShortcuts();
+        this.setupFormEnhancements();
+        console.log('✨ UI Enhancements initialized (2024 Production Grade)');
+    }
+
+    /**
+     * Apply color scheme based on user preference
+     */
+    applyColorScheme(isDark) {
+        document.documentElement.setAttribute('data-theme', isDark ? 'dark' : 'light');
+        console.log(`🎨 Color scheme set to ${isDark ? 'dark' : 'light'} mode`);
+    }
+
+    /**
+     * Setup haptic feedback for touch interactions
+     */
+    setupHapticFeedback() {
+        if (!this.hapticSupported) {
+            console.log('📱 Haptic feedback not supported on this device');
+            return;
+        }
+        
+        const hapticElements = document.querySelectorAll('.btn-primary, .btn-secondary, button, .clickable');
+        
+        hapticElements.forEach(element => {
+            element.addEventListener('click', () => {
+                this.triggerHapticFeedback('light');
+            });
+        });
+        
+        console.log('📱 Haptic feedback enabled');
+    }
+
+    /**
+     * Trigger haptic feedback
+     * @param {string} type - 'light', 'medium', 'heavy'
+     */
+    triggerHapticFeedback(type = 'light') {
+        if (!this.hapticSupported) return;
+        
+        const patterns = {
+            light: 10,
+            medium: 20,
+            heavy: 30
+        };
+        
+        navigator.vibrate(patterns[type] || 10);
+    }
+
+    /**
+     * Setup keyboard shortcuts for power users
+     */
+    setupKeyboardShortcuts() {
+        document.addEventListener('keydown', (e) => {
+            // Ctrl/Cmd + K for quick navigation
+            if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+                e.preventDefault();
+                this.showQuickNavigation();
+            }
+            
+            // Escape to close modals/overlays
+            if (e.key === 'Escape') {
+                this.closeOverlays();
+            }
+        });
+        
+        console.log('⌨️ Keyboard shortcuts enabled');
+    }
+
+    /**
+     * Show quick navigation menu
+     */
+    showQuickNavigation() {
+        // TODO: Implement quick navigation overlay
+        console.log('🚀 Quick navigation triggered');
+    }
+
+    /**
+     * Close all overlays
+     */
+    closeOverlays() {
+        const overlays = document.querySelectorAll('.modal, .overlay, .dropdown-open');
+        overlays.forEach(overlay => {
+            overlay.classList.remove('active', 'open', 'dropdown-open');
+        });
+    }
+
+    /**
+     * Setup form enhancements for better UX
+     */
+    setupFormEnhancements() {
+        const inputs = document.querySelectorAll('input, textarea, select');
+        
+        inputs.forEach(input => {
+            // Add floating label effect
+            input.addEventListener('focus', () => {
+                if (input.parentElement) {
+                    input.parentElement.classList.add('input-focused');
+                }
+            });
+            
+            input.addEventListener('blur', () => {
+                if (input.parentElement) {
+                    input.parentElement.classList.remove('input-focused');
+                    if (input.value) {
+                        input.parentElement.classList.add('input-filled');
+                    } else {
+                        input.parentElement.classList.remove('input-filled');
+                    }
+                }
+            });
+            
+            // Real-time validation feedback
+            input.addEventListener('input', () => {
+                this.validateInput(input);
+            });
+        });
+        
+        console.log('📝 Form enhancements enabled');
+    }
+
+    /**
+     * Validate input and provide visual feedback
+     */
+    validateInput(input) {
+        if (input.validity.valid) {
+            input.classList.remove('invalid');
+            input.classList.add('valid');
+        } else {
+            input.classList.remove('valid');
+            if (input.value.length > 0) {
+                input.classList.add('invalid');
+            }
+        }
     }
 
     /**
      * Setup premium hover effects with glassmorphism
+     * Respects user's reduced motion preference
      */
     setupHoverEffects() {
         const hoverElements = document.querySelectorAll('.action-card, .btn-primary, .btn-secondary, .glass-card');
@@ -43,26 +213,35 @@ class UIEnhancements {
                 this.enhanceHoverState(e.target, false);
             });
 
-            // Add cursor tracking for premium effect
-            element.addEventListener('mousemove', (e) => {
-                this.trackCursorGlow(e, element);
-            });
+            // Add cursor tracking for premium effect (only if motion is not reduced)
+            if (!this.reducedMotion) {
+                element.addEventListener('mousemove', (e) => {
+                    this.trackCursorGlow(e, element);
+                });
+            }
         });
     }
 
     /**
      * Enhance hover state with premium glassmorphism effects
+     * Adapts based on reduced motion preference
      */
     enhanceHoverState(element, isHovering) {
+        const duration = this.reducedMotion ? 0.1 : 0.4;
+        
         if (isHovering) {
-            element.style.transform = 'translateY(-4px) scale(1.02)';
+            element.style.transform = this.reducedMotion ? 'none' : 'translateY(-4px) scale(1.02)';
             element.style.boxShadow = '0 16px 48px rgba(31, 38, 135, 0.35), 0 0 20px rgba(102, 126, 234, 0.3)';
             element.style.backdropFilter = 'blur(25px)';
-            element.style.transition = 'all 0.4s cubic-bezier(0.4, 0, 0.2, 1)';
+            element.style.transition = `all ${duration}s cubic-bezier(0.4, 0, 0.2, 1)`;
+            
+            // Add ARIA live region update for screen readers
+            element.setAttribute('aria-pressed', 'true');
         } else {
-            element.style.transform = 'translateY(0) scale(1)';
+            element.style.transform = 'none';
             element.style.boxShadow = '';
             element.style.backdropFilter = '';
+            element.setAttribute('aria-pressed', 'false');
         }
     }
 
