@@ -245,14 +245,14 @@ class EnhancedCommentEngine {
         // REVERTED 2025-11-21: Removed grade/month display (logic only)
 
         const templates = isMale ? [
-            `${data.name} demonstrated ${data.level} performance this term, achieving consistent and ${data.descriptor} progress across multiple developmental areas.`,
-            `${data.name} has shown ${data.level} academic development throughout the term, displaying structured and ${data.descriptor} engagement with learning objectives.`,
-            `${data.name} ${data.verb} during this term, establishing strong foundational competencies and ${data.descriptor} mastery in essential educational areas.`,
-            `Throughout the term, ${data.name} exhibited ${data.level} performance, demonstrating ${data.descriptor} growth in key developmental domains.`,
-            `${data.name} has met ${data.level} benchmarks this term with focused determination and systematic approach to learning activities.`,
-            `In class, ${data.name} attained ${data.level} results through methodical effort and consistent application to objectives.`,
-            `${data.name}'s performance this term reflects ${data.level} achievement with measurable advancement across core competency areas.`,
-            `The academic record shows ${data.name} accomplished ${data.level} standards this term through dedicated focus and persistent effort.`
+            `${data.name} demonstrated ${data.level} performance this term, achieving ${data.descriptor} across multiple developmental areas.`,
+            `${data.name} has shown ${data.level} academic development throughout the term, displaying ${data.descriptor} in learning objectives.`,
+            `${data.name} ${data.verb} during this term, establishing foundational competencies with ${data.descriptor} in essential educational areas.`,
+            `Throughout the term, ${data.name} exhibited ${data.level} performance, demonstrating ${data.descriptor} in key developmental domains.`,
+            `${data.name} has met ${data.level} benchmarks this term through systematic approach and focused application to learning activities.`,
+            `In class, ${data.name} attained ${data.level} results through methodical engagement with course objectives.`,
+            `${data.name}'s performance this term reflects ${data.level} achievement with measurable advancement across competency areas.`,
+            `The academic record shows ${data.name} accomplished ${data.level} standards this term through dedicated focus on learning goals.`
         ] : [
             `${data.name} has had an enriching time this term, bringing energy and enthusiastic participation to our classroom community.`,
             `It has been a pleasure watching ${data.name} grow and develop ${data.adverb} throughout the term, making ${data.level} progress.`,
@@ -274,23 +274,23 @@ class EnhancedCommentEngine {
         const strengthsList = this.naturalJoin(data.strengths);
 
         const templates = isMale ? [
-            `${data.pronoun_subject} consistently demonstrates strong and versatile capabilities in ${strengthsList}, achieving measurable proficiency ${data.adverb}.`,
-            `Notable strengths include ${data.pronoun_possessive} ${data.descriptor} abilities in ${strengthsList}, reflecting sustained achievement and dedication.`,
-            `${data.name} excels particularly in ${strengthsList}, displaying consistent performance excellence and aptitude.`,
-            `${data.pronoun_possessive_cap} proficiency in ${strengthsList} is ${data.descriptor}, demonstrating competence throughout this term.`,
-            `Analysis of ${data.pronoun_possessive} work reveals distinct aptitude in ${strengthsList}, with quantifiable progress and skill mastery.`,
-            `${data.name} maintains high performance standards in ${strengthsList}, evidencing systematic development and focused application.`,
-            `Assessment data confirms ${data.pronoun_possessive} strength areas as ${strengthsList}, showing reliable competency and measurable gains.`,
-            `${data.pronoun_subject} exhibits well-developed skills in ${strengthsList}, maintaining consistent output and achieving targeted objectives.`
+            `${data.pronoun_subject} demonstrates strong capabilities in ${strengthsList}, achieving measurable proficiency ${data.adverb}.`,
+            `Notable strengths include ${data.pronoun_possessive} abilities in ${strengthsList}, reflecting ${data.descriptor} and sustained dedication.`,
+            `${data.name} excels particularly in ${strengthsList}, displaying ${data.descriptor} throughout the term.`,
+            `${data.pronoun_possessive_cap} proficiency in ${strengthsList} demonstrates ${data.descriptor} competence this term.`,
+            `Analysis of ${data.pronoun_possessive} work reveals distinct aptitude in ${strengthsList}, with ${data.descriptor} evident throughout.`,
+            `${data.name} maintains performance standards in ${strengthsList}, evidencing systematic development ${data.adverb}.`,
+            `Assessment data confirms ${data.pronoun_possessive} strength areas as ${strengthsList}, showing ${data.descriptor} gains.`,
+            `${data.pronoun_subject} exhibits skills in ${strengthsList}, achieving targeted objectives ${data.adverb}.`
         ] : [
-            `${data.pronoun_possessive_cap} talents in ${strengthsList} are evident and inspire others positively.`,
-            `${data.pronoun_subject} shows developing strengths in ${strengthsList}, which are progressing well each day.`,
-            `${data.name} demonstrates natural abilities in ${strengthsList}, contributing positively to our classroom.`,
-            `${data.pronoun_possessive_cap} strengths in ${strengthsList} are clear and bring ${data.descriptor} contribution to our class.`,
-            `${data.name}'s engagement with ${strengthsList} is positive and encourages peers around ${data.pronoun_object}.`,
-            `${data.name} shares meaningful skills through ${strengthsList}, enriching our learning community.`,
-            `${data.pronoun_subject} engages thoughtfully with ${strengthsList}, creating positive moments for all of us.`,
-            `${data.name}'s approach to ${strengthsList} is encouraging, supporting a collaborative atmosphere among classmates.`
+            `${data.pronoun_possessive_cap} talents in ${strengthsList} are evident, inspiring others in our classroom.`,
+            `${data.pronoun_subject} shows developing strengths in ${strengthsList}, progressing well each day.`,
+            `${data.name} demonstrates natural abilities in ${strengthsList}, contributing meaningfully to our classroom.`,
+            `${data.pronoun_possessive_cap} strengths in ${strengthsList} bring ${data.descriptor} to our learning environment.`,
+            `${data.name}'s engagement with ${strengthsList} encourages peers around ${data.pronoun_object}.`,
+            `${data.name} shares skills through ${strengthsList}, enriching our learning community.`,
+            `${data.pronoun_subject} engages thoughtfully with ${strengthsList}, creating meaningful moments for classmates.`,
+            `${data.name}'s approach to ${strengthsList} supports a collaborative atmosphere in our class.`
         ];
 
         return this.selectRandom(templates);
@@ -353,9 +353,9 @@ class EnhancedCommentEngine {
         if (remainingSubjects.length > 0) {
             const subjectsList = this.naturalJoin(remainingSubjects);
             if (isMale) {
-                parts.push(`${data.pronoun_subject} also made consistent and ${data.descriptor} progress in ${subjectsList}, demonstrating versatile aptitude.`);
+                parts.push(`${data.pronoun_subject} also demonstrated ${data.descriptor} in ${subjectsList}, showing versatile aptitude.`);
             } else {
-                parts.push(`${data.pronoun_subject} also progressed well in ${subjectsList}, engaging positively with each activity.`);
+                parts.push(`${data.pronoun_subject} also engaged well with ${subjectsList}, progressing in each activity.`);
             }
         }
 
@@ -409,14 +409,14 @@ class EnhancedCommentEngine {
      */
     generateConclusion(data, isMale) {
         const templates = isMale ? [
-            `${data.name} is well-prepared for continued advancement and demonstrates excellent potential for sustained future success.`,
-            `With ongoing support and structured guidance, ${data.name} will continue to thrive academically and achieve ambitious learning goals.`,
-            `${data.name} shows strong readiness for new challenges and demonstrates promising capability for continued educational growth.`,
+            `${data.name} is well-prepared for continued advancement and demonstrates strong potential for sustained future success.`,
+            `With ongoing support, ${data.name} will continue to thrive academically and achieve ambitious learning goals.`,
+            `${data.name} shows readiness for new challenges and demonstrates promising capability for continued educational growth.`,
             `${data.pronoun_subject} has established a solid foundation for future learning and exhibits promise for academic achievement.`,
-            `Looking forward, ${data.name} possesses the requisite skills and work habits to advance successfully to the next grade level.`,
-            `${data.name}'s current trajectory indicates strong preparedness for upcoming academic challenges and curriculum demands.`,
+            `Looking forward, ${data.name} possesses the requisite skills to advance successfully to the next grade level.`,
+            `${data.name}'s current trajectory indicates preparedness for upcoming academic challenges and curriculum demands.`,
             `Based on demonstrated competencies, ${data.name} is positioned well for continued progress and future learning success.`,
-            `${data.pronoun_subject} has met grade-level expectations and shows readiness to tackle more complex learning objectives ahead.`
+            `${data.pronoun_subject} has met grade-level expectations and shows readiness to tackle more complex learning objectives.`
         ] : [
             `${data.name} is ready for new experiences and shows potential for continued success and learning.`,
             `With guidance, ${data.name} will continue to progress and grow in all developmental areas.`,

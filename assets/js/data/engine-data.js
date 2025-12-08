@@ -6,44 +6,47 @@
 
 window.TeachersPetData = window.TeachersPetData || {};
 
-// Randomized descriptor pools to prevent repetition
+// Optimized descriptor pools - precise, varied, professional (2024 best practices)
+// Using max 2-word combinations, avoiding redundancy, strong nouns over adjective stacking
 window.TeachersPetData.descriptorPools = {
-    10: ["exceptional performance", "remarkable achievement", "superior mastery", "phenomenal competency", "distinguished excellence"],
-    9: ["impressive progress", "notable accomplishment", "commendable proficiency", "stellar development", "admirable growth"],
-    8: ["strong capability", "solid competence", "robust understanding", "capable performance", "proficient skills"],
-    7: ["noteworthy progress", "effective development", "sound understanding", "positive achievement", "competent work"],
-    6: ["good progress", "encouraging development", "satisfactory growth", "pleasing advancement", "favorable learning"],
-    5: ["appropriate development", "steady progress", "consistent learning", "reliable growth", "suitable advancement"],
+    10: ["exceptional mastery", "remarkable achievement", "superior competency", "outstanding performance", "distinguished excellence"],
+    9: ["impressive progress", "notable accomplishment", "commendable proficiency", "stellar development", "significant growth"],
+    8: ["strong capability", "solid competence", "thorough understanding", "proficient performance", "capable execution"],
+    7: ["effective development", "sound understanding", "meaningful achievement", "competent work", "productive learning"],
+    6: ["encouraging development", "satisfactory growth", "positive advancement", "reliable progress", "constructive learning"],
+    5: ["appropriate development", "steady progress", "consistent learning", "measured growth", "suitable advancement"],
     4: ["emerging skills", "developing understanding", "growing capabilities", "budding competence", "promising foundation"],
-    3: ["foundational learning", "basic progress", "initial development", "beginning understanding", "early growth"],
-    2: ["exploratory learning", "starting development", "beginning journey", "initial steps", "early exploration"],
-    1: ["discovering learning", "emerging awareness", "starting exploration", "initial curiosity", "beginning discovery"]
+    3: ["foundational learning", "basic progress", "initial development", "fundamental understanding", "early growth"],
+    2: ["exploratory learning", "starting development", "beginning journey", "initial engagement", "early exploration"],
+    1: ["emerging awareness", "starting exploration", "initial curiosity", "beginning discovery", "early interest"]
 };
 
+// Optimized verb pools - strong verbs, minimal adverb stacking, professional tone
 window.TeachersPetData.verbPools = {
-    10: ["excelled magnificently", "achieved brilliantly", "performed exceptionally", "demonstrated mastery", "showcased excellence"],
-    9: ["demonstrated excellence", "performed admirably", "showed impressive skill", "exhibited strong ability", "displayed proficiency"],
-    8: ["performed well", "achieved solidly", "demonstrated capability", "showed competence", "exhibited understanding"],
-    7: ["progressed effectively", "developed well", "showed growth", "achieved consistently", "learned successfully"],
-    6: ["progressed steadily", "developed positively", "grew encouragingly", "advanced favorably", "learned reliably"],
-    5: ["developed consistently", "progressed appropriately", "grew steadily", "advanced suitably", "learned reliably"],
-    4: ["showed promise", "demonstrated growth", "exhibited development", "displayed progress", "revealed potential"],
-    3: ["made progress", "showed development", "demonstrated learning", "exhibited growth", "revealed advancement"],
-    2: ["began developing", "started learning", "initiated growth", "commenced progress", "embarked on learning"],
-    1: ["explored enthusiastically", "discovered curiously", "began investigating", "started exploring", "commenced discovering"]
+    10: ["excelled consistently", "achieved mastery", "performed exceptionally", "demonstrated excellence", "showcased proficiency"],
+    9: ["demonstrated strong ability", "performed admirably", "showed skill", "exhibited proficiency", "achieved excellence"],
+    8: ["performed well", "demonstrated capability", "showed competence", "achieved solidly", "exhibited understanding"],
+    7: ["progressed effectively", "developed skills", "showed growth", "learned successfully", "advanced consistently"],
+    6: ["progressed steadily", "developed positively", "grew effectively", "advanced reliably", "learned well"],
+    5: ["developed consistently", "progressed suitably", "grew steadily", "advanced appropriately", "learned effectively"],
+    4: ["showed promise", "demonstrated growth", "exhibited development", "displayed potential", "revealed progress"],
+    3: ["made progress", "showed development", "demonstrated learning", "exhibited improvement", "achieved gains"],
+    2: ["began developing", "started learning", "initiated progress", "commenced growth", "engaged with learning"],
+    1: ["explored actively", "discovered eagerly", "began investigating", "started learning", "engaged curiously"]
 };
 
+// Optimized adverb pools - diverse, non-repetitive, professional (eliminated duplicate words)
 window.TeachersPetData.adverbPools = {
-    10: ["remarkably", "exceptionally", "brilliantly", "magnificently", "phenomenally"],
-    9: ["consistently", "impressively", "notably", "admirably", "commendably"],
+    10: ["remarkably", "exceptionally", "impressively", "notably", "extraordinarily"],
+    9: ["consistently", "admirably", "commendably", "thoroughly", "diligently"],
     8: ["skillfully", "capably", "proficiently", "competently", "effectively"],
-    7: ["effectively", "successfully", "positively", "soundly", "ably"],
-    6: ["confidently", "encouragingly", "steadily", "reliably", "favorably"],
-    5: ["reliably", "appropriately", "consistently", "steadily", "suitably"],
-    4: ["steadily", "promisingly", "progressively", "developmentally", "encouragingly"],
-    3: ["gradually", "progressively", "foundationally", "basically", "initially"],
-    2: ["eagerly", "exploratively", "initially", "tentatively", "beginningly"],
-    1: ["curiously", "enthusiastically", "exploratively", "investigatively", "discoveringly"]
+    7: ["successfully", "positively", "productively", "soundly", "constructively"],
+    6: ["confidently", "encouragingly", "reliably", "favorably", "assuredly"],
+    5: ["appropriately", "steadily", "suitably", "dependably", "regularly"],
+    4: ["promisingly", "progressively", "meaningfully", "purposefully", "actively"],
+    3: ["gradually", "fundamentally", "systematically", "methodically", "carefully"],
+    2: ["eagerly", "attentively", "openly", "willingly", "receptively"],
+    1: ["curiously", "enthusiastically", "inquisitively", "exploratively", "engagingly"]
 };
 
 window.TeachersPetData.performanceMap = {

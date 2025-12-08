@@ -199,6 +199,96 @@
             "adept",
             "masterful",
             "proficient"
+        ],
+        "solid": [
+            "strong",
+            "sound",
+            "substantial",
+            "reliable",
+            "dependable",
+            "firm",
+            "robust",
+            "stable"
+        ],
+        "thorough": [
+            "comprehensive",
+            "complete",
+            "detailed",
+            "exhaustive",
+            "meticulous",
+            "systematic",
+            "methodical",
+            "careful"
+        ],
+        "meaningful": [
+            "significant",
+            "important",
+            "substantial",
+            "valuable",
+            "worthwhile",
+            "purposeful",
+            "relevant",
+            "constructive"
+        ],
+        "productive": [
+            "effective",
+            "fruitful",
+            "constructive",
+            "beneficial",
+            "valuable",
+            "useful",
+            "successful",
+            "efficient"
+        ],
+        "reliable": [
+            "dependable",
+            "consistent",
+            "steady",
+            "trustworthy",
+            "stable",
+            "predictable",
+            "responsible",
+            "solid"
+        ],
+        "constructive": [
+            "productive",
+            "helpful",
+            "beneficial",
+            "positive",
+            "useful",
+            "valuable",
+            "practical",
+            "effective"
+        ],
+        "measured": [
+            "deliberate",
+            "careful",
+            "calculated",
+            "thoughtful",
+            "considered",
+            "systematic",
+            "methodical",
+            "controlled"
+        ],
+        "fundamental": [
+            "basic",
+            "essential",
+            "foundational",
+            "primary",
+            "core",
+            "elementary",
+            "crucial",
+            "key"
+        ],
+        "receptive": [
+            "open",
+            "responsive",
+            "willing",
+            "accepting",
+            "amenable",
+            "approachable",
+            "open-minded",
+            "agreeable"
         ]
     },
     "verbs": {
@@ -381,6 +471,26 @@
             "thrived",
             "evolved",
             "progressed"
+        ],
+        "engaged": [
+            "participated",
+            "involved",
+            "contributed",
+            "interacted",
+            "connected",
+            "collaborated",
+            "cooperated",
+            "took part"
+        ],
+        "advanced": [
+            "progressed",
+            "developed",
+            "moved forward",
+            "improved",
+            "evolved",
+            "matured",
+            "grew",
+            "proceeded"
         ]
     },
     "adverbs": {
@@ -533,6 +643,46 @@
             "organically",
             "effortlessly",
             "genuinely"
+        ],
+        "methodically": [
+            "systematically",
+            "carefully",
+            "deliberately",
+            "orderly",
+            "precisely",
+            "thoroughly",
+            "thoughtfully",
+            "organized"
+        ],
+        "assuredly": [
+            "confidently",
+            "certainly",
+            "definitely",
+            "positively",
+            "surely",
+            "firmly",
+            "decidedly",
+            "securely"
+        ],
+        "dependably": [
+            "reliably",
+            "consistently",
+            "steadily",
+            "faithfully",
+            "responsibly",
+            "trustworthily",
+            "predictably",
+            "regularly"
+        ],
+        "purposefully": [
+            "deliberately",
+            "intentionally",
+            "consciously",
+            "meaningfully",
+            "determinedly",
+            "resolutely",
+            "decidedly",
+            "specifically"
         ]
     },
     "educational_terms": {
