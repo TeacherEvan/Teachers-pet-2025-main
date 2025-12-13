@@ -17,6 +17,59 @@ Before implementing ANY feature:
 
 ## Recent Work (Newest First)
 
+### 2025-12-13: HOTFIX - December Month Selection Activation
+
+**Agent:** GitHub Copilot CLI
+**Branch:** `main`
+**Priority:** CRITICAL 🚨
+
+**Context:** User discovered December was not appearing as active option in month selection dropdown, despite curriculum data being created. The month-selection.html had hardcoded available months that was NOT updated.
+
+**Root Cause:** 
+- `month-selection.html` had hardcoded `availableMonths` object on line 405
+- This was separate from `curriculum-loader.js` configuration
+- December info section was missing from UI
+
+**Fix Applied:**
+
+1. **Updated month-selection.html** (Line 412):
+   ```javascript
+   // BEFORE:
+   'K1': ['August', 'November']
+   
+   // AFTER:
+   'K1': ['August', 'November', 'December']
+   ```
+
+2. **Added December Info Section** (Line 382-388):
+   ```html
+   <div id="decemberInfo" class="month-info">
+       <h3>🎄 December Curriculum</h3>
+       <p>2nd Semester curriculum introducing dedicated Phonics...</p>
+   </div>
+   ```
+
+3. **Registered Info Element** (Line 423):
+   ```javascript
+   const monthInfos = {
+       'August': document.getElementById('augustInfo'),
+       'November': document.getElementById('novemberInfo'),
+       'December': document.getElementById('decemberInfo'),  // ← ADDED
+       'comingSoon': document.getElementById('comingSoonInfo')
+   };
+   ```
+
+**Testing:**
+- Refresh browser
+- Select K1 grade
+- December should now appear as active (NOT "Coming Soon")
+- Clicking December should show curriculum info
+
+**Files Modified:**
+- `month-selection.html` - Added December to availableMonths + info section
+
+---
+
 ### 2025-12-13: K1 December Curriculum Implementation
 
 **Agent:** GitHub Copilot CLI

@@ -379,6 +379,13 @@
                     Father's Day activities.</p>
             </div>
 
+            <div id="decemberInfo" class="month-info">
+                <h3>🎄 December Curriculum</h3>
+                <p>2nd Semester curriculum introducing dedicated Phonics (Letters R, S, T, U), environmental awareness
+                    (trees, ocean animals, sustainability), advanced number writing (1-7), and seasonal creative activities
+                    including New Year celebrations.</p>
+            </div>
+
             <div id="comingSoonInfo" class="month-info">
                 <h3>Coming Soon <span class="coming-soon-badge">AVAILABLE LATER</span></h3>
                 <p>This month's curriculum is currently being developed. Please select August for now, or check back
@@ -402,7 +409,7 @@
     <script>
         // Available months by grade
         const availableMonths = {
-            'K1': ['August', 'November'],
+            'K1': ['August', 'November', 'December'],
             'K2': ['November'],
             'K3': []
         };
@@ -413,6 +420,7 @@
         const monthInfos = {
             'August': document.getElementById('augustInfo'),
             'November': document.getElementById('novemberInfo'),
+            'December': document.getElementById('decemberInfo'),
             'comingSoon': document.getElementById('comingSoonInfo')
         };
 
