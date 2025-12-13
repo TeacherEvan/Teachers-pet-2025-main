@@ -379,6 +379,12 @@
                     Father's Day activities.</p>
             </div>
 
+            <div id="decemberInfo" class="month-info">
+                <h3>📘 December Curriculum</h3>
+                <p>End-of-year curriculum continuing skill development across literacy, numeracy, social understanding,
+                    and creative activities through play-based learning.</p>
+            </div>
+
             <div id="comingSoonInfo" class="month-info">
                 <h3>Coming Soon <span class="coming-soon-badge">AVAILABLE LATER</span></h3>
                 <p>This month's curriculum is currently being developed. Please select August for now, or check back
@@ -403,7 +409,7 @@
         // Available months by grade
         const availableMonths = {
             'K1': ['August', 'November'],
-            'K2': ['November'],
+            'K2': ['November', 'December'],
             'K3': []
         };
 
@@ -413,6 +419,7 @@
         const monthInfos = {
             'August': document.getElementById('augustInfo'),
             'November': document.getElementById('novemberInfo'),
+            'December': document.getElementById('decemberInfo'),
             'comingSoon': document.getElementById('comingSoonInfo')
         };
 
@@ -493,8 +500,8 @@
             });
 
             // Show appropriate info
-            if (month === 'August' && isMonthAvailable('August')) {
-                monthInfos['August'].classList.add('show');
+            if (month && isMonthAvailable(month) && monthInfos[month]) {
+                monthInfos[month].classList.add('show');
             } else if (month && !isMonthAvailable(month)) {
                 monthInfos['comingSoon'].classList.add('show');
             }
