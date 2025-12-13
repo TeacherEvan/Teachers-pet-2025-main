@@ -76,7 +76,8 @@ window.TeachersPetData.grammarRules = {
         "conversation 1": "Conversation 1", "conversation 2": "Conversation 2",
         "conversation 3": "Conversation 3",
         arts: "Arts", "puppet show": "Puppet Show",
-        "super safari": "Super Safari", "story time": "Story Time"
+        "super safari": "Super Safari", "story time": "Story Time",
+        phonics: "Phonics"
     }
 };
 
@@ -87,23 +88,26 @@ window.TeachersPetData.subjectTopicMap = {
         "draw lines", "trace", "match", "circle", "letter", "alphabet", "phonics",
         "nancy", "nurse", "nose", "oscar", "octopus", "on",
         "penny", "panda", "pen", "queenie", "quick", "quiet",
-        "rev", "n/o/p", "n o p"
+        "rev", "n/o/p", "n o p", "picture", "starting", "dot", "color", "same", "correct"
     ],
-    "Mathematics": ["count", "number", "match", "trace", "dotted"],
-    "I.Q": ["color", "same", "fatter", "taller", "hot", "cold", "shape"],
-    "Social Studies": ["identify", "animal", "sounds", "habits", "hygiene", "gestures"],
-    "Science": ["tissue", "lava", "magnet", "volcano", "experiment", "surface tension", "parachute", "float", "sink", "walking water"],
+    "Mathematics": ["count", "number", "match", "trace", "dotted", "write", "freehand", "box", "draw", "circles", "amount", "cut", "paste", "following", "lines"],
+    "I.Q": ["color", "same", "fatter", "taller", "hot", "cold", "shape", "object", "animal", "circle", "direction", "above", "cross", "group", "mark", "match", "size", "front", "back", "wings", "incomplete"],
+    "Social Studies": ["identify", "animal", "sounds", "habits", "hygiene", "gestures", "kindness", "environment", "discuss", "care", "trees", "benefits", "cutting", "destroying", "forest", "insects", "sea", "ocean", "water", "plants", "feed", "throw", "rubbish", "deforestation"],
+    "Science": ["tissue", "lava", "magnet", "volcano", "experiment", "surface tension", "parachute", "float", "sink", "walking water", "mixing", "colours", "bottle", "diver", "air", "pressure", "rocket", "mix", "bowl", "paper", "clip", "food", "colouring", "candle", "sound", "table", "pencil", "stepping", "press", "push", "fly"],
     "Cooking": ["look chop", "sugar", "bean", "salt", "coconut", "thai", "fried", "wonton", "wontons", "minced", "egg", "oil", "carrot", "seasoning"],
-    "Conversation 1": ["pet", "feel", "lunch", "want to be", "like to go"],
+    "Conversation 1": ["pet", "feel", "lunch", "want to be", "like to go", "colours", "question", "banana", "tree", "yellow", "green", "family", "members", "love", "father", "mother", "abilities", "sing", "dance", "playground", "equipment", "playing", "seesaw", "slide"],
     "Conversation 2": ["drink", "going", "school"],
-    // Added Conversation 3 for K1 November
+    // Added Conversation 3 for K1 November and December
     "Conversation 3": [
         "food", "eat", "rice", "colors", "color", "yellow", "purple", "green", "orange",
-        "daily routines", "wake", "take a shower", "sleep", "go to sleep", "morning"
+        "daily routines", "wake", "take a shower", "sleep", "go to sleep", "morning",
+        "actions", "walking", "running", "jumping", "sitting", "weather", "sunny", "rainy", "cloudy"
     ],
-    "Arts": ["finger painting", "ladybug", "play dough", "sponge", "origami", "ring craft", "pig", "banana", "painting", "stem", "paper bag", "fathers", "father's day", "card", "flower"],
-    "Physical Education": ["football", "balance", "ball", "ring", "jump", "zigzag", "hurdle", "snakes", "ladders", "trampoline", "balancing", "game", "rubber", "shape", "dice", "step", "straw", "jumping"],
-    "Puppet Show": ["noond", "vegetables", "panicked rabbit", "hare", "tortoise", "dog", "reflection"],
+    "Arts": ["finger painting", "ladybug", "play dough", "sponge", "origami", "ring craft", "pig", "banana", "painting", "stem", "paper bag", "fathers", "father's day", "card", "flower", "butterfly", "squish", "tree", "design", "new year", "january", "house", "window", "roof", "fold"],
+    "Physical Education": ["football", "balance", "ball", "ring", "jump", "zigzag", "hurdle", "snakes", "ladders", "trampoline", "balancing", "game", "rubber", "shape", "dice", "step", "straw", "jumping", "hopscotch", "hop", "number", "picking", "matching", "dropping", "race", "dart", "board", "throw", "cart", "racing", "push"],
+    "Puppet Show": ["noond", "vegetables", "panicked rabbit", "hare", "tortoise", "dog", "reflection", "ants", "grasshopper", "hungry", "winter", "lion", "mouse", "forest", "net"],
     "Super Safari": ["listen", "colour", "numbers", "circle", "pets", "food", "maze", "train", "mask"],
-    "Story Time": ["harry frog", "bird", "lovely animals", "ox and the frog"]
+    "Story Time": ["harry frog", "bird", "lovely animals", "ox and the frog"],
+    // New Phonics subject for K1 December
+    "Phonics": ["letter", "r", "s", "t", "u", "ricky", "rabbit", "read", "susie", "seal", "sun", "quiet", "tiger", "uncle", "teddy", "teeth", "utter", "under", "rev", "q/r/s"]
 };

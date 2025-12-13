@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>K1 December Curriculum Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        h1 {
+            color: #667eea;
+            text-align: center;
+        }
+        .subject {
+            margin: 20px 0;
+            padding: 15px;
+            background: #f8f9fa;
+            border-left: 4px solid #667eea;
+            border-radius: 5px;
+        }
+        .subject h2 {
+            margin-top: 0;
+            color: #764ba2;
+        }
+        .topic {
+            padding: 8px;
+            margin: 5px 0;
+            background: white;
+            border-radius: 4px;
+        }
+        .vocabulary {
+            color: #666;
+            font-style: italic;
+            margin-top: 10px;
+        }
+        .status {
+            padding: 15px;
+            margin: 20px 0;
+            border-radius: 8px;
+            font-weight: bold;
+        }
+        .success {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .error {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎄 K1 December 2025 Curriculum Test</h1>
+        <div id="status"></div>
+        <div id="curriculum-display"></div>
+    </div>
+
+    <!-- Load curriculum loader -->
+    <script src="assets/js/curriculum/curriculum-loader.js"></script>
+    
+    <!-- Load K1 December curriculum -->
+    <script src="assets/js/curriculum/K1/December.js"></script>
+
+    <script>
+        // Test the December curriculum
+        const statusDiv = document.getElementById('status');
+        const displayDiv = document.getElementById('curriculum-display');
+
+        try {
+            // Check if curriculum data loaded
+            if (!window.CurriculumData || !window.CurriculumData.K1 || !window.CurriculumData.K1.December) {
+                throw new Error('K1 December curriculum data not loaded');
+            }
+
+            const curriculum = window.CurriculumData.K1.December;
+            
+            // Display success status
+            statusDiv.className = 'status success';
+            statusDiv.innerHTML = `
+                ✅ <strong>Curriculum Loaded Successfully!</strong><br>
+                Grade: ${curriculum.grade}<br>
+                Month: ${curriculum.month}<br>
+                Total Subjects: ${curriculum.subjects.length}
+            `;
+
+            // Display all subjects
+            curriculum.subjects.forEach(subject => {
+                const subjectDiv = document.createElement('div');
+                subjectDiv.className = 'subject';
+                
+                let topicsHtml = '<ul>';
+                subject.topics.forEach(topic => {
+                    topicsHtml += `<li class="topic">${topic.name}</li>`;
+                });
+                topicsHtml += '</ul>';
+
+                subjectDiv.innerHTML = `
+                    <h2>${subject.name}</h2>
+                    <strong>Topics (${subject.topics.length}):</strong>
+                    ${topicsHtml}
+                    <div class="vocabulary"><strong>Vocabulary:</strong> ${subject.vocabulary}</div>
+                `;
+                
+                displayDiv.appendChild(subjectDiv);
+            });
+
+            // Test curriculum loader
+            const loader = new CurriculumLoader();
+            console.log('✅ CurriculumLoader available months for K1:', loader.getAvailableMonths('K1'));
+            console.log('✅ Is K1 December available?', loader.isAvailable('K1', 'December'));
+
+        } catch (error) {
+            statusDiv.className = 'status error';
+            statusDiv.innerHTML = `
+                ❌ <strong>Error Loading Curriculum:</strong><br>
+                ${error.message}
+            `;
+            console.error('❌ Curriculum test failed:', error);
+        }
+    </script>
+</body>
+</html>
