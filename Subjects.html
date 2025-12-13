@@ -12,7 +12,6 @@
     <link rel="preload" href="assets/css/components.css" as="style">
     <link rel="preload" href="assets/css/micro-interactions.css" as="style">
     <link rel="preload" href="assets/js/controllers/app-controller.js" as="script">
-    <link rel="preload" href="assets/js/comment-engine.js" as="script">
     <link rel="preload" href="assets/js/curriculum/curriculum-loader.js" as="script">
     <link rel="preload" href="assets/js/utils/performance-optimizer.js" as="script">
     <link rel="preload" href="assets/js/utils/ui-enhancements.js" as="script">
@@ -410,7 +409,8 @@
 
 <body>
     <div class="container">
-        <button type="button" class="recommendation-button" onclick="ensureCommentGeneration()">✨ Make Recommendation</button>
+        <button type="button" class="recommendation-button" onclick="ensureCommentGeneration()">✨ Make
+            Recommendation</button>
         <button type="button" class="refresh-button" onclick="refreshReport()">🔄 Refresh Report</button>
         <h1>Subject Selection</h1>
         <p class="text-center color-secondary margin-bottom-25 font-family-segoe">
@@ -1040,67 +1040,11 @@
         let selectedTopics = [];
         let selectedComment = null;
 
-        // Define functions immediately to prevent "not defined" errors
+        // UI functions are provided by:
+        // - assets/js/ui/subjects-ui.js (toggleSubject, handleSubjectCheck, ensureCommentGeneration, etc)
+        // - assets/js/ui/shared-ui.js (startOver, navigation helpers)
+        // Keep this inline script focused on selection persistence only.
         console.log('Subjects.html JavaScript loaded successfully');
-
-        // Immediate fallback for toggleSubject function
-        window.toggleSubject = function (subjectId) {
-            console.log('🔄 FALLBACK toggleSubject called for:', subjectId);
-
-            const content = document.getElementById('content_' + subjectId);
-            const arrow = document.getElementById('arrow_' + subjectId);
-
-            console.log('FALLBACK - Content element:', content);
-            console.log('FALLBACK - Arrow element:', arrow);
-
-            if (!content || !arrow) {
-                console.error('❌ FALLBACK - Subject elements not found for:', subjectId);
-                return;
-            }
-
-            const isActive = content.classList.contains('active');
-            console.log('FALLBACK - Current active state:', isActive);
-
-            if (isActive) {
-                content.classList.remove('active');
-                arrow.classList.remove('rotated');
-                console.log('✅ FALLBACK - Collapsed subject:', subjectId);
-            } else {
-                content.classList.add('active');
-                arrow.classList.add('rotated');
-                console.log('✅ FALLBACK - Expanded subject:', subjectId);
-            }
-        };
-
-        // Immediate fallback for handleSubjectCheck function
-        window.handleSubjectCheck = function (subjectId) {
-            console.log('🔄 FALLBACK handleSubjectCheck called for:', subjectId);
-
-            const checkbox = document.getElementById('subject_' + subjectId);
-            const content = document.getElementById('content_' + subjectId);
-
-            if (!checkbox || !content) {
-                console.error('❌ FALLBACK - Subject checkbox or content not found for:', subjectId);
-                return;
-            }
-
-            const topicCheckboxes = content.querySelectorAll('.topic-checkbox');
-
-            if (checkbox.checked) {
-                // Check all topics in this subject
-                topicCheckboxes.forEach(cb => cb.checked = true);
-            } else {
-                // Uncheck all topics in this subject
-                topicCheckboxes.forEach(cb => cb.checked = false);
-            }
-
-            // Update selection count
-            if (typeof updateSelectionCount === 'function') {
-                updateSelectionCount();
-            }
-        };
-
-        // Functions are now loaded from missing-functions.js
 
         // On load, log what student data we can see and try a gentle restore
         document.addEventListener('DOMContentLoaded', () => {
@@ -1163,10 +1107,7 @@
             updateSelectionCount();
         }
 
-        // selectAll and clearAll functions are now loaded from missing-functions.js
-        // refreshReport function is now loaded from missing-functions.js
-
-        // startOver function is now loaded from missing-functions.js
+        // selectAll / clearAll / refreshReport / startOver are provided by external UI scripts.
 
         function updateSelectionCount() {
             // ⚡ PERFORMANCE OPTIMIZATION: Cache query result
@@ -1284,13 +1225,7 @@
         // saveSelections function moved to top of script
         // loadSelections function moved to top of script
 
-        // ensureCommentGeneration function is now loaded from missing-functions.js
-
-        // selectComment function is now loaded from missing-functions.js
-
-        // copySelectedComment function is now loaded from missing-functions.js
-
-        // goBack function is now loaded from missing-functions.js
+        // ensureCommentGeneration / selectComment / copySelectedComment / goBack are provided by external UI scripts.
 
         // ❌ REMOVED: Legacy generateComment() function - ALL comment generation now in enhanced-comment-engine.js
         // This function was creating fake subject data (I.Q appearing when not selected)
@@ -1413,11 +1348,7 @@
 
         // startOver function moved to top of script
 
-        // selectComment function is now loaded from missing-functions.js
-
-        // copySelectedComment function is now loaded from missing-functions.js
-
-        // All functions are now loaded from missing-functions.js
+        // selectComment / copySelectedComment and other actions are provided by external UI scripts.
 
         // Initialize page when DOM is ready
         document.addEventListener('DOMContentLoaded', function () {
@@ -1428,15 +1359,9 @@
     <script src="assets/js/utils/error-boundary.js"></script>
     <script src="assets/js/utils/performance-optimizer.js"></script>
     <script src="assets/js/utils/ui-enhancements.js"></script>
-    <script src="assets/js/synonym-manager.js"></script>
     <script src="localstorage-monitor.js"></script>
-    <script src="assets/js/data/engine-data.js"></script>
-    <script src="assets/js/comment-engine.js"></script>
-    <!-- Engine Modules (Refactored) -->
-    <script src="assets/js/engine/utils.js"></script>
-    <script src="assets/js/engine/processor.js"></script>
-    <script src="assets/js/engine/templates.js"></script>
-    <script src="assets/js/engine/core.js"></script>
+    <!-- Code-splitting: engines load on-demand when generating comments -->
+    <script src="assets/js/utils/script-loader.js"></script>
     <script src="optimized-comment-generator.js"></script>
     <script src="assets/js/ui/shared-ui.js"></script>
     <script src="assets/js/ui/subjects-ui.js"></script>

@@ -1,9 +1,11 @@
 # Teachers Pet - Development Job Card
 
 ## ⚠️ CRITICAL RULE FOR ALL AGENTS ⚠️
+
 **STOP WINGING IT - USE YOUR MCP TOOLS OR YOUR CODE WILL BE BROKEN!**
 
 Before implementing ANY feature:
+
 1. ✅ Use `mcp_context7_resolve-library-id` + `mcp_context7_get-library-docs` for research
 2. ✅ Use `fetch_webpage` to study MDN, GitHub repos, and authoritative sources
 3. ✅ Use `mcp_sequentialthinking` to break down complex problems
@@ -15,13 +17,45 @@ Before implementing ANY feature:
 
 ## Recent Work (Newest First)
 
+### 2025-12-13: Subjects Page Code-Splitting (Lazy-Loaded Engines)
+
+**Agent:** GitHub Copilot
+**Branch:** `main`
+
+**Context:** The Subjects page was eagerly loading all comment engine scripts on initial page load. This increased JS payload and time-to-interactive despite the user only needing engines at “Generate Comments” time.
+
+**Implementation (Practical / No Build Step):**
+
+- Added a tiny cached runtime loader: `assets/js/utils/script-loader.js` (`window.ScriptLoader`)
+- Updated `optimized-comment-generator.js` to lazy-load Enhanced engine assets (and fall back to Premium) when generation is requested
+- Updated `assets/js/ui/subjects-ui.js` to route generation through `commentGenerator` and show a skeleton/loading state during engine load + generation
+- Cleaned `Subjects.html`:
+  - Removed redundant inline fallback definitions for `toggleSubject` / `handleSubjectCheck`
+  - Removed misleading “missing-functions.js” references
+  - Removed eager engine script tags (`engine/*`, `synonym-manager.js`, `comment-engine.js`, `engine-data.js`) and added `script-loader.js`
+  - Removed preload of `comment-engine.js` (now on-demand)
+
+**Files Modified/Added:**
+
+- Added: `assets/js/utils/script-loader.js`
+- Modified: `optimized-comment-generator.js`
+- Modified: `assets/js/ui/subjects-ui.js`
+- Modified: `Subjects.html`
+
+**QA / Verification:**
+
+- ✅ `npm run verify` (ESLint + checks)
+- Manual smoke test: open `Subjects.html`, select topics, click “Generate Comments” and verify comments render after a brief skeleton state
+
 ### 2025-12-08: Grammar and Adjective Optimization
+
 **Agent:** GitHub Copilot
 **Branch:** `copilot/optimize-grammar-and-adjectives`
 
 **Context:** Comprehensive optimization of comment generation system to eliminate adjective stacking, reduce repetition, and enhance professional tone following 2024 best practices for educational writing.
 
 **Research Phase:**
+
 - Web search for "natural language variation and adjective optimization in educational report comments 2024"
 - Web search for "professional writing avoid adjective stacking repetition best practices 2024"
 - Key findings: Max 2-3 adjectives per noun, eliminate stacking, prioritize strong nouns/verbs
@@ -29,43 +63,50 @@ Before implementing ANY feature:
 **Implementation:**
 
 **Descriptor Pools (engine-data.js):**
+
 - Eliminated adjective stacking across all rating levels
 - Removed semantic overlap: "phenomenal competency" → "outstanding performance"
 - Enhanced precision: "pleasing advancement" → "positive advancement"
 - Fixed overlap: "reliable progress" → "favorable progress" (distinct from level 5's "reliable growth")
 
 **Verb Pools (engine-data.js):**
+
 - Reduced adverb+verb stacking by 60%: "excelled magnificently" → "excelled consistently"
 - Stronger verbs: "grew encouragingly" → "grew effectively"
 - Removed awkward constructions: "embarked on learning" → "engaged with learning"
 
 **Adverb Pools (engine-data.js):**
+
 - Eliminated 8 duplicate words across rating levels
 - Fixed overlap: "reliably" (was in both 5 and 6) → "consistently" for level 6
 - Removed non-words: "beginningly", "discoveringly" → "willingly", "receptively"
 - Added professional alternatives: "methodically", "assuredly", "purposefully"
 
 **Templates (enhanced-comment-engine.js):**
+
 - Removed adjective stacking from 12+ templates
 - "consistent and {descriptor}" → just "{descriptor}"
-- "strong and versatile capabilities" → "strong capabilities"  
+- "strong and versatile capabilities" → "strong capabilities"
 - "positive and encourages" → just "encourages"
 - Male templates: More direct, fact-based (fewer adjectives)
 - Female templates: Warm but professional (no excessive embellishment)
 
 **Synonyms.json Expansion:**
+
 - Added 15+ critical adjectives: solid, thorough, meaningful, productive, reliable, constructive, measured, fundamental, receptive
 - Added verbs: engaged, advanced
 - Added adverbs: methodically, assuredly, dependably, purposefully
 - Total coverage now includes ALL words from optimized descriptor pools
 
 **Files Modified:**
+
 - `assets/js/data/engine-data.js` - Optimized descriptor/verb/adverb pools
 - `assets/js/enhanced-comment-engine.js` - Removed adjective stacking from templates
 - `enhanced-comment-engine.js` - Synced root copy
 - `assets/data/synonyms.json` - Expanded synonym coverage
 
 **Testing & Verification:**
+
 - ✅ Ran test-adjective-reduction.html
 - ✅ Verified 0 emotional adjectives per comment (target: 0-2)
 - ✅ Confirmed adjective stacking eliminated
@@ -76,12 +117,14 @@ Before implementing ANY feature:
 - ✅ CodeQL security check: 0 alerts
 
 **Results:**
+
 - **Before:** 26+ emotional adjectives, 5+ adjective stacking instances
 - **After:** 0 emotional adjectives, 0 stacking instances
 - **Professional tone:** Warm & professional (not overly emotional)
 - **Variety:** Synonym manager prevents repetition across 100+ comment generations
 
 **QA Instructions:**
+
 1. Open `test-adjective-reduction.html` in browser
 2. Click "Run All Tests"
 3. Verify adjective count shows "0" for all test cases
@@ -91,12 +134,14 @@ Before implementing ANY feature:
 ---
 
 ### 2025-12-03: Production-Grade Refactor & UX Overhaul
+
 **Agent:** GitHub Copilot
 **Branch:** `copilot/refactor-overhaul-codebase`
 
 **Context:** User requested a comprehensive architectural overhaul to transform the application into a production-grade, high-performance system with premium UX, following modern 2024 best practices.
 
 **Research Phase:**
+
 - Used web search to research latest web performance optimization techniques (2024)
 - Researched modern glassmorphism UI patterns and micro-interactions
 - Identified opportunities for lazy loading, code splitting, and Core Web Vitals optimization
@@ -104,6 +149,7 @@ Before implementing ANY feature:
 **Implementation:**
 
 **Performance Optimization:**
+
 - Created `assets/js/utils/performance-optimizer.js`:
   - Intersection Observer-based lazy loading for images
   - Dynamic module loading with code splitting
@@ -114,6 +160,7 @@ Before implementing ANY feature:
 - **Results:** LCP: 168ms, Launcher Init: 1200ms, Zero CLS
 
 **UX Enhancements:**
+
 - Created `assets/js/utils/ui-enhancements.js`:
   - Premium micro-interactions (hover effects, transforms)
   - Material Design ripple effects
@@ -132,6 +179,7 @@ Before implementing ANY feature:
   - High contrast mode support
 
 **Code Quality:**
+
 - Created `assets/js/utils/error-boundary.js`:
   - Global error handler for runtime errors
   - Unhandled promise rejection handler
@@ -147,6 +195,7 @@ Before implementing ANY feature:
 - Updated ESLint configuration to modern flat config format
 
 **Files Created:**
+
 - `assets/js/utils/performance-optimizer.js` (11.1 KB)
 - `assets/js/utils/ui-enhancements.js` (15.4 KB)
 - `assets/js/utils/error-boundary.js` (10.1 KB)
@@ -155,6 +204,7 @@ Before implementing ANY feature:
 - `eslint.config.js` (modern flat config)
 
 **Files Modified:**
+
 - `index.html` (added preload hints and utility scripts)
 - `Subjects.html` (added performance and error handling)
 - `assets/js/controllers/launcher-controller.js` (semantic refactor)
@@ -162,6 +212,7 @@ Before implementing ANY feature:
 - `package.json` (added globals dependency)
 
 **Verification:**
+
 - ✅ Performance monitoring working (LCP: 168ms)
 - ✅ Error boundary catching and displaying errors
 - ✅ UI enhancements active on hover/click
@@ -170,6 +221,7 @@ Before implementing ANY feature:
 - ✅ Visual confirmation with screenshot
 
 **Next Steps (Pending Phase 5 & 6):**
+
 - Complete wizard flow end-to-end testing
 - Cross-browser compatibility testing
 - Mobile device testing
@@ -179,6 +231,7 @@ Before implementing ANY feature:
 ---
 
 ### 2025-11-22: Monthly Acknowledgment Timer
+
 **Agent:** GitHub Copilot
 
 **Context:** User requested that the notification popup (acknowledgment modal) after inserting student information only appears once a month instead of every time.
@@ -186,15 +239,18 @@ Before implementing ANY feature:
 **Problem:** The acknowledgment modal was showing every time the user clicked "Next" on the student information page, which is repetitive for frequent users.
 
 **Solution:**
+
 - Implemented a 30-day timer using `localStorage` (`acknowledgmentTimestamp`).
 - Modified `showAcknowledgmentModal` in `student-information.html` to check this timestamp.
 - If the timestamp exists and is less than 30 days old, the modal is skipped and navigation proceeds automatically.
 - Modified `acknowledgeAndProceed` to update the timestamp when the user manually acknowledges the modal.
 
 **Files Modified:**
+
 - `student-information.html`
 
 **Verification:**
+
 - First run: Modal appears.
 - Subsequent runs (within 30 days): Modal is skipped.
 - After 30 days (or clearing localStorage): Modal appears again.
@@ -202,24 +258,29 @@ Before implementing ANY feature:
 ---
 
 ### 2025-11-22: Mythology UI Theme (Visual Optimization)
+
 **Agent:** GitHub Copilot
 
 **Context:** User requested a "Stoic/Greek God mythology stone carving" theme for the `student-information.html` page, including interactive effects.
 
 **Features Implemented:**
+
 - **Stone Tablet UI:** Replaced glassmorphism with a procedural noise-based stone texture, chiseled borders, and 'Cinzel'/'Cormorant Garamond' typography.
 - **Interactive Shake:** The container shakes subtly on input interaction.
 - **Debris Particles:** Small "stone chips" fall from the input area when typing.
 - **Shatter Transition:** On clicking "Next" (Proceed), the entire UI "shatters" into a grid of falling stone tiles for 3 seconds before navigating.
 
 **Files Created:**
+
 - `assets/css/mythology-theme.css`
 - `assets/js/mythology-effects.js`
 
 **Files Modified:**
+
 - `student-information.html` (Included new assets)
 
 **Technical Details:**
+
 - Used SVG filters for noise texture (lightweight, no external images).
 - Used `requestAnimationFrame` for particle physics.
 - Intercepted `app.navigateWithTransition` to inject the shatter animation sequence.
@@ -227,11 +288,13 @@ Before implementing ANY feature:
 ---
 
 ### 2025-11-22: Mythology Theme Refinement
+
 **Agent:** GitHub Copilot
 
 **Context:** User feedback on the initial Mythology Theme implementation.
 
 **Changes:**
+
 - **Background:** Updated to a Greek Statue/Architecture image (Unsplash).
 - **Tablet UI:** Enhanced stone texture with deeper shadows and relief effects.
 - **Progress Bar:** Removed completely (`display: none`) as requested.
@@ -240,12 +303,14 @@ Before implementing ANY feature:
 - **Logic Check:** Verified that `enhanced-comment-engine.js` and `engine-data.js` already support granular 1-10 rating logic for unique comment vibes.
 
 **Files Modified:**
+
 - `assets/css/mythology-theme.css`
 - `assets/js/mythology-effects.js`
 
 ---
 
 ### 2025-11-21: Grade/Month Display Correction
+
 **Agent:** GitHub Copilot
 
 **Context:** User clarified that grade/month should NOT appear in generated comment text.
@@ -253,12 +318,14 @@ Before implementing ANY feature:
 **Problem:** Earlier implementation (same day) added curriculum context like "K2 November curriculum" to opening templates.
 
 **Solution:**
+
 - Reverted `generateOpening()` templates to use "this term" / "in class" (generic phrasing)
 - Kept grade/month in data structure for selection logic (determines available subjects/topics)
 - Updated `copilot-instructions.md` with explicit rule: "Grade/Month is for curriculum selection ONLY. Do not include in generated text."
 - Corrected `DATA-INTEGRATION-AUDIT-2025-11-21.md` to clarify logic vs display distinction
 
 **Files Modified:**
+
 - `assets/js/enhanced-comment-engine.js` (lines 243-268)
 - `enhanced-comment-engine.js` (root copy synced)
 - `.github/copilot-instructions.md`
@@ -269,16 +336,19 @@ Before implementing ANY feature:
 ---
 
 ### 2025-11-21: Data Integration Quality Audit - 100% User Input Coverage
+
 **Agent:** GitHub Copilot
 **MCP Tools Used:** ✅ mcp_context7 (JustValidate research), mcp_sequentialthinking, manage_todo_list
 
 **Objective:** Audit and verify that EVERY single user input appears in generated comments - no data loss
 
 **Problem:** Comprehensive audit revealed 2 critical gaps where user-provided data was NOT appearing in final comments:
+
 1. **Grade & Month Missing:** Users selected "K2 November" but comments said generic "this term" instead of specific curriculum context
 2. **Topic Sampling Limit:** Only first 3 topics mentioned per subject, even if teacher selected 10+ topics
 
 **Audit Methodology:**
+
 1. Mapped all 9 user input touchpoints (grade, month, name, gender, rating, strengths, weaknesses, subjects, topics)
 2. Traced data flow: HTML forms → localStorage → enhanced-comment-engine.js
 3. Researched form validation best practices using MCP Context7 (/horprogs/just-validate)
@@ -287,16 +357,19 @@ Before implementing ANY feature:
 **Fixes Implemented:**
 
 **FIX #1: Grade/Month Curriculum Context**
+
 - Added `grade` and `month` to processed data structure (lines 136-140)
 - Updated ALL 16 opening templates (8 male + 8 female) to include curriculum context (lines 241-268)
 - Result: Comments now say "K1 August curriculum" or "K2 November curriculum" instead of "this term"
 
 **FIX #2: Remove Topic Sampling Limit**
+
 - Removed `topics.slice(0, 3)` limitation (line 314)
 - Now mentions ALL selected topics using naturalJoin()
 - Example: If teacher selects 10 English topics, all 10 appear in comment (not just first 3)
 
 **Data Integration Verification Matrix:**
+
 ```
 Grade:     ✅ NOW INTEGRATED (was missing)
 Month:     ✅ NOW INTEGRATED (was missing)
@@ -312,11 +385,13 @@ SCORE: 9/9 (100%) ✅
 ```
 
 **Best Practices Research:**
+
 - Studied JustValidate library form validation patterns
 - Documented recommendations for future validation enhancements
 - Identified current strengths: novalidate, auto-save indicators, progress bars
 
 **Files Modified:**
+
 - `assets/js/enhanced-comment-engine.js` (3 changes: data structure, opening templates, topic limit removal)
 - `enhanced-comment-engine.js` (root copy synced)
 - `docs/DATA-INTEGRATION-AUDIT-2025-11-21.md` (comprehensive audit report)
@@ -327,18 +402,21 @@ SCORE: 9/9 (100%) ✅
 ---
 
 ### 2025-11-21: Fix Critical 404 Error - app.js File Path Correction
+
 **Agent:** GitHub Copilot
 **MCP Tools Used:** ✅ mcp_sequentialthi_sequentialthinking, manage_todo_list
 
 **Problem:** Browser console showing 404 error for `assets/js/app.js` on all pages, preventing application initialization. Error appeared in deployed version (Vercel) and confirmed in Firefox developer tools.
 
-**Root Cause:** 
+**Root Cause:**
 HTML files referenced `assets/js/app.js` but actual file was renamed/moved to `assets/js/controllers/app-controller.js` during refactoring. This caused:
+
 - Failed script loading (404 HTTP status)
 - Broken `TeachersPetApp` initialization
 - Potential wizard flow interruptions
 
 **Fix (7 files updated):**
+
 1. **index.html** - Updated preload href
 2. **grade-selection.html** - Updated preload href
 3. **month-selection.html** - Updated preload href AND script src (2 references)
@@ -348,7 +426,8 @@ HTML files referenced `assets/js/app.js` but actual file was renamed/moved to `a
 
 **Changes:** Replaced all `assets/js/app.js` references with `assets/js/controllers/app-controller.js`
 
-**Non-Issues Identified:** 
+**Non-Issues Identified:**
+
 - CSS warnings about `-moz-` prefixes, `orphans`, `widows`, `text-size-adjust` - All from Vercel's feedback widget (third-party), not our code
 - "Ruleset ignored due to bad selector" errors - Also from Vercel injected styles at `teachers-pet-2025-main.vercel.app:1:*`
 
@@ -358,23 +437,27 @@ HTML files referenced `assets/js/app.js` but actual file was renamed/moved to `a
 **Performance Impact:** Eliminates failed HTTP request on every page load
 
 ### 2025-11-18: Curriculum Persistence Fix - Grade/Month Lost on Back Navigation
+
 **Agent:** GitHub Copilot
 **MCP Tools Used:** ✅ Subagent for comprehensive flow research
 
 **Problem:** When users clicked "Back to Student Info" from Subjects page, the selected grade/month curriculum was lost. On next forward navigation, system defaulted to K1/August instead of user's actual selection (e.g., K2/November).
 
 **Root Cause:**
+
 1. `assets/js/app.js` `submitStudentInfo()` only passed student fields (name, gender, rating) in URL to Subjects.html, NOT grade/month
 2. `missing-functions.js` `goBack()` navigated to student-information.html without query params, dropping curriculum context
 3. `Subjects.html` curriculum loader had no localStorage fallback when URL params missing
 
 **Fix (4 touchpoints):**
+
 1. **assets/js/app.js** `submitStudentInfo()`: Read grade/month from localStorage.studentData, mirror into sessionData, include in Subjects URL params
 2. **missing-functions.js** `goBack()`: Preserve grade/month when navigating back (localStorage → URL fallback pattern)
 3. **Subjects.html** curriculum loader: Add localStorage.studentData fallback before defaulting to K1/August
 4. **student-information.html** + **assets/js/app.js** `initStudentInfo()`: Show "Current: K2 · November" tracker pill with "Change" link
 
-**Testing:** 
+**Testing:**
+
 - Select K2 November → fill student info → continue to Subjects → verify K2 Nov loads
 - Click "Back to Student Info" → verify URL has `?grade=K2&month=November`
 - Continue forward → verify K2 Nov persists (not reset to K1 Aug)
@@ -384,6 +467,7 @@ HTML files referenced `assets/js/app.js` but actual file was renamed/moved to `a
 **Documentation:** `docs/CURRICULUM-PERSISTENCE-FIX.md`
 
 ### 2025-11-17: CRITICAL FIX #2 - Incorrect Subject-Topic Keyword Mappings (K1 November)
+
 **Agent:** GitHub Copilot
 **MCP Tools Used:** ✅ mcp_sequentialthi_sequentialthinking for diagnosis
 
@@ -391,12 +475,15 @@ HTML files referenced `assets/js/app.js` but actual file was renamed/moved to `a
 
 **Root Cause:**
 Keyword maps (`subjectTopicMap`) missing K1 November curriculum-specific terms:
+
 - Cooking had ["look chop", "sugar", "bean"...] but NO "thai"/"wonton" keywords
 - PE had ["football", "balance"...] but NO "snakes"/"ladders"/"trampoline" keywords
 - Arts missing "ring craft", "banana painting", "fathers day" keywords
 
 **Fix:**
+
 - Updated `assets/js/enhanced-comment-engine.js` subjectTopicMap:
+
   - **Cooking:** Added thai, fried, wonton, wontons, minced, egg, oil, carrot, seasoning
   - **Physical Education:** Added snakes, ladders, trampoline, balancing, game, rubber, shape, dice, step, straw, jumping
   - **Arts:** Added ring craft, pig, banana, painting, stem, paper bag, fathers, father's day, card, flower
@@ -409,40 +496,48 @@ Keyword maps (`subjectTopicMap`) missing K1 November curriculum-specific terms:
 **Testing:** Select specific subjects only, verify comments mention ONLY those subjects with correct topics.
 
 ### 2025-11-17: CRITICAL FIX - Remove Fake Default Subjects
+
 **Agent:** GitHub Copilot
 **MCP Tools Used:** ✅ User feedback analysis
 
 **Problem:** Comments were referencing subjects and topics that the teacher DID NOT select. User reported: "Now its referencing stuff I DID NOT SELECT!"
 
-**Root Cause:** 
+**Root Cause:**
+
 1. When NO subjects/topics were selected, `missing-functions.js` injected FAKE default subjects: "General Learning" and "Social Development" with fake topics like "classroom_participation" and "peer_interaction".
 2. This caused comments to mention content the teacher never ticked.
 
 **Fix:**
+
 - **REMOVED** the fake default injection completely (lines ~241-248 in `missing-functions.js`).
 - **REPLACED** with strict validation: if nothing is selected, show alert and abort generation.
 - Added enhanced logging to show exact checkbox IDs and values being collected.
 - Added validation to skip checkboxes with empty/null values.
 
 **Changes:**
+
 - `missing-functions.js` → removed fake subject injection, added strict validation and detailed logging
 - `assets/js/enhanced-comment-engine.js` → added warning logging for orphaned topics
 - `enhanced-comment-engine.js` (root) → synced from assets
 
 **Test File Created:**
+
 - `test-data-integrity.html` → Comprehensive 4-test suite to verify no fake data injection
 
 **Expected Behavior:**
+
 - If teacher selects NO subjects/topics → Alert: "Please select at least one subject or topic before generating comments."
 - If teacher selects subjects/topics → Comments ONLY mention those exact selections, nothing else.
 
 **Validation:**
+
 - Open `Subjects.html`, select ONLY Arts and Physical Education topics → Generate → Comments should ONLY mention Arts and PE, nothing else.
 - Try generating with nothing selected → Should get alert and refuse to generate.
 
 ---
 
 ### 2025-11-17: Subject mentions not appearing (K1 November phonics)
+
 **Agent:** GitHub Copilot
 **MCP Tools Used:** ✅ mcp_context7_resolve-library-id, ✅ mcp_context7_get-library-docs (MDN localStorage/querySelectorAll), ✅ manage_todo_list, ✅ mcp_memory_add_observations
 
@@ -451,6 +546,7 @@ Keyword maps (`subjectTopicMap`) missing K1 November curriculum-specific terms:
 **Root Cause:** Subject inference and topic grouping lacked keywords for K1 November English phonics topics, and there was no mapping for “Conversation 3”. When the parent subject checkbox wasn’t checked, no subjects reached the engine, so the subject section was omitted.
 
 **Fix:**
+
 - Expanded `subjectTopicMap` in `assets/js/enhanced-comment-engine.js` to include phonics keywords and added mapping for `Conversation 3`.
 - Mirrored the same keywords in `topicToSubjectMap` within `missing-functions.js` (used by `inferSubjectsFromTopics`).
 - Synced the root copy `enhanced-comment-engine.js`.
@@ -460,6 +556,7 @@ Keyword maps (`subjectTopicMap`) missing K1 November curriculum-specific terms:
 **QA:** Open `Subjects.html` → select English phonics items (without checking the English header) → Generate Comments → verify comments include “English” and topic mentions.
 
 ### 2025-11-13: Synonym Manager Fix & MCP Tool Integration
+
 **Agent:** GitHub Copilot
 **MCP Tools Used:** ✅ mcp_context7_resolve-library-id, ✅ mcp_context7_get-library-docs, ✅ fetch_webpage (MDN Map docs), ✅ mcp_sequentialthi_sequentialthinking, ✅ manage_todo_list
 
@@ -468,6 +565,7 @@ Keyword maps (`subjectTopicMap`) missing K1 November curriculum-specific terms:
 **Root Cause:** Agent "winged it" without researching proper algorithms. The `replaceOverused()` method incremented usage counts AFTER checking thresholds, so words never reached the threshold to trigger replacement.
 
 **Solution (Using MCP Tools):**
+
 - Used Context7 to research wink-nlp library patterns for word tracking
 - Fetched MDN documentation on JavaScript Map() for O(1) lookup performance
 - Applied sequential thinking to redesign the algorithm:
@@ -478,11 +576,13 @@ Keyword maps (`subjectTopicMap`) missing K1 November curriculum-specific terms:
 - Added comprehensive console logging at every step for debugging
 
 **Changes:**
+
 - Completely rewrote `replaceOverused()` method in `assets/js/synonym-manager.js`
 - Fixed duplicate script tag in `Subjects.html` (enhanced-comment-engine.js was loaded twice)
 - Usage tracking now works correctly: words used ≥2 times get replaced with least-used synonyms
 
 **Testing:**
+
 - Run: Open `Subjects.html` in browser, generate multiple comments
 - Expected: Console shows `🔍 📊 📝 🔄` logs, words rotate after 2nd use
 - Reset counts: `window.synonymManager.resetUsageCounts()` in console
@@ -490,11 +590,14 @@ Keyword maps (`subjectTopicMap`) missing K1 November curriculum-specific terms:
 ---
 
 ### 2025-11-13: Synonym Manager & Enhanced Teacher Personalities (INITIAL - BROKEN)
+
 **Agent:** GitHub Copilot
 **MCP Tools Used:** ❌ NONE - This is why it broke!
 
 **Changes:**
+
 - **Synonym Manager System:**
+
   - Created `assets/js/synonym-manager.js` with intelligent word variation tracking.
   - Created `assets/data/synonyms.json` with 100+ professional synonyms across 5 categories (adjectives, verbs, adverbs, educational_terms, phrases).
   - Integrated async synonym replacement into `EnhancedCommentEngine` and `PremiumCommentEngine`.
@@ -504,6 +607,7 @@ Keyword maps (`subjectTopicMap`) missing K1 November curriculum-specific terms:
   - Updated `OptimizedCommentGenerator` and `missing-functions.js` to support async generation.
 
 - **Enhanced Teacher Personality Differentiation:**
+
   - **Male voice:** Added 4 new templates per section (opening, strengths, weaknesses, conclusion). Uses formal, structured, metrics-focused, achievement-oriented language ("demonstrated competencies", "measurable proficiency", "systematic approach").
   - **Female voice:** Added 4 new templates per section. Uses warm, nurturing, relationship-focused, emotionally supportive language ("blossomed beautifully", "touching hearts", "radiates joy", "nurturing atmosphere").
   - Doubled template variety from 4 to 8 options per section for each voice.
@@ -512,10 +616,12 @@ Keyword maps (`subjectTopicMap`) missing K1 November curriculum-specific terms:
   - Removed unused bulk action functions: `selectAll`, `clearAll`, `debugToggleSubjects`, `expandAllSubjects`, `collapseAllSubjects` from `missing-functions.js` and `Subjects.html`.
 
 **Files Created:**
+
 - `assets/js/synonym-manager.js`
 - `assets/data/synonyms.json`
 
 **Files Modified:**
+
 - `assets/js/enhanced-comment-engine.js` — async generation, synonym integration, 32 new templates
 - `assets/js/comment-engine.js` — async generation, synonym integration
 - `optimized-comment-generator.js` — async support
@@ -524,6 +630,7 @@ Keyword maps (`subjectTopicMap`) missing K1 November curriculum-specific terms:
 - `enhanced-comment-engine.js` (root) — synced from assets/js
 
 **Testing:**
+
 - Generate multiple comments in one session to verify synonym rotation.
 - Compare male vs female comments to confirm distinct personalities.
 - Console logs show synonym replacements: `🔄 SynonymManager: Replacing "word"...`
@@ -531,32 +638,40 @@ Keyword maps (`subjectTopicMap`) missing K1 November curriculum-specific terms:
 - Reset command: `window.synonymManager.resetUsageCounts()`
 
 **Notes:**
+
 - Synonym manager uses sessionStorage (resets on browser close).
 - Both engines now return Promises; all callers updated to use `await`.
 - Male/female voices now sound significantly more distinct and authentic.
 
 ### 2025-11-13: Refreshed AI Agent Instructions
+
 **Agent:** GitHub Copilot
 
 **Changes:**
+
 - Replaced `.github/copilot-instructions.md` with a concise 20-50 line guide focused on current architecture, workflows, and testing assets.
 - Highlighted mandatory jobcard/Index logging, curriculum loader usage, comment engine sync steps, and available browser-based test harnesses.
 - Called out glassmorphism UI conventions and deployment constraints to keep assistants aligned with project norms.
 
 ### 2025-11-13: Documentation updates — README & Dev Quick Start
+
 **Agent:** GitHub Copilot
 
 **Changes:**
+
 - Updated `README.md` to use `index.html` as the primary entry point and added a Developer Quick Start section (local server commands, console helpers, and testing pages).
 - Added quick developer tests to `COMMENT-INTEGRATION-SUMMARY.md` and kept test commands in README.
 
 **Notes:**
+
 - Sync `assets/js/enhanced-comment-engine.js` to `enhanced-comment-engine.js` after edits for legacy test pages using the PowerShell command included in README.
 
 ### 2025-11-13: Documentation audit & small fixes
+
 **Agent:** GitHub Copilot
 
 **Changes:**
+
 - Standardized project title to `Teachers Pet` in README and key doc files.
 - Replaced `Play.html` references in README and developer guidance with `index.html`.
 - Removed duplicate `index.html` entry in README file structure and updated File Structure to match actual layout.
@@ -564,32 +679,40 @@ Keyword maps (`subjectTopicMap`) missing K1 November curriculum-specific terms:
 - Updated `.qoder` docs to mention `Teachers Pet` consistently.
 
 **Notes:**
+
 - Left historical references to `Play.html` in project design docs where used intentionally as a transition note.
 
 ### 2025-11-13: UI cleanup - remove bulk action toolbar
+
 **Agent:** GitHub Copilot
 
 **Changes:**
+
 - Removed the bulk action toolbar (Select All / Clear All / Debug Toggle / Expand All / Collapse All) from `Subjects.html` to simplify UX per feedback.
 - Left supporting JS functions intact (selectAll/clearAll/debugToggleSubjects/expandAllSubjects/collapseAllSubjects) in case they are re-introduced or used in automated tests.
 
 **Notes:**
+
 - `missing-functions.js` still contains `selectAll()` and `clearAll()` for compatibility; we may remove these helper functions if you want them gone.
 
 **Notes:**
+
 - No functional application code changed; documentation update only.
 
 ### 2025-11-13: Added Popup Acknowledgment Message
+
 **Agent:** GitHub Copilot
 
 **Changes:**
+
 - Added modal overlay with acknowledgment message to `student-information.html`
-**Modal Content:**
-- Warning text with pulsating red effect: "*COMMENTS ARE NOT GENERATED USING AI. PLEASE REVIEW YOUR COMMENTS!"
-- Information text: "*The more boxes you tick, the larger the comments. Sangsom School report only requires 75 - 80 words. Tick/select lightly."
-- Tip text in green italic: "**Tip - leave strengths and weaknesses empty in the previous student information page."
+  **Modal Content:**
+- Warning text with pulsating red effect: "\*COMMENTS ARE NOT GENERATED USING AI. PLEASE REVIEW YOUR COMMENTS!"
+- Information text: "\*The more boxes you tick, the larger the comments. Sangsom School report only requires 75 - 80 words. Tick/select lightly."
+- Tip text in green italic: "\*\*Tip - leave strengths and weaknesses empty in the previous student information page."
 
 **Technical Implementation:**
+
 - Modal HTML structure added before closing container div
 - CSS styles using glassmorphism theme (matching existing design):
   - Semi-transparent white background with backdrop-filter blur
@@ -603,6 +726,7 @@ Keyword maps (`subjectTopicMap`) missing K1 November curriculum-specific terms:
 - Modal triggered before navigation, ensuring user reads important instructions
 
 **Visual Design:**
+
 - Consistent with space theme background
 - Warning emoji (⚠️) in title
 - Green "I Understand - Continue →" button with hover effects
@@ -611,9 +735,11 @@ Keyword maps (`subjectTopicMap`) missing K1 November curriculum-specific terms:
 ---
 
 ### 2025-11-12: Added Pulsating Gold "Click to drop down" Text to Subject Headers
+
 **Agent:** GitHub Copilot
 
 **Changes:**
+
 - Added `.dropdown-hint` CSS class with pulsating gold animation
   - Font size: 11px, italic style
   - Color: #FFD700 (gold)
@@ -627,6 +753,7 @@ Keyword maps (`subjectTopicMap`) missing K1 November curriculum-specific terms:
 - Text appears between subject label and dropdown arrow
 
 **Visual Effect:**
+
 - Subtle gold text that gently pulsates to draw attention
 - Soft text-shadow glow effect synchronized with opacity changes
 - Non-intrusive hint for user interaction
@@ -634,11 +761,13 @@ Keyword maps (`subjectTopicMap`) missing K1 November curriculum-specific terms:
 ---
 
 ### 2025-11-12: Student Name Display Fix
+
 **Agent:** GitHub Copilot
 
 **Issue:** Generated comments not displaying student's entered name
 
 **Debugging:**
+
 - Added enhanced logging to `assets/js/enhanced-comment-engine.js` processSessionData()
   - Logs studentName, gender, subjects, topicRatings
   - Validates studentName exists before processing
@@ -650,6 +779,7 @@ Keyword maps (`subjectTopicMap`) missing K1 November curriculum-specific terms:
 - Synchronized root `enhanced-comment-engine.js` with assets version
 
 **Expected Behavior:**
+
 - Console should show student name being collected from localStorage
 - Enhanced engine should validate name exists
 - Comment should start with student's actual name
@@ -659,9 +789,11 @@ Keyword maps (`subjectTopicMap`) missing K1 November curriculum-specific terms:
 ---
 
 ### 2025-11-12: K2 November Curriculum Implementation
+
 **Agent:** GitHub Copilot
 
 **Completed:**
+
 - Created K2 November curriculum data structure with 10 subjects
 - Implemented curriculum-k2-november-data.md markdown reference file
 - Created assets/js/curriculum/k2/november.js with all K2 November subjects and topics
@@ -672,6 +804,7 @@ Keyword maps (`subjectTopicMap`) missing K1 November curriculum-specific terms:
 - Added "Conversation 3" to enhanced-comment-engine.js subject capitalization
 
 **K2 November Subjects (10 total):**
+
 1. Mathematics
 2. I.Q
 3. Social Studies
@@ -686,6 +819,7 @@ Keyword maps (`subjectTopicMap`) missing K1 November curriculum-specific terms:
 **NOT in K2 November:** Cooking, Super Safari, Story Time, Conversation 2
 
 **Files Modified:**
+
 - grade-selection.html (enabled K2, updated validation)
 - month-selection.html (added dynamic month filtering, enabled K2 November)
 - assets/js/curriculum/curriculum-loader.js (updated availability lists)
@@ -695,6 +829,7 @@ Keyword maps (`subjectTopicMap`) missing K1 November curriculum-specific terms:
 - Subjects.html (implemented dynamic curriculum rendering with DOMContentLoaded)
 
 **Files Created:**
+
 - curriculum-k2-november-data.md
 - assets/js/curriculum/k2/november.js
 
@@ -703,9 +838,11 @@ Keyword maps (`subjectTopicMap`) missing K1 November curriculum-specific terms:
 ---
 
 ### 2025-11-12: K1 November Curriculum Implementation
+
 **Agent:** GitHub Copilot
 
 **Completed:**
+
 - Created K1 November curriculum data structure with 11 subjects
 - Implemented curriculum-november-data.md markdown reference file
 - Created assets/js/curriculum/k1/november.js with all K1 November subjects and topics
@@ -714,6 +851,7 @@ Keyword maps (`subjectTopicMap`) missing K1 November curriculum-specific terms:
 - Fixed student-information.html to pass grade and month URL parameters to Subjects.html
 
 **K1 November Subjects (11 total):**
+
 1. English
 2. Mathematics
 3. I.Q
@@ -733,9 +871,11 @@ Keyword maps (`subjectTopicMap`) missing K1 November curriculum-specific terms:
 ---
 
 ### 2025-11-12: Multi-Grade, Multi-Month Curriculum System (Phase 1)
+
 **Agent:** GitHub Copilot
 
 **Completed:**
+
 - Implemented 5-page wizard navigation flow (index → grade → month → student-info → subjects)
 - Created month-selection.html for month selection page
 - Created assets/js/curriculum/k1/august.js with modular curriculum data structure
@@ -747,6 +887,7 @@ Keyword maps (`subjectTopicMap`) missing K1 November curriculum-specific terms:
 - Updated VS Code settings with spell-checker words and markdown lint rules
 
 **Files Created:**
+
 - month-selection.html
 - assets/js/curriculum/curriculum-loader.js
 - assets/js/curriculum/k1/august.js
@@ -756,6 +897,7 @@ Keyword maps (`subjectTopicMap`) missing K1 November curriculum-specific terms:
 - MULTI-GRADE-MIGRATION-SUMMARY.md
 
 **Architecture:**
+
 - Modular curriculum structure: `/assets/js/curriculum/{grade}/{month}.js`
 - Dynamic subject rendering in Subjects.html
 - Grade-month parameter passing via URL query strings
@@ -764,26 +906,30 @@ Keyword maps (`subjectTopicMap`) missing K1 November curriculum-specific terms:
 ---
 
 ### 2025-11-22: Start Over Workflow Optimization
+
 **Agent:** GitHub Copilot
 
 **Context:** User requested that "Start Over" should preserve the current Grade/Month selection and return to `student-information.html` instead of resetting completely to `index.html`.
 
 **Changes:**
+
 - Modified `window.startOverWithAnimation` in both `app-controller.js` and `launcher-controller.js`.
 - **Logic:**
-    1. Reads `grade` and `month` from `localStorage` before clearing.
-    2. Clears all storage (resetting student name, subjects, etc.).
-    3. Restores `grade` and `month` to `localStorage`.
-    4. Redirects to `student-information.html` with query parameters.
+  1. Reads `grade` and `month` from `localStorage` before clearing.
+  2. Clears all storage (resetting student name, subjects, etc.).
+  3. Restores `grade` and `month` to `localStorage`.
+  4. Redirects to `student-information.html` with query parameters.
 - **Fallback:** If no grade/month is found (e.g., first run), it still redirects to `index.html`.
 
 **Files Modified:**
+
 - `assets/js/controllers/app-controller.js`
 - `assets/js/controllers/launcher-controller.js`
 
 ---
 
 ### 2025-11-22: Critical Refactoring - Modular Engine
+
 **Agent:** GitHub Copilot
 
 - **Task:** Split monolithic `enhanced-comment-engine.js` into specialized modules.
@@ -800,16 +946,19 @@ Keyword maps (`subjectTopicMap`) missing K1 November curriculum-specific terms:
 ## Notes & Suggestions
 
 ### Current Curriculum Availability (2025-11-12)
+
 - **K1:** August (13 subjects), November (11 subjects)
 - **K2:** November (10 subjects)
 - **K3:** None yet (coming soon)
 
 ### Known Differences Between Grades/Months
+
 - **K1 August:** Has Super Safari, Story Time, Conversation 2 (13 subjects total)
 - **K1 November:** Has Cooking, Conversation 3, no Super Safari/Story Time (11 subjects)
 - **K2 November:** Has Conversation 3, no Cooking/Super Safari/Story Time (10 subjects)
 
 ### Future Implementation Ideas
+
 - Add remaining K1 months (September-July)
 - Add K2 August and other months
 - Implement K3 curriculum
@@ -822,6 +971,7 @@ Keyword maps (`subjectTopicMap`) missing K1 November curriculum-specific terms:
 ## Development Guidelines (from RULES.mdc)
 
 **CRITICAL RULES:**
+
 1. ✅ **NEVER implement features before clarifying requirements** - Ask first, code second
 2. ✅ **NEVER assume user wants immediate implementation** - Get explicit confirmation
 3. ✅ **NO feature enhancements without approval** - If improving, REPLACE don't add parallel features
@@ -830,6 +980,7 @@ Keyword maps (`subjectTopicMap`) missing K1 November curriculum-specific terms:
 6. ✅ **Log new files in Index.md** - Columns: date, agent, file, status (active/deleted)
 
 **Comment Generation Rules:**
+
 - AI comments MUST start with student's name
 - AI comments MUST end with positive/encouraging note
 - AI comments MUST incorporate ALL selected subjects
