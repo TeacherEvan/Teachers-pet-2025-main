@@ -156,6 +156,7 @@
 ## Summary
 
 **Total Subjects:** 11
+
 - English
 - Mathematics
 - I.Q
@@ -171,6 +172,7 @@
 **Key Themes:** Letter recognition (A-T), Numbers 1-10, Environmental awareness, Phonics introduction (R, S, T, U), Social interaction, Creative arts, Physical development
 
 **Notes:**
+
 - December introduces **Phonics** as a new subject separate from English
 - Focus on environmental themes (trees, ocean animals, caring for nature)
 - Conversation 3 emphasizes daily activities and weather
