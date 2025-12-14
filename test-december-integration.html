@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>December Curriculum Integration Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+            background: #f5f5f5;
+        }
+        .test-section {
+            background: white;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .test-result {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border-left: 4px solid;
+        }
+        .pass {
+            background-color: #d4edda;
+            border-color: #28a745;
+            color: #155724;
+        }
+        .fail {
+            background-color: #f8d7da;
+            border-color: #dc3545;
+            color: #721c24;
+        }
+        .info {
+            background-color: #d1ecf1;
+            border-color: #17a2b8;
+            color: #0c5460;
+        }
+        h1 {
+            color: #333;
+            border-bottom: 3px solid #007bff;
+            padding-bottom: 10px;
+        }
+        h2 {
+            color: #555;
+            margin-top: 30px;
+        }
+        .subject-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 15px;
+            margin-top: 15px;
+        }
+        .subject-card {
+            border: 1px solid #ddd;
+            padding: 15px;
+            border-radius: 5px;
+            background: #f9f9f9;
+        }
+        .subject-card h4 {
+            margin-top: 0;
+            color: #007bff;
+        }
+        .topic-count {
+            color: #666;
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+<body>
+    <h1>🎄 December Curriculum Integration Test</h1>
+    
+    <div class="test-section">
+        <h2>Test Results</h2>
+        <div id="testResults"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>K1 December Curriculum</h2>
+        <div id="k1Data"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>K2 December Curriculum</h2>
+        <div id="k2Data"></div>
+    </div>
+
+    <div class="test-section">
+        <h2>Curriculum Loader Configuration</h2>
+        <div id="loaderConfig"></div>
+    </div>
+
+    <!-- Load curriculum files -->
+    <script src="assets/js/curriculum/k1/december.js"></script>
+    <script src="assets/js/curriculum/k2/december.js"></script>
+    <script src="assets/js/curriculum/curriculum-loader.js"></script>
+
+    <script>
+        const resultsDiv = document.getElementById('testResults');
+        const k1DataDiv = document.getElementById('k1Data');
+        const k2DataDiv = document.getElementById('k2Data');
+        const loaderConfigDiv = document.getElementById('loaderConfig');
+
+        function addTestResult(testName, passed, message, type = null) {
+            const div = document.createElement('div');
+            div.className = `test-result ${type || (passed ? 'pass' : 'fail')}`;
+            div.innerHTML = `<strong>${passed ? '✅' : '❌'} ${testName}</strong>: ${message}`;
+            resultsDiv.appendChild(div);
+        }
+
+        function displayCurriculum(curriculum, containerDiv, grade) {
+            const summary = document.createElement('div');
+            summary.className = 'test-result info';
+            summary.innerHTML = `<strong>Summary:</strong> ${curriculum.subjects.length} subjects, 
+                ${curriculum.subjects.reduce((sum, s) => sum + s.topics.length, 0)} total topics`;
+            containerDiv.appendChild(summary);
+
+            const subjectGrid = document.createElement('div');
+            subjectGrid.className = 'subject-list';
+
+            curriculum.subjects.forEach((subject, index) => {
+                const card = document.createElement('div');
+                card.className = 'subject-card';
+                card.innerHTML = `
+                    <h4>${index + 1}. ${subject.name}</h4>
+                    <p class="topic-count">📝 ${subject.topics.length} topics</p>
+                    <p><strong>ID:</strong> ${subject.id}</p>
+                `;
+                subjectGrid.appendChild(card);
+            });
+
+            containerDiv.appendChild(subjectGrid);
+        }
+
+        // Run tests
+        try {
+            // Test 1: K1 December loaded
+            if (window.CurriculumData?.K1?.December) {
+                const k1 = window.CurriculumData.K1.December;
+                addTestResult('K1 December Load', true, `Loaded ${k1.subjects.length} subjects`);
+                displayCurriculum(k1, k1DataDiv, 'K1');
+            } else {
+                addTestResult('K1 December Load', false, 'Failed to load K1 December curriculum');
+            }
+
+            // Test 2: K2 December loaded
+            if (window.CurriculumData?.K2?.December) {
+                const k2 = window.CurriculumData.K2.December;
+                addTestResult('K2 December Load', true, `Loaded ${k2.subjects.length} subjects`);
+                displayCurriculum(k2, k2DataDiv, 'K2');
+            } else {
+                addTestResult('K2 December Load', false, 'Failed to load K2 December curriculum');
+            }
+
+            // Test 3: Curriculum loader initialized
+            if (window.curriculumLoader) {
+                addTestResult('Curriculum Loader', true, 'CurriculumLoader initialized');
+
+                // Test 4: Check available months
+                const k1Months = window.curriculumLoader.getAvailableMonths('K1');
+                const k2Months = window.curriculumLoader.getAvailableMonths('K2');
+
+                if (k1Months.includes('December')) {
+                    addTestResult('K1 Available Months', true, `December in K1 months: ${k1Months.join(', ')}`);
+                } else {
+                    addTestResult('K1 Available Months', false, `December NOT in K1 months: ${k1Months.join(', ')}`);
+                }
+
+                if (k2Months.includes('December')) {
+                    addTestResult('K2 Available Months', true, `December in K2 months: ${k2Months.join(', ')}`);
+                } else {
+                    addTestResult('K2 Available Months', false, `December NOT in K2 months: ${k2Months.join(', ')}`);
+                }
+
+                // Test 5: Check isAvailable method
+                const k1DecAvailable = window.curriculumLoader.isAvailable('K1', 'December');
+                const k2DecAvailable = window.curriculumLoader.isAvailable('K2', 'December');
+
+                if (k1DecAvailable) {
+                    addTestResult('K1 isAvailable', true, 'K1 December is available');
+                } else {
+                    addTestResult('K1 isAvailable', false, 'K1 December is NOT available');
+                }
+
+                if (k2DecAvailable) {
+                    addTestResult('K2 isAvailable', true, 'K2 December is available');
+                } else {
+                    addTestResult('K2 isAvailable', false, 'K2 December is NOT available');
+                }
+
+                // Display loader configuration
+                loaderConfigDiv.innerHTML = `
+                    <div class="test-result info">
+                        <strong>K1 Available Months:</strong> ${k1Months.join(', ')}<br>
+                        <strong>K2 Available Months:</strong> ${k2Months.join(', ')}<br>
+                        <strong>K3 Available Months:</strong> ${window.curriculumLoader.getAvailableMonths('K3').join(', ') || 'None'}
+                    </div>
+                `;
+
+            } else {
+                addTestResult('Curriculum Loader', false, 'CurriculumLoader not initialized');
+            }
+
+            // Test 6: Compare K1 vs K2 December structure
+            const k1 = window.CurriculumData.K1.December;
+            const k2 = window.CurriculumData.K2.December;
+
+            addTestResult('Structure Comparison', true, 
+                `K1: ${k1.subjects.length} subjects, K2: ${k2.subjects.length} subjects`, 'info');
+
+            // Test 7: Check required fields
+            let allValid = true;
+            [k1, k2].forEach((curriculum, idx) => {
+                const grade = idx === 0 ? 'K1' : 'K2';
+                curriculum.subjects.forEach(subject => {
+                    if (!subject.id || !subject.name || !subject.topics || !subject.vocabulary) {
+                        allValid = false;
+                        addTestResult(`${grade} Data Validation`, false, 
+                            `Subject "${subject.name}" missing required fields`);
+                    }
+                });
+            });
+
+            if (allValid) {
+                addTestResult('Data Validation', true, 'All subjects have required fields (id, name, topics, vocabulary)');
+            }
+
+            // Summary
+            addTestResult('Integration Test Complete', true, 
+                'December curriculum successfully integrated for K1 and K2', 'info');
+
+        } catch (error) {
+            addTestResult('Error', false, `Exception: ${error.message}`);
+            console.error('Test error:', error);
+        }
+    </script>
+</body>
+</html>

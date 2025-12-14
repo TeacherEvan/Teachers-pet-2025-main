@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>K1 December Curriculum Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+        .test-result {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+        }
+        .pass {
+            background-color: #d4edda;
+            color: #155724;
+        }
+        .fail {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+        .subject {
+            border: 1px solid #ddd;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+        }
+        .topic {
+            margin-left: 20px;
+            font-size: 0.9em;
+            color: #555;
+        }
+        .vocabulary {
+            margin-top: 10px;
+            font-style: italic;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <h1>K1 December Curriculum Test</h1>
+    
+    <div id="testResults"></div>
+    
+    <h2>Curriculum Data</h2>
+    <div id="curriculumData"></div>
+
+    <script src="assets/js/curriculum/k1/december.js"></script>
+    <script>
+        // Test Results Container
+        const resultsDiv = document.getElementById('testResults');
+        const dataDiv = document.getElementById('curriculumData');
+        
+        function addTestResult(testName, passed, message) {
+            const div = document.createElement('div');
+            div.className = `test-result ${passed ? 'pass' : 'fail'}`;
+            div.innerHTML = `<strong>${passed ? '✅' : '❌'} ${testName}</strong>: ${message}`;
+            resultsDiv.appendChild(div);
+        }
+        
+        // Run Tests
+        try {
+            // Test 1: Check if curriculum data structure exists
+            if (window.CurriculumData && window.CurriculumData.K1 && window.CurriculumData.K1.December) {
+                addTestResult('Data Structure', true, 'K1 December curriculum loaded successfully');
+            } else {
+                addTestResult('Data Structure', false, 'K1 December curriculum not found');
+            }
+            
+            const curriculum = window.CurriculumData.K1.December;
+            
+            // Test 2: Check grade and month
+            if (curriculum.grade === 'K1' && curriculum.month === 'December') {
+                addTestResult('Grade/Month', true, `Grade: ${curriculum.grade}, Month: ${curriculum.month}`);
+            } else {
+                addTestResult('Grade/Month', false, `Expected K1/December, got ${curriculum.grade}/${curriculum.month}`);
+            }
+            
+            // Test 3: Check subjects count
+            const subjectCount = curriculum.subjects.length;
+            if (subjectCount === 11) {
+                addTestResult('Subject Count', true, `Found ${subjectCount} subjects`);
+            } else {
+                addTestResult('Subject Count', false, `Expected 11 subjects, found ${subjectCount}`);
+            }
+            
+            // Test 4: Check required subjects exist
+            const requiredSubjects = [
+                'english', 'mathematics', 'iq', 'social_studies', 'phonics',
+                'science', 'conversation1', 'conversation3', 'arts',
+                'physical_education', 'puppet_show'
+            ];
+            
+            const subjectIds = curriculum.subjects.map(s => s.id);
+            const missingSubjects = requiredSubjects.filter(id => !subjectIds.includes(id));
+            
+            if (missingSubjects.length === 0) {
+                addTestResult('Required Subjects', true, 'All 11 required subjects present');
+            } else {
+                addTestResult('Required Subjects', false, `Missing subjects: ${missingSubjects.join(', ')}`);
+            }
+            
+            // Test 5: Check that each subject has topics
+            let allHaveTopics = true;
+            let subjectsWithoutTopics = [];
+            
+            curriculum.subjects.forEach(subject => {
+                if (!subject.topics || subject.topics.length === 0) {
+                    allHaveTopics = false;
+                    subjectsWithoutTopics.push(subject.name);
+                }
+            });
+            
+            if (allHaveTopics) {
+                addTestResult('Topics', true, 'All subjects have topics defined');
+            } else {
+                addTestResult('Topics', false, `Subjects without topics: ${subjectsWithoutTopics.join(', ')}`);
+            }
+            
+            // Test 6: Check that each subject has vocabulary
+            let allHaveVocabulary = true;
+            let subjectsWithoutVocab = [];
+            
+            curriculum.subjects.forEach(subject => {
+                if (!subject.vocabulary || subject.vocabulary.trim() === '') {
+                    allHaveVocabulary = false;
+                    subjectsWithoutVocab.push(subject.name);
+                }
+            });
+            
+            if (allHaveVocabulary) {
+                addTestResult('Vocabulary', true, 'All subjects have vocabulary defined');
+            } else {
+                addTestResult('Vocabulary', false, `Subjects without vocabulary: ${subjectsWithoutVocab.join(', ')}`);
+            }
+            
+            // Display curriculum data
+            curriculum.subjects.forEach((subject, index) => {
+                const subjectDiv = document.createElement('div');
+                subjectDiv.className = 'subject';
+                
+                let html = `<h3>${index + 1}. ${subject.name}</h3>`;
+                html += `<strong>ID:</strong> ${subject.id}<br>`;
+                html += `<strong>Topics (${subject.topics.length}):</strong><br>`;
+                
+                subject.topics.forEach((topic, topicIndex) => {
+                    html += `<div class="topic">${topicIndex + 1}. ${topic.name}</div>`;
+                });
+                
+                html += `<div class="vocabulary"><strong>Vocabulary:</strong> ${subject.vocabulary}</div>`;
+                
+                subjectDiv.innerHTML = html;
+                dataDiv.appendChild(subjectDiv);
+            });
+            
+            // Summary
+            const totalTopics = curriculum.subjects.reduce((sum, subject) => sum + subject.topics.length, 0);
+            const summaryDiv = document.createElement('div');
+            summaryDiv.className = 'test-result pass';
+            summaryDiv.innerHTML = `<strong>📊 Summary:</strong> ${curriculum.subjects.length} subjects, ${totalTopics} total topics`;
+            resultsDiv.appendChild(summaryDiv);
+            
+        } catch (error) {
+            addTestResult('Error', false, `Exception occurred: ${error.message}`);
+            console.error('Test error:', error);
+        }
+    </script>
+</body>
+</html>
