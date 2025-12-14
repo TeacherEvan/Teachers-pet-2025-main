@@ -1,0 +1,8 @@
+blank_issues_enabled: true
+contact_links:
+  - name: 📖 Documentation
+    url: https://github.com/TeacherEvan/Teachers-pet-2025-main/tree/main/docs
+    about: Read the project documentation for help and guidance
+  - name: 💬 Discussions
+    url: https://github.com/TeacherEvan/Teachers-pet-2025-main/discussions
+    about: Ask questions and discuss ideas with the community
