@@ -103,7 +103,7 @@ window.CurriculumData.K1.December = {
             name: 'Conversation 3',
             topics: [
                 { id: 'conv3_actions', name: 'Food: Actions -What are you doing? I am walking' },
-                { id: 'conv3_weather', name: 'Weather- How\'s the weather? It\'s sunny' }
+                { id: 'conv3_weather', name: 'Weather - How\'s the weather? It\'s sunny' }
             ],
             vocabulary: 'walking, running, jumping, sitting, sunny, rainy, cloudy'
         },
