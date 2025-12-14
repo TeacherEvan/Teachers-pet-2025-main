@@ -4,6 +4,10 @@ Thank you for your interest in contributing to Teachers Pet! This document provi
 
 ## 🚀 Getting Started
 
+### First Time Contributors
+
+**Important:** You'll need to [fork this repository](https://github.com/TeacherEvan/Teachers-pet-2025-main/fork) before making changes. This creates your own copy where you can work freely.
+
 1. **Read the Documentation**
    - Start with `.github/copilot-instructions.md` for technical overview
    - Review `docs/PROJECT_STATUS.md` for architecture details
@@ -11,9 +15,12 @@ Thank you for your interest in contributing to Teachers Pet! This document provi
 
 2. **Set Up Your Environment**
    ```bash
-   # Clone the repository
-   git clone https://github.com/TeacherEvan/Teachers-pet-2025-main.git
+   # Fork the repository on GitHub, then clone YOUR fork
+   git clone https://github.com/YOUR-USERNAME/Teachers-pet-2025-main.git
    cd Teachers-pet-2025-main
+   
+   # Add upstream remote to track original repository
+   git remote add upstream https://github.com/TeacherEvan/Teachers-pet-2025-main.git
    
    # Install dependencies (for linting)
    npm install
