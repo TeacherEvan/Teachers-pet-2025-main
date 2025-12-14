@@ -1,4 +1,42 @@
-# Teachers Pet – Agent Guide
+# Teachers Pet – Copilot Instructions
+
+## 📋 Repository Overview
+
+**Teachers Pet** is a production-ready static web application for generating personalized kindergarten student report comments. The application runs entirely client-side with no backend, using vanilla JavaScript and localStorage for state management.
+
+**Key Features:**
+- Multi-step wizard for collecting student data (grade, month, subjects, topics)
+- Intelligent comment generation engine with synonym variation
+- Dynamic curriculum loading system
+- Performance-optimized with Core Web Vitals monitoring
+- Premium glassmorphism UI with accessibility features
+
+**Key Constraints:**
+- **No Backend:** Runs entirely in the browser (client-side only)
+- **No Build Tools:** Pure HTML/CSS/JS with ES modules
+- **Static Deployment:** Designed for GitHub Pages, Netlify, Vercel
+- **No External APIs:** Self-contained application
+- **Browser Storage:** Uses localStorage for persistence
+
+## 🛠️ Technology Stack
+
+**Core Technologies:**
+- Pure HTML5, CSS3, JavaScript (ES6+)
+- No frameworks or bundlers
+- ES Modules for code organization
+
+**Key Libraries:**
+- No external dependencies (self-contained)
+
+**Development Tools:**
+- ESLint for linting (`.eslintrc.json`)
+- Chrome DevTools for debugging
+- Python http.server or Node http-server for local preview
+
+**Browser Support:**
+- Chrome 90+, Firefox 88+, Safari 14+, Edge 90+
+- Progressive enhancement for older browsers
+- WCAG 2.1 Level AA accessibility target
 
 ## ⚠️ CRITICAL: RESEARCH BEFORE IMPLEMENTATION ⚠️
 **NEVER "wing it" - ALWAYS research first using MCP tools!**
@@ -35,9 +73,79 @@ To understand the project quickly, read these files in order:
 2. **`docs/jobcard.md`**: Chronological log of recent work. Check the top 3 entries to see what just happened.
 3. **`docs/archive/`**: Old fix logs and summaries. Only check if digging into history.
 
-## Project Structure & Constraints
+## 🚀 Quick Start for Development
+
+### Running Locally
+```bash
+# Option 1: Python (recommended)
+python -m http.server 8080
+
+# Option 2: Node.js
+npx http-server -p 8080
+
+# Option 3: Direct file access
+# Open index.html directly in your browser (some features require server)
+```
+
+**Access:** `http://localhost:8080/index.html`
+
+### Testing Your Changes
+1. **Full wizard test:** Open `Subjects.html`, complete flow
+2. **Specific tests:** Use test pages (`test-*.html`)
+3. **Console tests:** `window.testCommentGeneration()`
+4. **Performance:** `window.performanceOptimizer.logPerformanceReport()`
+
+### Linting
+```bash
+# Install dependencies (first time only)
+npm install
+
+# Run ESLint
+npm run lint
+```
+
+## 📁 Project Structure & Constraints
 
 **Static HTML/CSS/JS Application** - No build tools, no servers, no external APIs without approval.
+
+### Directory Structure
+```
+Teachers-pet-2025-main/
+├── .github/
+│   └── copilot-instructions.md      # This file - agent guidance
+├── assets/
+│   ├── css/                         # Stylesheets (glassmorphism design)
+│   │   ├── main.css                 # Core styles
+│   │   ├── components.css           # Component-specific styles
+│   │   └── micro-interactions.css   # Animation and interaction styles
+│   ├── js/
+│   │   ├── controllers/
+│   │   │   └── app-controller.js    # Main app controller & sessionData
+│   │   ├── curriculum/
+│   │   │   ├── curriculum-loader.js # Dynamic curriculum loading
+│   │   │   └── {grade}/{month}.js   # Curriculum data files
+│   │   ├── utils/
+│   │   │   ├── performance-optimizer.js  # Core Web Vitals monitoring
+│   │   │   └── ui-enhancements.js        # Micro-interactions & a11y
+│   │   ├── enhanced-comment-engine.js    # PRIMARY generation logic
+│   │   ├── synonym-manager.js            # Word variation system
+│   │   └── comment-engine.js             # Legacy/fallback engine
+│   └── data/
+│       └── synonyms.json            # Vocabulary database
+├── docs/
+│   ├── PROJECT_STATUS.md            # Architecture overview (READ FIRST)
+│   ├── jobcard.md                   # Chronological task log
+│   └── archive/                     # Historical documentation
+├── test-*.html                      # Testing pages
+├── index.html                       # Landing page
+├── grade-selection.html             # Grade selector
+├── month-selection.html             # Month selector  
+├── student-information.html         # Student data input
+├── Subjects.html                    # Subject selection & generation
+├── optimized-comment-generator.js   # Engine initialization wrapper
+├── enhanced-comment-engine.js       # Root copy (sync with assets/js/)
+└── missing-functions.js             # Subjects.html handlers
+```
 
 ### Wizard Flow
 ```
@@ -287,6 +395,83 @@ const data = storage.getAll(['key1', 'key2']); // 1 batch retrieval
 - **localStorage I/O:** 50% reduction (batch operations)
 - **UI Responsiveness:** Smoother (debounced updates)
 
+## 📏 Coding Standards & Best Practices
+
+### JavaScript Style
+- Use ES6+ features (const/let, arrow functions, template literals)
+- Avoid global variables - use modules or namespace objects
+- Cache DOM queries before loops
+- Debounce frequent event handlers (150ms standard)
+- Use batch operations for localStorage
+
+### Naming Conventions
+- **Functions:** camelCase (e.g., `generateComment`, `loadCurriculum`)
+- **Classes:** PascalCase (e.g., `EnhancedCommentEngine`, `CurriculumLoader`)
+- **Constants:** UPPER_SNAKE_CASE (e.g., `MAX_ATTEMPTS`, `DEFAULT_RATING`)
+- **Files:** kebab-case.js (e.g., `enhanced-comment-engine.js`)
+
+### Comments
+- Use JSDoc for public functions
+- Explain "why" not "what"
+- Add warnings for critical constraints
+- Document magic numbers
+
+### Error Handling
+- Use try-catch for localStorage operations
+- Log warnings for missing data
+- Provide fallbacks for critical features
+- Never fail silently
+
+### Performance Rules
+- Cache `querySelectorAll()` results
+- Use `requestIdleCallback` for non-critical tasks
+- Lazy load non-critical resources
+- Monitor Core Web Vitals
+
+### Accessibility
+- Preserve ARIA attributes
+- Maintain keyboard navigation
+- Respect `prefers-reduced-motion`
+- Test with screen readers
+
+## 📝 Common Development Tasks
+
+### Adding a New Subject/Topic
+1. Edit curriculum file: `/assets/js/curriculum/{grade}/{month}.js`
+2. Update `subjectTopicMap` in `enhanced-comment-engine.js`
+3. Update `topicToSubjectMap` in `missing-functions.js`
+4. Update grammar rules if needed: `grammarRules.subjectCapitalization`
+5. Sync root copy: `Copy-Item "assets/js/enhanced-comment-engine.js" "enhanced-comment-engine.js" -Force`
+6. Test with `test-all-subjects-audit.html`
+
+### Adding a New Grade/Month Curriculum
+1. Create `/assets/js/curriculum/{grade}/{month}.js`
+2. Follow existing structure (see K1/August.js as template)
+3. Update `getAvailableMonths()` in curriculum-loader.js
+4. Update `availableList` lookup
+5. Create documentation in `docs/curriculum-{grade}-{month}-data.md`
+
+### Modifying Comment Templates
+1. Edit templates in `assets/js/enhanced-comment-engine.js`
+2. Update both male and female versions
+3. Ensure all subjects/topics are mentioned
+4. Test with multiple rating combinations
+5. Sync root copy after changes
+
+### Adding New Synonyms
+1. Edit `assets/data/synonyms.json`
+2. Organize by category (adjectives, verbs, adverbs, etc.)
+3. Maintain consistent quality across rating levels
+4. Test for overuse with synonym manager
+
+### Debugging Comment Generation Issues
+1. Open DevTools Console (F12)
+2. Check for `✅ Collected session data:` log
+3. Verify `localStorage.studentData` contents
+4. Run `window.testCommentGeneration()`
+5. Check `subjectTopicMap` for missing keywords
+6. Verify both storage layers are synced
+
 ## Common Pitfalls to Avoid
 
 1. **Storage Desync:** Always update BOTH `TeachersPetApp.sessionData` and `localStorage.studentData` when changing state
@@ -298,7 +483,31 @@ const data = storage.getAll(['key1', 'key2']); // 1 batch retrieval
 7. **Redundant DOM Queries:** Cache `querySelectorAll()` results when used multiple times - saves 66% query overhead
 8. **Scattered Storage Calls:** Use `TeachersPetStorage.namespace()` batch methods instead of multiple setItem/getItem calls
 
+## 📚 Additional Resources
+
+### Key Documentation Files
+- **`docs/PROJECT_STATUS.md`** - Architecture overview and agent dashboard
+- **`docs/jobcard.md`** - Chronological development log
+- **`docs/PRODUCTION_REFACTOR_2024.md`** - v2.0 refactor details
+- **`README.md`** - User-facing documentation and setup guide
+
+### External References
+- **MDN Web Docs:** For JavaScript APIs and browser features
+- **WCAG 2.1 Guidelines:** For accessibility compliance
+- **Core Web Vitals:** For performance optimization targets
+
+### Testing Resources
+- **Test Pages:** All `test-*.html` files in root directory
+- **Console Helpers:** `window.testCommentGeneration()`, `window.performanceOptimizer`
+- **Browser DevTools:** Network tab for resource loading, Console for debugging
+
+### Support Channels
+- Check `docs/jobcard.md` for recent changes and context
+- Review `docs/PROJECT_STATUS.md` for known issues
+- Use test pages to reproduce and verify bugs
+
 ---
 
-*Last updated: 2025-11-17*
+*Last updated: 2025-12-14*
+*This file follows GitHub's best practices for Copilot instructions.*
 *For questions or clarifications, refer to `jobcard.md` for recent change context.*
