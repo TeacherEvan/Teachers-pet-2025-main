@@ -8,6 +8,18 @@
  * @class EnhancedCommentEngine
  */
 
+/**
+ * Debug logging helper - only logs when window.__TP_DEBUG__ === true
+ * @param {string} emoji - Emoji prefix for the log message
+ * @param {string} message - Main log message
+ * @param {...any} args - Additional arguments to log
+ */
+function debugLog(emoji, message, ...args) {
+    if (typeof window !== 'undefined' && window.__TP_DEBUG__ === true) {
+        console.log(emoji + ' ' + message, ...args);
+    }
+}
+
 class EnhancedCommentEngine {
     constructor() {
         // Load data from global namespace (extracted to assets/js/data/engine-data.js)
@@ -40,24 +52,24 @@ class EnhancedCommentEngine {
      */
     async generateComments(sessionData) {
         try {
-            console.log('🎯 Enhanced Engine: Processing session data', sessionData);
+            debugLog('🎯', 'Enhanced Engine: Processing session data', sessionData);
 
             if (!sessionData || !sessionData.studentName) {
                 throw new Error('Invalid session data: missing student name');
             }
 
             const processedData = this.processSessionData(sessionData);
-            console.log('📊 Processed data structure:', processedData);
+            debugLog('📊', 'Processed data structure:', processedData);
 
             let maleComment = await this.generateStyleComment('male', processedData);
             let femaleComment = await this.generateStyleComment('female', processedData);
 
             // Apply synonym replacement if SynonymManager is available
             if (typeof window !== 'undefined' && window.synonymManager) {
-                console.log('📚 Applying synonym replacement to male comment...');
+                debugLog('📚', 'Applying synonym replacement to male comment...');
                 maleComment = await window.synonymManager.replaceOverused(maleComment, 2);
 
-                console.log('📚 Applying synonym replacement to female comment...');
+                debugLog('📚', 'Applying synonym replacement to female comment...');
                 femaleComment = await window.synonymManager.replaceOverused(femaleComment, 2);
             } else {
                 console.warn('⚠️ SynonymManager not available, skipping synonym replacement');
@@ -81,12 +93,12 @@ class EnhancedCommentEngine {
      * Process and structure session data for comment generation
      */
     processSessionData(sessionData) {
-        console.log('🔍 Processing session data:', sessionData);
-        console.log('📊 sessionData.studentName:', sessionData.studentName);
-        console.log('📊 sessionData.gender:', sessionData.gender);
-        console.log('📊 sessionData.subjects:', sessionData.subjects);
-        console.log('📊 sessionData.topicRatings:', sessionData.topicRatings);
-        console.log('📊 ⭐ sessionData.overallRating (RAW):', sessionData.overallRating, 'Type:', typeof sessionData.overallRating);
+        debugLog('🔍', 'Processing session data:', sessionData);
+        debugLog('📊', 'sessionData.studentName:', sessionData.studentName);
+        debugLog('📊', 'sessionData.gender:', sessionData.gender);
+        debugLog('📊', 'sessionData.subjects:', sessionData.subjects);
+        debugLog('📊', 'sessionData.topicRatings:', sessionData.topicRatings);
+        debugLog('📊', '⭐ sessionData.overallRating (RAW):', sessionData.overallRating, 'Type:', typeof sessionData.overallRating);
 
         // Validate student name
         if (!sessionData.studentName || sessionData.studentName.trim() === '') {
@@ -97,11 +109,11 @@ class EnhancedCommentEngine {
         // CRITICAL: Track rating value through entire pipeline
         // Use rating if valid (1-10), otherwise default to 5
         const rating = (sessionData.overallRating >= 1 && sessionData.overallRating <= 10) ? sessionData.overallRating : 5;
-        console.log('📊 ⭐ RATING VALUE BEING USED:', rating, 'Type:', typeof rating);
-        console.log('📊 ⭐ Available rating pools:', Object.keys(this.performanceMap).join(', '));
+        debugLog('📊', '⭐ RATING VALUE BEING USED:', rating, 'Type:', typeof rating);
+        debugLog('📊', '⭐ Available rating pools:', Object.keys(this.performanceMap).join(', '));
 
         const performance = this.performanceMap[rating] || this.performanceMap[5];
-        console.log('📊 ⭐ Performance level selected:', performance.level);
+        debugLog('📊', '⭐ Performance level selected:', performance.level);
 
         const genderKey = sessionData.gender.toLowerCase();
         const pronouns = this.grammarRules.pronouns[genderKey] || this.grammarRules.pronouns.he;
@@ -111,22 +123,24 @@ class EnhancedCommentEngine {
         const verb = this.getRandomFromPool(this.verbPools[rating]);
         const adverb = this.getRandomFromPool(this.adverbPools[rating]);
 
-        console.log(`📊 ⭐ Selected from pools for rating ${rating}:`);
-        console.log('   - descriptor:', descriptor);
-        console.log('   - verb:', verb);
-        console.log('   - adverb:', adverb);
+        debugLog('📊', `⭐ Selected from pools for rating ${rating}:`);
+        debugLog('   -', 'descriptor:', descriptor);
+        debugLog('   -', 'verb:', verb);
+        debugLog('   -', 'adverb:', adverb);
 
         // Group topics by their parent subjects
         const topicsBySubject = this.groupTopicsBySubject(sessionData.subjects || [], sessionData.topicRatings || {});
-        console.log('📦 Topics grouped by subject:', topicsBySubject);
+        debugLog('📦', 'Topics grouped by subject:', topicsBySubject);
 
         // Log each subject and its topics for clarity
-        Object.entries(topicsBySubject).forEach(([subject, topics]) => {
-            console.log(`  ✓ ${subject}: ${topics.length} topics`, topics);
-        });
+        if (window.__TP_DEBUG__ === true) {
+            Object.entries(topicsBySubject).forEach(([subject, topics]) => {
+                debugLog('  ✓', `${subject}: ${topics.length} topics`, topics);
+            });
+        }
 
         const studentName = sessionData.studentName.trim();
-        console.log('✅ Using student name:', studentName);
+        debugLog('✅', 'Using student name:', studentName);
 
         return {
             name: studentName,
@@ -157,6 +171,7 @@ class EnhancedCommentEngine {
      */
     groupTopicsBySubject(subjects, topicRatings) {
         const grouped = {};
+        const unmappedTopics = [];
         const topicList = Object.keys(topicRatings);
 
         // Initialize with empty arrays for selected subjects
@@ -189,14 +204,17 @@ class EnhancedCommentEngine {
                 }
             }
 
-            // Still not assigned? Add to first subject as fallback
-            if (!assigned && subjects.length > 0) {
-                console.warn(`⚠️ Topic "${topic}" could not be matched to any subject - assigning to first subject "${subjects[0]}" as fallback`);
-                grouped[subjects[0]].push(topic);
-            } else if (!assigned) {
-                console.warn(`⚠️ Topic "${topic}" could not be matched to any subject and no subjects selected - ORPHANED TOPIC`);
+            // Track unmapped topics separately (removed fallback to first subject)
+            if (!assigned) {
+                console.warn(`⚠️ Topic "${topic}" could not be matched to any subject - will be mentioned generically`);
+                unmappedTopics.push(topic);
             }
         });
+
+        // Store unmapped topics for generic reference
+        if (unmappedTopics.length > 0) {
+            grouped['__unmapped__'] = unmappedTopics;
+        }
 
         return grouped;
     }
@@ -302,16 +320,16 @@ class EnhancedCommentEngine {
      * FIXED: Ensure ALL checked subjects appear in comment, even without topics
      */
     generateSubjectSection(data, isMale) {
-        console.log('🎯 generateSubjectSection called with data:', {
+        debugLog('🎯', 'generateSubjectSection called with data:', {
             subjects: data.subjects,
             topicsBySubject: data.topicsBySubject
         });
 
         const parts = [];
         const subjectsWithTopics = Object.entries(data.topicsBySubject)
-            .filter(([subject, topics]) => topics.length > 0);
+            .filter(([subject, topics]) => subject !== '__unmapped__' && topics.length > 0);
 
-        console.log('📦 Subjects with topics:', subjectsWithTopics);
+        debugLog('📦', 'Subjects with topics:', subjectsWithTopics);
 
         // Detailed subject mentions with topics - mention ALL subjects with topics
         subjectsWithTopics.forEach(([subject, topics], index) => {
@@ -337,6 +355,27 @@ class EnhancedCommentEngine {
             }
         });
 
+        // Handle unmapped topics generically (without attributing to a subject)
+        const unmappedTopics = data.topicsBySubject['__unmapped__'];
+        if (unmappedTopics && unmappedTopics.length > 0) {
+            const unmappedText = this.naturalJoin(unmappedTopics);
+            if (isMale) {
+                const templates = [
+                    `${data.pronoun_subject} also engaged with selected activities including ${unmappedText}, showing versatility.`,
+                    `${data.name} participated in ${unmappedText}, demonstrating adaptability across learning areas.`,
+                    `Additional work with ${unmappedText} showed ${data.descriptor} engagement.`
+                ];
+                parts.push(this.selectRandom(templates));
+            } else {
+                const templates = [
+                    `${data.pronoun_subject} also participated in ${unmappedText}, showing enthusiasm.`,
+                    `${data.name} engaged with ${unmappedText}, bringing curiosity to each activity.`,
+                    `Additional activities including ${unmappedText} were met with positive engagement.`
+                ];
+                parts.push(this.selectRandom(templates));
+            }
+        }
+
         // Find remaining subjects (those without specific topics selected)
         // FIX: Use case-insensitive comparison to ensure all subjects are found
         const subjectsWithTopicsNames = subjectsWithTopics.map(([s]) => s);
@@ -348,7 +387,7 @@ class EnhancedCommentEngine {
             return !found;
         });
 
-        console.log('📋 Remaining subjects (without topics):', remainingSubjects);
+        debugLog('📋', 'Remaining subjects (without topics):', remainingSubjects);
 
         if (remainingSubjects.length > 0) {
             const subjectsList = this.naturalJoin(remainingSubjects);
@@ -371,7 +410,7 @@ class EnhancedCommentEngine {
         }
 
         const result = parts.join(' ');
-        console.log('✅ Generated subject section:', result);
+        debugLog('✅', 'Generated subject section:', result);
         return result;
     }
 

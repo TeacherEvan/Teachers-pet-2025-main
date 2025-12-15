@@ -8,6 +8,18 @@
  * @class SynonymManager
  */
 
+/**
+ * Debug logging helper - only logs when window.__TP_DEBUG__ === true
+ * @param {string} emoji - Emoji prefix for the log message
+ * @param {string} message - Main log message
+ * @param {...any} args - Additional arguments to log
+ */
+function debugLogSynonym(emoji, message, ...args) {
+    if (typeof window !== 'undefined' && window.__TP_DEBUG__ === true) {
+        console.log(emoji + ' ' + message, ...args);
+    }
+}
+
 class SynonymManager {
     constructor() {
         this.synonymData = null;
@@ -16,7 +28,7 @@ class SynonymManager {
         this.maxUsageThreshold = 2; // Maximum uses before swapping
         this.initialized = false;
 
-        console.log('📚 SynonymManager: Initializing...');
+        debugLogSynonym('📚', 'SynonymManager: Initializing...');
     }
 
     /**
@@ -34,7 +46,7 @@ class SynonymManager {
             }
             this.synonymData = await response.json();
             this.initialized = true;
-            console.log('✅ SynonymManager: Synonym data loaded successfully', {
+            debugLogSynonym('✅', 'SynonymManager: Synonym data loaded successfully', {
                 categories: Object.keys(this.synonymData),
                 totalWords: this.getTotalWordCount()
             });
@@ -80,7 +92,7 @@ class SynonymManager {
             const stored = sessionStorage.getItem('synonymUsageCounts');
             if (stored) {
                 const counts = JSON.parse(stored);
-                console.log('📊 SynonymManager: Loaded usage counts from session', counts);
+                debugLogSynonym('📊', 'SynonymManager: Loaded usage counts from session', counts);
                 return counts;
             }
         } catch (error) {
@@ -95,7 +107,7 @@ class SynonymManager {
     saveUsageCounts() {
         try {
             sessionStorage.setItem('synonymUsageCounts', JSON.stringify(this.usageCounts));
-            console.log('💾 SynonymManager: Saved usage counts to session');
+            debugLogSynonym('💾', 'SynonymManager: Saved usage counts to session');
         } catch (error) {
             console.warn('⚠️ SynonymManager: Could not save usage counts:', error);
         }
@@ -117,7 +129,7 @@ class SynonymManager {
         this.usageCounts[normalized] = (this.usageCounts[normalized] || 0) + 1;
         this.saveUsageCounts();
 
-        console.log(`📈 SynonymManager: "${word}" usage count: ${this.usageCounts[normalized]}`);
+        debugLogSynonym('📈', `SynonymManager: "${word}" usage count: ${this.usageCounts[normalized]}`);
     }
 
     /**
@@ -160,7 +172,7 @@ class SynonymManager {
             }
         }
 
-        console.log(`🔄 SynonymManager: Replacing "${word}" (used ${this.getUsageCount(word)}x) with "${bestSynonym}" (used ${lowestCount}x)`);
+        debugLogSynonym('🔄', `SynonymManager: Replacing "${word}" (used ${this.getUsageCount(word)}x) with "${bestSynonym}" (used ${lowestCount}x)`);
 
         return bestSynonym;
     }
@@ -193,9 +205,9 @@ class SynonymManager {
             this.maxUsageThreshold = threshold;
         }
 
-        console.log('🔍 SynonymManager: Processing text for overused words...');
-        console.log('📏 Current usage threshold:', this.maxUsageThreshold);
-        console.log('📊 Current usage counts BEFORE processing:', { ...this.usageCounts });
+        debugLogSynonym('🔍', 'SynonymManager: Processing text for overused words...');
+        debugLogSynonym('📏', 'Current usage threshold:', this.maxUsageThreshold);
+        debugLogSynonym('📊', 'Current usage counts BEFORE processing:', { ...this.usageCounts });
 
         // Extract all words from text (case-insensitive matching)
         const wordMatches = text.match(/\b[\w']+\b/g) || [];
@@ -214,7 +226,7 @@ class SynonymManager {
             }
         }
 
-        console.log('📝 Words found in current text:', Array.from(wordsInText.keys()));
+        debugLogSynonym('📝', 'Words found in current text:', Array.from(wordsInText.keys()));
 
         // Track replacements to make
         const replacements = new Map(); // original word -> replacement word
@@ -223,28 +235,28 @@ class SynonymManager {
         for (const [normalized, instances] of wordsInText.entries()) {
             const currentUsage = this.getUsageCount(normalized);
 
-            console.log(`🔍 Checking "${normalized}": current usage = ${currentUsage}, threshold = ${this.maxUsageThreshold}`);
+            debugLogSynonym('🔍', `Checking "${normalized}": current usage = ${currentUsage}, threshold = ${this.maxUsageThreshold}`);
 
             // If word has been used >= threshold times, try to replace it
             if (currentUsage >= this.maxUsageThreshold) {
                 const synonyms = this.findSynonyms(normalized);
 
                 if (synonyms && synonyms.length > 0) {
-                    console.log(`📖 Found ${synonyms.length} synonyms for "${normalized}":`, synonyms);
+                    debugLogSynonym('📖', `Found ${synonyms.length} synonyms for "${normalized}":`, synonyms);
 
                     const bestSynonym = this.selectBestSynonym(normalized, synonyms);
 
                     if (bestSynonym && bestSynonym.toLowerCase() !== normalized) {
                         replacements.set(normalized, bestSynonym);
-                        console.log(`✅ Will replace "${normalized}" with "${bestSynonym}"`);
+                        debugLogSynonym('✅', `Will replace "${normalized}" with "${bestSynonym}"`);
                     }
                 } else {
-                    console.log(`⚠️ No synonyms found for "${normalized}"`);
+                    debugLogSynonym('⚠️', `No synonyms found for "${normalized}"`);
                 }
             }
         }
 
-        console.log('🎯 Total replacements planned:', replacements.size);
+        debugLogSynonym('🎯', 'Total replacements planned:', replacements.size);
 
         // Apply replacements with case preservation
         let processedText = text;
@@ -255,7 +267,7 @@ class SynonymManager {
 
             processedText = processedText.replace(regex, (match) => {
                 const replaced = this.matchCase(match, replacement);
-                console.log(`🔄 Replacing "${match}" → "${replaced}"`);
+                debugLogSynonym('🔄', `Replacing "${match}" → "${replaced}"`);
                 return replaced;
             });
         }
@@ -276,7 +288,7 @@ class SynonymManager {
             this.incrementUsage(word);
         }
 
-        console.log('✅ SynonymManager: Text processing complete');
+        debugLogSynonym('✅', 'SynonymManager: Text processing complete');
 
         return processedText;
     }
@@ -312,7 +324,7 @@ class SynonymManager {
     resetUsageCounts() {
         this.usageCounts = {};
         this.saveUsageCounts();
-        console.log('🔄 SynonymManager: Usage counts reset');
+        debugLogSynonym('🔄', 'SynonymManager: Usage counts reset');
     }
 
     /**
