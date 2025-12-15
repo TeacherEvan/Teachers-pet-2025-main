@@ -1101,14 +1101,6 @@
         };
 
         // Update selection count
-        function updateSelectionCount() {
-            const checkedCount = document.querySelectorAll('.topic-checkbox:checked').length;
-            const countElement = document.querySelector('#selectionCount');
-            if (countElement) {
-                countElement.textContent = checkedCount;
-            }
-        }
-
         // Debounced version of updateSelectionCount for performance
         let debounceTimeout;
         function debouncedUpdateSelectionCount() {
