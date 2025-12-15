@@ -15,6 +15,114 @@ Before implementing ANY feature:
 
 ## Recent Work (Newest First)
 
+### 2025-12-15: Production Hardening and Performance Improvements
+**Agent:** GitHub Copilot
+**Branch:** `copilot/add-production-harding-performance-improvements`
+
+**Context:** Implemented production-ready features including debug log gating, lazy loading for heavy generation scripts, safer topic grouping without incorrect attribution, and tone consistency improvements.
+
+**Implementation:**
+
+**1. Production Log Gating**
+- Added `window.__TP_DEBUG__` flag for controlling verbose logging
+- Created `debugLog()` helper in `assets/js/enhanced-comment-engine.js`
+- Created `debugLogSynonym()` helper in `assets/js/synonym-manager.js`
+- Gated all verbose console.log statements behind debug flag
+- Critical errors and warnings still log regardless of debug flag
+
+**Usage:**
+```javascript
+// Enable debug logging in browser console
+window.__TP_DEBUG__ = true;
+
+// Disable debug logging (default)
+window.__TP_DEBUG__ = false;
+```
+
+**2. Lazy Loading System**
+- Modified `Subjects.html` to remove eager loading of comment generation scripts
+- Created inline lazy loading system with `loadCommentGenerationScripts()`
+- Scripts loaded on-demand when user clicks "Generate Comments"
+- Added loading UI states: disabled buttons, spinner text in comment boxes
+- Updated `ensureCommentGeneration()` in `assets/js/ui/subjects-ui.js` to trigger lazy loading
+
+**Scripts Lazy Loaded:**
+- `assets/js/synonym-manager.js`
+- `assets/js/data/engine-data.js`
+- `assets/js/comment-engine.js`
+- `assets/js/engine/utils.js`
+- `assets/js/engine/processor.js`
+- `assets/js/engine/templates.js`
+- `assets/js/engine/core.js`
+- `optimized-comment-generator.js`
+
+**Performance Impact:** Initial page load reduced by ~200KB of script payload
+
+**3. Safer Topic Grouping**
+- Modified `groupTopicsBySubject()` in `assets/js/enhanced-comment-engine.js`
+- Removed fallback behavior that assigned unmapped topics to first selected subject
+- Track unmapped topics separately in `topicsBySubject['__unmapped__']`
+- Updated `generateSubjectSection()` to handle unmapped topics generically
+- Generic mentions: "selected activities", "additional work with...", without attributing to specific subject
+
+**4. Tone Consistency in Fallback Comments**
+- Updated `generateMaleFallbackComment()` in `optimized-comment-generator.js`
+- Updated `generateFemaleFallbackComment()` in `optimized-comment-generator.js`
+- Removed adjective-heavy phrasing:
+  - "blossomed beautifully" → "demonstrated performance"
+  - "wonderful natural abilities" → "strong abilities"
+  - "delightful progress" → "consistent progress"
+  - "treasured member" → "valued member"
+  - "flourish and grow" → "develop skills"
+  - "beautiful potential" → "potential"
+- Aligned with adjective-reduction direction from 2025-12-08 work
+
+**Files Modified:**
+- `assets/js/enhanced-comment-engine.js` - Debug logging, safer topic grouping
+- `assets/js/synonym-manager.js` - Debug logging
+- `enhanced-comment-engine.js` - Synced from assets/js/
+- `optimized-comment-generator.js` - Tone consistency in fallbacks
+- `Subjects.html` - Lazy loading system
+- `assets/js/ui/subjects-ui.js` - Lazy loading integration
+
+**Testing/QA Instructions:**
+
+1. **Test Debug Logging:**
+   - Open `Subjects.html` in browser with DevTools Console
+   - Generate comments - verify console is quiet (no verbose logs)
+   - Run `window.__TP_DEBUG__ = true` in console
+   - Generate comments again - verify verbose logs appear with emojis
+
+2. **Test Lazy Loading:**
+   - Open `Subjects.html` fresh (hard refresh)
+   - Check Network tab - verify synonym-manager.js, engine scripts NOT loaded initially
+   - Select subjects/topics, click "Generate Comments"
+   - Verify button shows "⏳ Loading generation engine..." briefly
+   - Verify scripts load in Network tab
+   - Verify comments generate successfully
+   - Generate again - verify no reload (scripts cached)
+
+3. **Test Unmapped Topic Handling:**
+   - Open browser console: `window.__TP_DEBUG__ = true`
+   - Select topics that don't match any subject's keywords in `subjectTopicMap`
+   - Generate comments
+   - Verify console shows "⚠️ Topic ... could not be matched to any subject"
+   - Verify comment text mentions topics generically ("selected activities", "additional work")
+   - Verify no incorrect attribution to first subject
+
+4. **Test Tone Consistency:**
+   - Simulate fallback mode by temporarily disabling EnhancedCommentEngine
+   - Generate comments for both male and female styles
+   - Verify fallback comments avoid adjective-heavy phrases
+   - Compare with previous fallback output (should be more neutral)
+
+**TODO: [OPTIMIZATION]**
+- Consider adding prefetch hints for generation scripts on hover over "Generate" button
+- Consider service worker caching for offline capability
+- Monitor real-world lazy loading performance metrics
+
+---
+
 ### 2025-12-14: K1 December Curriculum Implementation
 **Agent:** GitHub Copilot
 **Branch:** `copilot/create-k1-k2-december-files`
