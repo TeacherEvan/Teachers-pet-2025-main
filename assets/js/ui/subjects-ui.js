@@ -94,72 +94,96 @@ function inferSubjectsFromTopics(topicRatings, selectedSubjects) {
 }
 
 function ensureCommentGeneration() {
-    try {
-        console.log('🚀 Starting comment generation...');
+    (async () => {
+        try {
+            console.log('🚀 Starting comment generation...');
 
-        const safeParse = (val) => {
-            try { return JSON.parse(val || '{}'); } catch { return {}; }
-        };
-
-        let studentData = safeParse(localStorage.getItem('studentData'));
-        // If required fields are missing, try to recover from sessionStorage
-        if (!studentData.studentName || !studentData.gender) {
-            const ssData = safeParse(sessionStorage.getItem('studentData'));
-            if (ssData.studentName && ssData.gender) {
-                console.warn('ℹ️ Restoring studentData from sessionStorage fallback');
-                studentData = ssData;
-                try { localStorage.setItem('studentData', JSON.stringify(ssData)); } catch { }
+            // Show loading state
+            if (typeof showGenerationLoading === 'function') {
+                showGenerationLoading();
             }
-        }
 
-        const selectedSubjects = [];
-        const topicRatings = {};
-
-        // ⚡ PERFORMANCE OPTIMIZATION: Cache DOM queries
-        const checkedSubjectCheckboxes = document.querySelectorAll('.subject-checkbox:checked');
-        const checkedTopicCheckboxes = document.querySelectorAll('.topic-checkbox:checked');
-
-        // Collect selected subjects and topics
-        checkedSubjectCheckboxes.forEach(cb => {
-            if (cb.value && cb.value.trim() !== '') {
-                selectedSubjects.push(cb.value);
+            // Load comment generation scripts if not already loaded
+            if (typeof loadCommentGenerationScripts === 'function') {
+                try {
+                    await loadCommentGenerationScripts();
+                } catch (error) {
+                    console.error('❌ Failed to load comment generation scripts:', error);
+                    alert('Failed to load comment generation system. Please refresh the page and try again.');
+                    if (typeof hideGenerationLoading === 'function') {
+                        hideGenerationLoading();
+                    }
+                    return;
+                }
             }
-        });
 
-        checkedTopicCheckboxes.forEach(cb => {
-            if (cb.value && cb.value.trim() !== '') {
-                topicRatings[cb.value] = 5; // Default rating
+            // Hide loading state
+            if (typeof hideGenerationLoading === 'function') {
+                hideGenerationLoading();
             }
-        });
 
-        // Infer parent subjects from selected topics
-        inferSubjectsFromTopics(topicRatings, selectedSubjects);
+            const safeParse = (val) => {
+                try { return JSON.parse(val || '{}'); } catch { return {}; }
+            };
 
-        // Validate required data
-        if (!studentData.studentName || !studentData.gender) {
-            alert('Missing student information. Please go back and complete the student information form.');
-            return;
-        }
+            let studentData = safeParse(localStorage.getItem('studentData'));
+            // If required fields are missing, try to recover from sessionStorage
+            if (!studentData.studentName || !studentData.gender) {
+                const ssData = safeParse(sessionStorage.getItem('studentData'));
+                if (ssData.studentName && ssData.gender) {
+                    console.warn('ℹ️ Restoring studentData from sessionStorage fallback');
+                    studentData = ssData;
+                    try { localStorage.setItem('studentData', JSON.stringify(ssData)); } catch { }
+                }
+            }
 
-        // Prepare session data
-        const sessionData = {
-            studentName: studentData.studentName,
-            gender: studentData.gender,
-            overallRating: parseInt(studentData.overallAttributes) || 5,
-            strengths: studentData.strengths || '',
-            weaknesses: studentData.weaknesses || '',
-            subjects: selectedSubjects,
-            topicRatings: topicRatings
-        };
+            const selectedSubjects = [];
+            const topicRatings = {};
 
-        // STRICT: Do NOT inject fake subjects/topics
-        if (selectedSubjects.length === 0 && Object.keys(topicRatings).length === 0) {
-            alert('Please select at least one subject or topic before generating comments.');
-            return;
-        }
+            // ⚡ PERFORMANCE OPTIMIZATION: Cache DOM queries
+            const checkedSubjectCheckboxes = document.querySelectorAll('.subject-checkbox:checked');
+            const checkedTopicCheckboxes = document.querySelectorAll('.topic-checkbox:checked');
 
-        // Generate comments using Enhanced engine (now async)
-        (async () => {
+            // Collect selected subjects and topics
+            checkedSubjectCheckboxes.forEach(cb => {
+                if (cb.value && cb.value.trim() !== '') {
+                    selectedSubjects.push(cb.value);
+                }
+            });
+
+            checkedTopicCheckboxes.forEach(cb => {
+                if (cb.value && cb.value.trim() !== '') {
+                    topicRatings[cb.value] = 5; // Default rating
+                }
+            });
+
+            // Infer parent subjects from selected topics
+            inferSubjectsFromTopics(topicRatings, selectedSubjects);
+
+            // Validate required data
+            if (!studentData.studentName || !studentData.gender) {
+                alert('Missing student information. Please go back and complete the student information form.');
+                return;
+            }
+
+            // Prepare session data
+            const sessionData = {
+                studentName: studentData.studentName,
+                gender: studentData.gender,
+                overallRating: parseInt(studentData.overallAttributes) || 5,
+                strengths: studentData.strengths || '',
+                weaknesses: studentData.weaknesses || '',
+                subjects: selectedSubjects,
+                topicRatings: topicRatings
+            };
+
+            // STRICT: Do NOT inject fake subjects/topics
+            if (selectedSubjects.length === 0 && Object.keys(topicRatings).length === 0) {
+                alert('Please select at least one subject or topic before generating comments.');
+                return;
+            }
+
+            // Generate comments using Enhanced engine
             let comments;
             if (typeof EnhancedCommentEngine !== 'undefined') {
                 const enhancedEngine = new EnhancedCommentEngine();
@@ -181,15 +205,14 @@ function ensureCommentGeneration() {
             // Display generated comments
             displayGeneratedComments(comments);
 
-        })().catch(error => {
-            console.error('❌ Async comment generation failed:', error);
+        } catch (error) {
+            console.error('❌ Comment generation failed:', error);
             alert('An error occurred during comment generation: ' + error.message);
-        });
-
-    } catch (error) {
-        console.error('❌ Comment generation setup failed:', error);
-        alert('An error occurred during comment generation: ' + error.message);
-    }
+            if (typeof hideGenerationLoading === 'function') {
+                hideGenerationLoading();
+            }
+        }
+    })();
 }
 
 function validateUserDataInComments(comments, sessionData) {

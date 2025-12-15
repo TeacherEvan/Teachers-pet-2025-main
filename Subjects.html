@@ -12,7 +12,7 @@
     <link rel="preload" href="assets/css/components.css" as="style">
     <link rel="preload" href="assets/css/micro-interactions.css" as="style">
     <link rel="preload" href="assets/js/controllers/app-controller.js" as="script">
-    <link rel="preload" href="assets/js/comment-engine.js" as="script">
+    <!-- Note: Comment generation scripts are lazy-loaded on demand -->
     <link rel="preload" href="assets/js/curriculum/curriculum-loader.js" as="script">
     <link rel="preload" href="assets/js/utils/performance-optimizer.js" as="script">
     <link rel="preload" href="assets/js/utils/ui-enhancements.js" as="script">
@@ -1100,6 +1100,14 @@
             }
         };
 
+        // Update selection count
+        // Debounced version of updateSelectionCount for performance
+        let debounceTimeout;
+        function debouncedUpdateSelectionCount() {
+            clearTimeout(debounceTimeout);
+            debounceTimeout = setTimeout(updateSelectionCount, 150);
+        }
+
         // Functions are now loaded from missing-functions.js
 
         // On load, log what student data we can see and try a gentle restore
@@ -1428,17 +1436,127 @@
     <script src="assets/js/utils/error-boundary.js"></script>
     <script src="assets/js/utils/performance-optimizer.js"></script>
     <script src="assets/js/utils/ui-enhancements.js"></script>
-    <script src="assets/js/synonym-manager.js"></script>
+    <!-- Note: Comment generation scripts are lazy-loaded on demand -->
     <script src="localstorage-monitor.js"></script>
-    <script src="assets/js/data/engine-data.js"></script>
-    <script src="assets/js/comment-engine.js"></script>
-    <!-- Engine Modules (Refactored) -->
-    <script src="assets/js/engine/utils.js"></script>
-    <script src="assets/js/engine/processor.js"></script>
-    <script src="assets/js/engine/templates.js"></script>
-    <script src="assets/js/engine/core.js"></script>
-    <script src="optimized-comment-generator.js"></script>
     <script src="assets/js/ui/shared-ui.js"></script>
+    
+    <!-- Lazy Loading System for Comment Generation -->
+    <script>
+        /**
+         * Lazy loading system for comment generation dependencies
+         * Loads heavy scripts only when user triggers generation
+         */
+        window.commentGenerationLoaded = false;
+        window.commentGenerationLoading = false;
+
+        /**
+         * Load comment generation dependencies dynamically
+         * @returns {Promise<void>}
+         */
+        async function loadCommentGenerationScripts() {
+            if (window.commentGenerationLoaded) {
+                return Promise.resolve();
+            }
+
+            if (window.commentGenerationLoading) {
+                // Wait for existing load to complete
+                return new Promise((resolve, reject) => {
+                    const MAX_WAIT_MS = 10000; // 10 seconds
+                    const POLL_INTERVAL_MS = 100;
+                    let waited = 0;
+                    const checkInterval = setInterval(() => {
+                        if (window.commentGenerationLoaded) {
+                            clearInterval(checkInterval);
+                            resolve();
+                        } else {
+                            waited += POLL_INTERVAL_MS;
+                            if (waited >= MAX_WAIT_MS) {
+                                clearInterval(checkInterval);
+                                reject(new Error('Timed out waiting for comment generation scripts to load.'));
+                            }
+                        }
+                    }, POLL_INTERVAL_MS);
+                });
+            }
+
+            window.commentGenerationLoading = true;
+
+            const scriptsToLoad = [
+                'assets/js/synonym-manager.js',
+                'assets/js/data/engine-data.js',
+                'assets/js/comment-engine.js',
+                'assets/js/engine/utils.js',
+                'assets/js/engine/processor.js',
+                'assets/js/engine/templates.js',
+                'assets/js/engine/core.js',
+                'optimized-comment-generator.js'
+            ];
+
+            const loadScript = (src) => {
+                return new Promise((resolve, reject) => {
+                    const script = document.createElement('script');
+                    script.src = src;
+                    script.onload = resolve;
+                    script.onerror = () => reject(new Error(`Failed to load script: ${src}`));
+                    document.body.appendChild(script);
+                });
+            };
+
+            try {
+                // Load scripts sequentially to maintain dependencies
+                for (const src of scriptsToLoad) {
+                    await loadScript(src);
+                }
+
+                window.commentGenerationLoaded = true;
+                window.commentGenerationLoading = false;
+
+                if (window.__TP_DEBUG__) {
+                    console.log('✅ Comment generation scripts loaded successfully');
+                }
+            } catch (error) {
+                window.commentGenerationLoading = false;
+                console.error('❌ Failed to load comment generation scripts:', error);
+                throw error;
+            }
+        }
+
+        /**
+         * Show loading UI state
+         */
+        function showGenerationLoading() {
+            const generateBtn = document.getElementById('generateBtn');
+            const commentBoxes = document.querySelectorAll('.comment-box');
+
+            if (generateBtn) {
+                generateBtn.disabled = true;
+                generateBtn.innerHTML = '⏳ Loading generation engine...';
+            }
+
+            commentBoxes.forEach(box => {
+                box.textContent = '⏳ Loading comment generation engine...';
+                box.style.opacity = '0.6';
+            });
+        }
+
+        /**
+         * Hide loading UI state
+         */
+        function hideGenerationLoading() {
+            const generateBtn = document.getElementById('generateBtn');
+            const commentBoxes = document.querySelectorAll('.comment-box');
+
+            if (generateBtn) {
+                generateBtn.disabled = false;
+                generateBtn.innerHTML = 'Generate Comments';
+            }
+
+            commentBoxes.forEach(box => {
+                box.style.opacity = '1';
+            });
+        }
+    </script>
+    
     <script src="assets/js/ui/subjects-ui.js"></script>
 </body>
 

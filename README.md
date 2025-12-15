@@ -118,6 +118,29 @@ npx http-server -p 8080
 - Data stays on user's device
 - Can be cleared using "Start Over" button
 
+### Performance Optimizations
+- Lazy loading of comment generation scripts
+- Scripts loaded on-demand when generating comments
+- Reduces initial page load by ~200KB
+- Debug logging gated behind flag for production use
+
+### Debug Mode
+For developers and troubleshooting, enable verbose logging:
+```javascript
+// Open browser console (F12) and run:
+window.__TP_DEBUG__ = true;
+
+// Then generate comments to see detailed logs
+// To disable:
+window.__TP_DEBUG__ = false;
+```
+
+Debug mode shows:
+- Session data processing steps
+- Topic grouping and subject mapping
+- Synonym replacement operations
+- Performance metrics and timings
+
 ## 🔧 Troubleshooting
 
 ### Report Generation Issues

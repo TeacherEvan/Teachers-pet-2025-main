@@ -239,7 +239,7 @@ class OptimizedCommentGenerator {
 
         if (data.strengths) {
             const strengths = this.processTextList(data.strengths);
-            comment += `${pronoun.subject} particularly excels in ${this.naturalJoin(strengths)}, displaying strong capabilities and understanding. `;
+            comment += `${pronoun.subject} particularly excels in ${this.naturalJoin(strengths)}, displaying strong understanding. `;
         }
 
         if (data.subjects && data.subjects.length > 0) {
@@ -253,31 +253,31 @@ class OptimizedCommentGenerator {
             comment += `With continued support in ${this.naturalJoin(weaknesses)}, ${name} will continue to develop these important skills. `;
         }
 
-        comment += `${name} is well-prepared for continued academic growth and shows excellent potential for future success.`;
+        comment += `${name} is well-prepared for continued academic growth and shows potential for future success.`;
 
         return comment;
     }
 
     generateFemaleFallbackComment(name, pronoun, performance, data) {
-        let comment = `${name} has blossomed beautifully this term, bringing joy and enthusiasm to our classroom community. `;
+        let comment = `${name} has demonstrated ${performance.level} performance this term, bringing enthusiasm to our classroom community. `;
 
         if (data.strengths) {
             const strengths = this.processTextList(data.strengths);
-            comment += `${pronoun.subject} shines particularly in ${this.naturalJoin(strengths)}, displaying wonderful natural abilities. `;
+            comment += `${pronoun.subject} particularly excels in ${this.naturalJoin(strengths)}, displaying strong abilities. `;
         }
 
         if (data.subjects && data.subjects.length > 0) {
-            comment += `In ${this.naturalJoin(data.subjects)}, ${name} has shown delightful progress and genuine curiosity. `;
+            comment += `In ${this.naturalJoin(data.subjects)}, ${name} has shown consistent progress and curiosity. `;
         }
 
-        comment += `${pronoun.subject} brings warmth and kindness to all classroom interactions and is a treasured member of our learning community. `;
+        comment += `${pronoun.subject} brings positive energy to classroom interactions and is a valued member of our learning community. `;
 
         if (data.weaknesses) {
             const weaknesses = this.processTextList(data.weaknesses);
-            comment += `With gentle encouragement in ${this.naturalJoin(weaknesses)}, ${name} will continue to flourish and grow. `;
+            comment += `With gentle encouragement in ${this.naturalJoin(weaknesses)}, ${name} will continue to develop these important skills. `;
         }
 
-        comment += `${name} is ready for wonderful new adventures in learning and shows beautiful potential for continued success.`;
+        comment += `${name} is ready for continued learning adventures and shows potential for future success.`;
 
         return comment;
     }
