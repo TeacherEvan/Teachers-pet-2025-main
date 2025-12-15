@@ -338,18 +338,18 @@ class EnhancedCommentEngine {
 
             if (isMale) {
                 const templates = [
-                    `In ${subject}, ${data.pronoun_subject_lower} showed ${data.descriptor} progress with ${topicsText}, demonstrating proficient understanding.`,
-                    `${data.name} demonstrated ${data.level} competency in ${subject}, particularly excelling with ${topicsText}.`,
-                    `${data.pronoun_possessive_cap} work in ${subject} was ${data.descriptor}, especially notable in ${topicsText}.`,
-                    `${data.pronoun_subject} achieved ${data.level} results in ${subject}, displaying skillful engagement with ${topicsText}.`
+                    `In '${subject}', ${data.pronoun_subject_lower} showed ${data.descriptor} progress with ${topicsText}, demonstrating proficient understanding.`,
+                    `${data.name} demonstrated ${data.level} competency in '${subject}', particularly excelling with ${topicsText}.`,
+                    `${data.pronoun_possessive_cap} work in '${subject}' was ${data.descriptor}, especially notable in ${topicsText}.`,
+                    `${data.pronoun_subject} achieved ${data.level} results in '${subject}', displaying skillful engagement with ${topicsText}.`
                 ];
                 parts.push(this.selectRandom(templates));
             } else {
                 const templates = [
-                    `In ${subject}, ${data.pronoun_subject_lower} showed ${data.descriptor} engagement with ${topicsText}.`,
-                    `${data.name} demonstrated positive learning in ${subject}, particularly with ${topicsText}.`,
-                    `${data.pronoun_possessive_cap} progress in ${subject} was encouraging, especially exploring ${topicsText}.`,
-                    `${data.name} engaged well with ${subject}, showing interest in ${topicsText}.`
+                    `In '${subject}', ${data.pronoun_subject_lower} showed ${data.descriptor} engagement with ${topicsText}.`,
+                    `${data.name} demonstrated positive learning in '${subject}', particularly with ${topicsText}.`,
+                    `${data.pronoun_possessive_cap} progress in '${subject}' was encouraging, especially exploring ${topicsText}.`,
+                    `${data.name} engaged well with '${subject}', showing interest in ${topicsText}.`
                 ];
                 parts.push(this.selectRandom(templates));
             }
@@ -390,7 +390,7 @@ class EnhancedCommentEngine {
         debugLog('📋', 'Remaining subjects (without topics):', remainingSubjects);
 
         if (remainingSubjects.length > 0) {
-            const subjectsList = this.naturalJoin(remainingSubjects);
+            const subjectsList = this.naturalJoin(remainingSubjects.map(s => `'${s}'`));
             if (isMale) {
                 parts.push(`${data.pronoun_subject} also demonstrated ${data.descriptor} in ${subjectsList}, showing versatile aptitude.`);
             } else {
@@ -401,7 +401,7 @@ class EnhancedCommentEngine {
         // SAFETY CHECK: If NO subjects mentioned at all, add generic statement
         if (parts.length === 0 && data.subjects.length > 0) {
             console.warn('⚠️ No subject parts generated, adding fallback');
-            const allSubjectsList = this.naturalJoin(data.subjects);
+            const allSubjectsList = this.naturalJoin(data.subjects.map(s => `'${s}'`));
             if (isMale) {
                 parts.push(`${data.name} made ${data.descriptor} progress across ${allSubjectsList}, showing versatile development.`);
             } else {
