@@ -1468,13 +1468,22 @@
 
             if (window.commentGenerationLoading) {
                 // Wait for existing load to complete
-                return new Promise((resolve) => {
+                return new Promise((resolve, reject) => {
+                    const MAX_WAIT_MS = 10000; // 10 seconds
+                    const POLL_INTERVAL_MS = 100;
+                    let waited = 0;
                     const checkInterval = setInterval(() => {
                         if (window.commentGenerationLoaded) {
                             clearInterval(checkInterval);
                             resolve();
+                        } else {
+                            waited += POLL_INTERVAL_MS;
+                            if (waited >= MAX_WAIT_MS) {
+                                clearInterval(checkInterval);
+                                reject(new Error('Timed out waiting for comment generation scripts to load.'));
+                            }
                         }
-                    }, 100);
+                    }, POLL_INTERVAL_MS);
                 });
             }
 
