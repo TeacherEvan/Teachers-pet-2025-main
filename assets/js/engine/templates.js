@@ -112,18 +112,18 @@ window.TeachersPetTemplates = {
 
             if (isMale) {
                 const templates = [
-                    `In ${subject}, ${data.pronoun_subject_lower} showed ${data.descriptor} progress with ${topicsText}, demonstrating proficient understanding.`,
-                    `${data.name} demonstrated ${data.level} competency in ${subject}, particularly excelling with ${topicsText}.`,
-                    `${data.pronoun_possessive_cap} work in ${subject} was ${data.descriptor}, especially notable in ${topicsText}.`,
-                    `${data.pronoun_subject} achieved ${data.level} results in ${subject}, displaying skillful engagement with ${topicsText}.`
+                    `In '${subject}', ${data.pronoun_subject_lower} showed ${data.descriptor} progress with ${topicsText}, demonstrating proficient understanding.`,
+                    `${data.name} demonstrated ${data.level} competency in '${subject}', particularly excelling with ${topicsText}.`,
+                    `${data.pronoun_possessive_cap} work in '${subject}' was ${data.descriptor}, especially notable in ${topicsText}.`,
+                    `${data.pronoun_subject} achieved ${data.level} results in '${subject}', displaying skillful engagement with ${topicsText}.`
                 ];
                 parts.push(TeachersPetUtils.selectRandom(templates));
             } else {
                 const templates = [
-                    `In ${subject}, ${data.pronoun_subject_lower} showed ${data.descriptor} engagement with ${topicsText}.`,
-                    `${data.name} demonstrated positive learning in ${subject}, particularly with ${topicsText}.`,
-                    `${data.pronoun_possessive_cap} progress in ${subject} was encouraging, especially exploring ${topicsText}.`,
-                    `${data.name} engaged well with ${subject}, showing interest in ${topicsText}.`
+                    `In '${subject}', ${data.pronoun_subject_lower} showed ${data.descriptor} engagement with ${topicsText}.`,
+                    `${data.name} demonstrated positive learning in '${subject}', particularly with ${topicsText}.`,
+                    `${data.pronoun_possessive_cap} progress in '${subject}' was encouraging, especially exploring ${topicsText}.`,
+                    `${data.name} engaged well with '${subject}', showing interest in ${topicsText}.`
                 ];
                 parts.push(TeachersPetUtils.selectRandom(templates));
             }
@@ -139,7 +139,7 @@ window.TeachersPetTemplates = {
         });
 
         if (remainingSubjects.length > 0) {
-            const subjectsList = TeachersPetUtils.naturalJoin(remainingSubjects);
+            const subjectsList = TeachersPetUtils.naturalJoin(remainingSubjects.map(s => `'${s}'`));
             if (isMale) {
                 parts.push(`${data.pronoun_subject} also made consistent and ${data.descriptor} progress in ${subjectsList}, demonstrating versatile aptitude.`);
             } else {
@@ -149,7 +149,7 @@ window.TeachersPetTemplates = {
 
         // SAFETY CHECK: If NO subjects mentioned at all, add generic statement
         if (parts.length === 0 && data.subjects.length > 0) {
-            const allSubjectsList = TeachersPetUtils.naturalJoin(data.subjects);
+            const allSubjectsList = TeachersPetUtils.naturalJoin(data.subjects.map(s => `'${s}'`));
             if (isMale) {
                 parts.push(`${data.name} made ${data.descriptor} progress across ${allSubjectsList}, showing versatile development.`);
             } else {
