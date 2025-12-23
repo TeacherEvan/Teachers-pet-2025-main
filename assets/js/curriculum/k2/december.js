@@ -1,9 +1,13 @@
 /**
  * K2 December Curriculum Data
- * Teachers Pet - Kindergarten 2 December 2025
- *
- * NOTE: This dataset currently mirrors K2 November (10 subjects).
- * Update topics/vocabulary as the December curriculum is finalized.
+ * Teachers Pet - Kindergarten 2 December 2025 (2nd Semester)
+ * 
+ * This file contains all subjects, activities, and vocabulary for K2 December curriculum.
+ * NOTE: K2 December has 11 subjects (different from November's 10):
+ * - Includes Cooking (NOT in November)
+ * - Has updated topics for several subjects
+ * 
+ * Used by Subjects.html to dynamically generate subject selection interface.
  */
 
 // Initialize global curriculum data structure
@@ -11,224 +15,144 @@ window.CurriculumData = window.CurriculumData || {};
 window.CurriculumData.K2 = window.CurriculumData.K2 || {};
 
 window.CurriculumData.K2.December = {
-  grade: "K2",
-  month: "December",
+  grade: 'K2',
+  month: 'December',
   subjects: [
     {
-      id: "mathematics",
-      name: "Mathematics",
+      id: 'mathematics',
+      name: 'Mathematics',
       topics: [
-        { id: "math_counting", name: "Counting from 1-20" },
-        {
-          id: "math_word_problems",
-          name: "Read the word problems and subtract the numbers to get an answer",
-        },
-        {
-          id: "math_count_subtract",
-          name: "Count the objects in the box and outside the box, then use subtraction to find out how many items are left",
-        },
-        {
-          id: "math_cross_off",
-          name: "Cross off the circles and count the amount that is left",
-        },
+        { id: 'math_counting_1_20', name: 'Counting from 1-20' },
+        { id: 'math_counting_1_30', name: 'Counting from 1-30' },
+        { id: 'math_counting_1_50', name: 'Counting from 1-50' },
+        { id: 'math_subtraction_addition', name: 'Concepts of Subtraction and Addition' },
+        { id: 'math_tracing_writing', name: 'Tracing and freehand writing numbers 1-20' }
       ],
-      vocabulary:
-        "Subtract, left, count, how many, Minus, equals, plus, hats, bears, fish, cups, pens, glasses, cross off",
+      vocabulary: 'count, numbers, subtract, take away, less, write, minus, equals, addition, add, more, plus sign, minus sign, equals sign'
     },
     {
-      id: "iq",
-      name: "I.Q",
+      id: 'iq',
+      name: 'I.Q',
       topics: [
-        {
-          id: "iq_match_shapes",
-          name: "Draw lines to match the shapes to a picture that uses all the shapes in 1st column",
-        },
-        {
-          id: "iq_biggest_smallest",
-          name: "Look at the 3 given pictures, and colour the one that is either the biggest or smallest",
-        },
-        {
-          id: "iq_same_size",
-          name: "Look at the given pictures and choose the pair of pictures that are the same size",
-        },
-        {
-          id: "iq_correct_order",
-          name: "Put the given pictures in the correct order",
-        },
-        {
-          id: "iq_match_activities",
-          name: "Draw lines to match the same activities",
-        },
-        {
-          id: "iq_longest_shortest",
-          name: "Colour the longest object and shortest object",
-        },
-        {
-          id: "iq_up_down",
-          name: "Put an X on things going up and a slash on things going down",
-        },
-        {
-          id: "iq_heaviest_lightest",
-          name: "Colour the heaviest and lightest object",
-        },
+        { id: 'iq_wet_dry', name: 'Wet and Dry objects' },
+        { id: 'iq_underneath', name: 'The preposition Underneath' },
+        { id: 'iq_emotions', name: 'Recognizing Emotions (Happy or Sad)' },
+        { id: 'iq_loud_quiet', name: 'Distinguishing between Loud and Quiet noises' },
+        { id: 'iq_inside_outside', name: 'Understanding the spatial relationship of Inside and Outside' },
+        { id: 'iq_hot_cold', name: 'Concepts of Hot and Cold' },
+        { id: 'iq_appropriate_actions', name: 'Identifying Appropriate Actions' },
+        { id: 'iq_size_sequencing', name: 'Size Sequencing from smallest to biggest' }
       ],
-      vocabulary:
-        "square, rectangle, triangle, circle, diamonds, penguin, kangaroo, House, big, small, colour, Kettle, Duck, Hexagon, Temple, Fans, Goose, Dolphins, Candle, watermelon, girl, Plant, Lotus, Chicken, boat, bath, Dance, Eat, read, red, blue, Truck, belt, paintbrush, Caterpillar, Slash, X, stairs, sled, turtle, walking, Lollipop, Chair, Flashlight, Ice cream, Plant, TV, House, slide, Milk, growth, order, up, down",
+      vocabulary: 'wet, dry, underneath, happy, sad, loud, quiet, inside, outside, hot, cold, small, smaller, smallest, big, bigger, biggest'
     },
     {
-      id: "social_studies",
-      name: "Social Studies",
+      id: 'social_studies',
+      name: 'Social Studies',
       topics: [
-        { id: "social_frog_lifecycle", name: "Life cycle of the frog" },
-        { id: "social_seasons", name: "Different seasons around the world" },
-        { id: "social_loy_kratong", name: "Loy Kratong Festival" },
-        { id: "social_deforestation", name: "Effects of Deforestation" },
-        { id: "social_days_week", name: "Days of the week" },
-        { id: "social_transportation", name: "Transportation and Vehicles" },
+        { id: 'social_community_helpers', name: 'Community helpers, traffic rules, and road signs' },
+        { id: 'social_planet_earth', name: 'What makes up our planet earth and what those materials are used for' },
+        { id: 'social_new_year', name: 'New Year\'s Day and Thai New Year (Songkran)' },
+        { id: 'social_food_pyramid', name: 'Food pyramid and healthy eating' }
       ],
-      vocabulary:
-        "Frog, Tadpole, Froglet, Egg, Summer, Autumn, Winter, Spring, Loy Kratong, River, Klong, Banana Leaves, Banana trunk, Lotus Flowers, Rain, Flood, Deforestation, Forest, Trees, Monday-Sunday, Earth, Car, boat, plane, train",
+      vocabulary: 'community, helper, road sign, safety, police, doctor, teacher, rule, follow, help, home, school, soil, stone, sand, glass bottle, building, charcoal, New Year\'s Day, Songkran Day, presents/gift, monk, protein, carbohydrates/grains, fats, fruits, vegetables'
     },
     {
-      id: "english",
-      name: "English",
+      id: 'english',
+      name: 'English',
       topics: [
-        {
-          id: "english_uppercase_lowercase",
-          name: "Draw a line from the lower-case letter to the upper-case letter",
-        },
-        { id: "english_trace_letter", name: "Trace the letter" },
-        { id: "english_circle_correct", name: "Circle the correct letter" },
-        { id: "english_write_letters", name: "Write the letters" },
-        {
-          id: "english_match_same",
-          name: "Draw lines to match the same letters",
-        },
-        {
-          id: "english_phonics_n",
-          name: "Circle the letter n and paste correct stickers with N words",
-        },
-        {
-          id: "english_phonics_o",
-          name: "Trace the dotted line to make O and circle words that start with o",
-        },
-        {
-          id: "english_phonics_p",
-          name: 'Colour the parts with the letter "P" and read the word and circle the pictures that start with "P"',
-        },
-        {
-          id: "english_phonics_q",
-          name: 'Trace the dotted line to make the "Q" and paste the "Q" pictures with stickers',
-        },
+        { id: 'english_lowercase_intro', name: 'Introduce and discuss lowercase letters m,n,o,p,q,r,s,t,u,v,w,x,y,z' },
+        { id: 'english_match_pictures', name: 'Draw lines to match letters with pictures' },
+        { id: 'english_trace_write', name: 'Trace and write letters' },
+        { id: 'english_circle_correct', name: 'Circle correct letter' },
+        { id: 'english_vocabulary_practice', name: 'Practice identifying and saying vocabulary words that begin with each letter' },
+        { id: 'english_lowercase_uppercase', name: 'Matching lowercase letters to their uppercase counterparts' }
       ],
-      vocabulary:
-        "a-apple, b-bee, c-cat, d-dog, e-egg, f-fish, g-goat, h-hat, i-ink, j-jug, nurse, neck, nose, nest, octopus, orange, on, ox, panda, pear, pen, pig, quick, queen, quiet, quit",
+      vocabulary: 'mat, net, ox, pen, queen, rainbow, sun, top, umbrella, van, whale, x-ray, yacht, zipper'
     },
     {
-      id: "science",
-      name: "Science",
-      topics: [{ id: "science_air_pressure", name: "Air Pressure Experiment" }],
-      vocabulary:
-        "Candle, Plate, Plastic bottle, Plastic sheet, Tube, Fire, Air",
+      id: 'phonics',
+      name: 'Phonics',
+      topics: [
+        { id: 'phonics_letter_r', name: 'Letter R sound - identify initial sound, color/circle matching pictures' },
+        { id: 'phonics_letter_s', name: 'Letter S sound - identify initial sound, color/circle matching pictures' },
+        { id: 'phonics_letter_t', name: 'Letter T sound - identify initial sound, color/circle matching pictures' },
+        { id: 'phonics_letter_u', name: 'Letter U sound - identify initial sound, color/circle matching pictures' }
+      ],
+      vocabulary: 'Rabbit, Read, Rain, Rose, Seal, Sand, Sun, Sea, Tiger, Tea, Teeth, Tie, Uncle, Up, Umbrella, Under'
     },
     {
-      id: "conversation1",
-      name: "Conversation 1",
+      id: 'science',
+      name: 'Science',
       topics: [
-        {
-          id: "conv1_body_parts",
-          name: "Body Parts - Smell and Hear, Feel and see: What do you use to smell/hear/feel/see? -I use my nose/ears/hands/eyes",
-        },
-        {
-          id: "conv1_how_many",
-          name: "How many ears/eyes/hands do you have? -I have two ears/eyes/hands",
-        },
-        { id: "conv1_one_nose", name: "Do you have 1 nose? -Yes I do" },
-        {
-          id: "conv1_what_do",
-          name: "What do you do with your hands/eyes? -I feel/see",
-        },
-        {
-          id: "conv1_where_from",
-          name: "Where are you from? -I am from Thailand",
-        },
-        {
-          id: "conv1_common_action",
-          name: "Common Action: What are you doing? -I am raising my hand. Are you raising your hand? -Yes, I am",
-        },
-        {
-          id: "conv1_favourite_place",
-          name: "Favourite Place: Where do you like to go? -I like to go to the zoo. Do you like to go to the zoo? -Yes, I do",
-        },
+        { id: 'science_water_air_pressure', name: 'Water and Air Pressure Experiment - Observe difference between wet and dry objects after submerged' }
       ],
-      vocabulary:
-        "Nose, Smell, Ears, Hear, Hands, Feel, Eyes, See, Senses, Thailand, raise, hand, school, park, zoo",
+      vocabulary: 'wet, dry, float, sink, air, water, experiment, submerge'
     },
     {
-      id: "conversation3",
-      name: "Conversation 3",
+      id: 'conversation1',
+      name: 'Conversation 1',
       topics: [
-        {
-          id: "conv3_days_week",
-          name: "Days of the week: What day is it today? -It is Monday. Is it Monday? -Yes, it is",
-        },
-        {
-          id: "conv3_weather",
-          name: "Weather: What is the weather like? -It's sunny. Is it sunny? -Yes, it is",
-        },
-        {
-          id: "conv3_things_wear",
-          name: "Things we wear: What do you wear on rainy days? -I wear a raincoat on rainy days. Do you wear a raincoat on rainy days? -Yes, I do",
-        },
+        { id: 'conv1_color_hair_socks', name: 'What color is/are your hair/socks? -My hair is black/socks are white' },
+        { id: 'conv1_who_love', name: 'Who do you love? -I love my father & mother' },
+        { id: 'conv1_what_can_do', name: 'What can you do? -I can sing & dance' },
+        { id: 'conv1_where_playing', name: 'Where do you like playing? -I like playing on the...' },
+        { id: 'conv1_what_doing', name: 'What are you doing? -I am walking/running/jumping' }
       ],
-      vocabulary:
-        "Monday, Tuesday, Wednesday, Thursday, Friday, Saturday, Sunday, Sunny, Rainy, Cloudy, Jacket, Umbrella, Raincoat",
+      vocabulary: 'black, white, hair, socks, shirt, mother, father, love, sing, dance, slide, swings, trampoline, walking, running, jumping'
     },
     {
-      id: "arts",
-      name: "Arts",
+      id: 'conversation3',
+      name: 'Conversation 3',
       topics: [
-        { id: "arts_finger_puppet", name: "Finger Puppet (Elephant)" },
-        { id: "arts_origami_frog", name: "Create an origami Frog" },
-        { id: "arts_freehand_drawing", name: "Freehand drawing" },
-        { id: "arts_hand_tracing", name: "Hand tracing and finger printing" },
-        { id: "arts_fathers_day", name: "Father Day card making" },
+        { id: 'conv3_sunny_days', name: 'What do you use/wear on sunny days? -I wear sunglasses/a hat/use an umbrella' },
+        { id: 'conv3_what_is_this', name: 'What is this? -It\'s a television' },
+        { id: 'conv3_home_appliances', name: 'Do you have a microwave at home? -Yes, we do./No, we don\'t' }
       ],
-      vocabulary:
-        "Fold, Frog, Paper, Puppet, Finger, elephant, colour, Draw, vase, flower, stems, Paste, hand, trace, design, father, love, card, Father's Day",
+      vocabulary: 'sunglasses, hat, umbrella, TV, microwave, toaster'
     },
     {
-      id: "physical_education",
-      name: "Physical Education",
+      id: 'arts',
+      name: 'Arts',
       topics: [
-        { id: "pe_hurdle_jumping", name: "Hurdle Jumping" },
-        {
-          id: "pe_cup_stacking",
-          name: "Racing game: cup stacking and collecting",
-        },
-        {
-          id: "pe_basketball",
-          name: "Basketball Shooting and balancing on flower steps",
-        },
-        { id: "pe_zigzag_football", name: "Zigzag running football game" },
-        { id: "pe_rolled_paper", name: "Racing Game (Rolled Paper)" },
+        { id: 'arts_leaf_painting', name: 'Leaf painting' },
+        { id: 'arts_fancy_mask', name: 'Fancy mask crafting' },
+        { id: 'arts_santa_mobile', name: 'Creating a Santa Claus mobile' },
+        { id: 'arts_new_year_card', name: 'New Year\'s card' },
+        { id: 'arts_watercolor_squish', name: 'Water color squish painting' }
       ],
-      vocabulary:
-        "Hurdle, Jump, over, Cup, Collect, Stack, Walk, balance, Basketball, shoot, Run, zigzag, kick, goal, Paper roll, pass",
+      vocabulary: 'leaf, paint, print, texture, pattern, watercolor, mask, design, face, eyes, Santa Claus, mobile, card, color pencil, fold, squish'
     },
     {
-      id: "puppet_show",
-      name: "Puppet Show",
+      id: 'physical_education',
+      name: 'Physical Education',
       topics: [
-        { id: "puppet_shepherd_boy", name: "Shepherd Boy (Wolf story)" },
+        { id: 'pe_zigzag_ball', name: 'Zigzag running and ball handling' },
+        { id: 'pe_ring_toss', name: 'Ring toss' },
+        { id: 'pe_relay_race', name: 'Relay Race' },
+        { id: 'pe_zigzag_arches', name: 'Zigzag running and going under the arches' },
+        { id: 'pe_color_sorting', name: 'Color sorting game' }
       ],
-      vocabulary: "Wolf, Shout, Sheep, Shepherd, Hill",
+      vocabulary: 'zigzag, run, ball, put, toss, ring, pole, towel, pass, arches, go under, chair, rubber ring, color, sort, match'
     },
-  ],
+    {
+      id: 'puppet_show',
+      name: 'Puppet Show',
+      topics: [
+        { id: 'puppet_weeping_tree', name: 'The Weeping Tree' },
+        { id: 'puppet_sick_bear', name: 'The Sick Bear' }
+      ],
+      vocabulary: 'Tree, Weep, Butterfly, Flower, Bear, Rain, Sick, Play, Friends'
+    },
+    {
+      id: 'cooking',
+      name: 'Cooking',
+      topics: [
+        { id: 'cooking_pork_balls', name: 'Crispy Puffed Pork balls' }
+      ],
+      vocabulary: 'minced pork, bread, egg, carrot, onion, cooking oil, sugar, salt, ketchup'
+    }
+  ]
 };
 
-console.log(
-  "✅ K2 December curriculum loaded:",
-  window.CurriculumData.K2.December.subjects.length,
-  "subjects"
-);
+// Log successful load
+console.log('✅ K2 December curriculum loaded:', window.CurriculumData.K2.December.subjects.length, 'subjects');
