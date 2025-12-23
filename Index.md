@@ -2,6 +2,7 @@
 
 | Date | Agent | File | Status |
 |------|-------|------|--------|
+| 2025-12-23 | GitHub Copilot | docs/curriculum-k2-december-data.md | active |
 | 2025-12-03 | GitHub Copilot | docs/REFACTOR_SUMMARY.md | active |
 | 2025-12-03 | GitHub Copilot | assets/js/utils/error-boundary.js | active |
 | 2025-12-03 | GitHub Copilot | assets/js/utils/ui-enhancements.js | active |
