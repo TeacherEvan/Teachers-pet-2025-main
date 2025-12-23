@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JSON Loader Test</title>
+    <style>
+        body { font-family: sans-serif; padding: 20px; background: #1a1a2e; color: #fff; }
+        .test-result { padding: 10px; margin: 5px 0; border-radius: 4px; }
+        .success { background: #2ecc71; color: #000; }
+        .error { background: #e74c3c; color: #fff; }
+        pre { background: #000; padding: 10px; overflow: auto; }
+    </style>
+</head>
+<body>
+    <h1>JSON Curriculum Loader Test</h1>
+    <div id="results"></div>
+
+    <script type="module">
+        import CurriculumLoader from './assets/js/curriculum/curriculum-loader.js';
+
+        const results = document.getElementById('results');
+        const log = (msg, type = 'info') => {
+            const div = document.createElement('div');
+            div.className = `test-result ${type}`;
+            div.textContent = msg;
+            results.appendChild(div);
+            console.log(msg);
+        };
+
+        async function runTests() {
+            const loader = new CurriculumLoader();
+
+            try {
+                log('Test 1: Loading K1 August...');
+                const k1Aug = await loader.load('K1', 'August');
+                if (k1Aug.grade === 'K1' && k1Aug.month === 'August' && k1Aug.subjects.length > 0) {
+                    log('✅ K1 August loaded successfully', 'success');
+                } else {
+                    log('❌ K1 August data invalid', 'error');
+                }
+
+                log('Test 2: Loading K2 November...');
+                const k2Nov = await loader.load('K2', 'November');
+                if (k2Nov.grade === 'K2' && k2Nov.month === 'November' && k2Nov.subjects.length > 0) {
+                    log('✅ K2 November loaded successfully', 'success');
+                } else {
+                    log('❌ K2 November data invalid', 'error');
+                }
+
+                log('Test 3: Loading Invalid Month...');
+                try {
+                    await loader.load('K1', 'InvalidMonth');
+                    log('❌ Should have failed for invalid month', 'error');
+                } catch (e) {
+                    log('✅ Correctly failed for invalid month: ' + e.message, 'success');
+                }
+
+            } catch (error) {
+                log('❌ Unexpected error: ' + error.message, 'error');
+            }
+        }
+
+        runTests();
+    </script>
+</body>
+</html>

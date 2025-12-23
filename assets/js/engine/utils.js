@@ -5,7 +5,7 @@
  * Teachers Pet Utility Functions
  * Pure functions for string manipulation, array handling, and formatting.
  */
-window.TeachersPetUtils = {
+export const TeachersPetUtils = {
     /**
      * Natural language joining with Oxford comma
      */

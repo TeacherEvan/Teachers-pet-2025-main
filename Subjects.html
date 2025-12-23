@@ -13,7 +13,7 @@
     <link rel="preload" href="assets/css/micro-interactions.css" as="style">
     <link rel="preload" href="assets/js/controllers/app-controller.js" as="script">
     <!-- Note: Comment generation scripts are lazy-loaded on demand -->
-    <link rel="preload" href="assets/js/curriculum/curriculum-loader.js" as="script">
+    <link rel="modulepreload" href="assets/js/curriculum/curriculum-loader.js">
     <link rel="preload" href="assets/js/utils/performance-optimizer.js" as="script">
     <link rel="preload" href="assets/js/utils/ui-enhancements.js" as="script">
 
@@ -22,8 +22,6 @@
     <link rel="stylesheet" href="assets/css/components.css">
     <link rel="stylesheet" href="assets/css/micro-interactions.css">
 
-    <!-- Curriculum Loader -->
-    <script src="assets/js/curriculum/curriculum-loader.js"></script>
 </head>
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap');
@@ -956,7 +954,9 @@
     </div> <!-- .container -->
 
     <!-- Load curriculum dynamically based on grade and month -->
-    <script id="dynamic-curriculum-loader">
+    <script type="module" id="dynamic-curriculum-loader">
+        import CurriculumLoader from './assets/js/curriculum/curriculum-loader.js';
+
         document.addEventListener('DOMContentLoaded', async function () {
             try {
                 // Get grade and month from session
@@ -981,53 +981,52 @@
                 console.log(`📚 Selected curriculum: ${grade} - ${month}`);
 
                 // Load curriculum data
-                if (window.curriculumLoader) {
-                    const curriculum = await window.curriculumLoader.load(grade, month);
-                    console.log('✅ Curriculum data loaded:', curriculum);
+                const loader = new CurriculumLoader();
+                const curriculum = await loader.load(grade, month);
+                console.log('✅ Curriculum data loaded:', curriculum);
 
-                    // Generate subjects HTML dynamically
-                    const subjectsForm = document.getElementById('subjectsForm');
-                    if (subjectsForm && curriculum.subjects) {
-                        // CLEAR existing hardcoded HTML first
-                        subjectsForm.innerHTML = '';
+                // Generate subjects HTML dynamically
+                const subjectsForm = document.getElementById('subjectsForm');
+                if (subjectsForm && curriculum.subjects) {
+                    // CLEAR existing hardcoded HTML first
+                    subjectsForm.innerHTML = '';
 
-                        let html = '';
+                    let html = '';
 
-                        curriculum.subjects.forEach(subject => {
-                            html += `
-                            <!-- ${subject.name.toUpperCase()} -->
-                            <div class="subject-section">
-                                <div class="subject-header" onclick="toggleSubject('${subject.id}')">
-                                    <div class="subject-title">
-                                        <input type="checkbox" class="subject-checkbox" id="subject_${subject.id}" value="${subject.name}"
-                                            onchange="handleSubjectCheck('${subject.id}')">
-                                        <label for="subject_${subject.id}">${subject.name.toUpperCase()}</label>
-                                        <span class="dropdown-hint">Click to drop down</span>
-                                        <span class="dropdown-arrow" id="arrow_${subject.id}">▼</span>
-                                    </div>
+                    curriculum.subjects.forEach(subject => {
+                        html += `
+                        <!-- ${subject.name.toUpperCase()} -->
+                        <div class="subject-section">
+                            <div class="subject-header" onclick="toggleSubject('${subject.id}')">
+                                <div class="subject-title">
+                                    <input type="checkbox" class="subject-checkbox" id="subject_${subject.id}" value="${subject.name}"
+                                        onchange="handleSubjectCheck('${subject.id}')">
+                                    <label for="subject_${subject.id}">${subject.name.toUpperCase()}</label>
+                                    <span class="dropdown-hint">Click to drop down</span>
+                                    <span class="dropdown-arrow" id="arrow_${subject.id}">▼</span>
                                 </div>
-                                <div class="subject-content" id="content_${subject.id}">`;
+                            </div>
+                            <div class="subject-content" id="content_${subject.id}">`;
 
-                            subject.topics.forEach((topic, index) => {
-                                const topicId = `${subject.id}${index + 1}`;
-                                html += `
-                                    <div class="topic-item">
-                                        <input type="checkbox" class="topic-checkbox" id="${topicId}"
-                                            value="${topic.name.toLowerCase()}" 
-                                            onchange="saveSelections(); debouncedUpdateSelectionCount();">
-                                        <label for="${topicId}" class="topic-text">${topic.name}</label>
-                                    </div>`;
-                            });
-
+                        subject.topics.forEach((topic, index) => {
+                            const topicId = `${subject.id}${index + 1}`;
                             html += `
-                                </div>
-                            </div>`;
+                                <div class="topic-item">
+                                    <input type="checkbox" class="topic-checkbox" id="${topicId}"
+                                        value="${topic.name.toLowerCase()}" 
+                                        onchange="saveSelections(); debouncedUpdateSelectionCount();">
+                                    <label for="${topicId}" class="topic-text">${topic.name}</label>
+                                </div>`;
                         });
 
-                        // Replace hardcoded HTML with dynamic content
-                        subjectsForm.innerHTML = html;
-                        console.log('✅ Dynamically generated', curriculum.subjects.length, 'subjects');
-                    }
+                        html += `
+                            </div>
+                        </div>`;
+                    });
+
+                    // Replace hardcoded HTML with dynamic content
+                    subjectsForm.innerHTML = html;
+                    console.log('✅ Dynamically generated', curriculum.subjects.length, 'subjects');
                 }
             } catch (error) {
                 console.warn('⚠️ Curriculum loading failed, keeping hardcoded subjects:', error.message);
@@ -1454,71 +1453,8 @@
          * @returns {Promise<void>}
          */
         async function loadCommentGenerationScripts() {
-            if (window.commentGenerationLoaded) {
-                return Promise.resolve();
-            }
-
-            if (window.commentGenerationLoading) {
-                // Wait for existing load to complete
-                return new Promise((resolve, reject) => {
-                    const MAX_WAIT_MS = 10000; // 10 seconds
-                    const POLL_INTERVAL_MS = 100;
-                    let waited = 0;
-                    const checkInterval = setInterval(() => {
-                        if (window.commentGenerationLoaded) {
-                            clearInterval(checkInterval);
-                            resolve();
-                        } else {
-                            waited += POLL_INTERVAL_MS;
-                            if (waited >= MAX_WAIT_MS) {
-                                clearInterval(checkInterval);
-                                reject(new Error('Timed out waiting for comment generation scripts to load.'));
-                            }
-                        }
-                    }, POLL_INTERVAL_MS);
-                });
-            }
-
-            window.commentGenerationLoading = true;
-
-            const scriptsToLoad = [
-                'assets/js/synonym-manager.js',
-                'assets/js/data/engine-data.js',
-                'assets/js/comment-engine.js',
-                'assets/js/engine/utils.js',
-                'assets/js/engine/processor.js',
-                'assets/js/engine/templates.js',
-                'assets/js/engine/core.js',
-                'optimized-comment-generator.js'
-            ];
-
-            const loadScript = (src) => {
-                return new Promise((resolve, reject) => {
-                    const script = document.createElement('script');
-                    script.src = src;
-                    script.onload = resolve;
-                    script.onerror = () => reject(new Error(`Failed to load script: ${src}`));
-                    document.body.appendChild(script);
-                });
-            };
-
-            try {
-                // Load scripts sequentially to maintain dependencies
-                for (const src of scriptsToLoad) {
-                    await loadScript(src);
-                }
-
-                window.commentGenerationLoaded = true;
-                window.commentGenerationLoading = false;
-
-                if (window.__TP_DEBUG__) {
-                    console.log('✅ Comment generation scripts loaded successfully');
-                }
-            } catch (error) {
-                window.commentGenerationLoading = false;
-                console.error('❌ Failed to load comment generation scripts:', error);
-                throw error;
-            }
+            // Modules are loaded automatically
+            return Promise.resolve();
         }
 
         /**
@@ -1555,6 +1491,16 @@
                 box.style.opacity = '1';
             });
         }
+    </script>
+    
+    <script src="assets/js/comment-engine.js" defer></script>
+    <script type="module">
+        import { OptimizedCommentGenerator } from './optimized-comment-generator.js';
+        
+        // Initialize generator and expose to window for UI access
+        window.commentGenerator = new OptimizedCommentGenerator();
+        window.commentGenerationLoaded = true;
+        console.log('✅ Comment generation modules loaded successfully');
     </script>
     
     <script src="assets/js/ui/subjects-ui.js"></script>

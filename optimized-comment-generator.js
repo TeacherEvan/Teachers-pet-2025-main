@@ -3,7 +3,9 @@
  * Provides backward compatibility and enhanced integration with existing systems
  */
 
-class OptimizedCommentGenerator {
+import { EnhancedCommentEngine } from './assets/js/engine/core.js';
+
+export class OptimizedCommentGenerator {
     constructor() {
         this.engine = null;
         this.isInitialized = false;
@@ -15,13 +17,13 @@ class OptimizedCommentGenerator {
     init() {
         try {
             // Check if EnhancedCommentEngine is available (preferred)
-            if (typeof EnhancedCommentEngine !== 'undefined') {
+            if (EnhancedCommentEngine) {
                 this.engine = new EnhancedCommentEngine();
                 this.isInitialized = true;
                 console.log('OptimizedCommentGenerator initialized with EnhancedCommentEngine');
-            } else if (typeof PremiumCommentEngine !== 'undefined') {
+            } else if (typeof window.PremiumCommentEngine !== 'undefined') {
                 // Fallback to PremiumCommentEngine if Enhanced is not available
-                this.engine = new PremiumCommentEngine();
+                this.engine = new window.PremiumCommentEngine();
                 this.isInitialized = true;
                 console.log('OptimizedCommentGenerator initialized with PremiumCommentEngine (fallback)');
             } else {

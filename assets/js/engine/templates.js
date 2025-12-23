@@ -1,11 +1,12 @@
 /* eslint-env es6 */
-/* global window, TeachersPetUtils */
+/* global window */
+import { TeachersPetUtils } from './utils.js';
 
 /**
  * Teachers Pet Comment Templates
  * Contains the logic for generating specific sections of the comment.
  */
-window.TeachersPetTemplates = {
+export const TeachersPetTemplates = {
     /**
      * Generate comment in specific teacher style (male/female)
      */

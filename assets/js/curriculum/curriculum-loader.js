@@ -7,8 +7,7 @@
  * @class CurriculumLoader
  */
 
-/* eslint-disable no-unused-vars */
-class CurriculumLoader {
+export default class CurriculumLoader {
   constructor() {
     this.loadedCurriculum = null;
     this.currentGrade = "";
@@ -22,58 +21,44 @@ class CurriculumLoader {
    * @returns {Promise} Resolves with curriculum data or rejects with error
    */
   async load(grade, month) {
-    return new Promise((resolve, reject) => {
-      if (!grade || !month) {
-        reject(new Error("Grade and month are required"));
-        return;
+    if (!grade || !month) {
+      throw new Error("Grade and month are required");
+    }
+
+    this.currentGrade = grade;
+    this.currentMonth = month;
+
+    // Construct curriculum file path
+    const gradeFolder = grade.toLowerCase();
+    const monthFile = month.toLowerCase();
+    const curriculumPath = `assets/data/curriculum/${gradeFolder}/${monthFile}.json`;
+
+    console.log(`📚 Loading curriculum: ${grade} - ${month}`);
+    console.log(`📂 Path: ${curriculumPath}`);
+
+    try {
+      const response = await fetch(curriculumPath);
+      
+      if (!response.ok) {
+        throw new Error(`Failed to load curriculum file: ${response.status} ${response.statusText}`);
       }
 
-      this.currentGrade = grade;
-      this.currentMonth = month;
-
-      // Construct curriculum file path
-      const gradeFolder = grade.toLowerCase();
-      const monthFile = month.toLowerCase();
-      const curriculumPath = `assets/js/curriculum/${gradeFolder}/${monthFile}.js`;
-
-      console.log(`📚 Loading curriculum: ${grade} - ${month}`);
-      console.log(`📂 Path: ${curriculumPath}`);
-
-      // Create script element to load curriculum
-      const script = document.createElement("script");
-      script.src = curriculumPath;
-      script.async = true;
-
-      script.onload = () => {
-        // Check if curriculum data was loaded
-        if (
-          window.CurriculumData &&
-          window.CurriculumData[grade] &&
-          window.CurriculumData[grade][month]
-        ) {
-          this.loadedCurriculum = window.CurriculumData[grade][month];
-          console.log(
-            `✅ Curriculum loaded: ${this.loadedCurriculum.subjects.length} subjects`
-          );
-          resolve(this.loadedCurriculum);
-        } else {
-          const error = new Error(
-            `Curriculum data structure not found for ${grade} ${month}`
-          );
-          console.error("❌", error.message);
-          reject(error);
-        }
-      };
-
-      script.onerror = (error) => {
-        const errorMsg = `Failed to load curriculum file: ${curriculumPath}`;
-        console.error("❌", errorMsg);
-        reject(new Error(errorMsg));
-      };
-
-      // Add script to document
-      document.head.appendChild(script);
-    });
+      const data = await response.json();
+      
+      // Validate data structure
+      if (data && data.subjects) {
+        this.loadedCurriculum = data;
+        console.log(
+          `✅ Curriculum loaded: ${this.loadedCurriculum.subjects.length} subjects`
+        );
+        return this.loadedCurriculum;
+      } else {
+        throw new Error(`Invalid curriculum data structure for ${grade} ${month}`);
+      }
+    } catch (error) {
+      console.error("❌", error.message);
+      throw error;
+    }
   }
 
   /**
@@ -98,13 +83,16 @@ class CurriculumLoader {
       K3: [],
     };
 
-    return availableList[grade]?.includes(month) || false;
+    return (
+      availableList[grade] &&
+      availableList[grade].includes(month)
+    );
   }
 
   /**
    * Get list of available months for a grade
    * @param {string} grade - Grade level
-   * @returns {Array} Array of available month names
+   * @returns {Array} List of available months
    */
   getAvailableMonths(grade) {
     const availableList = {
@@ -127,7 +115,3 @@ class CurriculumLoader {
   }
 }
 
-// Create global instance
-window.curriculumLoader = new CurriculumLoader();
-
-console.log("✅ Curriculum Loader initialized");

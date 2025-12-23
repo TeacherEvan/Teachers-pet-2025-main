@@ -1,11 +1,12 @@
 /* eslint-env es6 */
-/* global window, TeachersPetUtils */
+/* global window */
+import { TeachersPetUtils } from './utils.js';
 
 /**
  * Teachers Pet Data Processor
  * Handles data normalization, validation, and grouping.
  */
-window.TeachersPetProcessor = {
+export const TeachersPetProcessor = {
     /**
      * Process and structure session data for comment generation
      * @param {Object} sessionData - The raw session data

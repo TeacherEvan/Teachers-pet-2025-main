@@ -10,7 +10,7 @@
     <!-- Preload Critical Resources -->
     <link rel="preload" href="assets/css/main.css" as="style">
     <link rel="preload" href="assets/css/components.css" as="style">
-    <link rel="preload" href="assets/js/controllers/app-controller.js" as="script">
+    <!-- <link rel="preload" href="assets/js/controllers/app-controller.js" as="script"> -->
     <link rel="preload" href="assets/js/comment-engine.js" as="script">
 
     <!-- CSS -->
@@ -1205,14 +1205,11 @@
     <script src="assets/js/ui/shared-ui.js"></script>
     <!-- Mythology Effects -->
     <script src="assets/js/mythology-effects.js"></script>
-    <script src="assets/js/controllers/app-controller.js"></script>
-    <script src="assets/js/controllers/student-info-controller.js"></script>
-    <script>
+    <script type="module">
+        import { TeachersPetApp } from './assets/js/controllers/app-controller.js';
         // Initialize App
         document.addEventListener('DOMContentLoaded', () => {
             window.app = new TeachersPetApp();
-            window.studentInfoController = new StudentInfoController(window.app);
-            window.studentInfoController.init();
         });
     </script>
 </body>

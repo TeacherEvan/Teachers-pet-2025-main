@@ -10,7 +10,7 @@
     <!-- Preload Critical Resources -->
     <link rel="preload" href="assets/css/main.css" as="style">
     <link rel="preload" href="assets/css/components.css" as="style">
-    <link rel="preload" href="assets/js/controllers/app-controller.js" as="script">
+    <!-- <link rel="preload" href="assets/js/controllers/app-controller.js" as="script"> -->
 
     <!-- CSS -->
     <link rel="stylesheet" href="assets/css/main.css">
@@ -630,6 +630,10 @@
                 window.location.href = 'grade-selection.html?fresh=1';
             }
         });
+    </script>
+    <script type="module">
+        import { TeachersPetApp } from './assets/js/controllers/app-controller.js';
+        window.app = new TeachersPetApp();
     </script>
 </body>
 

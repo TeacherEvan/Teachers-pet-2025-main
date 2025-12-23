@@ -1,4 +1,4 @@
-class SubjectsController {
+export class SubjectsController {
     constructor(app) {
         this.app = app;
     }

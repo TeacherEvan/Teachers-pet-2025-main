@@ -1,15 +1,19 @@
 /* eslint-env es6 */
-/* global window, TeachersPetProcessor, TeachersPetTemplates, TeachersPetUtils */
+import { TeachersPetData } from '../data/engine-data.js';
+import { synonymManager } from '../synonym-manager.js';
+import { TeachersPetProcessor } from './processor.js';
+import { TeachersPetTemplates } from './templates.js';
+import { TeachersPetUtils } from './utils.js';
 
 /**
  * Enhanced Comment Generation Engine (Core)
  * Orchestrates the generation process by coordinating data processing and template generation.
  * @class EnhancedCommentEngine
  */
-class EnhancedCommentEngine {
+export class EnhancedCommentEngine {
     constructor() {
-        // Load data from global namespace (extracted to assets/js/data/engine-data.js)
-        this.data = window.TeachersPetData || {};
+        // Load data from imported module
+        this.data = TeachersPetData || {};
 
         // Fallback if data is missing (should not happen if script loaded correctly)
         if (Object.keys(this.data).length === 0) {
@@ -37,12 +41,12 @@ class EnhancedCommentEngine {
             let femaleComment = await TeachersPetTemplates.generateStyleComment('female', processedData);
 
             // 3. Apply Synonym Replacement
-            if (typeof window !== 'undefined' && window.synonymManager) {
+            if (synonymManager) {
                 console.log('📚 Applying synonym replacement to male comment...');
-                maleComment = await window.synonymManager.replaceOverused(maleComment, 2);
+                maleComment = await synonymManager.replaceOverused(maleComment, 2);
 
                 console.log('📚 Applying synonym replacement to female comment...');
-                femaleComment = await window.synonymManager.replaceOverused(femaleComment, 2);
+                femaleComment = await synonymManager.replaceOverused(femaleComment, 2);
             } else {
                 console.warn('⚠️ SynonymManager not available, skipping synonym replacement');
             }
@@ -63,6 +67,6 @@ class EnhancedCommentEngine {
 }
 
 // Export for global use
-if (typeof window !== 'undefined') {
-    window.EnhancedCommentEngine = EnhancedCommentEngine;
-}
+// if (typeof window !== 'undefined') {
+//     window.EnhancedCommentEngine = EnhancedCommentEngine;
+// }

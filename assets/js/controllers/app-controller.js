@@ -5,9 +5,15 @@
  */
 
 /* eslint-disable no-unused-vars */
-class TeachersPetApp {
+import { createPersistentStore } from '../state/store.js';
+import { LauncherController } from './launcher-controller.js';
+import { StudentInfoController } from './student-info-controller.js';
+import { SubjectsController } from './subjects-controller.js';
+
+export class TeachersPetApp {
     constructor() {
-        this.sessionData = {
+        // Initialize Reactive Store
+        this.sessionData = createPersistentStore('studentData', {
             grade: '',
             month: '',
             studentName: '',
@@ -17,7 +23,7 @@ class TeachersPetApp {
             weaknesses: '',
             subjects: [],
             topicRatings: {}
-        };
+        });
 
         this.currentPage = this.getCurrentPage();
         this.initialized = false;
@@ -40,9 +46,9 @@ class TeachersPetApp {
         if (this.initialized) return;
 
         // Initialize controllers
-        if (typeof LauncherController !== 'undefined') this.controllers.launcher = new LauncherController(this);
-        if (typeof StudentInfoController !== 'undefined') this.controllers.studentInfo = new StudentInfoController(this);
-        if (typeof SubjectsController !== 'undefined') this.controllers.subjects = new SubjectsController(this);
+        this.controllers.launcher = new LauncherController(this);
+        this.controllers.studentInfo = new StudentInfoController(this);
+        this.controllers.subjects = new SubjectsController(this);
 
         // Initialize based on current page
         switch (this.currentPage) {
@@ -84,21 +90,8 @@ class TeachersPetApp {
         if (params.has('month')) {
             this.sessionData.month = params.get('month');
         }
-
-        // Fallback to localStorage
-        if (!this.sessionData.grade || !this.sessionData.month) {
-            try {
-                const saved = localStorage.getItem('studentData');
-                if (saved) {
-                    const data = JSON.parse(saved);
-                    this.sessionData.grade = this.sessionData.grade || data.grade || '';
-                    this.sessionData.month = this.sessionData.month || data.month || '';
-                }
-            } catch (error) {
-                console.warn('Could not load from localStorage:', error);
-            }
-        }
-
+        
+        // No need for manual localStorage fallback - Store handles it!
         console.log('Loaded grade/month:', this.sessionData.grade, this.sessionData.month);
     }
 

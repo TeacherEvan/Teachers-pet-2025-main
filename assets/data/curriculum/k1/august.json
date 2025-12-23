@@ -1,0 +1,166 @@
+{
+    "grade": "K1",
+    "month": "August",
+    "subjects": [
+        {
+            "id": "english",
+            "name": "English",
+            "topics": [
+                { "id": "english_match_letter", "name": "Draw lines to match the letter with the correct picture" },
+                { "id": "english_trace_letter", "name": "Trace the letter starting from the dot" },
+                { "id": "english_match_same", "name": "Draw lines to match the same letters" },
+                { "id": "english_circle_letter", "name": "Circle the correct letter matching with pictures" }
+            ],
+            "vocabulary": "A-Ant, B-Bee, C-Cat"
+        },
+        {
+            "id": "mathematics",
+            "name": "Mathematics",
+            "topics": [
+                { "id": "math_count", "name": "Count from 1-10" },
+                { "id": "math_match_numbers", "name": "Draw lines to match the pictures that have the same number" },
+                { "id": "math_mark_amount", "name": "Mark the picture with the correct amount" },
+                { "id": "math_mark_numbers", "name": "Mark the numbers that matches with the pictures" },
+                { "id": "math_circle_amount", "name": "Circle the correct amount" },
+                { "id": "math_trace_numbers", "name": "Trace the number 1-5 following the dotted line starting from the dot" }
+            ],
+            "vocabulary": "One – ten"
+        },
+        {
+            "id": "iq",
+            "name": "I.Q",
+            "topics": [
+                { "id": "iq_same", "name": "Color the pictures that are the same" },
+                { "id": "iq_fatter", "name": "Color the pictures that are fatter" },
+                { "id": "iq_taller", "name": "Color the taller picture" },
+                { "id": "iq_hot_cold", "name": "Color the hot items and cold items" },
+                { "id": "iq_shapes", "name": "Color the shape that is the same as the first" }
+            ],
+            "vocabulary": "tree, ice-cream, kettle, flower, baby, cat, fish, bird, dog, balloon, toothpaste, pencil, airplane, kite, house, sun, candle, coffee/tea, ice water, popsicle, circle, square, heart, triangle"
+        },
+        {
+            "id": "social_studies",
+            "name": "Social Studies",
+            "topics": [
+                { "id": "social_animal_sounds", "name": "Identify the animal sounds and sounds around us" },
+                { "id": "social_milk_animals", "name": "Identify animals that produce milk" },
+                { "id": "social_good_habits", "name": "Good habits we do every day" },
+                { "id": "social_hygiene", "name": "Our personal hygiene" },
+                { "id": "social_gestures", "name": "Good and bad gestures" }
+            ],
+            "vocabulary": "Bird-chirp, dog-woof, frog-croak, oink-pink, cat-meow, toy whistle, beep, cow, goat, cat, chicken, pig, fish, wash hands, eat, homework, cover/protect, nose, cough, sneeze, brush our teeth / hair, shower, clean clothes, wash my face/hands, good and bad manners, respect, attitude, teachers, elders, parents and family"
+        },
+        {
+            "id": "science",
+            "name": "Science",
+            "topics": [
+                { "id": "science_tissue_magic", "name": "Tissue Magic" },
+                { "id": "science_lava_lamp", "name": "Lava lamp" },
+                { "id": "science_magnet", "name": "Magnet" },
+                { "id": "science_lemon_volcano", "name": "Lemon volcano" }
+            ],
+            "vocabulary": "tissue paper, fold, glace, water, picture, oil, water, mix, float, color, magnet, metal, push/pull, lemon, juice, sour, salt, baking powder, mix, bubble, erupt"
+        },
+        {
+            "id": "cooking",
+            "name": "Cooking",
+            "topics": [
+                { "id": "cooking_look_chop", "name": "Look chop" }
+            ],
+            "vocabulary": "Sugar, bean, salt, coconut milk, food color, mix, dessert, fruit shape"
+        },
+        {
+            "id": "conversation1",
+            "name": "Conversation 1",
+            "topics": [
+                { "id": "conv1_pets", "name": "What pet do you have? -I have a dog/cat" },
+                { "id": "conv1_feelings", "name": "How do you feel? -I feel happy /sad" },
+                { "id": "conv1_lunch", "name": "What would you like to have for lunch? -I would like to have..., please" },
+                { "id": "conv1_career", "name": "What do you want to be? – I want to be a doctor/teacher" },
+                { "id": "conv1_places", "name": "Where would you like to go? – I like to go to the zoo/park" }
+            ],
+            "vocabulary": "cat, dog, rabbit, bird, happy, sad, noodles, fried chicken, doctor, teacher, zoo, park"
+        },
+        {
+            "id": "conversation2",
+            "name": "Conversation 2",
+            "topics": [
+                { "id": "conv2_drink", "name": "What do you like to drink? -I like to drink milk" },
+                { "id": "conv2_going", "name": "Where are you going? - I'm going to the hospital" },
+                { "id": "conv2_transport", "name": "How do you go to school? - I go to school by car" }
+            ],
+            "vocabulary": "milk, juice, water, hospital, school, park, car, bus, van"
+        },
+        {
+            "id": "arts",
+            "name": "Arts",
+            "topics": [
+                { "id": "arts_finger_painting", "name": "Finger painting" },
+                { "id": "arts_ladybug", "name": "Ladybug" },
+                { "id": "arts_play_dough", "name": "Play Dough" },
+                { "id": "arts_sponge_painting", "name": "Sponge painting" },
+                { "id": "arts_origami_fox", "name": "Origami Fox" }
+            ],
+            "vocabulary": "watercolor, paint, finger, jump, paper plate, ladybug, straw, fruits, dough, form, hands, sponge, paint, fold, paper, fox, coloring"
+        },
+        {
+            "id": "physical_education",
+            "name": "Physical Education",
+            "topics": [
+                { "id": "pe_football", "name": "Playing football" },
+                { "id": "pe_balance_ball", "name": "Balance the ball" },
+                { "id": "pe_ball_ring", "name": "Put the ball in the ring" },
+                { "id": "pe_balance_jump", "name": "Balance and jump in the circle" },
+                { "id": "pe_zigzag", "name": "Zigzag and going under the arches" },
+                { "id": "pe_hurdle", "name": "Hurdle jumping" }
+            ],
+            "vocabulary": "football, kick, goal, balance, wait, ball, ring, jump, circle, feet, zigzag, run, traffic cone, crawl, arches, hurdle"
+        },
+        {
+            "id": "puppet_show",
+            "name": "Puppet Show",
+            "topics": [
+                { "id": "puppet_noond", "name": "Noond doesn't eat her vegetables" },
+                { "id": "puppet_rabbit", "name": "The tale of the panicked rabbit" }
+            ],
+            "vocabulary": "milk, vegetables, stomach ache, doctor, rabbit, tiger, squirrel, lion"
+        },
+        {
+            "id": "super_safari",
+            "name": "Super Safari",
+            "topics": [
+                { "id": "safari_listen_colour", "name": "Listen and colour" },
+                { "id": "safari_say_numbers", "name": "Say the numbers" },
+                { "id": "safari_look_circle", "name": "Look and circle" },
+                { "id": "safari_say_sentence", "name": "Say the sentence" },
+                { "id": "safari_colour_circle", "name": "Colour the correct circle" },
+                { "id": "safari_complete_face", "name": "Complete the face" },
+                { "id": "safari_color_different", "name": "Color the different pictures" },
+                { "id": "safari_join_dots", "name": "Join the dots" },
+                { "id": "safari_my_pets", "name": "My pets-Say the pets" },
+                { "id": "safari_look_match", "name": "Look and match" },
+                { "id": "safari_food", "name": "Food-Say the food" },
+                { "id": "safari_draw_something", "name": "Draw something" },
+                { "id": "safari_maze", "name": "Maze activity" },
+                { "id": "safari_train", "name": "Super Safari Arts and Crafts-Let's make a train" },
+                { "id": "safari_hanging_letters", "name": "Hanging letters S/N/I" },
+                { "id": "safari_handprint_bird", "name": "Make a handprint bird" },
+                { "id": "safari_pasta_fish", "name": "Make a pasta fish" },
+                { "id": "safari_animals_mask", "name": "Animals Mask" },
+                { "id": "safari_cat_activity", "name": "Cat activity" }
+            ],
+            "vocabulary": "Gina, giraffe, Polly-parrot, Leo-lion, Mike-monkey, one-red, two-blue, three-green, four-orange, ball, colour, puzzle, car, doll, ball, jump, up, down, rocket, purple, mum, numbers 1-4, circles, train, cat, rabbit, fish, walking, standing, sitting, running, helping, pets, rabbit, bird, paint, cake pasta, salad, rice, breakfast, lunch, dinner, snacks, maze, pasta, glue, shape, ice-cream"
+        },
+        {
+            "id": "story_time",
+            "name": "Story Time",
+            "topics": [
+                { "id": "story_harry_frog", "name": "Harry frog" },
+                { "id": "story_bird", "name": "Bird" },
+                { "id": "story_lovely_animals", "name": "The lovely animals" },
+                { "id": "story_ox_frog", "name": "The ox and the frog" }
+            ],
+            "vocabulary": "licking, caterpillar, soil, ox, bullfrog"
+        }
+    ]
+}

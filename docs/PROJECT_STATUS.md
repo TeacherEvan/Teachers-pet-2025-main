@@ -1,7 +1,7 @@
 # Teachers Pet - Project Status & Agent Dashboard
 
-**Last Updated:** December 4, 2024  
-**Status:** Production-Ready / Enhanced 2024
+**Last Updated:** December 23, 2025
+**Status:** Production-Ready / Modernized Architecture (Phase 3 Complete)
 
 ## 1. Project Overview
 **Teachers Pet** is a production-grade static HTML/CSS/JS web application designed to help teachers generate personalized student report comments. Version 2.0 features advanced performance optimization, premium glassmorphism UI, and comprehensive accessibility support following 2024 best practices.
@@ -22,10 +22,11 @@
 5. `Subjects.html` (Dynamic Subject/Topic Selection)
 6. `Subjects.html` (Generation & Output)
 
-### State Management (Dual-Layer)
-The application maintains state in two places which **MUST** be kept in sync:
-1. **In-Memory:** `TeachersPetApp.sessionData` (managed by `assets/js/controllers/app-controller.js`)
-2. **Persistence:** `localStorage.studentData` (used for page navigation and comment generation)
+### State Management (Reactive Store)
+**NEW (Dec 2025):** The application uses a centralized Reactive Store (`assets/js/state/store.js`) that automatically syncs in-memory state with `localStorage`.
+- **Store:** `createPersistentStore` uses `Proxy` to intercept changes.
+- **Controllers:** All controllers (`app-controller.js`, etc.) import and use this store.
+- **Benefit:** Eliminates data desync issues and manual `localStorage` calls.
 
 ### Performance System (NEW in v2.0)
 - **PerformanceOptimizer:** Core Web Vitals monitoring, resource prefetching, idle task scheduling
@@ -38,7 +39,7 @@ The application maintains state in two places which **MUST** be kept in sync:
 - **Accessibility:** Reduced motion, dark mode, keyboard shortcuts
 
 ### Comment Generation Engine
-- **Primary Engine:** `assets/js/enhanced-comment-engine.js`
+- **Primary Engine:** `assets/js/enhanced-comment-engine.js` (ES Module)
 - **Wrapper:** `optimized-comment-generator.js`
 - **Logic:**
   - Maps selected topics to sentences.
@@ -47,7 +48,9 @@ The application maintains state in two places which **MUST** be kept in sync:
   - **Rule:** Grade/Month is used for *curriculum selection* only, not mentioned in the final text.
 
 ### Curriculum System
-- **Loader:** `assets/js/curriculum/curriculum-loader.js`
+- **Loader:** `assets/js/curriculum/curriculum-loader.js` (ES Module)
+- **Data:** Pure JSON files in `assets/data/curriculum/{grade}/{month}.json`
+- **Mechanism:** Async `fetch()` loading on demand. No more hardcoded JS data files.
 - **Data:** Stored in `assets/js/curriculum/{grade}/{month}.js`
 - **Structure:** `window.CurriculumData.{Grade}.{Month}`
 

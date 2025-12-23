@@ -15,6 +15,58 @@ Before implementing ANY feature:
 
 ## Recent Work (Newest First)
 
+### 2025-12-23: Phase 3 Data Decoupling Complete
+**Agent:** GitHub Copilot
+**Branch:** `main`
+**Task:** Convert Curriculum Data to JSON & Async Loading
+
+**Changes:**
+- Created `assets/data/curriculum/` directory structure.
+- Converted all JS curriculum files (K1/K2 Aug/Nov/Dec) to pure JSON files.
+- Refactored `assets/js/curriculum/curriculum-loader.js` to ES Module + `fetch` API.
+- Updated `Subjects.html` to use async module loading for curriculum.
+- Deleted legacy JS curriculum files.
+- Added `test-json-loader.html` for verification.
+
+**Impact:**
+- **Decoupled Data:** Curriculum is now pure data, not code.
+- **Async Loading:** Improved page load performance by fetching data on demand.
+- **Modern Standards:** Fully ES Module compliant loader.
+
+### 2025-12-23: Phase 2 State Hardening Complete
+**Agent:** GitHub Copilot
+**Branch:** `main`
+**Task:** Implement Reactive State Store & Modularize Controllers
+
+**Changes:**
+- Created `assets/js/state/store.js` with `createPersistentStore` (Proxy + localStorage).
+- Modularized `launcher-controller.js`, `student-info-controller.js`, `subjects-controller.js`.
+- Updated `app-controller.js` to use the new Store and import sub-controllers.
+- Updated `index.html`, `grade-selection.html`, `month-selection.html`, `student-information.html` to use `<script type="module">`.
+
+**Impact:**
+- **Zero Desync:** `sessionData` changes are now automatically saved to `localStorage`.
+- **Cleaner Architecture:** Controllers are now proper ES Modules with explicit dependencies.
+- **Removed Legacy Code:** Deleted manual localStorage fallback logic in `app-controller.js`.
+
+### 2025-12-23: Phase 1 Modularization Complete
+**Agent:** GitHub Copilot
+**Branch:** `main`
+**Task:** Convert Comment Engine to ES Modules
+
+**Changes:**
+- Modularized `assets/js/data/engine-data.js` (Exported `TeachersPetData`)
+- Modularized `assets/js/engine/utils.js`, `processor.js`, `templates.js`, `core.js`
+- Modularized `assets/js/synonym-manager.js`
+- Updated `optimized-comment-generator.js` to use `import`
+- Updated `Subjects.html` to load `optimized-comment-generator.js` as `type="module"`
+- Removed manual script loading logic in `Subjects.html`
+
+**Impact:**
+- Eliminated global variable pollution for the engine.
+- Improved dependency management (static imports).
+- Standardized on the "split file" architecture for the engine.
+
 ### 2025-12-23: K2 December Curriculum Data Fix
 **Agent:** GitHub Copilot
 **Branch:** `copilot/investigate-december-data`

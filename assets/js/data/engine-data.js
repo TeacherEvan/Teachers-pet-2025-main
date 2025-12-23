@@ -4,11 +4,11 @@
  * Extracted from enhanced-comment-engine.js to improve maintainability.
  */
 
-window.TeachersPetData = window.TeachersPetData || {};
+export const TeachersPetData = {};
 
 // Optimized descriptor pools - precise, varied, professional (2024 best practices)
 // Using max 2-word combinations, avoiding redundancy, strong nouns over adjective stacking
-window.TeachersPetData.descriptorPools = {
+TeachersPetData.descriptorPools = {
     10: ["exceptional mastery", "remarkable achievement", "superior competency", "outstanding performance", "distinguished excellence"],
     9: ["impressive progress", "notable accomplishment", "commendable proficiency", "stellar development", "significant growth"],
     8: ["strong capability", "solid competence", "thorough understanding", "proficient performance", "capable execution"],
@@ -22,7 +22,7 @@ window.TeachersPetData.descriptorPools = {
 };
 
 // Optimized verb pools - strong verbs, minimal adverb stacking, professional tone
-window.TeachersPetData.verbPools = {
+TeachersPetData.verbPools = {
     10: ["excelled consistently", "achieved mastery", "performed exceptionally", "demonstrated excellence", "showcased proficiency"],
     9: ["demonstrated strong ability", "performed admirably", "showed skill", "exhibited proficiency", "achieved excellence"],
     8: ["performed well", "demonstrated capability", "showed competence", "achieved solidly", "exhibited understanding"],
@@ -36,7 +36,7 @@ window.TeachersPetData.verbPools = {
 };
 
 // Optimized adverb pools - diverse, non-repetitive, professional (eliminated duplicate words)
-window.TeachersPetData.adverbPools = {
+TeachersPetData.adverbPools = {
     10: ["remarkably", "exceptionally", "impressively", "notably", "extraordinarily"],
     9: ["consistently", "admirably", "commendably", "thoroughly", "diligently"],
     8: ["skillfully", "capably", "proficiently", "competently", "effectively"],
@@ -49,7 +49,7 @@ window.TeachersPetData.adverbPools = {
     1: ["curiously", "enthusiastically", "inquisitively", "exploratively", "engagingly"]
 };
 
-window.TeachersPetData.performanceMap = {
+TeachersPetData.performanceMap = {
     10: { level: "exceptional" },
     9: { level: "excellent" },
     8: { level: "very strong" },
@@ -62,7 +62,7 @@ window.TeachersPetData.performanceMap = {
     1: { level: "emerging" }
 };
 
-window.TeachersPetData.grammarRules = {
+TeachersPetData.grammarRules = {
     pronouns: {
         he: { subject: "He", subject_lower: "he", object: "him", possessive: "his", possessive_cap: "His", verb: "has", isAre: "is" },
         she: { subject: "She", subject_lower: "she", object: "her", possessive: "her", possessive_cap: "Her", verb: "has", isAre: "is" },
@@ -81,7 +81,7 @@ window.TeachersPetData.grammarRules = {
 };
 
 // Subject-to-topic mapping for intelligent grouping
-window.TeachersPetData.subjectTopicMap = {
+TeachersPetData.subjectTopicMap = {
     // Expanded English to include K1 phonics items (Nancy, Oscar, Penny, Queenie, Rev N/O/P)
     "English": [
         "draw lines", "trace", "match", "circle", "letter", "alphabet", "phonics",

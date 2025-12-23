@@ -276,8 +276,10 @@
     <script src="assets/js/utils/performance-optimizer.js" defer></script>
     <script src="assets/js/utils/ui-enhancements.js" defer></script>
     <script src="assets/js/comment-engine.js?v=2" defer></script>
-    <script src="assets/js/controllers/launcher-controller.js" defer></script>
-    <script src="assets/js/controllers/app-controller.js" defer></script>
+    <script type="module">
+        import { TeachersPetApp } from './assets/js/controllers/app-controller.js';
+        window.app = new TeachersPetApp();
+    </script>
 </body>
 
 </html>

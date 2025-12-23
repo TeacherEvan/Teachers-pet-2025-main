@@ -3,7 +3,7 @@
  * Manages initialization, animations, and user interactions on the landing page
  * @class LauncherController
  */
-class LauncherController {
+export class LauncherController {
     constructor(appInstance) {
         this.app = appInstance;
         this.LOADING_SCREEN_DURATION_MS = 1200; // Premium loading experience duration

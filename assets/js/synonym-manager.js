@@ -20,7 +20,7 @@ function debugLogSynonym(emoji, message, ...args) {
     }
 }
 
-class SynonymManager {
+export class SynonymManager {
     constructor() {
         this.synonymData = null;
         this.usageCounts = this.loadUsageCounts();
@@ -351,8 +351,10 @@ class SynonymManager {
 }
 
 // Global instance for easy access
-if (typeof window !== 'undefined') {
-    window.SynonymManager = SynonymManager;
-    window.synonymManager = new SynonymManager();
-    console.log('🌐 SynonymManager: Global instance created (window.synonymManager)');
-}
+// if (typeof window !== 'undefined') {
+//     window.SynonymManager = SynonymManager;
+//     window.synonymManager = new SynonymManager();
+//     console.log('🌐 SynonymManager: Global instance created (window.synonymManager)');
+// }
+
+export const synonymManager = new SynonymManager();
