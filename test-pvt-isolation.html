@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test: PVT Subject Isolation</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 1400px;
+            margin: 40px auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .test-container {
+            background: white;
+            padding: 35px;
+            border-radius: 16px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            margin-bottom: 25px;
+        }
+
+        h1 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+            font-size: 28px;
+        }
+
+        h2 {
+            color: #667eea;
+            margin-top: 30px;
+            border-bottom: 3px solid #667eea;
+            padding-bottom: 12px;
+            font-size: 20px;
+        }
+
+        .intro {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 25px;
+            font-weight: 500;
+        }
+
+        .test-case {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 18px 0;
+            border-left: 5px solid #667eea;
+        }
+
+        .test-title {
+            font-weight: 700;
+            color: #2c3e50;
+            margin-bottom: 12px;
+            font-size: 17px;
+        }
+
+        .result {
+            background: white;
+            padding: 18px;
+            border-radius: 8px;
+            margin-top: 12px;
+            font-family: 'Courier New', monospace;
+            font-size: 13px;
+        }
+
+        .pass {
+            color: #27ae60;
+            font-weight: 700;
+            font-size: 15px;
+        }
+
+        .fail {
+            color: #e74c3c;
+            font-weight: 700;
+            font-size: 15px;
+        }
+
+        .warning {
+            color: #f39c12;
+            font-weight: 700;
+            font-size: 15px;
+        }
+
+        .info {
+            color: #7f8c8d;
+            font-size: 13px;
+            margin-top: 8px;
+            line-height: 1.6;
+        }
+
+        .subject-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 10px;
+            margin-top: 12px;
+        }
+
+        .subject-badge {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 8px 14px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            text-align: center;
+        }
+
+        .pvt-badge {
+            background: linear-gradient(135deg, #f093fb, #f5576c);
+        }
+
+        .k1k2-badge {
+            background: linear-gradient(135deg, #4facfe, #00f2fe);
+        }
+
+        button {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 14px 28px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-weight: 700;
+            margin: 8px;
+            font-size: 15px;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+            transition: all 0.3s ease;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.6);
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 18px;
+            margin-top: 25px;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .stat-value {
+            font-size: 36px;
+            font-weight: 800;
+            margin: 12px 0;
+        }
+
+        .stat-label {
+            font-size: 14px;
+            opacity: 0.95;
+            font-weight: 500;
+        }
+
+        .collision-highlight {
+            background: #fff3cd;
+            border: 2px solid #f39c12;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="test-container">
+        <h1>🔒 PVT Subject Isolation Test Suite</h1>
+        <div class="intro">
+            <strong>Critical Test:</strong> Ensures PVT students see ONLY their own subjects and no cross-contamination
+            occurs with K1/K2 curriculum.
+            All PVT subjects must be uniquely named to prevent JavaScript object key collisions.
+        </div>
+
+        <div class="stats">
+            <div class="stat-card">
+                <div class="stat-label">PVT Subjects Detected</div>
+                <div class="stat-value" id="pvtCount">0</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">K1/K2 Subjects Detected</div>
+                <div class="stat-value" id="k1k2Count">0</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Key Collisions Found</div>
+                <div class="stat-value" id="collisionCount">0</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Isolation Status</div>
+                <div class="stat-value" id="isolationStatus">⏳</div>
+            </div>
+        </div>
+
+        <button onclick="runAllTests()">▶️ Run Isolation Tests</button>
+        <button onclick="location.href='Subjects.html?grade=PVT&month=General'">🔗 Test PVT in Subjects Page</button>
+
+        <h2>Test Results</h2>
+        <div id="testResults"></div>
+    </div>
+
+    <script type="module">
+        import { TeachersPetData } from './assets/js/data/engine-data.js';
+
+        let testResults = [];
+
+        window.runAllTests = async function () {
+            testResults = [];
+            document.getElementById('testResults').innerHTML = '<p class="info">Running isolation tests...</p>';
+
+            // Test 1: Load PVT curriculum and verify subject names
+            testResults.push(await testPVTCurriculumLoading());
+
+            // Test 2: Check for key collisions in subjectTopicMap
+            testResults.push(testKeyCollisions());
+
+            // Test 3: Verify all PVT subjects are prefixed
+            testResults.push(testPVTPrefix());
+
+            // Test 4: Verify capitalization rules exist
+            testResults.push(testCapitalizationRules());
+
+            // Test 5: Cross-reference curriculum with engine data
+            testResults.push(await testCurriculumEngineAlignment());
+
+            displayResults();
+        };
+
+        async function testPVTCurriculumLoading() {
+            try {
+                const response = await fetch('assets/data/curriculum/pvt/general.json');
+                if (!response.ok) {
+                    throw new Error(`HTTP ${response.status}`);
+                }
+                const curriculum = await response.json();
+
+                const pvtSubjects = curriculum.subjects.map(s => s.name);
+                const allPrefixed = pvtSubjects.every(name => name.startsWith('PVT '));
+
+                document.getElementById('pvtCount').textContent = pvtSubjects.length;
+
+                return {
+                    name: 'PVT Curriculum Loading Test',
+                    passed: allPrefixed && pvtSubjects.length === 10,
+                    message: `Loaded ${pvtSubjects.length} PVT subjects, all prefixed: ${allPrefixed}`,
+                    details: `Subjects: ${pvtSubjects.join(', ')}`,
+                    subjectList: pvtSubjects
+                };
+            } catch (error) {
+                return {
+                    name: 'PVT Curriculum Loading Test',
+                    passed: false,
+                    message: `Failed to load curriculum: ${error.message}`,
+                    details: 'Check that assets/data/curriculum/pvt/general.json exists and is valid JSON'
+                };
+            }
+        }
+
+        function testKeyCollisions() {
+            const subjectTopicMap = TeachersPetData.subjectTopicMap;
+            const allKeys = Object.keys(subjectTopicMap);
+
+            // Separate PVT and K1/K2 subjects
+            const pvtKeys = allKeys.filter(key => key.startsWith('PVT '));
+            const k1k2Keys = allKeys.filter(key => !key.startsWith('PVT '));
+
+            // Check for base name collisions (e.g., "Mathematics" and "PVT Mathematics")
+            const collisions = [];
+            pvtKeys.forEach(pvtKey => {
+                const baseName = pvtKey.replace('PVT ', '');
+                if (k1k2Keys.includes(baseName)) {
+                    collisions.push({
+                        pvt: pvtKey,
+                        k1k2: baseName
+                    });
+                }
+            });
+
+            document.getElementById('k1k2Count').textContent = k1k2Keys.length;
+            document.getElementById('collisionCount').textContent = collisions.length;
+
+            return {
+                name: 'Key Collision Detection Test',
+                passed: collisions.length === 0,
+                message: `Found ${collisions.length} potential collisions between PVT and K1/K2 subjects`,
+                details: collisions.length > 0
+                    ? `Collisions: ${collisions.map(c => `${c.pvt} vs ${c.k1k2}`).join('; ')}`
+                    : 'No key collisions detected - PVT subjects are properly isolated',
+                collisions: collisions
+            };
+        }
+
+        function testPVTPrefix() {
+            const subjectTopicMap = TeachersPetData.subjectTopicMap;
+            const allKeys = Object.keys(subjectTopicMap);
+            const pvtKeys = allKeys.filter(key => key.startsWith('PVT '));
+
+            // Expected PVT subjects
+            const expectedPVT = [
+                'PVT Language Arts',
+                'PVT Mathematics',
+                'PVT Science',
+                'PVT Social Studies',
+                'PVT Physical Education',
+                'PVT Arts & Crafts',
+                'PVT Music & Movement',
+                'PVT Critical Thinking',
+                'PVT Social-Emotional Learning',
+                'PVT Life Skills'
+            ];
+
+            const allPresent = expectedPVT.every(subject => pvtKeys.includes(subject));
+            const extraKeys = pvtKeys.filter(key => !expectedPVT.includes(key));
+
+            return {
+                name: 'PVT Prefix Consistency Test',
+                passed: allPresent && extraKeys.length === 0,
+                message: `${pvtKeys.length} PVT subjects found, expected 10`,
+                details: allPresent
+                    ? 'All expected PVT subjects are present and properly prefixed'
+                    : `Missing: ${expectedPVT.filter(s => !pvtKeys.includes(s)).join(', ')}${extraKeys.length > 0 ? ` | Extra: ${extraKeys.join(', ')}` : ''}`,
+                pvtSubjects: pvtKeys
+            };
+        }
+
+        function testCapitalizationRules() {
+            const capitalization = TeachersPetData.grammarRules.subjectCapitalization;
+
+            // Check if all PVT subjects have capitalization rules
+            const pvtCapRules = Object.keys(capitalization).filter(key =>
+                key.startsWith('pvt ') || capitalization[key].startsWith('PVT ')
+            );
+
+            const expectedRules = [
+                'pvt language arts',
+                'pvt mathematics',
+                'pvt science',
+                'pvt social studies',
+                'pvt physical education',
+                'pvt arts & crafts',
+                'pvt music & movement',
+                'pvt critical thinking',
+                'pvt social-emotional learning',
+                'pvt life skills'
+            ];
+
+            const allPresent = expectedRules.every(rule => pvtCapRules.includes(rule));
+
+            return {
+                name: 'Capitalization Rules Test',
+                passed: allPresent && pvtCapRules.length === 10,
+                message: `${pvtCapRules.length} PVT capitalization rules found, expected 10`,
+                details: allPresent
+                    ? 'All PVT subjects have proper capitalization rules defined'
+                    : `Missing rules for: ${expectedRules.filter(r => !pvtCapRules.includes(r)).join(', ')}`
+            };
+        }
+
+        async function testCurriculumEngineAlignment() {
+            try {
+                const response = await fetch('assets/data/curriculum/pvt/general.json');
+                const curriculum = await response.json();
+
+                const curriculumSubjects = curriculum.subjects.map(s => s.name);
+                const subjectTopicMap = TeachersPetData.subjectTopicMap;
+                const engineSubjects = Object.keys(subjectTopicMap).filter(key => key.startsWith('PVT '));
+
+                // Check if all curriculum subjects have engine mappings
+                const missingMappings = curriculumSubjects.filter(name => !engineSubjects.includes(name));
+                const extraMappings = engineSubjects.filter(name => !curriculumSubjects.includes(name));
+
+                const aligned = missingMappings.length === 0 && extraMappings.length === 0;
+
+                return {
+                    name: 'Curriculum-Engine Alignment Test',
+                    passed: aligned,
+                    message: aligned
+                        ? 'Perfect alignment between curriculum file and engine data'
+                        : `Misalignment detected`,
+                    details: !aligned
+                        ? `Missing in engine: ${missingMappings.join(', ') || 'None'}; Extra in engine: ${extraMappings.join(', ') || 'None'}`
+                        : 'All 10 PVT subjects are consistently named in both curriculum and engine'
+                };
+            } catch (error) {
+                return {
+                    name: 'Curriculum-Engine Alignment Test',
+                    passed: false,
+                    message: `Failed: ${error.message}`,
+                    details: 'Could not complete alignment check'
+                };
+            }
+        }
+
+        function displayResults() {
+            const container = document.getElementById('testResults');
+            const passCount = testResults.filter(t => t.passed).length;
+            const totalTests = testResults.length;
+            const passRate = Math.round((passCount / totalTests) * 100);
+
+            // Update isolation status
+            const statusElement = document.getElementById('isolationStatus');
+            if (passRate === 100) {
+                statusElement.textContent = '✅';
+                statusElement.style.color = '#27ae60';
+            } else {
+                statusElement.textContent = '❌';
+                statusElement.style.color = '#e74c3c';
+            }
+
+            let html = '';
+
+            testResults.forEach((test, index) => {
+                const statusClass = test.passed ? 'pass' : 'fail';
+                const statusIcon = test.passed ? '✅' : '❌';
+
+                html += `
+                    <div class="test-case">
+                        <div class="test-title">${statusIcon} Test ${index + 1}: ${test.name}</div>
+                        <div class="result">
+                            <div class="${statusClass}">${test.passed ? 'PASS' : 'FAIL'}</div>
+                            <div style="margin-top: 10px; color: #2c3e50;">${test.message}</div>
+                            <div class="info">${test.details}</div>
+                            ${test.collisions && test.collisions.length > 0 ? `
+                                <div class="collision-highlight" style="margin-top:10px;">
+                                    <strong>⚠️ KEY COLLISIONS DETECTED:</strong><br>
+                                    ${test.collisions.map(c => `"${c.k1k2}" will be overwritten by "${c.pvt}"`).join('<br>')}
+                                </div>
+                            ` : ''}
+                            ${test.subjectList ? `
+                                <div class="subject-list" style="margin-top:15px;">
+                                    ${test.subjectList.map(s => `<div class="subject-badge pvt-badge">${s}</div>`).join('')}
+                                </div>
+                            ` : ''}
+                            ${test.pvtSubjects ? `
+                                <div class="subject-list" style="margin-top:15px;">
+                                    ${test.pvtSubjects.map(s => `<div class="subject-badge pvt-badge">${s}</div>`).join('')}
+                                </div>
+                            ` : ''}
+                        </div>
+                    </div>
+                `;
+            });
+
+            html += `
+                <div class="test-case" style="border-left-color: ${passRate === 100 ? '#27ae60' : '#e74c3c'};">
+                    <div class="test-title">📊 Final Isolation Report</div>
+                    <div class="result">
+                        <div style="font-size: 18px; font-weight: 700; color: ${passRate === 100 ? '#27ae60' : '#e74c3c'};">
+                            ${passCount}/${totalTests} Tests Passed (${passRate}%)
+                        </div>
+                        <div class="info" style="margin-top: 12px;">
+                            ${passRate === 100
+                    ? '🎉 <strong>COMPLETE ISOLATION ACHIEVED!</strong><br>PVT students have their own subjects with no K1/K2 cross-contamination.'
+                    : '⚠️ <strong>ISOLATION INCOMPLETE</strong><br>Some tests failed. PVT subjects may conflict with K1/K2 curriculum. Review failures above.'}
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            container.innerHTML = html;
+        }
+
+        // Auto-run tests on load
+        window.addEventListener('load', () => {
+            setTimeout(() => {
+                window.runAllTests();
+            }, 500);
+        });
+    </script>
+</body>
+
+</html>

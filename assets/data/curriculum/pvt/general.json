@@ -4,7 +4,7 @@
   "subjects": [
     {
       "id": "language_arts",
-      "name": "Language Arts",
+      "name": "PVT Language Arts",
       "topics": [
         {
           "id": "la_letter_recognition",
@@ -25,7 +25,7 @@
     },
     {
       "id": "mathematics",
-      "name": "Mathematics",
+      "name": "PVT Mathematics",
       "topics": [
         { "id": "math_number_recognition", "name": "Number recognition 1-20" },
         {
@@ -43,7 +43,7 @@
     },
     {
       "id": "science",
-      "name": "Science",
+      "name": "PVT Science",
       "topics": [
         { "id": "science_five_senses", "name": "Five senses exploration" },
         {
@@ -61,7 +61,7 @@
     },
     {
       "id": "social_studies",
-      "name": "Social Studies",
+      "name": "PVT Social Studies",
       "topics": [
         {
           "id": "ss_community_helpers",
@@ -85,7 +85,7 @@
     },
     {
       "id": "physical_education",
-      "name": "Physical Education",
+      "name": "PVT Physical Education",
       "topics": [
         {
           "id": "pe_ball_skills",
@@ -103,7 +103,7 @@
     },
     {
       "id": "arts_crafts",
-      "name": "Arts & Crafts",
+      "name": "PVT Arts & Crafts",
       "topics": [
         {
           "id": "arts_painting_drawing",
@@ -121,7 +121,7 @@
     },
     {
       "id": "music_movement",
-      "name": "Music & Movement",
+      "name": "PVT Music & Movement",
       "topics": [
         { "id": "music_rhythm_beat", "name": "Rhythm and beat activities" },
         { "id": "music_singing", "name": "Singing songs and nursery rhymes" },
@@ -139,7 +139,7 @@
     },
     {
       "id": "critical_thinking",
-      "name": "Critical Thinking",
+      "name": "PVT Critical Thinking",
       "topics": [
         { "id": "ct_puzzles_problems", "name": "Puzzles and problem-solving" },
         {
@@ -154,7 +154,7 @@
     },
     {
       "id": "social_emotional",
-      "name": "Social-Emotional Learning",
+      "name": "PVT Social-Emotional Learning",
       "topics": [
         { "id": "sel_emotions", "name": "Identifying and expressing emotions" },
         { "id": "sel_sharing_cooperation", "name": "Sharing and cooperation" },
@@ -169,7 +169,7 @@
     },
     {
       "id": "life_skills",
-      "name": "Life Skills",
+      "name": "PVT Life Skills",
       "topics": [
         {
           "id": "ls_personal_hygiene",

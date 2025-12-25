@@ -290,13 +290,17 @@ TeachersPetData.grammarRules = {
     "puppet show": "Puppet Show",
     "super safari": "Super Safari",
     "story time": "Story Time",
-    // PVT subject capitalization
-    "language arts": "Language Arts",
-    "critical thinking": "Critical Thinking",
-    "social-emotional learning": "Social-Emotional Learning",
-    "life skills": "Life Skills",
-    "music & movement": "Music & Movement",
-    "arts & crafts": "Arts & Crafts",
+    // PVT subject capitalization - All PVT subjects uniquely named
+    "pvt language arts": "PVT Language Arts",
+    "pvt mathematics": "PVT Mathematics",
+    "pvt science": "PVT Science",
+    "pvt social studies": "PVT Social Studies",
+    "pvt physical education": "PVT Physical Education",
+    "pvt arts & crafts": "PVT Arts & Crafts",
+    "pvt music & movement": "PVT Music & Movement",
+    "pvt critical thinking": "PVT Critical Thinking",
+    "pvt social-emotional learning": "PVT Social-Emotional Learning",
+    "pvt life skills": "PVT Life Skills",
   },
 };
 
@@ -444,8 +448,9 @@ TeachersPetData.subjectTopicMap = {
   ],
   "Story Time": ["harry frog", "bird", "lovely animals", "ox and the frog"],
 
-  // PVT (Private Student) Subjects - Comprehensive Kindergarten Curriculum
-  "Language Arts": [
+  // PVT (Private Student) Subjects - Completely Isolated from K1/K2
+  // All PVT subjects prefixed to prevent key collisions
+  "PVT Language Arts": [
     "letter",
     "recognition",
     "tracing",
@@ -461,7 +466,7 @@ TeachersPetData.subjectTopicMap = {
     "formation",
     "alphabet",
   ],
-  Mathematics: [
+  "PVT Mathematics": [
     "number",
     "numbers",
     "counting",
@@ -489,7 +494,7 @@ TeachersPetData.subjectTopicMap = {
     "triangle",
     "rectangle",
   ],
-  Science: [
+  "PVT Science": [
     "senses",
     "five senses",
     "see",
@@ -519,7 +524,7 @@ TeachersPetData.subjectTopicMap = {
     "sprout",
     "habitat",
   ],
-  "Social Studies": [
+  "PVT Social Studies": [
     "community",
     "helpers",
     "doctor",
@@ -546,7 +551,7 @@ TeachersPetData.subjectTopicMap = {
     "responsibilities",
     "respect",
   ],
-  "Critical Thinking": [
+  "PVT Critical Thinking": [
     "puzzle",
     "problem",
     "solving",
@@ -563,7 +568,7 @@ TeachersPetData.subjectTopicMap = {
     "tallest",
     "shortest",
   ],
-  "Social-Emotional Learning": [
+  "PVT Social-Emotional Learning": [
     "emotions",
     "happy",
     "sad",
@@ -579,7 +584,7 @@ TeachersPetData.subjectTopicMap = {
     "empathy",
     "kindness",
   ],
-  "Life Skills": [
+  "PVT Life Skills": [
     "hygiene",
     "wash hands",
     "brush teeth",
@@ -596,7 +601,7 @@ TeachersPetData.subjectTopicMap = {
     "penny",
     "nickel",
   ],
-  "Music & Movement": [
+  "PVT Music & Movement": [
     "rhythm",
     "beat",
     "singing",
@@ -611,7 +616,7 @@ TeachersPetData.subjectTopicMap = {
     "listening",
     "appreciation",
   ],
-  "Arts & Crafts": [
+  "PVT Arts & Crafts": [
     "painting",
     "drawing",
     "cutting",
@@ -626,36 +631,20 @@ TeachersPetData.subjectTopicMap = {
     "create",
     "design",
   ],
-  Technology: [
-    "computer",
-    "tablet",
-    "mouse",
-    "keyboard",
-    "touch screen",
-    "apps",
-    "educational games",
-    "coding",
-    "robotics",
-    "digital",
-    "electronic",
-    "interactive",
-    "technology",
-  ],
-  "Health & Safety": [
-    "healthy",
-    "nutrition",
-    "food groups",
-    "fruits",
-    "vegetables",
+  "PVT Physical Education": [
+    "ball skills",
+    "throwing",
+    "catching",
+    "kicking",
+    "balance",
+    "coordination",
+    "running",
+    "jumping",
+    "dance",
+    "creative movement",
+    "team sports",
+    "cooperate",
+    "active",
     "exercise",
-    "physical activity",
-    "germs",
-    "cleanliness",
-    "danger",
-    "emergency",
-    "fire drill",
-    "safety",
-    "first aid",
-    "health",
   ],
 };

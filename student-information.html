@@ -331,6 +331,89 @@
         box-shadow: 0 3px 8px rgba(230, 126, 34, 0.4);
     }
 
+    /* Category Section Styles */
+    .category-section {
+        margin-bottom: 12px;
+        border: 1px solid #e0e6ed;
+        border-radius: 8px;
+        overflow: hidden;
+        background: #fff;
+    }
+
+    .category-header {
+        background: linear-gradient(135deg, #f8f9fa, #e9ecef);
+        padding: 10px 15px;
+        cursor: pointer;
+        font-weight: 600;
+        font-size: 13px;
+        color: #2c3e50;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        user-select: none;
+        transition: all 0.2s ease;
+        border-bottom: 1px solid #e0e6ed;
+    }
+
+    .category-header:hover {
+        background: linear-gradient(135deg, #e9ecef, #dee2e6);
+    }
+
+    .category-header .emoji {
+        margin-right: 6px;
+        font-size: 14px;
+    }
+
+    .toggle-icon {
+        font-size: 12px;
+        transition: transform 0.3s ease;
+        color: #7f8c8d;
+    }
+
+    .category-header.collapsed .toggle-icon {
+        transform: rotate(-90deg);
+    }
+
+    .category-content {
+        padding: 12px;
+        background: #fafbfc;
+        max-height: 500px;
+        overflow: hidden;
+        transition: max-height 0.3s ease, padding 0.3s ease;
+    }
+
+    .category-content.collapsed {
+        max-height: 0;
+        padding: 0 12px;
+    }
+
+    .button-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+        gap: 6px;
+    }
+
+    .strength-btn {
+        background: linear-gradient(135deg, #27ae60, #229954);
+        box-shadow: 0 2px 5px rgba(39, 174, 96, 0.3);
+    }
+
+    .strength-btn:hover {
+        box-shadow: 0 3px 8px rgba(39, 174, 96, 0.4);
+    }
+
+    .clear-btn {
+        background: linear-gradient(135deg, #95a5a6, #7f8c8d);
+        font-size: 11px;
+        padding: 4px 10px;
+        margin-top: 8px;
+        box-shadow: 0 2px 5px rgba(149, 165, 166, 0.3);
+    }
+
+    .clear-btn:hover {
+        box-shadow: 0 3px 8px rgba(149, 165, 166, 0.4);
+    }
+
     .navigation {
         text-align: center;
         margin: 25px 0;
@@ -659,50 +742,224 @@
             <!-- Strengths and Areas for Improvement Grid -->
             <div class="grid-1fr-1fr">
                 <div class="form-group margin-bottom-0">
-                    <label for="strengths">Strengths:</label>
+                    <label for="strengths">Strengths: <button type="button" class="clear-btn"
+                            onclick="clearStrengths()">Clear All</button></label>
                     <div class="margin-bottom-8">
-                        <div class="flex-gap-8">
-                            <button type="button" class="quick-select-btn"
-                                onclick="addToStrengths('creative thinking')">Creative</button>
-                            <button type="button" class="quick-select-btn"
-                                onclick="addToStrengths('strong social skills')">Social</button>
-                            <button type="button" class="quick-select-btn"
-                                onclick="addToStrengths('good listening skills')">Listening</button>
-                            <button type="button" class="quick-select-btn"
-                                onclick="addToStrengths('excellent fine motor skills')">Motor Skills</button>
-                            <button type="button" class="quick-select-btn"
-                                onclick="addToStrengths('a curious and inquisitive nature')">Curious</button>
-                            <button type="button" class="quick-select-btn"
-                                onclick="addToStrengths('a helpful and kind disposition')">Helpful</button>
-                            <button type="button" class="quick-select-btn"
-                                onclick="addToStrengths('strong problem-solving abilities')">Problem-Solving</button>
-                            <button type="button" class="quick-select-btn"
-                                onclick="addToStrengths('natural leadership qualities')">Leadership</button>
+                        <!-- Cognitive/Academic -->
+                        <div class="category-section">
+                            <div class="category-header" onclick="toggleCategory('cognitive-strengths')">
+                                <span><span class="emoji">🧠</span>Cognitive/Academic</span>
+                                <span class="toggle-icon">▼</span>
+                            </div>
+                            <div id="cognitive-strengths" class="category-content">
+                                <div class="button-grid">
+                                    <button type="button" class="quick-select-btn strength-btn"
+                                        onclick="addToStrengths('creative thinking and imagination')">Creative</button>
+                                    <button type="button" class="quick-select-btn strength-btn"
+                                        onclick="addToStrengths('curious and inquisitive nature')">Curious</button>
+                                    <button type="button" class="quick-select-btn strength-btn"
+                                        onclick="addToStrengths('focused and attentive learner')">Focused</button>
+                                    <button type="button" class="quick-select-btn strength-btn"
+                                        onclick="addToStrengths('thoughtful and reflective approach')">Thoughtful</button>
+                                    <button type="button" class="quick-select-btn strength-btn"
+                                        onclick="addToStrengths('independent learning skills')">Independent</button>
+                                    <button type="button" class="quick-select-btn strength-btn"
+                                        onclick="addToStrengths('strong problem-solving abilities')">Problem-Solving</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Social-Emotional -->
+                        <div class="category-section">
+                            <div class="category-header" onclick="toggleCategory('social-strengths')">
+                                <span><span class="emoji">🤝</span>Social-Emotional</span>
+                                <span class="toggle-icon">▼</span>
+                            </div>
+                            <div id="social-strengths" class="category-content">
+                                <div class="button-grid">
+                                    <button type="button" class="quick-select-btn strength-btn"
+                                        onclick="addToStrengths('strong social skills')">Social Skills</button>
+                                    <button type="button" class="quick-select-btn strength-btn"
+                                        onclick="addToStrengths('cooperative team player')">Cooperative</button>
+                                    <button type="button" class="quick-select-btn strength-btn"
+                                        onclick="addToStrengths('cheerful and positive attitude')">Cheerful</button>
+                                    <button type="button" class="quick-select-btn strength-btn"
+                                        onclick="addToStrengths('friendly and welcoming')">Friendly</button>
+                                    <button type="button" class="quick-select-btn strength-btn"
+                                        onclick="addToStrengths('gentle and caring nature')">Gentle</button>
+                                    <button type="button" class="quick-select-btn strength-btn"
+                                        onclick="addToStrengths('respectful and courteous')">Respectful</button>
+                                    <button type="button" class="quick-select-btn strength-btn"
+                                        onclick="addToStrengths('patient with peers')">Patient</button>
+                                    <button type="button" class="quick-select-btn strength-btn"
+                                        onclick="addToStrengths('confident self-expression')">Confident</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Physical/Motor -->
+                        <div class="category-section">
+                            <div class="category-header" onclick="toggleCategory('physical-strengths')">
+                                <span><span class="emoji">💪</span>Physical/Motor</span>
+                                <span class="toggle-icon">▼</span>
+                            </div>
+                            <div id="physical-strengths" class="category-content">
+                                <div class="button-grid">
+                                    <button type="button" class="quick-select-btn strength-btn"
+                                        onclick="addToStrengths('excellent fine motor skills')">Fine Motor</button>
+                                    <button type="button" class="quick-select-btn strength-btn"
+                                        onclick="addToStrengths('active and energetic participation')">Active</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Communication/Expression -->
+                        <div class="category-section">
+                            <div class="category-header" onclick="toggleCategory('communication-strengths')">
+                                <span><span class="emoji">💬</span>Communication/Expression</span>
+                                <span class="toggle-icon">▼</span>
+                            </div>
+                            <div id="communication-strengths" class="category-content">
+                                <div class="button-grid">
+                                    <button type="button" class="quick-select-btn strength-btn"
+                                        onclick="addToStrengths('good listening skills')">Listening</button>
+                                    <button type="button" class="quick-select-btn strength-btn"
+                                        onclick="addToStrengths('expressive communication')">Expressive</button>
+                                    <button type="button" class="quick-select-btn strength-btn"
+                                        onclick="addToStrengths('enthusiastic participation')">Enthusiastic</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Character Traits -->
+                        <div class="category-section">
+                            <div class="category-header" onclick="toggleCategory('character-strengths')">
+                                <span><span class="emoji">⭐</span>Character Traits</span>
+                                <span class="toggle-icon">▼</span>
+                            </div>
+                            <div id="character-strengths" class="category-content">
+                                <div class="button-grid">
+                                    <button type="button" class="quick-select-btn strength-btn"
+                                        onclick="addToStrengths('helpful and kind disposition')">Helpful</button>
+                                    <button type="button" class="quick-select-btn strength-btn"
+                                        onclick="addToStrengths('natural leadership qualities')">Leadership</button>
+                                    <button type="button" class="quick-select-btn strength-btn"
+                                        onclick="addToStrengths('brave and willing to try new things')">Brave</button>
+                                    <button type="button" class="quick-select-btn strength-btn"
+                                        onclick="addToStrengths('diligent and hardworking')">Diligent</button>
+                                    <button type="button" class="quick-select-btn strength-btn"
+                                        onclick="addToStrengths('consistent effort and engagement')">Consistent</button>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <textarea id="strengths" name="strengths"
-                        placeholder="e.g., creative thinking, strong social skills"></textarea>
+                        placeholder="Select from categories above or type custom strengths..."></textarea>
                     <div class="auto-save-indicator" id="strengthsIndicator">Saved</div>
                 </div>
 
                 <div class="form-group margin-bottom-0">
-                    <label for="weaknesses">Areas for Improvement:</label>
+                    <label for="weaknesses">Areas for Improvement: <button type="button" class="clear-btn"
+                            onclick="clearWeaknesses()">Clear All</button></label>
                     <div class="margin-bottom-8">
-                        <div class="flex-gap-8">
-                            <button type="button" class="quick-select-btn improvement-btn"
-                                onclick="addToAreas('refining motor skills')">Motor Skills</button>
-                            <button type="button" class="quick-select-btn improvement-btn"
-                                onclick="addToAreas('developing social awareness')">Social Awareness</button>
-                            <button type="button" class="quick-select-btn improvement-btn"
-                                onclick="addToAreas('improving spatial awareness')">Spatial Awareness</button>
-                            <button type="button" class="quick-select-btn improvement-btn"
-                                onclick="addToAreas('building confidence in group settings')">Confidence</button>
-                            <button type="button" class="quick-select-btn improvement-btn"
-                                onclick="addToAreas('practicing active listening')">Listening</button>
+                        <!-- Fine Motor Development -->
+                        <div class="category-section">
+                            <div class="category-header" onclick="toggleCategory('motor-improvements')">
+                                <span><span class="emoji">✂️</span>Fine Motor Development</span>
+                                <span class="toggle-icon">▼</span>
+                            </div>
+                            <div id="motor-improvements" class="category-content">
+                                <div class="button-grid">
+                                    <button type="button" class="quick-select-btn improvement-btn"
+                                        onclick="addToAreas('refining motor skills')">Motor Skills</button>
+                                    <button type="button" class="quick-select-btn improvement-btn"
+                                        onclick="addToAreas('developing cutting and pasting skills')">Cutting/Pasting</button>
+                                    <button type="button" class="quick-select-btn improvement-btn"
+                                        onclick="addToAreas('building pencil control')">Pencil Control</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Social-Emotional Growth -->
+                        <div class="category-section">
+                            <div class="category-header" onclick="toggleCategory('social-improvements')">
+                                <span><span class="emoji">🌱</span>Social-Emotional Growth</span>
+                                <span class="toggle-icon">▼</span>
+                            </div>
+                            <div id="social-improvements" class="category-content">
+                                <div class="button-grid">
+                                    <button type="button" class="quick-select-btn improvement-btn"
+                                        onclick="addToAreas('developing social awareness')">Social Awareness</button>
+                                    <button type="button" class="quick-select-btn improvement-btn"
+                                        onclick="addToAreas('building confidence in group settings')">Group
+                                        Confidence</button>
+                                    <button type="button" class="quick-select-btn improvement-btn"
+                                        onclick="addToAreas('learning to share and take turns')">Sharing/Turns</button>
+                                    <button type="button" class="quick-select-btn improvement-btn"
+                                        onclick="addToAreas('managing emotions appropriately')">Emotion
+                                        Management</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Communication Skills -->
+                        <div class="category-section">
+                            <div class="category-header" onclick="toggleCategory('communication-improvements')">
+                                <span><span class="emoji">🗣️</span>Communication Skills</span>
+                                <span class="toggle-icon">▼</span>
+                            </div>
+                            <div id="communication-improvements" class="category-content">
+                                <div class="button-grid">
+                                    <button type="button" class="quick-select-btn improvement-btn"
+                                        onclick="addToAreas('practicing active listening')">Active Listening</button>
+                                    <button type="button" class="quick-select-btn improvement-btn"
+                                        onclick="addToAreas('improving verbal expression')">Verbal Expression</button>
+                                    <button type="button" class="quick-select-btn improvement-btn"
+                                        onclick="addToAreas('following multi-step directions')">Following
+                                        Directions</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Cognitive Development -->
+                        <div class="category-section">
+                            <div class="category-header" onclick="toggleCategory('cognitive-improvements')">
+                                <span><span class="emoji">🧩</span>Cognitive Development</span>
+                                <span class="toggle-icon">▼</span>
+                            </div>
+                            <div id="cognitive-improvements" class="category-content">
+                                <div class="button-grid">
+                                    <button type="button" class="quick-select-btn improvement-btn"
+                                        onclick="addToAreas('improving spatial awareness')">Spatial Awareness</button>
+                                    <button type="button" class="quick-select-btn improvement-btn"
+                                        onclick="addToAreas('building attention span')">Attention Span</button>
+                                    <button type="button" class="quick-select-btn improvement-btn"
+                                        onclick="addToAreas('developing organizational skills')">Organization</button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Independence/Self-Regulation -->
+                        <div class="category-section">
+                            <div class="category-header" onclick="toggleCategory('independence-improvements')">
+                                <span><span class="emoji">🎯</span>Independence/Self-Regulation</span>
+                                <span class="toggle-icon">▼</span>
+                            </div>
+                            <div id="independence-improvements" class="category-content">
+                                <div class="button-grid">
+                                    <button type="button" class="quick-select-btn improvement-btn"
+                                        onclick="addToAreas('building self-confidence')">Self-Confidence</button>
+                                    <button type="button" class="quick-select-btn improvement-btn"
+                                        onclick="addToAreas('developing independent work habits')">Independent
+                                        Work</button>
+                                    <button type="button" class="quick-select-btn improvement-btn"
+                                        onclick="addToAreas('improving impulse control')">Impulse Control</button>
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <textarea id="weaknesses" name="weaknesses"
-                        placeholder="List areas where the student can improve..."></textarea>
+                        placeholder="Select from categories above or type custom areas for improvement..."></textarea>
                     <div class="auto-save-indicator" id="weaknessesIndicator">Saved</div>
                 </div>
             </div>
@@ -1158,6 +1415,35 @@
             if (currentValue.includes(text)) return;
 
             textarea.value = currentValue === '' ? text : currentValue + ', ' + text;
+            validateField(textarea);
+            autoSaveFormData();
+        }
+
+        // Category toggle function
+        function toggleCategory(categoryId) {
+            const content = document.getElementById(categoryId);
+            const header = content.previousElementSibling;
+
+            if (content.classList.contains('collapsed')) {
+                content.classList.remove('collapsed');
+                header.classList.remove('collapsed');
+            } else {
+                content.classList.add('collapsed');
+                header.classList.add('collapsed');
+            }
+        }
+
+        // Clear functions
+        function clearStrengths() {
+            const textarea = document.getElementById('strengths');
+            textarea.value = '';
+            validateField(textarea);
+            autoSaveFormData();
+        }
+
+        function clearWeaknesses() {
+            const textarea = document.getElementById('weaknesses');
+            textarea.value = '';
             validateField(textarea);
             autoSaveFormData();
         }

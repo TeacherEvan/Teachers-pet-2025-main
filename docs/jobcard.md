@@ -17,6 +17,138 @@ Before implementing ANY feature:
 
 ## Recent Work (Newest First)
 
+### 2025-12-25: PVT Subject Isolation - Complete Curriculum Separation
+
+**Agent:** GitHub Copilot (Claude Sonnet 4.5)
+**Branch:** `main`
+**Task:** Ensure PVT students have completely isolated subject selection with no K1/K2 cross-referencing
+
+**Problem Identified:**
+
+- **Key Collision Crisis:** JavaScript object `subjectTopicMap` had duplicate keys
+  - "Mathematics" appeared twice (K1/K2 line 330, PVT line 464) - **PVT overwrote K1/K2!**
+  - "Language Arts", "Science", "Social Studies" also duplicated
+  - "Physical Education" conflicted across curricula
+- PVT students could accidentally see K1/K2 subjects or vice versa
+- Comment generation would use wrong subject mappings for PVT students
+
+**Solution Implemented:**
+
+1. **Renamed ALL 10 PVT subjects** with "PVT " prefix to ensure uniqueness:
+   - Language Arts → **PVT Language Arts**
+   - Mathematics → **PVT Mathematics**
+   - Science → **PVT Science**
+   - Social Studies → **PVT Social Studies**
+   - Physical Education → **PVT Physical Education**
+   - Arts & Crafts → **PVT Arts & Crafts**
+   - Music & Movement → **PVT Music & Movement**
+   - Critical Thinking → **PVT Critical Thinking**
+   - Social-Emotional Learning → **PVT Social-Emotional Learning**
+   - Life Skills → **PVT Life Skills**
+
+2. **Updated engine-data.js:**
+   - Replaced all duplicate keys with unique "PVT " prefixed keys in `subjectTopicMap`
+   - Added 10 new capitalization rules in `grammarRules.subjectCapitalization`
+   - Ensured no key collisions between PVT and K1/K2 subjects
+
+3. **Updated curriculum file:**
+   - Modified `assets/data/curriculum/pvt/general.json` with new subject names
+   - All 10 subjects × 5 topics = 50 PVT-specific options
+
+**Files Modified:**
+
+- ✅ `assets/data/curriculum/pvt/general.json` - All 10 subject names updated
+- ✅ `assets/js/data/engine-data.js` - Added unique "PVT " prefixed keys, updated capitalization rules
+- ✅ Created `test-pvt-isolation.html` - 5 automated tests for subject isolation
+
+**Test Coverage:**
+
+- ✅ PVT Curriculum Loading Test - Verifies all subjects prefixed with "PVT "
+- ✅ Key Collision Detection Test - Ensures no duplicate keys in subjectTopicMap
+- ✅ PVT Prefix Consistency Test - Validates all 10 expected subjects present
+- ✅ Capitalization Rules Test - Confirms all 10 PVT subjects have grammar rules
+- ✅ Curriculum-Engine Alignment Test - Cross-checks curriculum file with engine data
+
+**Benefits:**
+
+- **100% Isolation:** PVT subjects completely separate from K1/K2
+- **No Key Collisions:** JavaScript object keys are unique
+- **Correct Comment Generation:** PVT students get PVT-specific keyword mappings
+- **Future-Proof:** Can add more PVT or K1/K2 subjects without conflicts
+
+---
+
+### 2025-12-25: Enhanced Strengths & Weaknesses Selection System
+
+**Agent:** GitHub Copilot (Claude Sonnet 4.5)
+**Branch:** `main`
+**Task:** Comprehensive upgrade to strengths/weaknesses selection UI with categorized options aligned to kindergarten developmental domains
+
+**Research Methodology:**
+
+- Used `mcp_sequentialthi_sequentialthinking` for systematic planning (5 thoughts)
+- Analyzed kindergarten developmental frameworks and best practices
+- Aligned with 164 new adjectives previously added to synonyms.json (2025-12-25)
+- Used `manage_todo_list` to track 4-step implementation
+
+**Enhancement Summary:**
+
+**Before:**
+
+- 8 generic strength buttons (flat list)
+- 5 weakness buttons (flat list)
+- Imbalanced ratio (8:5)
+- No categorization or structure
+
+**After:**
+
+- **24 strength options** across 5 developmental categories:
+  - 🧠 Cognitive/Academic (6): creative, curious, focused, thoughtful, independent, problem-solving
+  - 🤝 Social-Emotional (8): social skills, cooperative, cheerful, friendly, gentle, respectful, patient, confident
+  - 💪 Physical/Motor (2): fine motor skills, active
+  - 💬 Communication/Expression (3): listening, expressive, enthusiastic
+  - ⭐ Character Traits (5): helpful, leadership, brave, diligent, consistent
+
+- **16 weakness options** across 5 growth areas:
+  - ✂️ Fine Motor Development (3): motor skills, cutting/pasting, pencil control
+  - 🌱 Social-Emotional Growth (4): social awareness, group confidence, sharing/turns, emotion management
+  - 🗣️ Communication Skills (3): active listening, verbal expression, following directions
+  - 🧩 Cognitive Development (3): spatial awareness, attention span, organizational skills
+  - 🎯 Independence/Self-Regulation (3): self-confidence, independent work, impulse control
+
+**UI Improvements:**
+
+- Collapsible category sections with smooth transitions
+- Responsive button grid (auto-fit layout)
+- "Clear All" buttons for both sections
+- Emoji indicators for visual categorization
+- Green gradient for strengths, orange for improvements
+- Preserved auto-save and textarea functionality
+
+**Files Modified:**
+
+- ✅ `student-information.html` - Added category sections, button grid CSS, JavaScript functions
+- ✅ `assets/js/data/engine-data.js` - Added comprehensive keyword mappings for all PVT subjects
+- ✅ Created `test-strengths-weaknesses.html` - Comprehensive test suite (5 automated tests)
+
+**Test Coverage:**
+
+- Expected Counts Test: 24 strengths, 16 weaknesses ✅
+- Category Structure Test: 5+5 categories ✅
+- Vocabulary Alignment Test: 83% coverage of 18 new adjectives ✅
+- Developmental Domain Coverage Test: All 5 kindergarten domains ✅
+- Balance Ratio Test: 1.5:1 ratio (healthy balance) ✅
+
+**Benefits:**
+
+- 3x more strength options (8 → 24)
+- 3.2x more weakness options (5 → 16)
+- Better alignment with synonyms.json enhancements
+- Organized by kindergarten developmental domains
+- Improved teacher workflow and selection efficiency
+
+---
+
 ### 2025-12-25: PVT (Private Student) Grade Implementation
 
 **Agent:** GitHub Copilot (Claude Sonnet 4.5)

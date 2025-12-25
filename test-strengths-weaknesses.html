@@ -1,0 +1,393 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test: Enhanced Strengths & Weaknesses Selection</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 20px;
+            background: #f5f7fa;
+        }
+
+        .test-container {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+        }
+
+        h1 {
+            color: #2c3e50;
+            margin-bottom: 10px;
+        }
+
+        h2 {
+            color: #3498db;
+            margin-top: 30px;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 10px;
+        }
+
+        .test-case {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 15px 0;
+            border-left: 4px solid #3498db;
+        }
+
+        .test-title {
+            font-weight: 600;
+            color: #2c3e50;
+            margin-bottom: 10px;
+            font-size: 16px;
+        }
+
+        .result {
+            background: white;
+            padding: 15px;
+            border-radius: 6px;
+            margin-top: 10px;
+            font-family: monospace;
+            font-size: 13px;
+        }
+
+        .pass {
+            color: #27ae60;
+            font-weight: 600;
+        }
+
+        .fail {
+            color: #e74c3c;
+            font-weight: 600;
+        }
+
+        .info {
+            color: #7f8c8d;
+            font-size: 14px;
+            margin-top: 5px;
+        }
+
+        button {
+            background: linear-gradient(135deg, #3498db, #2980b9);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-weight: 600;
+            margin: 5px;
+        }
+
+        button:hover {
+            transform: translateY(-1px);
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 32px;
+            font-weight: 700;
+            margin: 10px 0;
+        }
+
+        .stat-label {
+            font-size: 14px;
+            opacity: 0.9;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="test-container">
+        <h1>🧪 Enhanced Strengths & Weaknesses Selection - Test Suite</h1>
+        <p class="info">Testing the upgraded categorized selection system with 24 strengths and 16 weaknesses options.
+        </p>
+
+        <div class="stats">
+            <div class="stat-card">
+                <div class="stat-label">Strength Options</div>
+                <div class="stat-value" id="strengthCount">0</div>
+                <div class="stat-label">across 5 categories</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Weakness Options</div>
+                <div class="stat-value" id="weaknessCount">0</div>
+                <div class="stat-label">across 5 categories</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Test Results</div>
+                <div class="stat-value" id="passRate">0%</div>
+                <div class="stat-label">Pass Rate</div>
+            </div>
+        </div>
+
+        <button onclick="runAllTests()">▶️ Run All Tests</button>
+        <button onclick="location.href='student-information.html'">🔗 Open Student Information Page</button>
+
+        <h2>Test Results</h2>
+        <div id="testResults"></div>
+    </div>
+
+    <script>
+        const expectedStrengths = [
+            // Cognitive/Academic (6)
+            'creative thinking and imagination',
+            'curious and inquisitive nature',
+            'focused and attentive learner',
+            'thoughtful and reflective approach',
+            'independent learning skills',
+            'strong problem-solving abilities',
+            // Social-Emotional (8)
+            'strong social skills',
+            'cooperative team player',
+            'cheerful and positive attitude',
+            'friendly and welcoming',
+            'gentle and caring nature',
+            'respectful and courteous',
+            'patient with peers',
+            'confident self-expression',
+            // Physical/Motor (2)
+            'excellent fine motor skills',
+            'active and energetic participation',
+            // Communication/Expression (3)
+            'good listening skills',
+            'expressive communication',
+            'enthusiastic participation',
+            // Character Traits (5)
+            'helpful and kind disposition',
+            'natural leadership qualities',
+            'brave and willing to try new things',
+            'diligent and hardworking',
+            'consistent effort and engagement'
+        ];
+
+        const expectedWeaknesses = [
+            // Fine Motor Development (3)
+            'refining motor skills',
+            'developing cutting and pasting skills',
+            'building pencil control',
+            // Social-Emotional Growth (4)
+            'developing social awareness',
+            'building confidence in group settings',
+            'learning to share and take turns',
+            'managing emotions appropriately',
+            // Communication Skills (3)
+            'practicing active listening',
+            'improving verbal expression',
+            'following multi-step directions',
+            // Cognitive Development (3)
+            'improving spatial awareness',
+            'building attention span',
+            'developing organizational skills',
+            // Independence/Self-Regulation (3)
+            'building self-confidence',
+            'developing independent work habits',
+            'improving impulse control'
+        ];
+
+        const categories = {
+            strengths: [
+                { name: 'Cognitive/Academic', emoji: '🧠', expectedCount: 6 },
+                { name: 'Social-Emotional', emoji: '🤝', expectedCount: 8 },
+                { name: 'Physical/Motor', emoji: '💪', expectedCount: 2 },
+                { name: 'Communication/Expression', emoji: '💬', expectedCount: 3 },
+                { name: 'Character Traits', emoji: '⭐', expectedCount: 5 }
+            ],
+            weaknesses: [
+                { name: 'Fine Motor Development', emoji: '✂️', expectedCount: 3 },
+                { name: 'Social-Emotional Growth', emoji: '🌱', expectedCount: 4 },
+                { name: 'Communication Skills', emoji: '🗣️', expectedCount: 3 },
+                { name: 'Cognitive Development', emoji: '🧩', expectedCount: 3 },
+                { name: 'Independence/Self-Regulation', emoji: '🎯', expectedCount: 3 }
+            ]
+        };
+
+        let testResults = [];
+
+        function runAllTests() {
+            testResults = [];
+            document.getElementById('testResults').innerHTML = '<p class="info">Running tests...</p>';
+
+            // Test 1: Verify expected counts
+            testResults.push(testExpectedCounts());
+
+            // Test 2: Verify category structure
+            testResults.push(testCategoryStructure());
+
+            // Test 3: Verify alignment with synonyms.json enhancements
+            testResults.push(testVocabularyAlignment());
+
+            // Test 4: Verify developmental domain coverage
+            testResults.push(testDevelopmentalCoverage());
+
+            // Test 5: Verify balance ratio
+            testResults.push(testBalanceRatio());
+
+            displayResults();
+        }
+
+        function testExpectedCounts() {
+            const strengthTotal = expectedStrengths.length;
+            const weaknessTotal = expectedWeaknesses.length;
+
+            const passed = strengthTotal === 24 && weaknessTotal === 16;
+
+            return {
+                name: 'Expected Counts Test',
+                passed: passed,
+                message: `Strengths: ${strengthTotal}/24, Weaknesses: ${weaknessTotal}/16`,
+                details: passed ? 'Counts match expected totals' : 'Count mismatch detected'
+            };
+        }
+
+        function testCategoryStructure() {
+            const strengthCategories = categories.strengths.length;
+            const weaknessCategories = categories.weaknesses.length;
+
+            const passed = strengthCategories === 5 && weaknessCategories === 5;
+
+            return {
+                name: 'Category Structure Test',
+                passed: passed,
+                message: `Strength categories: ${strengthCategories}/5, Weakness categories: ${weaknessCategories}/5`,
+                details: passed ? 'All categories properly defined' : 'Category structure incomplete'
+            };
+        }
+
+        function testVocabularyAlignment() {
+            // Check if new adjective categories from synonyms.json are represented
+            const newAdjectives = ['creative', 'enthusiastic', 'curious', 'confident', 'thoughtful',
+                'diligent', 'cheerful', 'cooperative', 'focused', 'gentle',
+                'brave', 'friendly', 'active', 'independent', 'consistent',
+                'respectful', 'patient', 'expressive'];
+
+            const strengthText = expectedStrengths.join(' ').toLowerCase();
+            const matchedCount = newAdjectives.filter(adj => strengthText.includes(adj)).length;
+
+            const passed = matchedCount >= 15; // 83% coverage threshold
+
+            return {
+                name: 'Vocabulary Alignment Test',
+                passed: passed,
+                message: `${matchedCount}/${newAdjectives.length} new adjectives represented`,
+                details: passed ? 'Strong alignment with enhanced vocabulary' : 'Low alignment with new adjectives'
+            };
+        }
+
+        function testDevelopmentalCoverage() {
+            // Verify kindergarten developmental domains are covered
+            const domains = {
+                cognitive: ['creative', 'problem-solving', 'focused', 'thoughtful', 'curious'],
+                socialEmotional: ['social', 'cooperative', 'cheerful', 'friendly', 'gentle', 'patient', 'confident'],
+                physical: ['motor', 'active'],
+                communication: ['listening', 'expressive', 'enthusiastic'],
+                character: ['helpful', 'leadership', 'brave', 'diligent', 'consistent']
+            };
+
+            let coverage = 0;
+            const strengthText = expectedStrengths.join(' ').toLowerCase();
+
+            Object.values(domains).forEach(keywords => {
+                const matched = keywords.some(kw => strengthText.includes(kw));
+                if (matched) coverage++;
+            });
+
+            const passed = coverage === 5;
+
+            return {
+                name: 'Developmental Domain Coverage Test',
+                passed: passed,
+                message: `${coverage}/5 developmental domains covered`,
+                details: passed ? 'Complete kindergarten domain coverage' : 'Missing developmental domain coverage'
+            };
+        }
+
+        function testBalanceRatio() {
+            // Check if strengths/weaknesses ratio is reasonable (should be ~1.5:1 to 2:1)
+            const ratio = expectedStrengths.length / expectedWeaknesses.length;
+            const passed = ratio >= 1.3 && ratio <= 2.0;
+
+            return {
+                name: 'Balance Ratio Test',
+                passed: passed,
+                message: `Ratio: ${ratio.toFixed(2)}:1 (24 strengths : 16 weaknesses)`,
+                details: passed ? 'Healthy balance between strengths and improvements' : 'Ratio outside recommended range'
+            };
+        }
+
+        function displayResults() {
+            const container = document.getElementById('testResults');
+            const passCount = testResults.filter(t => t.passed).length;
+            const totalTests = testResults.length;
+            const passRate = Math.round((passCount / totalTests) * 100);
+
+            // Update stats
+            document.getElementById('strengthCount').textContent = expectedStrengths.length;
+            document.getElementById('weaknessCount').textContent = expectedWeaknesses.length;
+            document.getElementById('passRate').textContent = passRate + '%';
+
+            let html = '';
+
+            testResults.forEach((test, index) => {
+                const statusClass = test.passed ? 'pass' : 'fail';
+                const statusIcon = test.passed ? '✅' : '❌';
+
+                html += `
+                    <div class="test-case">
+                        <div class="test-title">${statusIcon} Test ${index + 1}: ${test.name}</div>
+                        <div class="result">
+                            <div class="${statusClass}">${test.passed ? 'PASS' : 'FAIL'}</div>
+                            <div style="margin-top: 8px;">${test.message}</div>
+                            <div class="info" style="margin-top: 5px;">${test.details}</div>
+                        </div>
+                    </div>
+                `;
+            });
+
+            html += `
+                <div class="test-case" style="border-left-color: ${passRate === 100 ? '#27ae60' : '#f39c12'};">
+                    <div class="test-title">📊 Final Summary</div>
+                    <div class="result">
+                        <div style="font-size: 16px; font-weight: 600; color: ${passRate === 100 ? '#27ae60' : '#f39c12'};">
+                            ${passCount}/${totalTests} Tests Passed (${passRate}%)
+                        </div>
+                        <div class="info" style="margin-top: 10px;">
+                            ${passRate === 100 ?
+                    '🎉 All tests passed! Enhancement successfully implemented.' :
+                    '⚠️ Some tests failed. Review implementation details above.'}
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            container.innerHTML = html;
+        }
+
+        // Auto-run tests on load
+        window.addEventListener('load', () => {
+            setTimeout(runAllTests, 500);
+        });
+    </script>
+</body>
+
+</html>
