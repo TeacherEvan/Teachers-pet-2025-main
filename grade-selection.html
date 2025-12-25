@@ -476,8 +476,18 @@
             // Save grade one more time before navigation
             saveGrade(selectedGrade);
 
-            // Navigate to month selection page with grade context
-            window.location.href = `month-selection.html?grade=${selectedGrade}`;
+            // PVT students skip month selection and go directly to student information
+            if (selectedGrade === 'PVT') {
+                // Set a default month for PVT (General curriculum doesn't use months)
+                localStorage.setItem('month', 'General');
+                if (window.app && window.app.sessionData) {
+                    window.app.sessionData.month = 'General';
+                }
+                window.location.href = 'student-information.html';
+            } else {
+                // K1/K2 students go through normal month selection
+                window.location.href = `month-selection.html?grade=${selectedGrade}`;
+            }
         });
 
         // Load saved grade on page load
