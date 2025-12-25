@@ -7,299 +7,258 @@
       "name": "PVT Language Arts",
       "topics": [
         {
-          "id": "la_letter_recognition",
-          "name": "Letter recognition and tracing"
+          "id": "la_phonics_sounds",
+          "name": "Letter recognition and phonics"
         },
-        { "id": "la_phonics", "name": "Phonics and beginning sounds" },
-        { "id": "la_sight_words", "name": "Sight words and vocabulary" },
         {
-          "id": "la_story_comprehension",
-          "name": "Story comprehension and retelling"
+          "id": "la_vocabulary_building",
+          "name": "Basic vocabulary and word families"
+        },
+        {
+          "id": "la_reading_comprehension",
+          "name": "Simple story comprehension"
         },
         {
           "id": "la_writing_skills",
-          "name": "Basic writing and sentence formation"
+          "name": "Emergent writing and drawing"
         },
-        { "id": "la_rhyming", "name": "Rhyming and word families" },
         {
-          "id": "la_listening",
-          "name": "Active listening and following directions"
+          "id": "la_speaking_listening",
+          "name": "Oral communication and listening skills"
         }
       ],
-      "vocabulary": "alphabet, letters A-Z, phonics sounds, common sight words (the, and, is, my, you), simple sentences, uppercase, lowercase, beginning sounds, middle sounds, ending sounds, rhyme, story, character, setting"
+      "vocabulary": "letters, sounds, words, read, write, speak, listen, story, picture, draw, color"
     },
     {
       "id": "mathematics",
       "name": "PVT Mathematics",
       "topics": [
-        { "id": "math_number_recognition", "name": "Number recognition 1-20" },
         {
-          "id": "math_counting",
-          "name": "Counting and one-to-one correspondence"
+          "id": "math_number_recognition",
+          "name": "Number recognition and counting"
         },
-        { "id": "math_shapes_patterns", "name": "Basic shapes and patterns" },
-        { "id": "math_operations", "name": "Simple addition and subtraction" },
+        {
+          "id": "math_basic_operations",
+          "name": "Addition and subtraction basics"
+        },
+        {
+          "id": "math_shapes_patterns",
+          "name": "Shapes and simple patterns"
+        },
         {
           "id": "math_measurement",
-          "name": "Measurement concepts (big/small, long/short, heavy/light)"
+          "name": "Basic measurement and comparison"
         },
-        { "id": "math_sorting", "name": "Sorting and classifying objects" },
-        { "id": "math_graphing", "name": "Simple data collection and graphing" }
+        {
+          "id": "math_time_money",
+          "name": "Time and money concepts"
+        }
       ],
-      "vocabulary": "numbers 1-20, count, add, subtract, plus, minus, equals, circle, square, triangle, rectangle, pattern, big, small, long, short, heavy, light, more, less, same, different, sort, graph"
+      "vocabulary": "numbers, count, add, subtract, shapes, pattern, measure, time, money, big, small"
     },
     {
       "id": "science",
       "name": "PVT Science",
       "topics": [
-        { "id": "science_five_senses", "name": "Five senses exploration" },
         {
-          "id": "science_living_nonliving",
-          "name": "Living vs non-living things"
+          "id": "science_living_things",
+          "name": "Plants and animals"
         },
-        { "id": "science_weather_seasons", "name": "Weather and seasons" },
-        { "id": "science_experiments", "name": "Simple science experiments" },
         {
-          "id": "science_plants_animals",
-          "name": "Plants and animals life cycles"
+          "id": "science_weather_seasons",
+          "name": "Weather and seasons"
         },
-        { "id": "science_space", "name": "Introduction to space and planets" },
-        { "id": "science_magnets", "name": "Exploring magnets and forces" }
+        {
+          "id": "science_five_senses",
+          "name": "The five senses"
+        },
+        {
+          "id": "science_matter_materials",
+          "name": "Matter and materials"
+        },
+        {
+          "id": "science_simple_experiments",
+          "name": "Basic science experiments"
+        }
       ],
-      "vocabulary": "see, hear, smell, taste, touch, senses, living, non-living, grow, breathe, eat, sunny, rainy, cloudy, windy, spring, summer, fall, winter, experiment, observe, predict, plant, seed, sprout, animal, habitat, sun, moon, stars, planet, magnet, push, pull"
+      "vocabulary": "plant, animal, weather, season, sense, touch, smell, taste, see, hear, matter, solid, liquid"
     },
     {
       "id": "social_studies",
       "name": "PVT Social Studies",
       "topics": [
         {
-          "id": "ss_community_helpers",
-          "name": "Community helpers and their roles"
+          "id": "ss_family_community",
+          "name": "Family and community helpers"
         },
-        { "id": "ss_family_relationships", "name": "Family and relationships" },
         {
-          "id": "ss_cultural_celebrations",
-          "name": "Cultural celebrations and traditions"
+          "id": "ss_holidays_cultures",
+          "name": "Holidays and cultural traditions"
         },
         {
           "id": "ss_basic_geography",
-          "name": "Basic geography (maps, locations)"
+          "name": "Maps and basic geography"
         },
         {
-          "id": "ss_rules_responsibilities",
-          "name": "Rules and responsibilities"
+          "id": "ss_rules_responsibility",
+          "name": "Rules and responsibility"
         },
-        { "id": "ss_history", "name": "Past and present comparisons" },
-        { "id": "ss_transportation", "name": "Modes of transportation" }
+        {
+          "id": "ss_diversity_inclusion",
+          "name": "Diversity and inclusion"
+        }
       ],
-      "vocabulary": "doctor, teacher, firefighter, police officer, nurse, family, mother, father, sister, brother, grandparents, holiday, tradition, map, city, country, world, rules, respect, responsibility, sharing, helping, past, present, car, bus, plane, train, boat"
+      "vocabulary": "family, community, holiday, tradition, map, rules, responsibility, different, same, help"
+    },
+    {
+      "id": "arts",
+      "name": "PVT Arts",
+      "topics": [
+        {
+          "id": "arts_visual_arts",
+          "name": "Drawing, painting, and coloring"
+        },
+        {
+          "id": "arts_crafts_creation",
+          "name": "Simple crafts and construction"
+        },
+        {
+          "id": "arts_color_theory",
+          "name": "Colors and color mixing"
+        },
+        {
+          "id": "arts_art_appreciation",
+          "name": "Art appreciation and expression"
+        }
+      ],
+      "vocabulary": "draw, paint, color, craft, build, red, blue, yellow, mix, beautiful, create"
+    },
+    {
+      "id": "music_movement",
+      "name": "PVT Music & Movement",
+      "topics": [
+        {
+          "id": "music_songs_rhythms",
+          "name": "Songs and basic rhythms"
+        },
+        {
+          "id": "music_instruments",
+          "name": "Simple musical instruments"
+        },
+        {
+          "id": "music_dance_movement",
+          "name": "Dance and movement"
+        },
+        {
+          "id": "music_listening_appreciation",
+          "name": "Music listening and appreciation"
+        }
+      ],
+      "vocabulary": "sing, song, rhythm, beat, instrument, dance, move, listen, loud, soft, fast, slow"
     },
     {
       "id": "physical_education",
       "name": "PVT Physical Education",
       "topics": [
         {
-          "id": "pe_ball_skills",
-          "name": "Ball skills (throwing, catching, kicking)"
+          "id": "pe_gross_motor",
+          "name": "Gross motor skills development"
         },
         {
-          "id": "pe_balance_coordination",
-          "name": "Balance and coordination activities"
+          "id": "pe_fine_motor",
+          "name": "Fine motor skills development"
         },
-        { "id": "pe_running_jumping", "name": "Running and jumping games" },
-        { "id": "pe_dance_movement", "name": "Dance and creative movement" },
-        { "id": "pe_team_sports", "name": "Introduction to team sports" },
-        { "id": "pe_gymnastics", "name": "Basic gymnastics and tumbling" },
-        { "id": "pe_health", "name": "Understanding healthy habits" }
+        {
+          "id": "pe_team_sports",
+          "name": "Teamwork and simple sports"
+        },
+        {
+          "id": "pe_health_nutrition",
+          "name": "Health and basic nutrition"
+        },
+        {
+          "id": "pe_safety_awareness",
+          "name": "Safety and body awareness"
+        }
       ],
-      "vocabulary": "throw, catch, kick, bounce, roll, balance, walk, run, jump, hop, skip, dance, move, stretch, team, cooperate, play, game, exercise, healthy, active, roll, tumble, fruit, vegetable, water"
-    },
-    {
-      "id": "arts_crafts",
-      "name": "PVT Arts & Crafts",
-      "topics": [
-        {
-          "id": "arts_painting_drawing",
-          "name": "Painting and drawing techniques"
-        },
-        { "id": "arts_cutting_pasting", "name": "Cutting and pasting skills" },
-        { "id": "arts_origami_folding", "name": "Origami and paper folding" },
-        {
-          "id": "arts_sculpture_modeling",
-          "name": "Sculpture and modeling with clay/playdough"
-        },
-        {
-          "id": "arts_seasonal_crafts",
-          "name": "Seasonal and thematic crafts"
-        },
-        { "id": "arts_color_theory", "name": "Primary and secondary colors" },
-        { "id": "arts_mixed_media", "name": "Exploring mixed media art" }
-      ],
-      "vocabulary": "paint, brush, color, draw, pencil, crayon, marker, cut, scissors, paste, glue, fold, paper, origami, clay, playdough, mold, shape, create, design, art, craft, collage, red, blue, yellow, orange, green, purple"
-    },
-    {
-      "id": "music_movement",
-      "name": "PVT Music & Movement",
-      "topics": [
-        { "id": "music_rhythm_beat", "name": "Rhythm and beat activities" },
-        { "id": "music_singing", "name": "Singing songs and nursery rhymes" },
-        {
-          "id": "music_instruments",
-          "name": "Musical instruments exploration"
-        },
-        { "id": "music_movement_to_music", "name": "Movement to music" },
-        {
-          "id": "music_appreciation",
-          "name": "Music listening and appreciation"
-        },
-        { "id": "music_composing", "name": "Simple music composition" },
-        { "id": "music_performance", "name": "Group performance skills" }
-      ],
-      "vocabulary": "music, song, sing, rhythm, beat, clap, tap, drum, shake, tambourine, bell, xylophone, dance, move, fast, slow, loud, quiet, high, low, melody, tempo, compose, perform"
-    },
-    {
-      "id": "critical_thinking",
-      "name": "PVT Critical Thinking & Logic",
-      "topics": [
-        { "id": "ct_puzzles_problems", "name": "Puzzles and problem-solving" },
-        {
-          "id": "ct_matching_sorting",
-          "name": "Matching and sorting activities"
-        },
-        { "id": "ct_patterns_sequences", "name": "Patterns and sequences" },
-        { "id": "ct_same_different", "name": "Identifying same vs different" },
-        {
-          "id": "ct_size_comparisons",
-          "name": "Size and quantity comparisons"
-        },
-        { "id": "ct_logic", "name": "Basic logic and reasoning" },
-        { "id": "ct_memory", "name": "Memory and concentration games" }
-      ],
-      "vocabulary": "puzzle, solve, match, sort, group, pattern, sequence, next, before, after, same, different, alike, compare, bigger, smaller, tallest, shortest, most, least, think, reason, logic, memory"
+      "vocabulary": "run, jump, catch, throw, balance, healthy, food, exercise, safe, body"
     },
     {
       "id": "social_emotional",
       "name": "PVT Social-Emotional Learning",
       "topics": [
-        { "id": "sel_emotions", "name": "Identifying and expressing emotions" },
-        { "id": "sel_sharing_cooperation", "name": "Sharing and cooperation" },
         {
-          "id": "sel_conflict_resolution",
-          "name": "Conflict resolution skills"
+          "id": "sel_emotions_recognition",
+          "name": "Identifying and expressing emotions"
         },
-        { "id": "sel_self_care", "name": "Self-care and independence" },
-        { "id": "sel_empathy_kindness", "name": "Empathy and kindness" },
         {
-          "id": "sel_resilience",
-          "name": "Building resilience and persistence"
+          "id": "sel_friendship_skills",
+          "name": "Friendship and social skills"
         },
-        { "id": "sel_friendship", "name": "Developing positive friendships" }
+        {
+          "id": "sel_self_control",
+          "name": "Self-control and patience"
+        },
+        {
+          "id": "sel_kindness_respect",
+          "name": "Kindness and respect for others"
+        },
+        {
+          "id": "sel_growth_mindset",
+          "name": "Growth mindset and perseverance"
+        }
       ],
-      "vocabulary": "happy, sad, angry, scared, excited, frustrated, calm, feeling, emotion, share, take turns, cooperate, friend, problem, solution, apologize, forgive, kind, caring, helping, independent, responsible, try again, persistent"
+      "vocabulary": "happy, sad, angry, kind, friend, share, wait, respect, try, learn"
     },
     {
-      "id": "life_skills",
-      "name": "PVT Life Skills",
-      "topics": [
-        {
-          "id": "ls_personal_hygiene",
-          "name": "Personal hygiene and self-care"
-        },
-        {
-          "id": "ls_simple_cooking",
-          "name": "Simple cooking and food preparation"
-        },
-        { "id": "ls_safety_rules", "name": "Safety rules and awareness" },
-        {
-          "id": "ls_time_concepts",
-          "name": "Time concepts (days, weeks, months)"
-        },
-        { "id": "ls_money_basics", "name": "Basic money concepts" },
-        { "id": "ls_organization", "name": "Organization and tidying skills" },
-        { "id": "ls_manners", "name": "Practicing good manners" }
-      ],
-      "vocabulary": "wash hands, brush teeth, comb hair, clean, tidy, mix, stir, pour, measure, cook, snack, safe, danger, careful, help, stop sign, traffic light, Monday, Tuesday, yesterday, today, tomorrow, week, month, coin, penny, nickel, dime, buy, pay, please, thank you, excuse me"
-    },
-    {
-      "id": "technology",
+      "id": "technology_digital",
       "name": "PVT Technology & Digital Literacy",
       "topics": [
-        { "id": "tech_mouse_skills", "name": "Mouse and trackpad navigation" },
-        { "id": "tech_keyboarding", "name": "Introduction to keyboarding" },
         {
-          "id": "tech_educational_apps",
-          "name": "Using educational software and apps"
+          "id": "tech_basic_computers",
+          "name": "Introduction to computers and devices"
         },
         {
           "id": "tech_digital_safety",
           "name": "Basic digital safety and etiquette"
         },
         {
-          "id": "tech_coding_basics",
-          "name": "Introduction to coding concepts (unplugged)"
+          "id": "tech_creative_media",
+          "name": "Creative digital media"
+        },
+        {
+          "id": "tech_problem_solving",
+          "name": "Technology for problem-solving"
         }
       ],
-      "vocabulary": "computer, mouse, click, drag, keyboard, screen, app, tablet, internet, safe, password, code, sequence, command"
+      "vocabulary": "computer, tablet, screen, click, safe, internet, picture, video, game, learn"
     },
     {
-      "id": "environmental",
-      "name": "PVT Environmental Awareness",
-      "topics": [
-        { "id": "env_recycling", "name": "Recycling and waste reduction" },
-        {
-          "id": "env_nature_appreciation",
-          "name": "Appreciating and exploring nature"
-        },
-        { "id": "env_caring_earth", "name": "Caring for our planet" },
-        {
-          "id": "env_water_conservation",
-          "name": "Understanding water conservation"
-        },
-        { "id": "env_gardening", "name": "Basic gardening and plant care" }
-      ],
-      "vocabulary": "recycle, reuse, reduce, trash, nature, earth, planet, water, save, plant, garden, grow, environment"
-    },
-    {
-      "id": "mindfulness",
-      "name": "PVT Mindfulness & Well-being",
+      "id": "life_skills",
+      "name": "PVT Life Skills",
       "topics": [
         {
-          "id": "mind_breathing",
-          "name": "Breathing and relaxation techniques"
-        },
-        { "id": "mind_yoga", "name": "Yoga and stretching for kids" },
-        { "id": "mind_focus", "name": "Focus and concentration activities" },
-        {
-          "id": "mind_body_awareness",
-          "name": "Identifying body signals and feelings"
+          "id": "ls_daily_routines",
+          "name": "Daily routines and self-care"
         },
         {
-          "id": "mind_gratitude",
-          "name": "Practicing gratitude and positivity"
+          "id": "ls_basic_cooking",
+          "name": "Basic cooking and food preparation"
+        },
+        {
+          "id": "ls_household_help",
+          "name": "Helping at home"
+        },
+        {
+          "id": "ls_time_management",
+          "name": "Time management basics"
+        },
+        {
+          "id": "ls_independence",
+          "name": "Building independence"
         }
       ],
-      "vocabulary": "breathe, relax, calm, yoga, stretch, focus, listen, body, feel, grateful, happy, positive"
-    },
-    {
-      "id": "global_citizenship",
-      "name": "PVT Global Citizenship",
-      "topics": [
-        {
-          "id": "global_cultures",
-          "name": "Exploring different cultures and traditions"
-        },
-        {
-          "id": "global_maps",
-          "name": "Introduction to world maps and globes"
-        },
-        { "id": "global_flags", "name": "Recognizing world flags" },
-        { "id": "global_languages", "name": "Introduction to world languages" },
-        {
-          "id": "global_friendship",
-          "name": "Being a global friend and citizen"
-        }
-      ],
-      "vocabulary": "world, globe, map, country, culture, tradition, flag, language, hello, friend, citizen, global"
+      "vocabulary": "brush, wash, eat, clean, cook, help, time, morning, afternoon, night, alone, together"
     }
   ]
 }
