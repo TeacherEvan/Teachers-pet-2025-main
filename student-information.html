@@ -353,10 +353,20 @@
         user-select: none;
         transition: all 0.2s ease;
         border-bottom: 1px solid #e0e6ed;
+        border: none;
+        border-bottom: 1px solid #e0e6ed;
+        width: 100%;
+        text-align: left;
+        font-family: inherit;
     }
 
     .category-header:hover {
         background: linear-gradient(135deg, #e9ecef, #dee2e6);
+    }
+
+    .category-header:focus {
+        outline: 2px solid #3498db;
+        outline-offset: 2px;
     }
 
     .category-header .emoji {
@@ -747,10 +757,13 @@
                     <div class="margin-bottom-8">
                         <!-- Cognitive/Academic -->
                         <div class="category-section">
-                            <div class="category-header" onclick="toggleCategory('cognitive-strengths')">
+                            <button type="button" class="category-header" role="button" aria-expanded="false"
+                                aria-controls="cognitive-strengths" tabindex="0"
+                                onclick="toggleCategory('cognitive-strengths')"
+                                onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleCategory('cognitive-strengths');}">
                                 <span><span class="emoji">🧠</span>Cognitive/Academic</span>
                                 <span class="toggle-icon">▼</span>
-                            </div>
+                            </button>
                             <div id="cognitive-strengths" class="category-content">
                                 <div class="button-grid">
                                     <button type="button" class="quick-select-btn strength-btn"
@@ -771,10 +784,13 @@
 
                         <!-- Social-Emotional -->
                         <div class="category-section">
-                            <div class="category-header" onclick="toggleCategory('social-strengths')">
+                            <button type="button" class="category-header" role="button" aria-expanded="false"
+                                aria-controls="social-strengths" tabindex="0"
+                                onclick="toggleCategory('social-strengths')"
+                                onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleCategory('social-strengths');}">
                                 <span><span class="emoji">🤝</span>Social-Emotional</span>
                                 <span class="toggle-icon">▼</span>
-                            </div>
+                            </button>
                             <div id="social-strengths" class="category-content">
                                 <div class="button-grid">
                                     <button type="button" class="quick-select-btn strength-btn"
@@ -799,10 +815,13 @@
 
                         <!-- Physical/Motor -->
                         <div class="category-section">
-                            <div class="category-header" onclick="toggleCategory('physical-strengths')">
+                            <button type="button" class="category-header" role="button" aria-expanded="false"
+                                aria-controls="physical-strengths" tabindex="0"
+                                onclick="toggleCategory('physical-strengths')"
+                                onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleCategory('physical-strengths');}">
                                 <span><span class="emoji">💪</span>Physical/Motor</span>
                                 <span class="toggle-icon">▼</span>
-                            </div>
+                            </button>
                             <div id="physical-strengths" class="category-content">
                                 <div class="button-grid">
                                     <button type="button" class="quick-select-btn strength-btn"
@@ -815,10 +834,13 @@
 
                         <!-- Communication/Expression -->
                         <div class="category-section">
-                            <div class="category-header" onclick="toggleCategory('communication-strengths')">
+                            <button type="button" class="category-header" role="button" aria-expanded="false"
+                                aria-controls="communication-strengths" tabindex="0"
+                                onclick="toggleCategory('communication-strengths')"
+                                onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleCategory('communication-strengths');}">
                                 <span><span class="emoji">💬</span>Communication/Expression</span>
                                 <span class="toggle-icon">▼</span>
-                            </div>
+                            </button>
                             <div id="communication-strengths" class="category-content">
                                 <div class="button-grid">
                                     <button type="button" class="quick-select-btn strength-btn"
@@ -833,10 +855,13 @@
 
                         <!-- Character Traits -->
                         <div class="category-section">
-                            <div class="category-header" onclick="toggleCategory('character-strengths')">
+                            <button type="button" class="category-header" role="button" aria-expanded="false"
+                                aria-controls="character-strengths" tabindex="0"
+                                onclick="toggleCategory('character-strengths')"
+                                onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleCategory('character-strengths');}">
                                 <span><span class="emoji">⭐</span>Character Traits</span>
                                 <span class="toggle-icon">▼</span>
-                            </div>
+                            </button>
                             <div id="character-strengths" class="category-content">
                                 <div class="button-grid">
                                     <button type="button" class="quick-select-btn strength-btn"
@@ -864,10 +889,13 @@
                     <div class="margin-bottom-8">
                         <!-- Fine Motor Development -->
                         <div class="category-section">
-                            <div class="category-header" onclick="toggleCategory('motor-improvements')">
+                            <button type="button" class="category-header" role="button" aria-expanded="false"
+                                aria-controls="motor-improvements" tabindex="0"
+                                onclick="toggleCategory('motor-improvements')"
+                                onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleCategory('motor-improvements');}">
                                 <span><span class="emoji">✂️</span>Fine Motor Development</span>
                                 <span class="toggle-icon">▼</span>
-                            </div>
+                            </button>
                             <div id="motor-improvements" class="category-content">
                                 <div class="button-grid">
                                     <button type="button" class="quick-select-btn improvement-btn"
@@ -882,10 +910,13 @@
 
                         <!-- Social-Emotional Growth -->
                         <div class="category-section">
-                            <div class="category-header" onclick="toggleCategory('social-improvements')">
+                            <button type="button" class="category-header" role="button" aria-expanded="false"
+                                aria-controls="social-improvements" tabindex="0"
+                                onclick="toggleCategory('social-improvements')"
+                                onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleCategory('social-improvements');}">
                                 <span><span class="emoji">🌱</span>Social-Emotional Growth</span>
                                 <span class="toggle-icon">▼</span>
-                            </div>
+                            </button>
                             <div id="social-improvements" class="category-content">
                                 <div class="button-grid">
                                     <button type="button" class="quick-select-btn improvement-btn"
@@ -904,10 +935,13 @@
 
                         <!-- Communication Skills -->
                         <div class="category-section">
-                            <div class="category-header" onclick="toggleCategory('communication-improvements')">
+                            <button type="button" class="category-header" role="button" aria-expanded="false"
+                                aria-controls="communication-improvements" tabindex="0"
+                                onclick="toggleCategory('communication-improvements')"
+                                onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleCategory('communication-improvements');}">
                                 <span><span class="emoji">🗣️</span>Communication Skills</span>
                                 <span class="toggle-icon">▼</span>
-                            </div>
+                            </button>
                             <div id="communication-improvements" class="category-content">
                                 <div class="button-grid">
                                     <button type="button" class="quick-select-btn improvement-btn"
@@ -923,10 +957,13 @@
 
                         <!-- Cognitive Development -->
                         <div class="category-section">
-                            <div class="category-header" onclick="toggleCategory('cognitive-improvements')">
+                            <button type="button" class="category-header" role="button" aria-expanded="false"
+                                aria-controls="cognitive-improvements" tabindex="0"
+                                onclick="toggleCategory('cognitive-improvements')"
+                                onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleCategory('cognitive-improvements');}">
                                 <span><span class="emoji">🧩</span>Cognitive Development</span>
                                 <span class="toggle-icon">▼</span>
-                            </div>
+                            </button>
                             <div id="cognitive-improvements" class="category-content">
                                 <div class="button-grid">
                                     <button type="button" class="quick-select-btn improvement-btn"
@@ -941,10 +978,13 @@
 
                         <!-- Independence/Self-Regulation -->
                         <div class="category-section">
-                            <div class="category-header" onclick="toggleCategory('independence-improvements')">
+                            <button type="button" class="category-header" role="button" aria-expanded="false"
+                                aria-controls="independence-improvements" tabindex="0"
+                                onclick="toggleCategory('independence-improvements')"
+                                onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();toggleCategory('independence-improvements');}">
                                 <span><span class="emoji">🎯</span>Independence/Self-Regulation</span>
                                 <span class="toggle-icon">▼</span>
-                            </div>
+                            </button>
                             <div id="independence-improvements" class="category-content">
                                 <div class="button-grid">
                                     <button type="button" class="quick-select-btn improvement-btn"
@@ -1419,17 +1459,20 @@
             autoSaveFormData();
         }
 
-        // Category toggle function
+        // Category toggle function with ARIA state management
         function toggleCategory(categoryId) {
             const content = document.getElementById(categoryId);
             const header = content.previousElementSibling;
+            const isCollapsed = content.classList.contains('collapsed');
 
-            if (content.classList.contains('collapsed')) {
+            if (isCollapsed) {
                 content.classList.remove('collapsed');
                 header.classList.remove('collapsed');
+                header.setAttribute('aria-expanded', 'true');
             } else {
                 content.classList.add('collapsed');
                 header.classList.add('collapsed');
+                header.setAttribute('aria-expanded', 'false');
             }
         }
 
