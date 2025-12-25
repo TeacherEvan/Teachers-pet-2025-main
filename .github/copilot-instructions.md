@@ -1,6 +1,73 @@
 # Teachers Pet – Copilot Instructions
 
-## 📋 Repository Overview
+## � Table of Contents
+
+- [📋 Repository Overview](#-repository-overview)
+- [🛠️ Technology Stack](#️-technology-stack)
+- [⚠️ CRITICAL: RESEARCH BEFORE IMPLEMENTATION](#️-critical-research-before-implementation-️)
+- [🗺️ Documentation Map (START HERE)](#️-documentation-map-start-here)
+- [🚀 Quick Start for Development](#-quick-start-for-development)
+  - [Running Locally](#running-locally)
+  - [Testing Your Changes](#testing-your-changes)
+  - [Linting](#linting)
+- [📁 Project Structure & Constraints](#-project-structure--constraints)
+  - [Directory Structure](#directory-structure)
+  - [Wizard Flow](#wizard-flow)
+  - [State Management](#state-management-dual-layer-system)
+  - [Reset Flow](#reset-flow)
+  - [Deployment](#deployment)
+- [Curriculum & Subjects](#curriculum--subjects)
+  - [Dynamic Loading System](#dynamic-loading-system)
+  - [Adding New Curriculum](#adding-new-curriculum)
+  - [Subject Rendering](#subject-rendering)
+- [Comment Generation Architecture](#comment-generation-architecture)
+  - [Engine Cascade](#engine-cascade)
+  - [File Sync Pattern](#file-sync-pattern)
+  - [Making Changes](#making-changes)
+  - [Data Integrity Rules](#data-integrity-rules-2025-11-17)
+  - [Generation Requirements](#generation-requirements)
+- [UI Conventions](#ui-conventions)
+- [Testing & Debug](#testing--debug)
+  - [Quick Validation](#quick-validation)
+  - [Console Debugging](#console-debugging)
+  - [Manual Testing](#manual-testing)
+  - [State Inspection](#state-inspection)
+- [Deployment & Workflow](#deployment--workflow)
+  - [Hosting](#hosting)
+  - [Documentation](#documentation)
+  - [Collaboration Rules](#collaboration-rules)
+- [Key Files & Patterns (Quick Reference)](#key-files--patterns-quick-reference)
+- [Collaboration & PR Rules](#collaboration--pr-rules)
+- [Performance Optimization Patterns](#performance-optimization-patterns-2025-11-17)
+  - [DOM Query Caching](#dom-query-caching)
+  - [Debouncing Pattern](#debouncing-pattern)
+  - [Storage Namespace Pattern](#storage-namespace-pattern)
+  - [Performance Gains](#performance-gains)
+- [📏 Coding Standards & Best Practices](#-coding-standards--best-practices)
+  - [JavaScript Style](#javascript-style)
+  - [Naming Conventions](#naming-conventions)
+  - [Comments](#comments)
+  - [Error Handling](#error-handling)
+  - [Performance Rules](#performance-rules)
+  - [Accessibility](#accessibility)
+- [📝 Common Development Tasks](#-common-development-tasks)
+  - [Adding a New Subject/Topic](#adding-a-new-subjecttopic)
+  - [Adding a New Grade/Month Curriculum](#adding-a-new-grademonth-curriculum)
+  - [Modifying Comment Templates](#modifying-comment-templates)
+  - [Adding New Synonyms](#adding-new-synonyms)
+  - [Debugging Comment Generation Issues](#debugging-comment-generation-issues)
+- [Common Pitfalls to Avoid](#common-pitfalls-to-avoid)
+- [📚 Additional Resources](#-additional-resources)
+  - [Key Documentation Files](#key-documentation-files)
+  - [External References](#external-references)
+  - [Testing Resources](#testing-resources)
+  - [Support Channels](#support-channels)
+
+[⬆️ Back to Top](#-table-of-contents)
+
+---
+
+## �📋 Repository Overview
 
 **Teachers Pet** is a production-ready static web application for generating personalized kindergarten student report comments. The application runs entirely client-side with no backend, using vanilla JavaScript and localStorage for state management.
 
@@ -64,6 +131,10 @@ Before implementing ANY complex feature, algorithm, or system:
 **Lesson from 2025-11-13:** Synonym manager initially broke because agent didn't research proper tracking algorithms. After using MCP tools, correct Map-based approach was found. Don't repeat this mistake.
 
 **Research FIRST, implement SECOND, validate THIRD.**
+
+[⬆️ Back to Top](#-table-of-contents)
+
+---
 
 ## 🗺️ Documentation Map (START HERE)
 
@@ -165,8 +236,9 @@ Common keys: `studentName`, `gender`, `grade`, `month`, `overallAttributes`, `st
 
 ### Deployment
 Static-only (GitHub Pages, Netlify, Vercel). Works from filesystem. Some features (clipboard) require HTTPS/secure context.
+[⬆️ Back to Top](#-table-of-contents)
 
-
+---
 ## Curriculum & Subjects
 
 ### Dynamic Loading System
@@ -266,6 +338,9 @@ Copy-Item "assets/js/enhanced-comment-engine.js" "enhanced-comment-engine.js" -F
 - Target ~100 words
 - Synonym manager auto-swaps overused words (threshold: 2 uses)
 
+[⬆️ Back to Top](#-table-of-contents)
+
+---
 
 ## UI Conventions
 
@@ -309,6 +384,9 @@ console.log(TeachersPetApp.sessionData)      // In-memory
 console.log(localStorage.studentData)         // Persistence
 ```
 
+[⬆️ Back to Top](#-table-of-contents)
+
+---
 
 ## Deployment & Workflow
 
@@ -390,6 +468,8 @@ const data = storage.getAll(['key1', 'key2']); // 1 batch retrieval
 
 **Applied in:** `Subjects.html` (backward compatible with legacy keys)
 
+[⬆️ Back to Top](#-table-of-contents)
+
 ### Performance Gains
 - **DOM Operations:** 3x faster (caching eliminates redundant scans)
 - **localStorage I/O:** 50% reduction (batch operations)
@@ -433,6 +513,10 @@ const data = storage.getAll(['key1', 'key2']); // 1 batch retrieval
 - Maintain keyboard navigation
 - Respect `prefers-reduced-motion`
 - Test with screen readers
+
+[⬆️ Back to Top](#-table-of-contents)
+
+---
 
 ## 📝 Common Development Tasks
 

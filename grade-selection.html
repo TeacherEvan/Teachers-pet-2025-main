@@ -319,6 +319,7 @@
                     <option value="K1">K1 - Kindergarten 1</option>
                     <option value="K2">K2 - Kindergarten 2</option>
                     <option value="K3">K3 - Kindergarten 3 (Coming Soon)</option>
+                    <option value="PVT">PVT - Private Student</option>
                 </select>
             </div>
 
@@ -337,6 +338,13 @@
             <div id="k3Info" class="grade-info">
                 <h3>📕 Kindergarten 3 <span class="coming-soon-badge">COMING SOON</span></h3>
                 <p>Curriculum information coming soon. This level will prepare students for primary education.</p>
+            </div>
+
+            <div id="pvtInfo" class="grade-info">
+                <h3>🌟 Private Student</h3>
+                <p>Comprehensive curriculum for private kindergarten students with personalized learning across all
+                    developmental domains including language arts, mathematics, science, social studies, physical
+                    education, arts, music, critical thinking, social-emotional learning, and life skills.</p>
             </div>
         </form>
 
@@ -359,7 +367,8 @@
         const gradeInfos = {
             'K1': document.getElementById('k1Info'),
             'K2': document.getElementById('k2Info'),
-            'K3': document.getElementById('k3Info')
+            'K3': document.getElementById('k3Info'),
+            'PVT': document.getElementById('pvtInfo')
         };
 
         // Load saved grade if exists
@@ -395,12 +404,12 @@
         // Update continue button state
         function updateContinueButton() {
             const selectedGrade = gradeSelect.value;
-            if (selectedGrade === 'K1' || selectedGrade === 'K2') {
+            if (selectedGrade === 'K1' || selectedGrade === 'K2' || selectedGrade === 'PVT') {
                 continueBtn.disabled = false;
             } else if (selectedGrade === 'K3') {
                 // Disable for coming soon grades
                 continueBtn.disabled = true;
-                alert(`${selectedGrade} curriculum is coming soon. Currently, K1 and K2 reports are available.`);
+                alert(`${selectedGrade} curriculum is coming soon. Currently, K1, K2, and PVT reports are available.`);
             } else {
                 continueBtn.disabled = true;
             }
@@ -459,8 +468,8 @@
                 return;
             }
 
-            if (selectedGrade !== 'K1' && selectedGrade !== 'K2') {
-                alert(`${selectedGrade} is not yet available. Please select K1 or K2.`);
+            if (selectedGrade !== 'K1' && selectedGrade !== 'K2' && selectedGrade !== 'PVT') {
+                alert(`${selectedGrade} is not yet available. Please select K1, K2, or PVT.`);
                 return;
             }
 

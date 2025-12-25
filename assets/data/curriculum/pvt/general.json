@@ -1,0 +1,192 @@
+{
+  "grade": "PVT",
+  "month": "General",
+  "subjects": [
+    {
+      "id": "language_arts",
+      "name": "Language Arts",
+      "topics": [
+        {
+          "id": "la_letter_recognition",
+          "name": "Letter recognition and tracing"
+        },
+        { "id": "la_phonics", "name": "Phonics and beginning sounds" },
+        { "id": "la_sight_words", "name": "Sight words and vocabulary" },
+        {
+          "id": "la_story_comprehension",
+          "name": "Story comprehension and retelling"
+        },
+        {
+          "id": "la_writing_skills",
+          "name": "Basic writing and sentence formation"
+        }
+      ],
+      "vocabulary": "alphabet, letters A-Z, phonics sounds, common sight words (the, and, is, my, you), simple sentences, uppercase, lowercase, beginning sounds, middle sounds, ending sounds"
+    },
+    {
+      "id": "mathematics",
+      "name": "Mathematics",
+      "topics": [
+        { "id": "math_number_recognition", "name": "Number recognition 1-20" },
+        {
+          "id": "math_counting",
+          "name": "Counting and one-to-one correspondence"
+        },
+        { "id": "math_shapes_patterns", "name": "Basic shapes and patterns" },
+        { "id": "math_operations", "name": "Simple addition and subtraction" },
+        {
+          "id": "math_measurement",
+          "name": "Measurement concepts (big/small, long/short, heavy/light)"
+        }
+      ],
+      "vocabulary": "numbers 1-20, count, add, subtract, plus, minus, equals, circle, square, triangle, rectangle, pattern, big, small, long, short, heavy, light, more, less, same, different"
+    },
+    {
+      "id": "science",
+      "name": "Science",
+      "topics": [
+        { "id": "science_five_senses", "name": "Five senses exploration" },
+        {
+          "id": "science_living_nonliving",
+          "name": "Living vs non-living things"
+        },
+        { "id": "science_weather_seasons", "name": "Weather and seasons" },
+        { "id": "science_experiments", "name": "Simple science experiments" },
+        {
+          "id": "science_plants_animals",
+          "name": "Plants and animals life cycles"
+        }
+      ],
+      "vocabulary": "see, hear, smell, taste, touch, senses, living, non-living, grow, breathe, eat, sunny, rainy, cloudy, windy, spring, summer, fall, winter, experiment, observe, predict, plant, seed, sprout, animal, habitat"
+    },
+    {
+      "id": "social_studies",
+      "name": "Social Studies",
+      "topics": [
+        {
+          "id": "ss_community_helpers",
+          "name": "Community helpers and their roles"
+        },
+        { "id": "ss_family_relationships", "name": "Family and relationships" },
+        {
+          "id": "ss_cultural_celebrations",
+          "name": "Cultural celebrations and traditions"
+        },
+        {
+          "id": "ss_basic_geography",
+          "name": "Basic geography (maps, locations)"
+        },
+        {
+          "id": "ss_rules_responsibilities",
+          "name": "Rules and responsibilities"
+        }
+      ],
+      "vocabulary": "doctor, teacher, firefighter, police officer, nurse, family, mother, father, sister, brother, grandparents, holiday, tradition, map, city, country, world, rules, respect, responsibility, sharing, helping"
+    },
+    {
+      "id": "physical_education",
+      "name": "Physical Education",
+      "topics": [
+        {
+          "id": "pe_ball_skills",
+          "name": "Ball skills (throwing, catching, kicking)"
+        },
+        {
+          "id": "pe_balance_coordination",
+          "name": "Balance and coordination activities"
+        },
+        { "id": "pe_running_jumping", "name": "Running and jumping games" },
+        { "id": "pe_dance_movement", "name": "Dance and creative movement" },
+        { "id": "pe_team_sports", "name": "Introduction to team sports" }
+      ],
+      "vocabulary": "throw, catch, kick, bounce, roll, balance, walk, run, jump, hop, skip, dance, move, stretch, team, cooperate, play, game, exercise, healthy, active"
+    },
+    {
+      "id": "arts_crafts",
+      "name": "Arts & Crafts",
+      "topics": [
+        {
+          "id": "arts_painting_drawing",
+          "name": "Painting and drawing techniques"
+        },
+        { "id": "arts_cutting_pasting", "name": "Cutting and pasting skills" },
+        { "id": "arts_origami_folding", "name": "Origami and paper folding" },
+        {
+          "id": "arts_sculpture_modeling",
+          "name": "Sculpture and modeling with clay/playdough"
+        },
+        { "id": "arts_seasonal_crafts", "name": "Seasonal and thematic crafts" }
+      ],
+      "vocabulary": "paint, brush, color, draw, pencil, crayon, marker, cut, scissors, paste, glue, fold, paper, origami, clay, playdough, mold, shape, create, design, art, craft, collage"
+    },
+    {
+      "id": "music_movement",
+      "name": "Music & Movement",
+      "topics": [
+        { "id": "music_rhythm_beat", "name": "Rhythm and beat activities" },
+        { "id": "music_singing", "name": "Singing songs and nursery rhymes" },
+        {
+          "id": "music_instruments",
+          "name": "Musical instruments exploration"
+        },
+        { "id": "music_movement_to_music", "name": "Movement to music" },
+        {
+          "id": "music_appreciation",
+          "name": "Music listening and appreciation"
+        }
+      ],
+      "vocabulary": "music, song, sing, rhythm, beat, clap, tap, drum, shake, tambourine, bell, xylophone, dance, move, fast, slow, loud, quiet, high, low, melody, tempo"
+    },
+    {
+      "id": "critical_thinking",
+      "name": "Critical Thinking",
+      "topics": [
+        { "id": "ct_puzzles_problems", "name": "Puzzles and problem-solving" },
+        {
+          "id": "ct_matching_sorting",
+          "name": "Matching and sorting activities"
+        },
+        { "id": "ct_patterns_sequences", "name": "Patterns and sequences" },
+        { "id": "ct_same_different", "name": "Identifying same vs different" },
+        { "id": "ct_size_comparisons", "name": "Size and quantity comparisons" }
+      ],
+      "vocabulary": "puzzle, solve, match, sort, group, pattern, sequence, next, before, after, same, different, alike, compare, bigger, smaller, tallest, shortest, most, least, think, reason"
+    },
+    {
+      "id": "social_emotional",
+      "name": "Social-Emotional Learning",
+      "topics": [
+        { "id": "sel_emotions", "name": "Identifying and expressing emotions" },
+        { "id": "sel_sharing_cooperation", "name": "Sharing and cooperation" },
+        {
+          "id": "sel_conflict_resolution",
+          "name": "Conflict resolution skills"
+        },
+        { "id": "sel_self_care", "name": "Self-care and independence" },
+        { "id": "sel_empathy_kindness", "name": "Empathy and kindness" }
+      ],
+      "vocabulary": "happy, sad, angry, scared, excited, frustrated, calm, feeling, emotion, share, take turns, cooperate, friend, problem, solution, apologize, forgive, kind, caring, helping, independent, responsible"
+    },
+    {
+      "id": "life_skills",
+      "name": "Life Skills",
+      "topics": [
+        {
+          "id": "ls_personal_hygiene",
+          "name": "Personal hygiene and self-care"
+        },
+        {
+          "id": "ls_simple_cooking",
+          "name": "Simple cooking and food preparation"
+        },
+        { "id": "ls_safety_rules", "name": "Safety rules and awareness" },
+        {
+          "id": "ls_time_concepts",
+          "name": "Time concepts (days, weeks, months)"
+        },
+        { "id": "ls_money_basics", "name": "Basic money concepts" }
+      ],
+      "vocabulary": "wash hands, brush teeth, comb hair, clean, tidy, mix, stir, pour, measure, cook, snack, safe, danger, careful, help, stop sign, traffic light, Monday, Tuesday, yesterday, today, tomorrow, week, month, coin, penny, nickel, dime, buy, pay"
+    }
+  ]
+}

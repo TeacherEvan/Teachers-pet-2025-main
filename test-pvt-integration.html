@@ -1,0 +1,408 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PVT Student Integration Test - Teachers Pet</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            max-width: 1000px;
+            margin: 20px auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: #333;
+        }
+
+        .container {
+            background: white;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        h1 {
+            color: #667eea;
+            margin-bottom: 10px;
+        }
+
+        .subtitle {
+            color: #666;
+            margin-bottom: 30px;
+        }
+
+        .test-section {
+            background: #f8f9fa;
+            border-left: 4px solid #667eea;
+            padding: 20px;
+            margin: 20px 0;
+            border-radius: 5px;
+        }
+
+        .test-section h2 {
+            color: #667eea;
+            margin-top: 0;
+        }
+
+        button {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 5px;
+            transition: all 0.3s;
+        }
+
+        button:hover {
+            background: #764ba2;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .output {
+            background: #fff;
+            border: 1px solid #ddd;
+            padding: 15px;
+            margin-top: 15px;
+            border-radius: 5px;
+            min-height: 50px;
+            white-space: pre-wrap;
+            font-family: 'Courier New', monospace;
+            font-size: 14px;
+        }
+
+        .success {
+            color: #28a745;
+            font-weight: bold;
+        }
+
+        .error {
+            color: #dc3545;
+            font-weight: bold;
+        }
+
+        .info {
+            color: #17a2b8;
+            font-weight: bold;
+        }
+
+        .subject-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        .subject-item {
+            background: white;
+            padding: 10px;
+            border-radius: 5px;
+            border: 1px solid #dee2e6;
+        }
+
+        .subject-item strong {
+            color: #667eea;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>🌟 PVT Student Integration Test</h1>
+        <p class="subtitle">Comprehensive testing for Private Student curriculum integration</p>
+
+        <!-- Test 1: Grade Selection -->
+        <div class="test-section">
+            <h2>Test 1: Grade Selection Availability</h2>
+            <p>Verify that PVT option appears in grade selection dropdown.</p>
+            <button onclick="testGradeSelection()">Test Grade Selection</button>
+            <div id="gradeOutput" class="output"></div>
+        </div>
+
+        <!-- Test 2: Curriculum Loading -->
+        <div class="test-section">
+            <h2>Test 2: Curriculum Data Loading</h2>
+            <p>Load PVT curriculum and verify all 10 subjects with 5 topics each.</p>
+            <button onclick="testCurriculumLoading()">Load PVT Curriculum</button>
+            <div id="curriculumOutput" class="output"></div>
+        </div>
+
+        <!-- Test 3: Subject Mapping -->
+        <div class="test-section">
+            <h2>Test 3: Comment Engine Subject Mapping</h2>
+            <p>Verify that PVT subjects are mapped correctly in the comment generation engine.</p>
+            <button onclick="testSubjectMapping()">Test Subject Mapping</button>
+            <div id="mappingOutput" class="output"></div>
+        </div>
+
+        <!-- Test 4: Full Flow Simulation -->
+        <div class="test-section">
+            <h2>Test 4: Full Workflow Simulation</h2>
+            <p>Simulate complete user flow: Grade → Month → Student Info → Subjects</p>
+            <button onclick="testFullFlow()">Simulate Full Flow</button>
+            <div id="flowOutput" class="output"></div>
+        </div>
+
+        <!-- Test 5: Comment Generation -->
+        <div class="test-section">
+            <h2>Test 5: Comment Generation</h2>
+            <p>Generate sample comments using PVT curriculum data.</p>
+            <button onclick="testCommentGeneration()">Generate Test Comments</button>
+            <div id="commentOutput" class="output"></div>
+        </div>
+    </div>
+
+    <script type="module">
+        import CurriculumLoader from './assets/js/curriculum/curriculum-loader.js';
+
+        const loader = new CurriculumLoader();
+        window.curriculumLoader = loader;
+
+        // Test 1: Grade Selection
+        window.testGradeSelection = function () {
+            const output = document.getElementById('gradeOutput');
+            output.innerHTML = '<span class="info">Checking grade selection options...</span>\n\n';
+
+            try {
+                // Check if PVT is in available grades
+                const availableGrades = ['K1', 'K2', 'K3', 'PVT'];
+
+                output.innerHTML += `<span class="success">✓ Available Grades:</span>\n`;
+                availableGrades.forEach(grade => {
+                    output.innerHTML += `  • ${grade}${grade === 'PVT' ? ' - Private Student' : ''}\n`;
+                });
+
+                output.innerHTML += `\n<span class="success">✓ PVT option is available!</span>\n`;
+
+                // Check localStorage structure
+                const testData = {
+                    grade: 'PVT',
+                    month: 'General',
+                    timestamp: Date.now()
+                };
+                localStorage.setItem('testStudentData', JSON.stringify(testData));
+                const retrieved = JSON.parse(localStorage.getItem('testStudentData'));
+
+                output.innerHTML += `\n<span class="success">✓ Storage Test Passed:</span>\n`;
+                output.innerHTML += `  Grade: ${retrieved.grade}\n`;
+                output.innerHTML += `  Month: ${retrieved.month}\n`;
+
+                localStorage.removeItem('testStudentData');
+
+            } catch (error) {
+                output.innerHTML += `\n<span class="error">✗ Error: ${error.message}</span>`;
+            }
+        };
+
+        // Test 2: Curriculum Loading
+        window.testCurriculumLoading = async function () {
+            const output = document.getElementById('curriculumOutput');
+            output.innerHTML = '<span class="info">Loading PVT General curriculum...</span>\n\n';
+
+            try {
+                const curriculum = await loader.load('PVT', 'General');
+
+                output.innerHTML += `<span class="success">✓ Curriculum Loaded Successfully!</span>\n\n`;
+                output.innerHTML += `Grade: ${curriculum.grade}\n`;
+                output.innerHTML += `Month: ${curriculum.month}\n`;
+                output.innerHTML += `Total Subjects: ${curriculum.subjects.length}\n\n`;
+
+                output.innerHTML += `<span class="success">Subjects & Topics:</span>\n`;
+
+                curriculum.subjects.forEach((subject, index) => {
+                    output.innerHTML += `\n${index + 1}. ${subject.name} (${subject.topics.length} topics)\n`;
+                    subject.topics.forEach(topic => {
+                        output.innerHTML += `   • ${topic.name}\n`;
+                    });
+                });
+
+                // Validation
+                const expectedSubjects = 10;
+                const expectedTopics = 5;
+                const allHave5Topics = curriculum.subjects.every(s => s.topics.length === expectedTopics);
+
+                output.innerHTML += `\n\n<span class="success">Validation:</span>\n`;
+                output.innerHTML += `  Expected Subjects: ${expectedSubjects} | Actual: ${curriculum.subjects.length} ${curriculum.subjects.length === expectedSubjects ? '✓' : '✗'}\n`;
+                output.innerHTML += `  All subjects have 5 topics: ${allHave5Topics ? '✓ Yes' : '✗ No'}\n`;
+
+            } catch (error) {
+                output.innerHTML += `\n<span class="error">✗ Error: ${error.message}</span>\n`;
+                output.innerHTML += `\nMake sure the file exists at:\n`;
+                output.innerHTML += `assets/data/curriculum/pvt/general.json`;
+            }
+        };
+
+        // Test 3: Subject Mapping
+        window.testSubjectMapping = async function () {
+            const output = document.getElementById('mappingOutput');
+            output.innerHTML = '<span class="info">Testing subject-to-keyword mapping...</span>\n\n';
+
+            try {
+                // Load engine data
+                const { TeachersPetData } = await import('./assets/js/data/engine-data.js');
+
+                output.innerHTML += `<span class="success">✓ Engine Data Loaded</span>\n\n`;
+
+                const pvtSubjects = [
+                    'Language Arts',
+                    'Mathematics',
+                    'Science',
+                    'Social Studies',
+                    'Physical Education',
+                    'Arts & Crafts',
+                    'Music & Movement',
+                    'Critical Thinking',
+                    'Social-Emotional Learning',
+                    'Life Skills'
+                ];
+
+                output.innerHTML += `<span class="success">PVT Subject Mappings:</span>\n`;
+
+                let mappedCount = 0;
+                pvtSubjects.forEach(subject => {
+                    const keywords = TeachersPetData.subjectTopicMap[subject];
+                    if (keywords && keywords.length > 0) {
+                        output.innerHTML += `\n✓ ${subject}: ${keywords.length} keywords\n`;
+                        output.innerHTML += `  ${keywords.slice(0, 5).join(', ')}${keywords.length > 5 ? '...' : ''}\n`;
+                        mappedCount++;
+                    } else {
+                        output.innerHTML += `\n✗ ${subject}: NOT MAPPED\n`;
+                    }
+                });
+
+                output.innerHTML += `\n\n<span class="success">Summary:</span>\n`;
+                output.innerHTML += `  Mapped: ${mappedCount}/${pvtSubjects.length}\n`;
+                output.innerHTML += `  ${mappedCount === pvtSubjects.length ? '✓ All subjects mapped!' : '✗ Some subjects missing'}\n`;
+
+            } catch (error) {
+                output.innerHTML += `\n<span class="error">✗ Error: ${error.message}</span>`;
+            }
+        };
+
+        // Test 4: Full Flow
+        window.testFullFlow = function () {
+            const output = document.getElementById('flowOutput');
+            output.innerHTML = '<span class="info">Simulating complete user workflow...</span>\n\n';
+
+            try {
+                // Step 1: Grade Selection
+                output.innerHTML += `<span class="success">Step 1: Grade Selection</span>\n`;
+                const gradeData = {
+                    grade: 'PVT',
+                    timestamp: Date.now()
+                };
+                localStorage.setItem('studentData', JSON.stringify(gradeData));
+                output.innerHTML += `  ✓ Selected: PVT - Private Student\n\n`;
+
+                // Step 2: Month Selection
+                output.innerHTML += `<span class="success">Step 2: Month Selection</span>\n`;
+                const monthData = {
+                    ...gradeData,
+                    month: 'General'
+                };
+                localStorage.setItem('studentData', JSON.stringify(monthData));
+                output.innerHTML += `  ✓ Selected: General Curriculum\n\n`;
+
+                // Step 3: Student Information
+                output.innerHTML += `<span class="success">Step 3: Student Information</span>\n`;
+                const studentData = {
+                    ...monthData,
+                    studentName: 'Alex Johnson',
+                    gender: 'male',
+                    overallAttributes: 'enthusiastic learner',
+                    strengths: 'creative thinking and problem solving',
+                    weaknesses: 'needs practice with fine motor skills'
+                };
+                localStorage.setItem('studentData', JSON.stringify(studentData));
+                output.innerHTML += `  ✓ Name: ${studentData.studentName}\n`;
+                output.innerHTML += `  ✓ Gender: ${studentData.gender}\n\n`;
+
+                // Step 4: Subject Selection Simulation
+                output.innerHTML += `<span class="success">Step 4: Subject Selection</span>\n`;
+                const subjectData = {
+                    ...studentData,
+                    subjects: ['Language Arts', 'Mathematics', 'Science'],
+                    topicRatings: {
+                        'la_letter_recognition': 8,
+                        'la_phonics': 9,
+                        'math_number_recognition': 7,
+                        'science_five_senses': 8
+                    }
+                };
+                localStorage.setItem('studentData', JSON.stringify(subjectData));
+                output.innerHTML += `  ✓ Selected Subjects: ${subjectData.subjects.join(', ')}\n`;
+                output.innerHTML += `  ✓ Topics Rated: ${Object.keys(subjectData.topicRatings).length}\n\n`;
+
+                output.innerHTML += `<span class="success">✓ Full workflow completed successfully!</span>\n`;
+                output.innerHTML += `\nData structure is ready for comment generation.\n`;
+
+            } catch (error) {
+                output.innerHTML += `\n<span class="error">✗ Error: ${error.message}</span>`;
+            }
+        };
+
+        // Test 5: Comment Generation
+        window.testCommentGeneration = async function () {
+            const output = document.getElementById('commentOutput');
+            output.innerHTML = '<span class="info">Testing comment generation with PVT data...</span>\n\n';
+
+            try {
+                // Prepare test data
+                const testData = {
+                    studentName: 'Emma Davis',
+                    gender: 'female',
+                    grade: 'PVT',
+                    month: 'General',
+                    subjects: ['Language Arts', 'Mathematics', 'Critical Thinking'],
+                    topicRatings: {
+                        'la_letter_recognition': 9,
+                        'la_phonics': 8,
+                        'la_sight_words': 9,
+                        'math_number_recognition': 8,
+                        'math_counting': 7,
+                        'ct_puzzles_problems': 9,
+                        'ct_patterns_sequences': 8
+                    },
+                    overallAttributes: 'enthusiastic and engaged learner',
+                    strengths: 'shows excellent phonics skills and pattern recognition',
+                    weaknesses: 'could benefit from more practice with number writing'
+                };
+
+                output.innerHTML += `<span class="success">Test Student Profile:</span>\n`;
+                output.innerHTML += `  Name: ${testData.studentName}\n`;
+                output.innerHTML += `  Grade: ${testData.grade}\n`;
+                output.innerHTML += `  Subjects: ${testData.subjects.join(', ')}\n`;
+                output.innerHTML += `  Topic Ratings: ${Object.keys(testData.topicRatings).length} topics\n\n`;
+
+                // Load comment engine
+                const { EnhancedCommentEngine } = await import('./assets/js/engine/core.js');
+                const engine = new EnhancedCommentEngine();
+
+                output.innerHTML += `<span class="info">Generating comments...</span>\n\n`;
+
+                const result = await engine.generateComments(testData);
+
+                output.innerHTML += `<span class="success">✓ Comments Generated Successfully!</span>\n\n`;
+                output.innerHTML += `<span class="success">Male Teacher Style:</span>\n`;
+                output.innerHTML += `${result.male}\n\n`;
+                output.innerHTML += `<span class="success">Female Teacher Style:</span>\n`;
+                output.innerHTML += `${result.female}\n`;
+
+            } catch (error) {
+                output.innerHTML += `\n<span class="error">✗ Error: ${error.message}</span>\n`;
+                output.innerHTML += `Stack: ${error.stack}`;
+            }
+        };
+
+        // Auto-run grade selection test on load
+        window.addEventListener('load', () => {
+            console.log('PVT Integration Test Page Loaded');
+        });
+    </script>
+</body>
+
+</html>

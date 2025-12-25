@@ -16,8 +16,8 @@ export default class CurriculumLoader {
 
   /**
    * Load curriculum for a specific grade and month
-   * @param {string} grade - Grade level (K1, K2, K3)
-   * @param {string} month - Month name (August, September, etc.)
+   * @param {string} grade - Grade level (K1, K2, K3, PVT)
+   * @param {string} month - Month name (August, September, etc.) or 'General' for PVT
    * @returns {Promise} Resolves with curriculum data or rejects with error
    */
   async load(grade, month) {
@@ -38,13 +38,15 @@ export default class CurriculumLoader {
 
     try {
       const response = await fetch(curriculumPath);
-      
+
       if (!response.ok) {
-        throw new Error(`Failed to load curriculum file: ${response.status} ${response.statusText}`);
+        throw new Error(
+          `Failed to load curriculum file: ${response.status} ${response.statusText}`
+        );
       }
 
       const data = await response.json();
-      
+
       // Validate data structure
       if (data && data.subjects) {
         this.loadedCurriculum = data;
@@ -53,7 +55,9 @@ export default class CurriculumLoader {
         );
         return this.loadedCurriculum;
       } else {
-        throw new Error(`Invalid curriculum data structure for ${grade} ${month}`);
+        throw new Error(
+          `Invalid curriculum data structure for ${grade} ${month}`
+        );
       }
     } catch (error) {
       console.error("❌", error.message);
@@ -81,12 +85,10 @@ export default class CurriculumLoader {
       K1: ["August", "November", "December"],
       K2: ["November", "December"],
       K3: [],
+      PVT: ["General"],
     };
 
-    return (
-      availableList[grade] &&
-      availableList[grade].includes(month)
-    );
+    return availableList[grade] && availableList[grade].includes(month);
   }
 
   /**
@@ -99,6 +101,7 @@ export default class CurriculumLoader {
       K1: ["August", "November", "December"],
       K2: ["November", "December"],
       K3: [],
+      PVT: ["General"],
     };
 
     return availableList[grade] || [];
@@ -114,4 +117,3 @@ export default class CurriculumLoader {
     console.log("🧹 Curriculum data cleared");
   }
 }
-
