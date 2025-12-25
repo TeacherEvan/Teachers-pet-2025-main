@@ -28,7 +28,9 @@
       "spirited",
       "energetic",
       "keen",
-      "animated"
+      "animated",
+      "ardent",
+      "zealous"
     ],
     "curious": [
       "inquisitive",
@@ -38,7 +40,9 @@
       "inquiring",
       "wondering",
       "investigative",
-      "thoughtful"
+      "thoughtful",
+      "probing",
+      "searching"
     ],
     "confident": [
       "self-assured",
@@ -298,7 +302,8 @@
       "mindful",
       "well-mannered",
       "civil",
-      "gracious"
+      "gracious",
+      "non-critical"
     ],
     "patient": [
       "calm",
@@ -353,36 +358,6 @@
       "optimistic",
       "auspicious",
       "propitious"
-    ],
-    "confident": [
-      "self-assured",
-      "assured",
-      "poised",
-      "certain",
-      "secure",
-      "composed",
-      "positive",
-      "bold"
-    ],
-    "enthusiastic": [
-      "eager",
-      "keen",
-      "passionate",
-      "animated",
-      "spirited",
-      "energetic",
-      "ardent",
-      "zealous"
-    ],
-    "curious": [
-      "inquisitive",
-      "interested",
-      "questioning",
-      "inquiring",
-      "investigative",
-      "probing",
-      "searching",
-      "exploring"
     ],
     "capable": [
       "competent",

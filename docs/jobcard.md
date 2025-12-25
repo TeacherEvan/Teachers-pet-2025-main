@@ -17,6 +17,15 @@ Before implementing ANY feature:
 
 ## Recent Work (Newest First)
 
+### 2025-12-25: SynonymManager – Respectful adjective verified
+
+**Agent:** GitHub Copilot (GPT-5)
+**Branch:** main
+**Change:** Verified that 'non-critical' is present in the `adjectives.respectful` list in [assets/data/synonyms.json](assets/data/synonyms.json#L292-L310). No edit required.
+**Validation:** JSON integrity check passed (no duplicate keys, no syntax errors).
+**Rationale:** Provides a respectful, de-escalating descriptor for generated comments.
+**Notes:** Attempted to record in knowledge graph via `mcp_memory_add_observations`, but tool returned a JSON serialization error. Logged here instead.
+
 ### 2025-12-25: Best Practices Research Validation & WCAG Accessibility Compliance
 
 **Agent:** GitHub Copilot (Claude Sonnet 4.5)
@@ -29,14 +38,14 @@ Before implementing ANY feature:
    - ✅ Validated PVT prefix solution against MDN namespace pattern
    - MDN confirms: Duplicate keys cause last definition to overwrite earlier ones
    - Our "PVT " prefix approach matches industry-standard collision prevention
-   - Source: https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Working_with_objects
+   - Source: <https://developer.mozilla.org/en-US/docs/Web/JavaScript/Guide/Working_with_objects>
 
 2. **Kindergarten Assessment Standards (NAEYC - 2022-2024):**
    - ✅ Validated developmental categories align with NAEYC frameworks
    - NAEYC domains: Social-Emotional, Cognitive, Physical, Communication
    - Our 5 strength categories match recognized kindergarten assessment best practices
    - Strengths-based approach validated by NAEYC authentic assessment philosophy
-   - Source: https://www.naeyc.org/resources/topics/assessment
+   - Source: <https://www.naeyc.org/resources/topics/assessment>
 
 3. **UI/UX Form Design (Nielsen Norman Group - 2004/2018):**
    - ✅ Validated form design matches NN/g guidelines
