@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Test K2 January Curriculum</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #667eea;
+            margin-bottom: 20px;
+        }
+        .status {
+            padding: 15px;
+            margin: 15px 0;
+            border-radius: 5px;
+            font-weight: bold;
+        }
+        .success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        .info {
+            background-color: #d1ecf1;
+            color: #0c5460;
+            border: 1px solid #bee5eb;
+        }
+        .subject-list {
+            margin-top: 20px;
+        }
+        .subject {
+            background: #f8f9fa;
+            padding: 15px;
+            margin: 10px 0;
+            border-left: 4px solid #667eea;
+        }
+        .subject h3 {
+            margin: 0 0 10px 0;
+            color: #667eea;
+        }
+        .topic {
+            margin: 5px 0 5px 20px;
+            color: #555;
+        }
+        .vocabulary {
+            margin-top: 10px;
+            font-size: 0.9em;
+            color: #666;
+            font-style: italic;
+        }
+        button {
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin: 10px 5px;
+        }
+        button:hover {
+            background: #5568d3;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>K2 January Curriculum Test</h1>
+        <div id="status"></div>
+        <button onclick="testLoadCurriculum()">Load K2 January Curriculum</button>
+        <button onclick="testAvailableMonths()">Check Available Months</button>
+        <div id="results"></div>
+    </div>
+
+    <script type="module">
+        import CurriculumLoader from './assets/js/curriculum/curriculum-loader.js';
+
+        window.curriculumLoader = new CurriculumLoader();
+
+        window.testLoadCurriculum = async function() {
+            const statusDiv = document.getElementById('status');
+            const resultsDiv = document.getElementById('results');
+            
+            statusDiv.innerHTML = '<div class="info">Loading K2 January curriculum...</div>';
+            resultsDiv.innerHTML = '';
+
+            try {
+                const curriculum = await window.curriculumLoader.load('K2', 'January');
+                
+                if (curriculum && curriculum.subjects) {
+                    statusDiv.innerHTML = `
+                        <div class="success">
+                            ✅ Successfully loaded K2 January curriculum!<br>
+                            Found ${curriculum.subjects.length} subjects
+                        </div>
+                    `;
+
+                    // Display subjects
+                    let html = '<div class="subject-list">';
+                    curriculum.subjects.forEach(subject => {
+                        html += `
+                            <div class="subject">
+                                <h3>${subject.name}</h3>
+                                <div>Topics (${subject.topics.length}):</div>
+                                ${subject.topics.map(topic => `<div class="topic">• ${topic.name}</div>`).join('')}
+                                <div class="vocabulary"><strong>Vocabulary:</strong> ${subject.vocabulary}</div>
+                            </div>
+                        `;
+                    });
+                    html += '</div>';
+                    resultsDiv.innerHTML = html;
+                } else {
+                    statusDiv.innerHTML = '<div class="error">❌ Curriculum loaded but has invalid structure</div>';
+                }
+            } catch (error) {
+                statusDiv.innerHTML = `<div class="error">❌ Error loading curriculum: ${error.message}</div>`;
+                console.error(error);
+            }
+        };
+
+        window.testAvailableMonths = function() {
+            const statusDiv = document.getElementById('status');
+            const resultsDiv = document.getElementById('results');
+
+            const k2Months = window.curriculumLoader.getAvailableMonths('K2');
+            const isJanuaryAvailable = window.curriculumLoader.isAvailable('K2', 'January');
+
+            statusDiv.innerHTML = `
+                <div class="${isJanuaryAvailable ? 'success' : 'error'}">
+                    ${isJanuaryAvailable ? '✅' : '❌'} January availability check: ${isJanuaryAvailable ? 'AVAILABLE' : 'NOT AVAILABLE'}
+                </div>
+            `;
+
+            resultsDiv.innerHTML = `
+                <div class="info">
+                    <h3>K2 Available Months:</h3>
+                    <p>${k2Months.join(', ')}</p>
+                </div>
+            `;
+        };
+    </script>
+</body>
+</html>

@@ -1,0 +1,161 @@
+{
+  "grade": "K2",
+  "month": "January",
+  "subjects": [
+    {
+      "id": "mathematics",
+      "name": "Mathematics",
+      "topics": [
+        { "id": "math_counting_1_30", "name": "Counting from 1-30" },
+        { "id": "math_writing_numbers", "name": "Writing numbers 1-30" },
+        { "id": "math_number_sentences", "name": "Write your own number sentences choosing numbers that are next to each other" },
+        { "id": "math_subtraction", "name": "Subtraction" },
+        { "id": "math_missing_numbers", "name": "Fill in the missing numbers from 1-30" },
+        { "id": "math_greater_less_than", "name": "Write \"<\" or \">\" in the boxes between the numbers" },
+        { "id": "math_check_sentences", "name": "Write \"√\" or \"X\" in the boxes in front of the number sentences to state if they are correct or incorrect" },
+        { "id": "math_word_problems", "name": "Add and subtract when doing word problems" },
+        { "id": "math_heart_method", "name": "Keep the big number in your heart and show the smaller number on your fingers in order to solve addition that results in more than 10" },
+        { "id": "math_count_compare", "name": "Count the pictures and write the numbers in their boxes along with their \"<\" or \">\" sign" }
+      ],
+      "vocabulary": "One-thirty, greater than, less than, subtraction, addition, count, numbers, write, minus, equals, plus"
+    },
+    {
+      "id": "iq",
+      "name": "I.Q",
+      "topics": [
+        { "id": "iq_match_opposites", "name": "Draw lines to match the opposite objects" },
+        { "id": "iq_not_belong", "name": "\"X\" the picture that does not belong in same group" },
+        { "id": "iq_match_related", "name": "Draw lines to match the related objects with each other" },
+        { "id": "iq_missing_patterns", "name": "\"X\" the missing pictures from the patterns" },
+        { "id": "iq_size_order", "name": "Write numbers to put the objects in order from the smallest to the biggest" },
+        { "id": "iq_should_do", "name": "\"√\" below the pictures that we should do and \"X\" below the pictures that we shouldn't do" },
+        { "id": "iq_count_boxes", "name": "Count the boxes and write the number" },
+        { "id": "iq_write_symbols", "name": "Write the given symbols where needed" },
+        { "id": "iq_heaviest", "name": "Write \"O\" around the heaviest object" },
+        { "id": "iq_ranking", "name": "Write which rank the last apple is" },
+        { "id": "iq_shadow_matching", "name": "Circle the owner of the shadow" }
+      ],
+      "vocabulary": "Heaviest, lightest, soft, hard, front, back, underneath, happy, sad, loud, quiet, inside, outside, hot, cold, shadow, animals, opposite, related, pattern, order, smallest, biggest"
+    },
+    {
+      "id": "social_studies",
+      "name": "Social Studies",
+      "topics": [
+        { "id": "social_healthy_food", "name": "Healthy food and food groups" },
+        { "id": "social_thailand", "name": "Thailand - King, weather, flag, religion" },
+        { "id": "social_jobs", "name": "Jobs and occupations" },
+        { "id": "social_flowers", "name": "Flowers - Lotus, orchid, jasmine" },
+        { "id": "social_animals", "name": "Animals - Wild and farm animals" },
+        { "id": "social_insects", "name": "Insects and Arachnids" }
+      ],
+      "vocabulary": "Healthy, food, food groups, growth, stronger, protein, carbohydrates, carbs, fats, fruits, vegetables, water, minerals, king, weather, flag, flag colors, blood, religion, sky, jobs, occupation, doctor, teacher, police officer, nurse, chef, workplace, flowers, lotus, orchid, jasmine, petals, pollen, nectar, pollen grains, colourful, insects, smell, animals, wild, farm, legs, homes"
+    },
+    {
+      "id": "english",
+      "name": "English",
+      "topics": [
+        { "id": "english_lowercase_uppercase", "name": "Draw lines from the lowercase letters to the correct uppercase letter" },
+        { "id": "english_trace_letters", "name": "Trace the letters \"a-z\"" },
+        { "id": "english_missing_letters", "name": "Fill in the missing letters from the three lettered words" },
+        { "id": "english_write_words", "name": "Write the full words" },
+        { "id": "english_circle_correct", "name": "Circle the correct word that goes with the pictures" },
+        { "id": "english_match_pictures", "name": "Draw lines from the pictures to its words" },
+        { "id": "english_english_thai", "name": "Write the words in both English and Thai" }
+      ],
+      "vocabulary": "Tap, cat, rat, bat, lap, map, hat, cap, mat, lowercase, uppercase, trace, write, circle, match"
+    },
+    {
+      "id": "phonics",
+      "name": "Phonics",
+      "topics": [
+        { "id": "phonics_letter_u", "name": "Trace the letter \"U\" and circle words that begin with the letter 'u'" },
+        { "id": "phonics_letter_v", "name": "Circle the letter \"v's\" and paste the correct stickers" },
+        { "id": "phonics_letter_w", "name": "Colour the water drops blue with letter 'w'" },
+        { "id": "phonics_letter_x", "name": "Colour the parts with the letter \"X\" purple and circle words ending with the letter \"x\"" },
+        { "id": "phonics_letter_y", "name": "Trace the letter \"y\"" },
+        { "id": "phonics_letter_z", "name": "Trace the letter \"Z\" and circle the correct boxes to make complete words" },
+        { "id": "phonics_revision", "name": "Phonics revision activities" }
+      ],
+      "vocabulary": "Uncle, under, umbrella, up, van, victory, vase, vegetables, worm, wet, water, window, fox, six, box, wax, yo-yo, yes, yellow, yogurt, zebra, zip, zigzag, zoo, revision"
+    },
+    {
+      "id": "science",
+      "name": "Science",
+      "topics": [
+        { "id": "science_water_bottle", "name": "Three-hole water bottle experiment" },
+        { "id": "science_air_rockets", "name": "Air rockets experiment" }
+      ],
+      "vocabulary": "Water, pressure, wet, holes, far, near, rocket, fly, high, experiment, science"
+    },
+    {
+      "id": "conversation1",
+      "name": "Conversation 1",
+      "topics": [
+        { "id": "conv1_how_feel", "name": "How do you feel? - I feel hot/cold" },
+        { "id": "conv1_what_doing", "name": "What are you doing? - I am swimming/colouring" },
+        { "id": "conv1_what_got", "name": "What have you got? - I have got a pencil/book/sharpener" },
+        { "id": "conv1_feel_thirsty", "name": "How do you feel? - I feel thirsty. What do you need? - I need water" },
+        { "id": "conv1_whats_matter", "name": "What's the matter? - I have got a headache/cough" },
+        { "id": "conv1_riding_bicycle", "name": "What are you doing? - I am riding a bicycle" },
+        { "id": "conv1_toy_box", "name": "What have you got in the toy box? - I have got a doll/car/robot" }
+      ],
+      "vocabulary": "cold, hot, swimming, colouring, pencil, book, sharpener, thirsty, water, headache, cough, riding, bicycle, doll, robot, car"
+    },
+    {
+      "id": "conversation3",
+      "name": "Conversation 3",
+      "topics": [
+        { "id": "conv3_appliances", "name": "What is this? - It's a laptop/mobile phone/tablet. Do you have one at house?" },
+        { "id": "conv3_house_chores", "name": "What are you doing? - I'm cleaning/washing dishes/packing away my toys" },
+        { "id": "conv3_summer_activities", "name": "Summer activities: What are you doing? - I am fishing/cycling/swimming" },
+        { "id": "conv3_rooms", "name": "Do you sleep in the kitchen/bedroom/living room/bathroom? What do you do in each room?" }
+      ],
+      "vocabulary": "Gadgets, mobile phone, laptop, tablet, chores, cleaning, toys, put away, summer, cycling, swimming, fishing, living room, bedroom, kitchen, bathroom, sleep, wash dishes, watch TV"
+    },
+    {
+      "id": "arts",
+      "name": "Arts",
+      "topics": [
+        { "id": "arts_paper_bag_puppet", "name": "Paper Bag Puppet (Animal Face)" },
+        { "id": "arts_watercolour_printing", "name": "Watercolour printing (Chinese kale)" },
+        { "id": "arts_geometric_shapes", "name": "Geometric shapes (car)" },
+        { "id": "arts_pencil_case", "name": "Pencil case craft" },
+        { "id": "arts_fan_craft", "name": "Fan Craft" },
+        { "id": "arts_watercolour_trees", "name": "Watercolour painting (Trees and Nature)" },
+        { "id": "arts_paper_plate_fish", "name": "Paper plate fish craft" }
+      ],
+      "vocabulary": "Puppet, animal, paper bag, design, Chinese cabbage, print, car, wheels, shapes, pencil case, draw, paste, fan, nature, trees, fish, body, tail"
+    },
+    {
+      "id": "physical_education",
+      "name": "Physical Education",
+      "topics": [
+        { "id": "pe_passing_ball", "name": "Passing the ball over your head" },
+        { "id": "pe_balance_lemon", "name": "Balancing and lemon relay game" },
+        { "id": "pe_zigzag_car", "name": "Zigzag car racing" },
+        { "id": "pe_balloon_game", "name": "Balloon game" },
+        { "id": "pe_zigzag_basketball", "name": "Zigzag running and basketball game" },
+        { "id": "pe_ball_sorting", "name": "Ball sorting game" },
+        { "id": "pe_jumping_rings", "name": "Jumping into the rings and going under the arches" }
+      ],
+      "vocabulary": "Jump, go under, ball, sort, colour, run, zigzag, shoot, balance, balloon, walk, pair, pass, over, head"
+    },
+    {
+      "id": "puppet_show",
+      "name": "Puppet Show",
+      "topics": [
+        { "id": "puppet_panicked_rabbit", "name": "The panicked rabbit" },
+        { "id": "puppet_hare_tortoise", "name": "The hare and the tortoise" }
+      ],
+      "vocabulary": "Rabbit, forest, animals, turtle, race, win, run, fast, first, panicked, hare, tortoise"
+    },
+    {
+      "id": "cooking",
+      "name": "Cooking",
+      "topics": [
+        { "id": "cooking_coconut_balls", "name": "Thai coconut balls" }
+      ],
+      "vocabulary": "Coconut, oil, fry, balls, roll, shaving"
+    }
+  ]
+}
