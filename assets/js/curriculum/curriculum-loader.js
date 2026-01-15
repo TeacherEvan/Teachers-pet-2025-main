@@ -83,7 +83,7 @@ export default class CurriculumLoader {
   isAvailable(grade, month) {
     const availableList = {
       K1: ["August", "November", "December"],
-      K2: ["November", "December"],
+      K2: ["November", "December", "January"],
       K3: [],
       PVT: ["General"],
     };
@@ -99,7 +99,7 @@ export default class CurriculumLoader {
   getAvailableMonths(grade) {
     const availableList = {
       K1: ["August", "November", "December"],
-      K2: ["November", "December"],
+      K2: ["November", "December", "January"],
       K3: [],
       PVT: ["General"],
     };
