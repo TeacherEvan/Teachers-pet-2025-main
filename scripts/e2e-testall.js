@@ -1,17 +1,18 @@
 import { spawnSync } from "child_process";
+import { performance } from "node:perf_hooks";
 
 const root = process.cwd();
 
 const steps = [
   {
     label: "Verify (lint + docs checks)",
-    command: process.platform === "win32" ? "npm.cmd" : "npm",
-    args: ["run", "verify"],
+    command: "npm run verify",
+    args: [],
   },
   {
     label: "Unit + Integration tests",
-    command: process.platform === "win32" ? "npm.cmd" : "npm",
-    args: ["test"],
+    command: "npm test",
+    args: [],
   },
 ];
 
@@ -19,16 +20,39 @@ let failures = 0;
 
 for (const step of steps) {
   console.log(`\n=== ${step.label} ===`);
+  console.log(`$ ${step.command} ${step.args.join(" ")}`.trim());
+
+  const start = performance.now();
   const result = spawnSync(step.command, step.args, {
-    stdio: "inherit",
     cwd: root,
+    encoding: "utf-8",
+    stdio: "pipe",
+    shell: true,
   });
+  const duration = (performance.now() - start).toFixed(0);
+
+  if (result.stdout) {
+    process.stdout.write(result.stdout);
+  }
+  if (result.stderr) {
+    process.stderr.write(result.stderr);
+  }
+
+  if (result.error) {
+    console.error(`\n❌ Step error: ${step.label}`);
+    console.error(result.error);
+    failures += 1;
+    break;
+  }
+
   if (result.status !== 0) {
-    console.error(`\n❌ Step failed: ${step.label}`);
+    console.error(
+      `\n❌ Step failed: ${step.label} (exit ${result.status}) in ${duration}ms`,
+    );
     failures += 1;
     break;
   } else {
-    console.log(`✅ Step passed: ${step.label}`);
+    console.log(`✅ Step passed: ${step.label} in ${duration}ms`);
   }
 }
 
