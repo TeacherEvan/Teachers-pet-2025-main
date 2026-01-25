@@ -17,6 +17,35 @@ Before implementing ANY feature:
 
 ## Recent Work (Newest First)
 
+### 2026-01-25: Debug Pass + Engine Topic Safety Fixes
+
+**Agent:** GitHub Copilot (GPT-5.2-Codex)
+**Branch:** main
+**Task:** Resolve verification failure, harden engine data processing, and prevent incorrect subject attribution.
+
+**Changes:**
+
+1. **Verification:** Added `lint` script to avoid `npx` version drift and updated verify runner to use it.
+2. **Processor hardening:** Guarded missing engine data and undefined gender; normalized handling for `strengths`/`weaknesses` arrays.
+3. **Topic integrity:** Removed fallback assignment of unmatched topics to the first subject; track as orphaned topics and mention generically.
+4. **Template safety:** Handle subjectless data and include orphaned topics without inventing subjects.
+5. **Regex safety:** Escaped student name in regex usage to prevent errors with special characters.
+6. **Tests:** Updated processor unit test to validate orphaned topic behavior.
+
+**Files Updated:**
+
+- package.json
+- scripts/verify.js
+- assets/js/engine/processor.js
+- assets/js/engine/templates.js
+- assets/js/engine/utils.js
+- tests/unit/processor.test.js
+
+**Verification:**
+
+- npm install
+- npm run verify (passed; warnings only for existing console logs)
+
 ### 2026-01-25: Modularization Cleanup + Test Suite Expansion
 
 **Agent:** GitHub Copilot (GPT-5.2-Codex)

@@ -58,7 +58,8 @@ export async function runTests() {
     { "unknown topic": 3 },
     engineData.subjectTopicMap,
   );
-  assert.deepEqual(fallback.Mathematics, ["unknown topic"]);
+  assert.deepEqual(fallback.grouped.Mathematics, []);
+  assert.deepEqual(fallback.orphanedTopics, ["unknown topic"]);
 
   assert.throws(() => {
     TeachersPetProcessor.processSessionData(
