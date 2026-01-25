@@ -269,8 +269,9 @@ Static-only (GitHub Pages, Netlify, Vercel). Works from filesystem. Some feature
 
 **Current Datasets:**
 
-- K1: August, November
-- K2: November
+- K1: August, November, December, January
+- K2: November, December, January
+- PVT: General
 
 ### Adding New Curriculum
 

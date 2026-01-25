@@ -41,7 +41,7 @@ export default class CurriculumLoader {
 
       if (!response.ok) {
         throw new Error(
-          `Failed to load curriculum file: ${response.status} ${response.statusText}`
+          `Failed to load curriculum file: ${response.status} ${response.statusText}`,
         );
       }
 
@@ -51,12 +51,12 @@ export default class CurriculumLoader {
       if (data && data.subjects) {
         this.loadedCurriculum = data;
         console.log(
-          `✅ Curriculum loaded: ${this.loadedCurriculum.subjects.length} subjects`
+          `✅ Curriculum loaded: ${this.loadedCurriculum.subjects.length} subjects`,
         );
         return this.loadedCurriculum;
       } else {
         throw new Error(
-          `Invalid curriculum data structure for ${grade} ${month}`
+          `Invalid curriculum data structure for ${grade} ${month}`,
         );
       }
     } catch (error) {
@@ -82,7 +82,7 @@ export default class CurriculumLoader {
    */
   isAvailable(grade, month) {
     const availableList = {
-      K1: ["August", "November", "December"],
+      K1: ["August", "November", "December", "January"],
       K2: ["November", "December", "January"],
       K3: [],
       PVT: ["General"],
@@ -98,7 +98,7 @@ export default class CurriculumLoader {
    */
   getAvailableMonths(grade) {
     const availableList = {
-      K1: ["August", "November", "December"],
+      K1: ["August", "November", "December", "January"],
       K2: ["November", "December", "January"],
       K3: [],
       PVT: ["General"],

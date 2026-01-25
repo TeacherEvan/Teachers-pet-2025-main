@@ -1,0 +1,231 @@
+{
+  "grade": "K1",
+  "month": "January",
+  "subjects": [
+    {
+      "id": "english",
+      "name": "English",
+      "topics": [
+        {
+          "id": "english_match_letter_picture",
+          "name": "Draw lines to match the letter to the correct picture"
+        },
+        {
+          "id": "english_trace_letter",
+          "name": "Trace the letter following the dotted line and color the letters"
+        },
+        {
+          "id": "english_match_same_letters",
+          "name": "Draw lines to match the same letters together"
+        },
+        {
+          "id": "english_draw_lines_dot",
+          "name": "Draw lines from the letter to the picture starting from the dot"
+        }
+      ],
+      "vocabulary": "A-Ant, B-Bee, C-Cat, D-Dog, E-Egg, F-Fan, H-Hen, I-Ice cream, O-Ox, T-Tea, V-Van, X-Xray"
+    },
+    {
+      "id": "phonics",
+      "name": "Phonics",
+      "topics": [{ "id": "phonics_letter_az", "name": "Letter A-Z" }],
+      "vocabulary": "Vicky van, victory, Wendy worm, wet, Felix fox, box, Yester yo-yo, yes, Zeppy zebra, zip"
+    },
+    {
+      "id": "mathematics",
+      "name": "Mathematics",
+      "topics": [
+        {
+          "id": "math_write_number_freehand",
+          "name": "Write the correct number in the box (free hand)"
+        },
+        {
+          "id": "math_draw_circles",
+          "name": "Draw the correct amount of circles in the box next to the numbers"
+        },
+        {
+          "id": "math_addition_fingers",
+          "name": "Addition - showing the amount with their fingers and then add the two numbers together"
+        },
+        {
+          "id": "math_circle_addition",
+          "name": "Circle the correct addition answer"
+        },
+        {
+          "id": "math_trace_number",
+          "name": "Trace the number following the dotted line and color"
+        }
+      ],
+      "vocabulary": "One – ten, plus, equal"
+    },
+    {
+      "id": "iq",
+      "name": "I.Q",
+      "topics": [
+        {
+          "id": "iq_match_shape",
+          "name": "Color the object matching the same shape"
+        },
+        {
+          "id": "iq_container_liquid",
+          "name": "Circle the container that hold more (liquid)"
+        },
+        {
+          "id": "iq_match_parts",
+          "name": "Match each part to the correct picture"
+        },
+        { "id": "iq_match_size", "name": "Match suitable size objects" },
+        {
+          "id": "iq_same_animals",
+          "name": "Color the set of animals that are the same"
+        },
+        { "id": "iq_animal_home", "name": "Animal and its home" },
+        {
+          "id": "iq_first_middle_last",
+          "name": "Mark the first/middle/last pictures"
+        },
+        {
+          "id": "iq_between_pictures",
+          "name": "Mark the picture that is between the pictures"
+        },
+        { "id": "iq_unusual_picture", "name": "Mark the unusual picture" },
+        { "id": "iq_opposite_pictures", "name": "Match the opposite pictures" }
+      ],
+      "vocabulary": "candy, present, watermelon, cherries, birthday hat, circle, triangle, square, carrot, leave, orange, chick, frog, fish bowl, bucket, milk jug, milk carton, water bottle, glass, food can, water jug, bicycle, wheel, sunflower, leaves, lamp, globe, cookie jar, cookie, door, door knob, cake, plate, fish bowl, goldfish, bears, monkey, tiger, penguin, egg-hatchling, dog/kennel, fish/fish bowl, vehicles, turtle, house, boy, girl, chair, mouse, rabbit"
+    },
+    {
+      "id": "social_studies",
+      "name": "Social Studies",
+      "topics": [
+        { "id": "social_healthy_food", "name": "The benefits of healthy food" },
+        {
+          "id": "social_good_bad_behaviour",
+          "name": "Good and Bad Behaviours and Identifying Good Behaviour in Different Situations"
+        },
+        {
+          "id": "social_temple_behaviour",
+          "name": "How to Behave When Going to a Temple"
+        },
+        {
+          "id": "social_occupations_seasons",
+          "name": "Different Occupations, Examples of Each Occupation, and Different Seasons with a Focus on the Rainy Season"
+        },
+        {
+          "id": "social_disease_animals",
+          "name": "Animals that carry diseases"
+        }
+      ],
+      "vocabulary": "vegetables, tomato, seafood, banana, doctor, eggs, rice, candles, chicken, pork, coffee, oranges, fighting, crying, sharing, helping, good behaviour, bad behaviour, temple, teacher, monk, school, farmer, paddy field, police, doctor, fruit seller, nurse, soldier, seasons, pencil, plates, umbrella, rain coat, boots, fly, fish, mosquito, rat, cockroach, dog, turtle"
+    },
+    {
+      "id": "science",
+      "name": "Science",
+      "topics": [
+        {
+          "id": "science_rainbow_rain",
+          "name": "Rainbow rain - Observe how food coloring drops fall through oil like rain"
+        },
+        {
+          "id": "science_air_pressure",
+          "name": "Air pressure (water bottle/straw) - Understand how air pressure controls water flow in a water bottle and straw"
+        },
+        {
+          "id": "science_water_displacement",
+          "name": "Water displacement - Observe that objects take up space in water"
+        },
+        { "id": "science_cooking_pork_bread", "name": "COOKING: Pork bread" }
+      ],
+      "vocabulary": "sandwich bread, pork, meat, garlic, egg, oyster sauce, vegetable, rain, drop, float, sink, heavy/light, color, air pressure, cover, release, straw, push, flow/waterflow, water, rise/level, displacement, take up space, object/rock"
+    },
+    {
+      "id": "conversation1",
+      "name": "Conversation 1",
+      "topics": [
+        {
+          "id": "conv1_feel_cold_hot",
+          "name": "How do you feel? – I feel cold/hot"
+        },
+        {
+          "id": "conv1_swimming",
+          "name": "What are you doing? – I am swimming"
+        },
+        {
+          "id": "conv1_pencil_book",
+          "name": "What have you got? – I have got a pencil/book"
+        },
+        { "id": "conv1_thirsty", "name": "How do you feel? – I am thirsty" },
+        {
+          "id": "conv1_headache",
+          "name": "What's the matter? – I have got a headache"
+        },
+        {
+          "id": "conv1_bicycle",
+          "name": "What are you doing? – I am riding a bicycle"
+        },
+        {
+          "id": "conv1_doll_robot",
+          "name": "What have you got in the toy box? – I have got a doll/robot"
+        }
+      ],
+      "vocabulary": "cold, hot, swimming, pencil, book, thirsty, headache, riding, I have got a doll/robot"
+    },
+    {
+      "id": "conversation3",
+      "name": "Conversation 3",
+      "topics": [
+        {
+          "id": "conv3_wild_animal",
+          "name": "What wild animal is this? – It's a Lion"
+        },
+        {
+          "id": "conv3_vegetable",
+          "name": "What vegetable do you like? – I like carrot"
+        },
+        {
+          "id": "conv3_spring_horse",
+          "name": "Where do you like to play? – I like to play on the spring horse"
+        }
+      ],
+      "vocabulary": "lion, giraffe, tiger, monkey, carrot, eggplant, mushroom, radish, spring horse, bars, seesaw"
+    },
+    {
+      "id": "arts",
+      "name": "Arts",
+      "topics": [
+        { "id": "arts_bookmark", "name": "Bookmark" },
+        { "id": "arts_photo_frame", "name": "Photo frame" },
+        { "id": "arts_paper_crown", "name": "Paper crown" },
+        { "id": "arts_paper_octopus", "name": "Paper octopus" },
+        { "id": "arts_paper_wristwatch", "name": "Paper wristwatch" },
+        { "id": "arts_origami_fox", "name": "Origami-fox" }
+      ],
+      "vocabulary": "bookmark, string, design, photo, frame, bear, crown, paper, square, make, octopus, tentacles, tissue core, watch, wrist, arm, fox, ear, eye, nose, whiskers"
+    },
+    {
+      "id": "physical_education",
+      "name": "Physical Education",
+      "topics": [
+        { "id": "pe_ring_toss", "name": "Ring toss game" },
+        { "id": "pe_bowling", "name": "Bowling" },
+        { "id": "pe_golf", "name": "Golf game" },
+        { "id": "pe_arch_ladder", "name": "Arch ladder climbing" },
+        { "id": "pe_racing", "name": "Racing game" },
+        {
+          "id": "pe_balancing_arches",
+          "name": "Balancing and going under arches"
+        }
+      ],
+      "vocabulary": "ring, pole, shoot, roll, bowling ball/pin, golf club/course, hole, flag, hit, climb, arch, ladder, run, fast, go under, crawl, balance"
+    },
+    {
+      "id": "puppet_show",
+      "name": "Puppet Show",
+      "topics": [
+        { "id": "puppet_sick_bear", "name": "The Sick Bear" },
+        { "id": "puppet_frog_cow", "name": "The Frog and the Cow" },
+        { "id": "puppet_panicked_rabbit", "name": "The Panicked rabbit" }
+      ],
+      "vocabulary": "mother, bear, sick, doctor, rain, cow, frog, stomach, big, small, rabbit, lion, panicked, daydream, mouse"
+    }
+  ]
+}
