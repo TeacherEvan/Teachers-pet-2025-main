@@ -68,13 +68,13 @@
         },
         {
           "id": "iq_container_liquid",
-          "name": "Circle the container that hold more (liquid)"
+          "name": "Circle the container that holds more (liquid)"
         },
         {
           "id": "iq_match_parts",
           "name": "Match each part to the correct picture"
         },
-        { "id": "iq_match_size", "name": "Match suitable size objects" },
+        { "id": "iq_match_size", "name": "Match objects by size" },
         {
           "id": "iq_same_animals",
           "name": "Color the set of animals that are the same"
@@ -223,7 +223,7 @@
       "topics": [
         { "id": "puppet_sick_bear", "name": "The Sick Bear" },
         { "id": "puppet_frog_cow", "name": "The Frog and the Cow" },
-        { "id": "puppet_panicked_rabbit", "name": "The Panicked rabbit" }
+        { "id": "puppet_panicked_rabbit", "name": "The Panicked Rabbit" }
       ],
       "vocabulary": "mother, bear, sick, doctor, rain, cow, frog, stomach, big, small, rabbit, lion, panicked, daydream, mouse"
     }

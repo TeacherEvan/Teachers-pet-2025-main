@@ -331,7 +331,21 @@ TeachersPetData.subjectTopicMap = {
     "n/o/p",
     "n o p",
   ],
-  Mathematics: ["count", "number", "match", "trace", "dotted"],
+  Mathematics: [
+    "count",
+    "number",
+    "match",
+    "trace",
+    "dotted",
+    "write",
+    "freehand",
+    "addition",
+    "add",
+    "circles",
+    "fingers",
+    "plus",
+    "equal",
+  ],
   "I.Q": ["color", "same", "fatter", "taller", "hot", "cold", "shape"],
   "Social Studies": [
     "identify",
@@ -352,6 +366,13 @@ TeachersPetData.subjectTopicMap = {
     "float",
     "sink",
     "walking water",
+    "rainbow",
+    "rain",
+    "air pressure",
+    "displacement",
+    "water",
+    "bottle",
+    "straw",
   ],
   Cooking: [
     "look chop",
@@ -388,6 +409,21 @@ TeachersPetData.subjectTopicMap = {
     "sleep",
     "go to sleep",
     "morning",
+    "wild",
+    "animal",
+    "lion",
+    "giraffe",
+    "tiger",
+    "monkey",
+    "vegetable",
+    "carrot",
+    "eggplant",
+    "mushroom",
+    "radish",
+    "spring horse",
+    "bars",
+    "seesaw",
+    "play",
   ],
   Arts: [
     "finger painting",
@@ -405,6 +441,14 @@ TeachersPetData.subjectTopicMap = {
     "father's day",
     "card",
     "flower",
+    "bookmark",
+    "photo",
+    "frame",
+    "crown",
+    "octopus",
+    "wristwatch",
+    "watch",
+    "fox",
   ],
   "Physical Education": [
     "football",
@@ -425,6 +469,14 @@ TeachersPetData.subjectTopicMap = {
     "step",
     "straw",
     "jumping",
+    "bowling",
+    "golf",
+    "ladder",
+    "arch",
+    "racing",
+    "toss",
+    "pole",
+    "climb",
   ],
   "Puppet Show": [
     "noond",
@@ -434,6 +486,12 @@ TeachersPetData.subjectTopicMap = {
     "tortoise",
     "dog",
     "reflection",
+    "sick",
+    "bear",
+    "frog",
+    "cow",
+    "stomach",
+    "rabbit",
   ],
   "Super Safari": [
     "listen",
@@ -461,7 +519,7 @@ TeachersPetData.subjectTopicMap = {
     "story",
     "picture",
     "draw",
-    "color"
+    "color",
   ],
   "PVT Mathematics": [
     "numbers",
@@ -474,7 +532,7 @@ TeachersPetData.subjectTopicMap = {
     "time",
     "money",
     "big",
-    "small"
+    "small",
   ],
   "PVT Science": [
     "plant",
@@ -489,7 +547,7 @@ TeachersPetData.subjectTopicMap = {
     "hear",
     "matter",
     "solid",
-    "liquid"
+    "liquid",
   ],
   "PVT Social Studies": [
     "family",
@@ -501,7 +559,7 @@ TeachersPetData.subjectTopicMap = {
     "responsibility",
     "different",
     "same",
-    "help"
+    "help",
   ],
   "PVT Arts": [
     "draw",
@@ -514,7 +572,7 @@ TeachersPetData.subjectTopicMap = {
     "yellow",
     "mix",
     "beautiful",
-    "create"
+    "create",
   ],
   "PVT Music & Movement": [
     "sing",
@@ -528,7 +586,7 @@ TeachersPetData.subjectTopicMap = {
     "loud",
     "soft",
     "fast",
-    "slow"
+    "slow",
   ],
   "PVT Physical Education": [
     "run",
@@ -540,7 +598,7 @@ TeachersPetData.subjectTopicMap = {
     "food",
     "exercise",
     "safe",
-    "body"
+    "body",
   ],
   "PVT Social-Emotional Learning": [
     "happy",
@@ -552,7 +610,7 @@ TeachersPetData.subjectTopicMap = {
     "wait",
     "respect",
     "try",
-    "learn"
+    "learn",
   ],
   "PVT Technology & Digital Literacy": [
     "computer",
@@ -564,7 +622,7 @@ TeachersPetData.subjectTopicMap = {
     "picture",
     "video",
     "game",
-    "learn"
+    "learn",
   ],
   "PVT Life Skills": [
     "brush",
@@ -578,6 +636,6 @@ TeachersPetData.subjectTopicMap = {
     "afternoon",
     "night",
     "alone",
-    "together"
+    "together",
   ],
 };
