@@ -9,6 +9,7 @@
     "test:unit": "node tests/run-tests.js --unit",
     "test:integration": "node tests/run-tests.js --integration",
     "test:perf": "node tests/perf/engine-benchmark.js",
+    "e2e:testall": "node scripts/e2e-testall.js",
     "prepare": "husky"
   },
   "lint-staged": {

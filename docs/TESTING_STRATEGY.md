@@ -49,6 +49,7 @@
 - Unit only: `node tests/run-tests.js --unit`
 - Integration only: `node tests/run-tests.js --integration`
 - Performance: `npm run test:perf`
+- End-to-end (automated + manual checklist): `npm run e2e:testall`
 
 ## CI/CD Guidance (Static Site)
 
