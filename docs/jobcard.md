@@ -17,6 +17,33 @@ Before implementing ANY feature:
 
 ## Recent Work (Newest First)
 
+### 2026-01-25: Modularization Cleanup + Test Suite Expansion
+
+**Agent:** GitHub Copilot (GPT-5.2-Codex)
+**Branch:** main
+**Task:** Reduce redundant engine code, improve navigation docs, and add Node-based unit/integration tests with performance benchmarks.
+
+**Changes:**
+
+1. **Refactor:** Replaced legacy `enhanced-comment-engine.js` files with lightweight shims that dynamically load the modular engine (`assets/js/engine/core.js`).
+2. **Documentation:** Added architecture/navigation index and a testing strategy guide.
+3. **Tests:** Added Node-based unit tests, integration pipeline tests, and a performance benchmark runner.
+4. **Scripts:** Updated npm scripts to run unit, integration, and performance tests.
+5. **README/Index:** Updated file structure and test instructions, and logged new files in Index.md.
+
+**Files Added/Updated:**
+
+- docs/ARCHITECTURE_INDEX.md
+- docs/TESTING_STRATEGY.md
+- tests/run-tests.js
+- tests/unit/\*.test.js
+- tests/integration/engine-pipeline.test.js
+- tests/perf/engine-benchmark.js
+- package.json
+- README.md
+- enhanced-comment-engine.js (shim)
+- assets/js/enhanced-comment-engine.js (shim)
+
 ### 2026-01-25: K1 January Full Activation (Phase 2: Integration & Testing)
 
 **Agent:** GitHub Copilot (Claude Sonnet 4.5)
