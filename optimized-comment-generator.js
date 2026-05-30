@@ -66,8 +66,14 @@ export class OptimizedCommentGenerator {
             throw new Error('OptimizedCommentGenerator not initialized');
         }
 
-        // Validate session data
-        const validatedData = this.validateAndCleanSessionData(sessionData);
+        let validatedData;
+
+        try {
+            validatedData = this.validateAndCleanSessionData(sessionData);
+        } catch (error) {
+            console.error('Session data validation failed, using fallback:', error);
+            return this.generateFallbackComments(this.buildFallbackSessionData(sessionData));
+        }
 
         if (this.fallbackMode) {
             return this.generateFallbackComments(validatedData);
@@ -172,24 +178,15 @@ export class OptimizedCommentGenerator {
      * Validate and clean session data
      */
     validateAndCleanSessionData(sessionData) {
+        const rawData = sessionData && typeof sessionData === 'object' ? sessionData : {};
         console.log('🔍 ⭐ validateAndCleanSessionData - INPUT:', sessionData);
-        console.log('🔍 ⭐ Input overallRating:', sessionData.overallRating, 'Type:', typeof sessionData.overallRating);
-        
-        const cleaned = { ...sessionData };
+        console.log('🔍 ⭐ Input overallRating:', rawData.overallRating, 'Type:', typeof rawData.overallRating);
+
+        const cleaned = this.buildFallbackSessionData(rawData);
 
         // Ensure required fields
-        if (!cleaned.studentName || cleaned.studentName.trim() === '') {
+        if (!rawData.studentName || String(rawData.studentName).trim() === '') {
             throw new Error('Student name is required for comment generation');
-        }
-
-        // Clean and validate student name
-        cleaned.studentName = cleaned.studentName.trim();
-
-        // Validate gender
-        const validGenders = ['he', 'she', 'they'];
-        if (!validGenders.includes(cleaned.gender.toLowerCase())) {
-            console.warn('Invalid gender, defaulting to "they"');
-            cleaned.gender = 'they';
         }
 
         // Ensure rating is within valid range
@@ -204,27 +201,52 @@ export class OptimizedCommentGenerator {
             console.log('✅ ⭐ Rating validation PASSED - using value:', cleaned.overallRating);
         }
 
-        // Ensure arrays exist
-        cleaned.subjects = cleaned.subjects || [];
-        cleaned.topicRatings = cleaned.topicRatings || {};
-
-        // Clean text fields
-        cleaned.strengths = (cleaned.strengths || '').trim();
-        cleaned.weaknesses = (cleaned.weaknesses || '').trim();
-
         return cleaned;
+    }
+
+    buildFallbackSessionData(sessionData) {
+        const safeData = sessionData && typeof sessionData === 'object' ? sessionData : {};
+        const validGenders = ['he', 'she', 'they'];
+        const normalizedGender = typeof safeData.gender === 'string'
+            ? safeData.gender.toLowerCase()
+            : 'they';
+        const rating = Number(safeData.overallRating);
+        const normalizeTextList = (value) => {
+            if (Array.isArray(value)) {
+                return value
+                    .map((item) => String(item).trim())
+                    .filter(Boolean);
+            }
+
+            return typeof value === 'string' ? value.trim() : '';
+        };
+
+        return {
+            studentName: typeof safeData.studentName === 'string' && safeData.studentName.trim() !== ''
+                ? safeData.studentName.trim()
+                : 'Student',
+            gender: validGenders.includes(normalizedGender) ? normalizedGender : 'they',
+            overallRating: Number.isFinite(rating) ? rating : 5,
+            strengths: normalizeTextList(safeData.strengths),
+            weaknesses: normalizeTextList(safeData.weaknesses),
+            subjects: Array.isArray(safeData.subjects) ? safeData.subjects : [],
+            topicRatings: safeData.topicRatings && typeof safeData.topicRatings === 'object'
+                ? safeData.topicRatings
+                : {},
+        };
     }
 
     /**
      * Generate fallback comments when main engine is unavailable
      */
     generateFallbackComments(sessionData) {
-        const name = sessionData.studentName;
-        const pronoun = this.getPronounSet(sessionData.gender);
-        const performance = this.getPerformanceDescriptor(sessionData.overallRating);
+        const safeData = this.buildFallbackSessionData(sessionData);
+        const name = safeData.studentName;
+        const pronoun = this.getPronounSet(safeData.gender);
+        const performance = this.getPerformanceDescriptor(safeData.overallRating);
 
-        const maleComment = this.generateMaleFallbackComment(name, pronoun, performance, sessionData);
-        const femaleComment = this.generateFemaleFallbackComment(name, pronoun, performance, sessionData);
+        const maleComment = this.generateMaleFallbackComment(name, pronoun, performance, safeData);
+        const femaleComment = this.generateFemaleFallbackComment(name, pronoun, performance, safeData);
 
         return {
             male: maleComment,
@@ -294,7 +316,8 @@ export class OptimizedCommentGenerator {
             they: { subject: 'They', object: 'them', possessive: 'their' }
         };
 
-        return pronouns[gender.toLowerCase()] || pronouns.they;
+        const normalizedGender = typeof gender === 'string' ? gender.toLowerCase() : 'they';
+        return pronouns[normalizedGender] || pronouns.they;
     }
 
     /**
@@ -321,7 +344,11 @@ export class OptimizedCommentGenerator {
      * Process text list from comma-separated string
      */
     processTextList(text) {
-        if (!text || typeof text !== 'string') return [];
+        if (!text) return [];
+        if (Array.isArray(text)) {
+            return text.map(item => String(item).trim()).filter(Boolean);
+        }
+        if (typeof text !== 'string') return [];
         return text.split(',').map(item => item.trim()).filter(Boolean);
     }
 
@@ -362,7 +389,7 @@ export class OptimizedCommentGenerator {
     /**
      * Test comment generation with sample data
      */
-    testGeneration() {
+    async testGeneration() {
         const testData = {
             studentName: 'Test Student',
             gender: 'they',
@@ -377,7 +404,7 @@ export class OptimizedCommentGenerator {
         };
 
         console.log('Testing comment generation with sample data...');
-        const result = this.generateComments(testData);
+        const result = await this.generateComments(testData);
         console.log('Test result:', result);
         return result;
     }

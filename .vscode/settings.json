@@ -75,5 +75,6 @@
     },
     "eslint.options": {
         "configFile": ".eslintrc.json"
-    }
+    },
+    "sarif-viewer.connectToGithubCodeScanning": "off"
 }

@@ -2,6 +2,10 @@
 
 | Date       | Agent          | File                                                            | Status |
 | ---------- | -------------- | --------------------------------------------------------------- | ------ |
+| 2026-05-30 | GitHub Copilot | tests/unit/ui-enhancements.test.js                              | active |
+| 2026-05-30 | GitHub Copilot | scripts/verify-helpers.js                                       | active |
+| 2026-05-30 | GitHub Copilot | tests/unit/compatibility.test.js                                | active |
+| 2026-05-30 | GitHub Copilot | tests/unit/verify-script.test.js                                | active |
 | 2026-01-25 | GitHub Copilot | docs/ARCHITECTURE_INDEX.md                                      | active |
 | 2026-01-25 | GitHub Copilot | docs/TESTING_STRATEGY.md                                        | active |
 | 2026-01-25 | GitHub Copilot | tests/run-tests.js                                              | active |

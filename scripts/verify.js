@@ -2,6 +2,7 @@ import { execSync } from "child_process";
 import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
+import { validateRootEngineShimFile } from "./verify-helpers.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -25,25 +26,16 @@ function log(type, message) {
 
 let hasError = false;
 
-// 1. Check File Synchronization (Legacy check removed for modular engine)
-// const rootEnginePath = path.join(__dirname, '..', 'enhanced-comment-engine.js');
-// const assetsEnginePath = path.join(__dirname, '..', 'assets', 'js', 'enhanced-comment-engine.js');
+// 1. Check Root Engine Compatibility Shim Contract
+const rootEnginePath = path.join(__dirname, "..", "enhanced-comment-engine.js");
+const rootEngineIssues = validateRootEngineShimFile(rootEnginePath);
 
-// if (fs.existsSync(rootEnginePath) && fs.existsSync(assetsEnginePath)) {
-//     const rootContent = fs.readFileSync(rootEnginePath, 'utf8');
-//     const assetsContent = fs.readFileSync(assetsEnginePath, 'utf8');
-
-//     if (rootContent !== assetsContent) {
-//         log('error', 'File Sync Mismatch: "enhanced-comment-engine.js" in root does not match "assets/js/enhanced-comment-engine.js".');
-//         log('info', 'Run: Copy-Item "assets/js/enhanced-comment-engine.js" "enhanced-comment-engine.js" -Force');
-//         hasError = true;
-//     } else {
-//         log('success', 'Engine files are in sync.');
-//     }
-// } else {
-//     // log('error', 'Missing critical engine files.');
-//     // hasError = true;
-// }
+if (rootEngineIssues.length > 0) {
+  rootEngineIssues.forEach((issue) => log("error", issue));
+  hasError = true;
+} else {
+  log("success", 'Root enhanced-comment-engine.js shim contract verified.');
+}
 
 // 2. Check for Forbidden Hardcoded Curriculum in Templates
 // We want to avoid "K1", "K2", "August", "November" in the generation logic,

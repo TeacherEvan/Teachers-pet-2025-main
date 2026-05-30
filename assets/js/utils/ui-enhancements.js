@@ -133,18 +133,364 @@ class UIEnhancements {
      * Show quick navigation menu
      */
     showQuickNavigation() {
-        // TODO: Implement quick navigation overlay
+        const overlay = this.ensureQuickNavigationOverlay();
+        const groupsContainer = document.getElementById('quickNavigationGroups');
+        const searchInput = document.getElementById('quickNavigationSearch');
+        const emptyState = document.getElementById('quickNavigationEmpty');
+
+        if (!groupsContainer || !searchInput || !emptyState) {
+            return;
+        }
+
+        this.quickNavigationPreviousFocus = document.activeElement;
+        this.renderQuickNavigationGroups(groupsContainer);
+        this.filterQuickNavigationItems('', emptyState);
+
+        searchInput.value = '';
+        overlay.classList.add('active', 'open');
+        overlay.setAttribute('aria-hidden', 'false');
+        searchInput.focus();
+        this.triggerHapticFeedback('medium');
+
         console.log('🚀 Quick navigation triggered');
+    }
+
+    ensureQuickNavigationOverlay() {
+        let overlay = document.getElementById('quickNavigationOverlay');
+        if (overlay) {
+            return overlay;
+        }
+
+        overlay = document.createElement('div');
+        overlay.id = 'quickNavigationOverlay';
+        overlay.classList.add('overlay', 'quick-nav-overlay');
+        overlay.setAttribute('aria-hidden', 'true');
+
+        const panel = document.createElement('div');
+        panel.classList.add('quick-nav-panel', 'glass-card');
+        panel.setAttribute('role', 'dialog');
+        panel.setAttribute('aria-modal', 'true');
+        panel.setAttribute('aria-label', 'Quick navigation');
+
+        const header = document.createElement('div');
+        header.classList.add('quick-nav-header');
+
+        const title = document.createElement('h2');
+        title.textContent = 'Quick Navigation';
+
+        const hint = document.createElement('p');
+        hint.textContent = 'Jump between pages, sections, and actions.';
+
+        const searchInput = document.createElement('input');
+        searchInput.id = 'quickNavigationSearch';
+        searchInput.type = 'text';
+        searchInput.placeholder = 'Search pages, sections, or actions';
+        searchInput.setAttribute('aria-label', 'Filter quick navigation items');
+        searchInput.addEventListener('input', () => {
+            const emptyState = document.getElementById('quickNavigationEmpty');
+            this.filterQuickNavigationItems(searchInput.value, emptyState);
+        });
+        searchInput.addEventListener('keydown', (event) => {
+            if (event.key === 'Enter') {
+                const firstVisible = Array.from(document.querySelectorAll('.quick-nav-item')).find(
+                    (item) => item.style.display !== 'none'
+                );
+                if (firstVisible) {
+                    event.preventDefault();
+                    firstVisible.click();
+                }
+            }
+
+            this.handleQuickNavigationKeydown(event);
+        });
+
+        header.appendChild(title);
+        header.appendChild(hint);
+        header.appendChild(searchInput);
+
+        const groupsContainer = document.createElement('div');
+        groupsContainer.id = 'quickNavigationGroups';
+        groupsContainer.classList.add('quick-nav-groups');
+
+        const emptyState = document.createElement('p');
+        emptyState.id = 'quickNavigationEmpty';
+        emptyState.classList.add('quick-nav-empty');
+        emptyState.textContent = 'No matching navigation items.';
+
+        panel.appendChild(header);
+        panel.appendChild(groupsContainer);
+        panel.appendChild(emptyState);
+        overlay.appendChild(panel);
+
+        overlay.addEventListener('click', (event) => {
+            if (event.target === overlay) {
+                this.closeOverlays();
+            }
+        });
+        overlay.addEventListener('keydown', (event) => {
+            this.handleQuickNavigationKeydown(event);
+        });
+
+        document.body.appendChild(overlay);
+        return overlay;
+    }
+
+    renderQuickNavigationGroups(container) {
+        Array.from(container.children).forEach((child) => child.remove());
+
+        const groups = [
+            { title: 'Pages', items: this.getQuickNavigationPages() },
+            { title: 'Sections', items: this.getQuickNavigationSections() },
+            { title: 'Actions', items: this.getQuickNavigationActions() },
+        ];
+
+        groups.forEach((group) => {
+            if (!group.items.length) {
+                return;
+            }
+
+            const section = document.createElement('section');
+            section.classList.add('quick-nav-group');
+
+            const heading = document.createElement('h3');
+            heading.classList.add('quick-nav-group-title');
+            heading.textContent = group.title;
+            section.appendChild(heading);
+
+            group.items.forEach((item) => {
+                section.appendChild(this.createQuickNavigationItem(item));
+            });
+
+            container.appendChild(section);
+        });
+    }
+
+    createQuickNavigationItem(item) {
+        const button = document.createElement('button');
+        button.type = 'button';
+        button.classList.add('quick-nav-item');
+        button.textContent = item.label;
+        button.dataset.quickNavSearch = `${item.group} ${item.label}`.toLowerCase();
+
+        if (item.isCurrent) {
+            button.classList.add('is-current');
+        }
+
+        button.addEventListener('click', () => {
+            if (typeof item.onSelect === 'function') {
+                item.onSelect();
+            }
+            this.closeOverlays({ restoreFocus: item.restoreFocus !== false });
+        });
+        button.addEventListener('keydown', (event) => {
+            this.handleQuickNavigationKeydown(event);
+        });
+
+        return button;
+    }
+
+    handleQuickNavigationKeydown(event) {
+        if (event.key !== 'Tab') {
+            return;
+        }
+
+        const overlay = document.getElementById('quickNavigationOverlay');
+        if (!overlay || !overlay.classList.contains('active')) {
+            return;
+        }
+
+        const focusableElements = this.getQuickNavigationFocusableElements(overlay);
+        if (focusableElements.length === 0) {
+            return;
+        }
+
+        const firstElement = focusableElements[0];
+        const lastElement = focusableElements[focusableElements.length - 1];
+
+        if (event.shiftKey && document.activeElement === firstElement) {
+            event.preventDefault();
+            lastElement.focus();
+            return;
+        }
+
+        if (!event.shiftKey && document.activeElement === lastElement) {
+            event.preventDefault();
+            firstElement.focus();
+        }
+    }
+
+    getQuickNavigationFocusableElements(overlay) {
+        return Array.from(
+            overlay.querySelectorAll('button, input, select, textarea, [tabindex]:not([tabindex="-1"])')
+        ).filter((element) => element.style.display !== 'none' && !element.disabled);
+    }
+
+    filterQuickNavigationItems(query, emptyState) {
+        const normalizedQuery = (query || '').trim().toLowerCase();
+        const items = Array.from(document.querySelectorAll('.quick-nav-item'));
+        let visibleCount = 0;
+
+        items.forEach((item) => {
+            const matches = !normalizedQuery || item.dataset.quickNavSearch.includes(normalizedQuery);
+            item.style.display = matches ? '' : 'none';
+            if (matches) {
+                visibleCount += 1;
+            }
+        });
+
+        if (emptyState) {
+            emptyState.style.display = visibleCount > 0 ? 'none' : 'block';
+        }
+    }
+
+    getQuickNavigationPages() {
+        const currentPath = this.normalizeQuickNavigationPath(
+            window.location && window.location.pathname ? window.location.pathname : ''
+        );
+        const pages = [
+            { label: 'Home', href: 'index.html' },
+            { label: 'Grade Selection', href: 'grade-selection.html' },
+            { label: 'Month Selection', href: 'month-selection.html' },
+            { label: 'Student Information', href: 'student-information.html' },
+            { label: 'Subjects', href: 'Subjects.html' },
+        ];
+
+        return pages.map((page) => ({
+            group: 'page',
+            label: page.label,
+            isCurrent: currentPath.endsWith(page.href.toLowerCase()),
+            restoreFocus: currentPath.endsWith(page.href.toLowerCase()),
+            onSelect: () => {
+                if (!currentPath.endsWith(page.href.toLowerCase())) {
+                    window.location.href = page.href;
+                }
+            },
+        }));
+    }
+
+    normalizeQuickNavigationPath(pathname) {
+        const normalizedPath = String(pathname || '').toLowerCase();
+
+        if (normalizedPath === '' || normalizedPath === '/') {
+            return '/index.html';
+        }
+
+        if (normalizedPath.endsWith('/')) {
+            return `${normalizedPath}index.html`;
+        }
+
+        const lastSegment = normalizedPath.split('/').pop();
+        if (lastSegment && !lastSegment.includes('.')) {
+            return `${normalizedPath}/index.html`;
+        }
+
+        return normalizedPath;
+    }
+
+    getQuickNavigationSections() {
+        const sectionElements = document.querySelectorAll('main[id], section[id], h1[id], h2[id], [data-quick-nav-label]');
+        const seen = new Set();
+
+        return Array.from(sectionElements).reduce((items, element) => {
+            const identifier = element.id || element.dataset.quickNavLabel;
+            if (!identifier || identifier === 'quickNavigationOverlay' || seen.has(identifier)) {
+                return items;
+            }
+
+            seen.add(identifier);
+            const label = element.dataset.quickNavLabel || this.prettifyQuickNavLabel(identifier);
+            items.push({
+                group: 'section',
+                label,
+                restoreFocus: false,
+                onSelect: () => {
+                    if (typeof element.scrollIntoView === 'function') {
+                        element.scrollIntoView({ behavior: this.reducedMotion ? 'auto' : 'smooth', block: 'start' });
+                    }
+
+                    if (typeof element.focus === 'function') {
+                        if (!element.getAttribute('tabindex')) {
+                            element.setAttribute('tabindex', '-1');
+                        }
+                        element.focus({ preventScroll: true });
+                    }
+                },
+            });
+
+            return items;
+        }, []);
+    }
+
+    getQuickNavigationActions() {
+        const actions = [];
+        const generateBtn = document.getElementById('generateBtn');
+        const firstInput = document.querySelector('input:not([type="hidden"]), textarea, select');
+
+        if (generateBtn) {
+            actions.push({
+                group: 'action',
+                label: 'Generate Comments',
+                restoreFocus: false,
+                onSelect: () => {
+                    generateBtn.click();
+                    generateBtn.focus({ preventScroll: true });
+                },
+            });
+        }
+
+        if (typeof window.startOverWithAnimation === 'function') {
+            actions.push({
+                group: 'action',
+                label: 'Start Over',
+                restoreFocus: false,
+                onSelect: () => window.startOverWithAnimation(),
+            });
+        } else if (typeof window.startOver === 'function') {
+            actions.push({
+                group: 'action',
+                label: 'Start Over',
+                restoreFocus: false,
+                onSelect: () => window.startOver(),
+            });
+        }
+
+        if (firstInput) {
+            actions.push({
+                group: 'action',
+                label: 'Focus First Input',
+                restoreFocus: false,
+                onSelect: () => firstInput.focus(),
+            });
+        }
+
+        return actions;
+    }
+
+    prettifyQuickNavLabel(identifier) {
+        return String(identifier)
+            .replace(/([a-z])([A-Z])/g, '$1 $2')
+            .replace(/[-_]+/g, ' ')
+            .replace(/\s+/g, ' ')
+            .trim()
+            .replace(/^./, (letter) => letter.toUpperCase());
     }
 
     /**
      * Close all overlays
      */
-    closeOverlays() {
+    closeOverlays(options = {}) {
+        const restoreFocus = options.restoreFocus !== false;
         const overlays = document.querySelectorAll('.modal, .overlay, .dropdown-open');
         overlays.forEach(overlay => {
             overlay.classList.remove('active', 'open', 'dropdown-open');
+            if (overlay.id === 'quickNavigationOverlay') {
+                overlay.setAttribute('aria-hidden', 'true');
+                if (restoreFocus && this.quickNavigationPreviousFocus && typeof this.quickNavigationPreviousFocus.focus === 'function') {
+                    this.quickNavigationPreviousFocus.focus();
+                }
+            }
         });
+        this.quickNavigationPreviousFocus = null;
     }
 
     /**
@@ -681,6 +1027,113 @@ style.textContent = `
 
     button.success {
         background: linear-gradient(135deg, #27ae60, #229954) !important;
+    }
+
+    .quick-nav-overlay {
+        position: fixed;
+        inset: 0;
+        display: flex;
+        align-items: flex-start;
+        justify-content: center;
+        padding: 8vh 16px 24px;
+        background: rgba(15, 23, 42, 0.72);
+        backdrop-filter: blur(12px);
+        opacity: 0;
+        pointer-events: none;
+        transition: opacity 0.25s ease-out;
+        z-index: 10000;
+    }
+
+    .quick-nav-overlay.active {
+        opacity: 1;
+        pointer-events: auto;
+    }
+
+    .quick-nav-panel {
+        width: min(720px, 100%);
+        max-height: 80vh;
+        overflow: auto;
+        border-radius: 20px;
+        background: rgba(18, 24, 38, 0.92);
+        border: 1px solid rgba(255, 255, 255, 0.14);
+        box-shadow: 0 24px 80px rgba(15, 23, 42, 0.4);
+        color: #f8fafc;
+        padding: 20px;
+    }
+
+    .quick-nav-header h2,
+    .quick-nav-group-title,
+    .quick-nav-header p,
+    .quick-nav-item,
+    .quick-nav-empty {
+        margin: 0;
+    }
+
+    .quick-nav-header {
+        display: grid;
+        gap: 10px;
+        margin-bottom: 18px;
+    }
+
+    .quick-nav-header p {
+        color: rgba(226, 232, 240, 0.78);
+        font-size: 0.95rem;
+    }
+
+    .quick-nav-header input {
+        width: 100%;
+        border-radius: 14px;
+        border: 1px solid rgba(148, 163, 184, 0.3);
+        background: rgba(15, 23, 42, 0.78);
+        color: #f8fafc;
+        padding: 12px 14px;
+    }
+
+    .quick-nav-groups {
+        display: grid;
+        gap: 16px;
+    }
+
+    .quick-nav-group {
+        display: grid;
+        gap: 8px;
+    }
+
+    .quick-nav-group-title {
+        font-size: 0.85rem;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: rgba(148, 163, 184, 0.9);
+    }
+
+    .quick-nav-item {
+        width: 100%;
+        text-align: left;
+        border: 1px solid rgba(148, 163, 184, 0.18);
+        border-radius: 14px;
+        background: rgba(30, 41, 59, 0.65);
+        color: #f8fafc;
+        padding: 12px 14px;
+        transition: transform 0.2s ease, background 0.2s ease, border-color 0.2s ease;
+    }
+
+    .quick-nav-item:hover,
+    .quick-nav-item:focus {
+        transform: translateY(-1px);
+        background: rgba(51, 65, 85, 0.92);
+        border-color: rgba(96, 165, 250, 0.55);
+    }
+
+    .quick-nav-item.is-current {
+        border-color: rgba(129, 140, 248, 0.7);
+        background: rgba(67, 56, 202, 0.26);
+    }
+
+    .quick-nav-empty {
+        display: none;
+        margin-top: 16px;
+        color: rgba(226, 232, 240, 0.72);
+        text-align: center;
     }
 `;
 document.head.appendChild(style);

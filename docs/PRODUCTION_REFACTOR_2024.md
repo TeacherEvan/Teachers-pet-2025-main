@@ -103,7 +103,7 @@ All metrics meet or exceed Google's "Good" thresholds:
 - **High Contrast**: Border enhancements when `prefers-contrast: high`
 
 ### Keyboard Navigation
-- **Ctrl/Cmd + K**: Quick navigation (future feature)
+- **Ctrl/Cmd + K**: Quick navigation overlay for pages, sections, and actions
 - **Escape**: Close overlays and modals
 - **Tab**: Enhanced focus indicators with 3px outline + 4px offset
 - **Arrow Keys**: Support for list navigation

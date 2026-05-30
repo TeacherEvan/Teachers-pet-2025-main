@@ -17,6 +17,77 @@ Before implementing ANY feature:
 
 ## Recent Work (Newest First)
 
+### 2026-05-30: Quick Navigation Overlay
+
+**Agent:** GitHub Copilot (GPT-5.4)
+**Branch:** main
+**Task:** Implement the Ctrl/Cmd+K quick navigation overlay in `ui-enhancements.js` and cover it with a DOM-stubbed unit test.
+
+**Changes:**
+
+1. **Quick navigation overlay:** Implemented a body-mounted overlay with grouped entries for page navigation, in-page sections, and command actions.
+2. **Command actions:** Added shortcuts for generating comments, starting over, and focusing the first input when those actions are available on the page.
+3. **Section navigation:** Added discovery of in-page sections via IDs and `data-quick-nav-label` metadata.
+4. **Filtering:** Added a search field that filters quick-nav items and supports Enter to trigger the first visible result.
+5. **Styling:** Added overlay and command item styles to the existing `ui-enhancements.js` injected stylesheet.
+6. **Tests:** Added `tests/unit/ui-enhancements.test.js` to validate overlay rendering, section scrolling, action dispatch, and close behavior with a fake DOM harness.
+7. **Docs:** Updated the production refactor doc to describe Ctrl/Cmd+K as an implemented overlay feature.
+
+**Files Updated:**
+
+- assets/js/utils/ui-enhancements.js
+- docs/PRODUCTION_REFACTOR_2024.md
+- docs/jobcard.md
+- Index.md
+
+**Files Added:**
+
+- tests/unit/ui-enhancements.test.js
+
+**Verification:**
+
+- node tests/run-tests.js --unit (passed)
+- npm test (pending after docs update)
+
+### 2026-05-30: Shim Contract Recovery + Fallback Hardening
+
+**Agent:** GitHub Copilot (GPT-5.4)
+**Branch:** main
+**Task:** Restore the root engine compatibility contract, remove the unused refactor file, harden fallback behavior, and add regression guards.
+
+**Changes:**
+
+1. **Root compatibility:** Restored `enhanced-comment-engine.js` to a thin shim that dynamically loads `assets/js/engine/core.js`.
+2. **Dead code removal:** Deleted `refactored-comment-engine.js`, which was unreferenced and missing topic-level coverage.
+3. **Fallback hardening:** Updated `optimized-comment-generator.js` to normalize partial input and return fallback comments when validation or engine execution fails.
+4. **Regression coverage:** Expanded compatibility tests to cover shim runtime behavior, validation fallback, explicit `fallbackMode`, engine-failure fallback, and the verify helper.
+5. **Verification guard:** Added `scripts/verify-helpers.js` and updated `scripts/verify.js` so verification now fails if the root engine stops being a compatibility shim.
+6. **Docs:** Updated refactor checklist status and logged newly created files in `Index.md`.
+
+**Files Updated:**
+
+- enhanced-comment-engine.js
+- optimized-comment-generator.js
+- scripts/verify.js
+- tests/unit/compatibility.test.js
+- docs/REFACTOR_SUMMARY.md
+- docs/jobcard.md
+- Index.md
+
+**Files Added:**
+
+- scripts/verify-helpers.js
+- tests/unit/verify-script.test.js
+
+**Files Removed:**
+
+- refactored-comment-engine.js
+
+**Verification:**
+
+- node tests/run-tests.js --unit (passed)
+- npm test (passed)
+
 ### 2026-01-25: Debug Pass + Engine Topic Safety Fixes
 
 **Agent:** GitHub Copilot (GPT-5.2-Codex)
