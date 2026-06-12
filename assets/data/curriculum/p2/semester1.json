@@ -1,0 +1,102 @@
+{
+    "grade": "P2",
+    "month": "Semester 1",
+    "subjects": [
+        {
+            "id": "thai-language",
+            "name": "Thai Language",
+            "topics": [
+                { "id": "thai_reading_stories", "name": "Reading: Short Stories (อ่านเรื่องสั้น)" },
+                { "id": "thai_writing_sentences", "name": "Writing: Simple Sentences (เขียนประโยคง่าย)" },
+                { "id": "thai_vowels_tone", "name": "Vowels & Tone Marks (สระและวรรณยุกต์)" },
+                { "id": "thai_vocabulary", "name": "Vocabulary Building (คำศัพท์พื้นฐาน)" },
+                { "id": "thai_literature_intro", "name": "Introduction to Thai Literature (วรรณคดีเบื้องต้น)" }
+            ],
+            "vocabulary": "แมว, หมา, บ้าน, โรงเรียน, ครู, เพื่อน, อ่าน, เขียน, ฟัง, พูด"
+        },
+        {
+            "id": "mathematics",
+            "name": "Mathematics",
+            "topics": [
+                { "id": "math_numbers_100", "name": "Numbers 1-100 (ตัวเลข 1-100)" },
+                { "id": "math_addition_subtraction", "name": "Addition & Subtraction within 100 (บวก-ลบไม่เกิน 100)" },
+                { "id": "math_place_value", "name": "Place Value: Ones & Tens (ค่าตำแหน่งหน่วย-สิบ)" },
+                { "id": "math_word_problems", "name": "Simple Word Problems (โจทย์ปัญหาง่าย)" },
+                { "id": "math_shapes_patterns", "name": "2D Shapes & Patterns (รูปทรง 2 มิติและรูปแบบ)" }
+            ],
+            "vocabulary": "หนึ่ง, สอง, สาม, บวก, ลบ, เท่ากับ, รูปทรง, สี่เหลี่ยม, วงกลม, สามเหลี่ยม"
+        },
+        {
+            "id": "science",
+            "name": "Science",
+            "topics": [
+                { "id": "sci_living_nonliving", "name": "Living vs Non-living Things (สิ่งมีชีวิตและไม่มีชีวิต)" },
+                { "id": "sci_plants_parts", "name": "Parts of a Plant (ส่วนของพืช)" },
+                { "id": "sci_animals_needs", "name": "What Animals Need (สิ่งที่สัตว์ต้องการ)" },
+                { "id": "sci_weather_seasons", "name": "Weather & Seasons (อากาศและฤดูกาล)" },
+                { "id": "sci_sun_shadows", "name": "Sun & Shadows (ดวงอาทิตย์และเงา)" }
+            ],
+            "vocabulary": "พืช, สัตว์, ใบ, ราก, กิ่ง, ดอก, แสงแดด, ฟ้าฝน, ร้อน, หนาว, เงา"
+        },
+        {
+            "id": "social-studies",
+            "name": "Social Studies",
+            "topics": [
+                { "id": "soc_my_community", "name": "My Community (ชุมชนของฉัน)" },
+                { "id": "soc_helpers", "name": "Community Helpers (ผู้ช่วยเหลือในชุมชน)" },
+                { "id": "soc_thailand_symbols", "name": "Thailand Symbols (สัญลักษณ์ของไทย)" },
+                { "id": "soc_rules_laws", "name": "Rules & Laws (กฎและกฎหมาย)" },
+                { "id": "soc_festivals", "name": "Thai Festivals (เทศกาลไทย)" }
+            ],
+            "vocabulary": "ชุมชน, ตำรวจ, หมอ, ครู, ธงชาติ, พระบรมมหากษัตริย์, กฎ, เลือด, โลก, สงกรานต์, ลอยกระทง"
+        },
+        {
+            "id": "english",
+            "name": "English",
+            "topics": [
+                { "id": "eng_phonics_blends", "name": "Phonics: Consonant Blends (พยัญชนะผสม)" },
+                { "id": "eng_sight_words", "name": "Sight Words Set 1-2 (คำที่อ่านได้ทันที)" },
+                { "id": "eng_simple_sentences", "name": "Simple Sentences (ประโยคง่าย I am... You are...)" },
+                { "id": "eng_conversation_greetings", "name": "Conversation: Greetings & Introductions (ทักทายและแนะนำตัว)" },
+                { "id": "eng_story_retell", "name": "Story Retelling (เล่าถึงเรื่องได้)" }
+            ],
+            "vocabulary": "cat, dog, run, jump, play, school, friend, happy, sad, I, you, he, she, we, they"
+        },
+        {
+            "id": "arts",
+            "name": "Arts",
+            "topics": [
+                { "id": "art_color_mixing", "name": "Color Mixing (การผสมสี)" },
+                { "id": "art_drawing_shapes", "name": "Drawing with Shapes (การวาดภาพด้วยรูปทรง)" },
+                { "id": "art_thai_patterns", "name": "Thai Traditional Patterns (ลวดลายไทย)" },
+                { "id": "art_collage", "name": "Collage Making (การทำภาพประกอบ)" },
+                { "id": "art_clay_modeling", "name": "Clay Modeling (การปั้นดินเหนียว)" }
+            ],
+            "vocabulary": "สีแดง, สีน้ำเงิน, สีเหลือง, วาด, ระบาย, ตัด, กาว, กระดาษ, ดินเหนียว, ลวดลาย"
+        },
+        {
+            "id": "health-pe",
+            "name": "Health & Physical Education",
+            "topics": [
+                { "id": "pe_basic_movements", "name": "Basic Movements: Run, Jump, Throw (ทักษะพื้นฐาน วิ่ง กระโดด โยน)" },
+                { "id": "pe_health_habits", "name": "Healthy Habits (พฤติกรรมสุขภาพดี)" },
+                { "id": "pe_food_groups", "name": "Food Groups (กลุ่มอาหาร 5 กลุ่ม)" },
+                { "id": "pe_personal_hygiene", "name": "Personal Hygiene (สุขภาวะส่วนตัว)" },
+                { "id": "pe_safety_rules", "name": "Safety Rules (กฎความปลอดภัย)" }
+            ],
+            "vocabulary": "วิ่ง, กระโดด, โยน, จับ, อาหาร, ผัก, ผลไม้, เนื้อ, นม, ข้าว, ล้างมือ, แปรงฟัน, อาบน้ำ"
+        },
+        {
+            "id": "computing",
+            "name": "Computing",
+            "topics": [
+                { "id": "comp_computer_parts", "name": "Parts of a Computer (ส่วนประกอบคอมพิวเตอร์)" },
+                { "id": "comp_mouse_keyboard", "name": "Using Mouse & Keyboard (การใช้เมาส์และคีย์บอร์ด)" },
+                { "id": "comp_digital_safety", "name": "Digital Safety (ความปลอดภัยออนไลน์)" },
+                { "id": "comp_typing_basics", "name": "Typing Basics (พิมพ์ดีดพื้นฐาน)" },
+                { "id": "comp_coding_intro", "name": "Introduction to Coding (เขียนโค้ดเบื้องต้น)" }
+            ],
+            "vocabulary": "คอมพิวเตอร์, เมาส์, คีย์บอร์ด, จอภาพ, ซีพียู, คลิก, พิมพ์, อินเทอร์เน็ต, รหัสผ่าน, โปรแกรม"
+        }
+    ]
+}

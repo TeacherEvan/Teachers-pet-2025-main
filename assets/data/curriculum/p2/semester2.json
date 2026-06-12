@@ -1,0 +1,102 @@
+{
+    "grade": "P2",
+    "month": "Semester 2",
+    "subjects": [
+        {
+            "id": "thai-language",
+            "name": "Thai Language",
+            "topics": [
+                { "id": "thai_reading_comprehension", "name": "Reading Comprehension (การอ่านเข้าใจเนื้อหา)" },
+                { "id": "thai_writing_paragraph", "name": "Writing: Short Paragraphs (เขียนย่อหน้าสั้น)" },
+                { "id": "thai_consonant_classes", "name": "Consonant Classes (อักษรต่ำ-กลาง-สูง)" },
+                { "id": "thai_poetry_songs", "name": "Thai Poetry & Songs (กาพย์และเพลงไทย)" },
+                { "id": "thai_dictionary_skills", "name": "Using a Dictionary (ใช้พจนานุกรม)" }
+            ],
+            "vocabulary": "เรื่อง, เนื้อหา, บทกวี, เพลง, พจนานุกรม, ความหมาย, ตัวอย่าง, ประโยค, ย่อหน้า, สรุป"
+        },
+        {
+            "id": "mathematics",
+            "name": "Mathematics",
+            "topics": [
+                { "id": "math_multiplication_intro", "name": "Introduction to Multiplication (การคูณเบื้องต้น)" },
+                { "id": "math_division_sharing", "name": "Division as Sharing (การหารแบบแบ่งปัน)" },
+                { "id": "math_fractions_half_quarter", "name": "Fractions: Half & Quarter (เศษส่วนครึ่งและส่วนสี่)" },
+                { "id": "math_measurement_length", "name": "Measurement: Length (การวัดความยาว)" },
+                { "id": "math_time_half_hour", "name": "Time: Half & Quarter Hours (เวลา ครึ่งชั่วโมง 15 นาที)" }
+            ],
+            "vocabulary": "คูณ, หาร, เท่ากัน, ครึ่ง, ส่วนสี่, เซนติเมตร, เมตร, นาฬิกา, ชั่วโมง, นาที, ยาว, สั้น"
+        },
+        {
+            "id": "science",
+            "name": "Science",
+            "topics": [
+                { "id": "sci_life_cycles", "name": "Life Cycles: Butterfly & Frog (วัฏจักรชีวิต ผีเสื้อ-กบ)" },
+                { "id": "sci_materials_properties", "name": "Materials & Properties (วัสดุและคุณสมบัติ)" },
+                { "id": "sci_force_motion", "name": "Force & Motion: Push/Pull (แรงและการเคลื่อนที่ ผลัก-ดึง)" },
+                { "id": "sci_water_cycle", "name": "Water Cycle (วัฏจักรน้ำ)" },
+                { "id": "sci_env_care", "name": "Caring for Environment (ดูแลสิ่งแวดล้อม)" }
+            ],
+            "vocabulary": "ไข่, แหน, ผีเสื้อ, กบ, แข็ง, นิ่ม, ผลัก, ดึง, น้ำ, ไอน้ำ, ฝน, กลีบ, รีไซเคิล, แยกขยะ"
+        },
+        {
+            "id": "social-studies",
+            "name": "Social Studies",
+            "topics": [
+                { "id": "soc_thai_history_kings", "name": "Great Kings of Thailand (พระราชากล้าหาญไทย)" },
+                { "id": "soc_map_skills", "name": "Map Skills: Thailand (ทักษะแผนที่ประเทศไทย)" },
+                { "id": "soc_economy_needs_wants", "name": "Needs vs Wants (ความต้องการและสิ่งที่อยากได้)" },
+                { "id": "soc_citizenship", "name": "Good Citizenship (พลเมืองที่ดี)" },
+                { "id": "soc_asean_neighbors", "name": "ASEAN Neighbors (เพื่อนบ้านอาเซียน)" }
+            ],
+            "vocabulary": "ในหลวง, รัชกาล, แผนที่, ทิศตะวันออก, ตะวันตก, เหนือ, ใต้, ต้องการ, อยากได้, ช่วยเหลือ, ร่วมมือ, สหภาพอาเซียน"
+        },
+        {
+            "id": "english",
+            "name": "English",
+            "topics": [
+                { "id": "eng_vowel_teams", "name": "Vowel Teams: ea, ee, oa, ai (สระคู่)" },
+                { "id": "eng_past_tense", "name": "Past Tense Verbs (กริยาอดีต)" },
+                { "id": "eng_questions", "name": "Asking Questions (การถามคำถาม What/Where/Who)" },
+                { "id": "eng_description", "name": "Describing People/Things (การบรรยายคน/สิ่งของ)" },
+                { "id": "eng_project_show_tell", "name": "Show & Tell Project (โชว์แอนด์เทล)" }
+            ],
+            "vocabulary": "ate, went, saw, played, read, wrote, what, where, who, when, tall, short, big, small, red, blue, my, your, his, her"
+        },
+        {
+            "id": "arts",
+            "name": "Arts",
+            "topics": [
+                { "id": "art_thai_crafts", "name": "Thai Crafts: Krathong, Lantern (งานหัตถกรรมไทย: กระทง, โคม)" },
+                { "id": "art_music_rhythm", "name": "Rhythm & Percussion (จังหวะและเครื่องตี)" },
+                { "id": "art_drama_roleplay", "name": "Drama & Role Play (ละครและเล่นบทบาท)" },
+                { "id": "art_print_making", "name": "Print Making (การพิมพ์ภาพ)" },
+                { "id": "art_digital_art", "name": "Digital Art Basics (ศิลปะดิจิทัลเบื้องต้น)" }
+            ],
+            "vocabulary": "กระทง, โคม, กลอง, จังหวะ, เล่นบทบาท, พิมพ์, สติ๊กเกอร์, คอมพิวเตอร์, แท็บเล็ต, สร้างสรรค์"
+        },
+        {
+            "id": "health-pe",
+            "name": "Health & Physical Education",
+            "topics": [
+                { "id": "pe_games_rules", "name": "Games with Rules (เกมที่มีกติกา)" },
+                { "id": "pe_fitness_exercise", "name": "Fitness Exercises (ออกกำลังกายเพื่อสุขภาพ)" },
+                { "id": "pe_emotional_health", "name": "Emotional Health (สุขภาพจิตใจ)" },
+                { "id": "pe_dental_health", "name": "Dental Health (สุขภาพช่องปาก)" },
+                { "id": "pe_drug_awareness", "name": "Say No to Drugs (ปฏิเสธยาเสพติด)" }
+            ],
+            "vocabulary": "เกม, กติกา, ทีม, ชนะ, แพ้, หัวใจ, ปอด, แข็งแรง, ฟัน, แปรง, ยาเสพติด, อันตราย, ปฏิเสธ, ปลอดภัย"
+        },
+        {
+            "id": "computing",
+            "name": "Computing",
+            "topics": [
+                { "id": "comp_file_management", "name": "File Management (จัดการไฟล์)" },
+                { "id": "comp_drawing_tools", "name": "Using Drawing Tools (ใช้เครื่องมือวาดภาพ)" },
+                { "id": "comp_simple_coding", "name": "Simple Coding: Sequences (เขียนโค้ดแบบลำดับขั้นตอน)" },
+                { "id": "comp_research_online", "name": "Online Research Basics (ค้นคว้าออนไลน์เบื้องต้น)" },
+                { "id": "comp_presentation", "name": "Digital Presentation (นำเสนอผลงานดิจิทัล)" }
+            ],
+            "vocabulary": "ไฟล์, โฟลเดอร์, บันทึก, เปิด, วาด, สี, ลำดับ, ค้นหา, เว็บไซต์, ข้อมูล, นำเสนอ, สไลด์, รูปภาพ"
+        }
+    ]
+}
