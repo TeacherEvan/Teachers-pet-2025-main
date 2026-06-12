@@ -308,7 +308,7 @@
         <div class="header">
             <span class="icon">📚</span>
             <h1>Select Grade Level</h1>
-            <p class="subtitle">Choose the kindergarten level for this report</p>
+            <p class="subtitle">Choose the grade level for this report</p>
         </div>
 
         <form id="gradeForm">
@@ -318,7 +318,7 @@
                     <option value="">Choose a grade...</option>
                     <option value="K1">K1 - Kindergarten 1</option>
                     <option value="K2">K2 - Kindergarten 2</option>
-                    <option value="K3">K3 - Kindergarten 3 (Coming Soon)</option>
+                    <option value="P2">P2 - Primary 2 (IEAP)</option>
                     <option value="PVT">PVT - Private Student</option>
                 </select>
             </div>
@@ -335,9 +335,11 @@
                     awareness.</p>
             </div>
 
-            <div id="k3Info" class="grade-info">
-                <h3>📕 Kindergarten 3 <span class="coming-soon-badge">COMING SOON</span></h3>
-                <p>Curriculum information coming soon. This level will prepare students for primary education.</p>
+            <div id="p2Info" class="grade-info">
+                <h3>📗 Primary 2 (IEAP)</h3>
+                <p>Primary 2 Intensive English Academic Program following Thai curriculum standards.<br>
+                    Core subjects: Thai Language, Mathematics, Science, Social Studies, English, Arts, Health & PE, Computing.<br>
+                    Two semesters: Semester 1 (May–Sep) and Semester 2 (Nov–Mar).</p>
             </div>
 
             <div id="pvtInfo" class="grade-info">
@@ -367,7 +369,7 @@
         const gradeInfos = {
             'K1': document.getElementById('k1Info'),
             'K2': document.getElementById('k2Info'),
-            'K3': document.getElementById('k3Info'),
+            'P2': document.getElementById('p2Info'),
             'PVT': document.getElementById('pvtInfo')
         };
 
@@ -404,12 +406,8 @@
         // Update continue button state
         function updateContinueButton() {
             const selectedGrade = gradeSelect.value;
-            if (selectedGrade === 'K1' || selectedGrade === 'K2' || selectedGrade === 'PVT') {
+            if (selectedGrade === 'K1' || selectedGrade === 'K2' || selectedGrade === 'P2' || selectedGrade === 'PVT') {
                 continueBtn.disabled = false;
-            } else if (selectedGrade === 'K3') {
-                // Disable for coming soon grades
-                continueBtn.disabled = true;
-                alert(`${selectedGrade} curriculum is coming soon. Currently, K1, K2, and PVT reports are available.`);
             } else {
                 continueBtn.disabled = true;
             }
@@ -468,8 +466,8 @@
                 return;
             }
 
-            if (selectedGrade !== 'K1' && selectedGrade !== 'K2' && selectedGrade !== 'PVT') {
-                alert(`${selectedGrade} is not yet available. Please select K1, K2, or PVT.`);
+            if (selectedGrade !== 'K1' && selectedGrade !== 'K2' && selectedGrade !== 'P2' && selectedGrade !== 'PVT') {
+                alert(`${selectedGrade} is not yet available. Please select K1, K2, P2, or PVT.`);
                 return;
             }
 
@@ -485,7 +483,7 @@
                 }
                 window.location.href = 'student-information.html';
             } else {
-                // K1/K2 students go through normal month selection
+                // K1/K2/P2 students go through normal month selection
                 window.location.href = `month-selection.html?grade=${selectedGrade}`;
             }
         });
