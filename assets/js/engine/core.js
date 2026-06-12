@@ -1,9 +1,22 @@
 /* eslint-env es6 */
+/* global window */
 import { TeachersPetData } from '../data/engine-data.js';
 import { synonymManager } from '../synonym-manager.js';
 import { TeachersPetProcessor } from './processor.js';
 import { TeachersPetTemplates } from './templates.js';
 import { TeachersPetUtils } from './utils.js';
+
+/**
+ * Debug logging helper - only logs when window.__TP_DEBUG__ === true
+ * @param {string} emoji - Emoji prefix for the log message
+ * @param {string} message - Main log message
+ * @param {...any} args - Additional arguments to log
+ */
+function debugLog(emoji, message, ...args) {
+    if (typeof window !== 'undefined' && window.__TP_DEBUG__ === true) {
+        console.log(emoji + ' ' + message, ...args);
+    }
+}
 
 /**
  * Enhanced Comment Generation Engine (Core)
@@ -26,7 +39,7 @@ export class EnhancedCommentEngine {
      */
     async generateComments(sessionData) {
         try {
-            console.log('🎯 Enhanced Engine: Processing session data', sessionData);
+            debugLog('🎯', 'Enhanced Engine: Processing session data', sessionData);
 
             if (!sessionData || !sessionData.studentName) {
                 throw new Error('Invalid session data: missing student name');
@@ -34,7 +47,7 @@ export class EnhancedCommentEngine {
 
             // 1. Process Data
             const processedData = TeachersPetProcessor.processSessionData(sessionData, this.data);
-            console.log('📊 Processed data structure:', processedData);
+            debugLog('📊', 'Processed data structure:', processedData);
 
             // 2. Generate Comments using Templates
             let maleComment = await TeachersPetTemplates.generateStyleComment('male', processedData);
@@ -42,13 +55,13 @@ export class EnhancedCommentEngine {
 
             // 3. Apply Synonym Replacement
             if (synonymManager) {
-                console.log('📚 Applying synonym replacement to male comment...');
+                debugLog('📚', 'Applying synonym replacement to male comment...');
                 maleComment = await synonymManager.replaceOverused(maleComment, 2);
 
-                console.log('📚 Applying synonym replacement to female comment...');
+                debugLog('📚', 'Applying synonym replacement to female comment...');
                 femaleComment = await synonymManager.replaceOverused(femaleComment, 2);
             } else {
-                console.warn('⚠️ SynonymManager not available, skipping synonym replacement');
+                debugLog('⚠️', 'SynonymManager not available, skipping synonym replacement');
             }
 
             return {
@@ -60,7 +73,7 @@ export class EnhancedCommentEngine {
                 }
             };
         } catch (error) {
-            console.error('❌ Enhanced comment generation failed:', error);
+            debugLog('❌', 'Enhanced comment generation failed:', error);
             return await TeachersPetTemplates.generateFallbackComments(sessionData.studentName || 'Student');
         }
     }

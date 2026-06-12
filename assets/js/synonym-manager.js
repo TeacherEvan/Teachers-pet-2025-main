@@ -52,7 +52,7 @@ export class SynonymManager {
             });
             return this.synonymData;
         } catch (error) {
-            console.error('❌ SynonymManager: Failed to load synonym data:', error);
+            debugLogSynonym('❌', 'SynonymManager: Failed to load synonym data:', error);
             this.synonymData = this.getEmptySynonymData();
             return this.synonymData;
         }
@@ -96,7 +96,7 @@ export class SynonymManager {
                 return counts;
             }
         } catch (error) {
-            console.warn('⚠️ SynonymManager: Could not load usage counts:', error);
+            debugLogSynonym('⚠️', 'SynonymManager: Could not load usage counts:', error);
         }
         return {};
     }
@@ -109,7 +109,7 @@ export class SynonymManager {
             sessionStorage.setItem('synonymUsageCounts', JSON.stringify(this.usageCounts));
             debugLogSynonym('💾', 'SynonymManager: Saved usage counts to session');
         } catch (error) {
-            console.warn('⚠️ SynonymManager: Could not save usage counts:', error);
+            debugLogSynonym('⚠️', 'SynonymManager: Could not save usage counts:', error);
         }
     }
 

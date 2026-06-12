@@ -21,11 +21,6 @@ export class OptimizedCommentGenerator {
                 this.engine = new EnhancedCommentEngine();
                 this.isInitialized = true;
                 console.log('OptimizedCommentGenerator initialized with EnhancedCommentEngine');
-            } else if (typeof window.PremiumCommentEngine !== 'undefined') {
-                // Fallback to PremiumCommentEngine if Enhanced is not available
-                this.engine = new window.PremiumCommentEngine();
-                this.isInitialized = true;
-                console.log('OptimizedCommentGenerator initialized with PremiumCommentEngine (fallback)');
             } else {
                 console.warn('No comment engines available, using fallback mode');
                 this.fallbackMode = true;

@@ -1,5 +1,18 @@
 /* eslint-env es6 */
+/* global window */
 import { TeachersPetUtils } from "./utils.js";
+
+/**
+ * Debug logging helper - only logs when window.__TP_DEBUG__ === true
+ * @param {string} emoji - Emoji prefix for the log message
+ * @param {string} message - Main log message
+ * @param {...any} args - Additional arguments to log
+ */
+function debugLog(emoji, message, ...args) {
+    if (typeof window !== 'undefined' && window.__TP_DEBUG__ === true) {
+        console.log(emoji + ' ' + message, ...args);
+    }
+}
 
 /**
  * Teachers Pet Data Processor
@@ -12,7 +25,7 @@ export const TeachersPetProcessor = {
    * @param {Object} engineData - The engine configuration (pools, maps, rules)
    */
   processSessionData: function (sessionData, engineData) {
-    console.log("🔍 Processing session data:", sessionData);
+    debugLog("🔍", "Processing session data:", sessionData);
 
     // Validate student name
     if (!sessionData.studentName || sessionData.studentName.trim() === "") {
@@ -38,8 +51,14 @@ export const TeachersPetProcessor = {
     const genderRaw =
       typeof sessionData.gender === "string" ? sessionData.gender : "";
     const genderKey = genderRaw.trim().toLowerCase();
+    
+    // Normalize gender aliases: 'male' -> 'he', 'female' -> 'she'
+    const normalizedGenderKey = genderKey === 'male' ? 'he' : 
+                                genderKey === 'female' ? 'she' : 
+                                genderKey;
+    
     const pronouns =
-      engineData.grammarRules.pronouns[genderKey] ||
+      engineData.grammarRules.pronouns[normalizedGenderKey] ||
       engineData.grammarRules.pronouns.he;
 
     // Get randomized descriptors/verbs/adverbs from pools
@@ -132,7 +151,7 @@ export const TeachersPetProcessor = {
 
       // Still not assigned? Track as orphaned topic (do not inject fake subject)
       if (!assigned) {
-        console.warn(
+        debugLog(
           `⚠️ Topic "${topic}" could not be matched to any subject - ORPHANED TOPIC`,
         );
         orphanedTopics.push(topic);

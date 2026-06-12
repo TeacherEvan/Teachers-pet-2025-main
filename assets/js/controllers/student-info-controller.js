@@ -23,13 +23,27 @@ export class StudentInfoController {
             if (grade && month) {
                 const tracker = document.getElementById('curriculumTracker');
                 if (tracker) {
-                    tracker.innerHTML = `<span style="background:rgba(0,0,0,0.07);border-radius:16px;padding:4px 12px;font-weight:600;display:inline-block;">Current: <span style='color:#2a7cff'>${grade}</span> · <span style='color:#ff7c2a'>${month}</span> <a href='month-selection.html?grade=${encodeURIComponent(grade)}' style='margin-left:8px;font-size:13px;'>Change</a></span>`;
+                    const safeGrade = this.escapeHtml(grade);
+                    const safeMonth = this.escapeHtml(month);
+                    tracker.innerHTML = `<span style="background:rgba(0,0,0,0.07);border-radius:16px;padding:4px 12px;font-weight:600;display:inline-block;">Current: <span style='color:#2a7cff'>${safeGrade}</span> · <span style='color:#ff7c2a'>${safeMonth}</span> <a href='month-selection.html?grade=${encodeURIComponent(grade)}' style='margin-left:8px;font-size:13px;'>Change</a></span>`;
                 }
             }
         } catch (e) { }
+    }
 
-        this.setupFormValidation();
-        this.setupProgressTracking();
+    /**
+     * Escape HTML to prevent XSS
+     * @param {string} text - Text to escape
+     * @returns {string} Escaped text
+     */
+    escapeHtml(text) {
+        if (!text) return '';
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
+    }
+
+    setupFormValidation() {
         this.initSlider();
         this.setupNavigationButtons();
     }
