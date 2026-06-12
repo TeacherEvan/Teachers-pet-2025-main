@@ -3,137 +3,135 @@
   "month": "December",
   "subjects": [
     {
-      "id": "mathematics",
       "name": "Mathematics",
       "topics": [
-        { "id": "math_counting_1_20", "name": "Counting from 1-20" },
-        { "id": "math_counting_1_30", "name": "Counting from 1-30" },
-        { "id": "math_counting_1_50", "name": "Counting from 1-50" },
-        { "id": "math_subtraction_addition", "name": "Concepts of Subtraction and Addition" },
-        { "id": "math_tracing_writing", "name": "Tracing and freehand writing numbers 1-20" }
+        "Counting and Number Identification: Practice counting from 1-20, 1-30, and 1-50",
+        "Concepts of Subtraction and Addition",
+        "Practice tracing and freehand writing numbers 1-20",
+        "Vocabulary: count, numbers, subtract, take away, less, write, minus, equals, addition, add, more, plus sign, minus sign, equals sign"
       ],
-      "vocabulary": "count, numbers, subtract, take away, less, write, minus, equals, addition, add, more, plus sign, minus sign, equals sign"
+      "description": "Advanced counting to 50, introduction to addition/subtraction, number writing mastery"
     },
     {
-      "id": "iq",
       "name": "I.Q",
       "topics": [
-        { "id": "iq_wet_dry", "name": "Wet and Dry objects" },
-        { "id": "iq_underneath", "name": "The preposition Underneath" },
-        { "id": "iq_emotions", "name": "Recognizing Emotions (Happy or Sad)" },
-        { "id": "iq_loud_quiet", "name": "Distinguishing between Loud and Quiet noises" },
-        { "id": "iq_inside_outside", "name": "Understanding the spatial relationship of Inside and Outside" },
-        { "id": "iq_hot_cold", "name": "Concepts of Hot and Cold" },
-        { "id": "iq_appropriate_actions", "name": "Identifying Appropriate Actions" },
-        { "id": "iq_size_sequencing", "name": "Size Sequencing from smallest to biggest" }
+        "Wet and Dry objects",
+        "Preposition Underneath",
+        "Recognizing Emotions (Happy or Sad)",
+        "Distinguishing Loud and Quiet noises",
+        "Spatial relationship: Inside and Outside",
+        "Concepts of Hot and Cold",
+        "Identifying Appropriate Actions",
+        "Size Sequencing from smallest to biggest",
+        "Vocabulary: wet, dry, underneath, happy, sad, loud, quiet, inside, outside, hot, cold, small, smaller, smallest, big, bigger, biggest"
       ],
-      "vocabulary": "wet, dry, underneath, happy, sad, loud, quiet, inside, outside, hot, cold, small, smaller, smallest, big, bigger, biggest"
+      "description": "Cognitive development: sensory discrimination, emotional recognition, spatial concepts, sequencing"
     },
     {
-      "id": "social_studies",
-      "name": "Social Studies",
+      "name": "Social",
       "topics": [
-        { "id": "social_community_helpers", "name": "Community helpers, traffic rules, and road signs" },
-        { "id": "social_planet_earth", "name": "What makes up our planet earth and what those materials are used for" },
-        { "id": "social_new_year", "name": "New Year's Day and Thai New Year (Songkran)" },
-        { "id": "social_food_pyramid", "name": "Food pyramid and healthy eating" }
+        "Community helpers, traffic rules, and road signs",
+        "What makes up our planet earth and materials usage",
+        "New Year's Day, Thai New Year (Songkran) and their meanings",
+        "Food pyramid, healthy eating portions, healthiest foods",
+        "Vocabulary: community, helper, road sign, safety, police, doctor, teacher, rule, follow, help, home, school, soil, stone, sand, glass bottle, building, charcoal, New Year's Day, Songkran Day, presents/gift, monk, protein, carbohydrates/grains, fats, fruits, vegetables"
       ],
-      "vocabulary": "community, helper, road sign, safety, police, doctor, teacher, rule, follow, help, home, school, soil, stone, sand, glass bottle, building, charcoal, New Year's Day, Songkran Day, presents/gift, monk, protein, carbohydrates/grains, fats, fruits, vegetables"
+      "description": "Social studies: community awareness, geography, cultural celebrations, nutrition"
     },
     {
-      "id": "english",
       "name": "English",
       "topics": [
-        { "id": "english_lowercase_intro", "name": "Introduce and discuss lowercase letters m,n,o,p,q,r,s,t,u,v,w,x,y,z" },
-        { "id": "english_match_pictures", "name": "Draw lines to match letters with pictures" },
-        { "id": "english_trace_write", "name": "Trace and write letters" },
-        { "id": "english_circle_correct", "name": "Circle correct letter" },
-        { "id": "english_vocabulary_practice", "name": "Practice identifying and saying vocabulary words that begin with each letter" },
-        { "id": "english_lowercase_uppercase", "name": "Matching lowercase letters to their uppercase counterparts" }
+        "Introduce and discuss lowercase letters m,n,o,p,q,r,s,t,u,v,w,x,y,z",
+        "Draw lines to match letters with pictures",
+        "Trace and write letters",
+        "Circle correct letters",
+        "Practice identifying and saying vocabulary words for each letter",
+        "Matching lowercase letters to uppercase counterparts",
+        "Vocabulary: mat, net, ox, pen, queen, rainbow, sun, top, umbrella, van, whale, x-ray, yacht, zipper"
       ],
-      "vocabulary": "mat, net, ox, pen, queen, rainbow, sun, top, umbrella, van, whale, x-ray, yacht, zipper"
+      "description": "Lowercase letter mastery A-Z, upper/lower matching, vocabulary expansion"
     },
     {
-      "id": "phonics",
       "name": "Phonics",
       "topics": [
-        { "id": "phonics_letter_r", "name": "Letter R sound - identify initial sound, color/circle matching pictures" },
-        { "id": "phonics_letter_s", "name": "Letter S sound - identify initial sound, color/circle matching pictures" },
-        { "id": "phonics_letter_t", "name": "Letter T sound - identify initial sound, color/circle matching pictures" },
-        { "id": "phonics_letter_u", "name": "Letter U sound - identify initial sound, color/circle matching pictures" }
+        "Introduce and review letter sounds (R,S,T,U)",
+        "Identify initial letter sound in words",
+        "Color or circle pictures with matching sound",
+        "Repeat after teacher and pronounce beginning sounds correctly",
+        "Vocabulary: Rabbit, Read, Rain, Rose, Seal, Sand, Sun, Sea, Tiger, Tea, Teeth, Tie, Uncle, Up, Umbrella, Under"
       ],
-      "vocabulary": "Rabbit, Read, Rain, Rose, Seal, Sand, Sun, Sea, Tiger, Tea, Teeth, Tie, Uncle, Up, Umbrella, Under"
+      "description": "Phonics: R-U sound recognition and pronunciation"
     },
     {
-      "id": "science",
       "name": "Science",
       "topics": [
-        { "id": "science_water_air_pressure", "name": "Water and Air Pressure Experiment - Observe difference between wet and dry objects after submerged" }
+        "Water and Air Pressure Experiment: Observe difference between wet and dry objects after submerged",
+        "Vocabulary: wet, dry, float, sink, air, water, experiment, submerge"
       ],
-      "vocabulary": "wet, dry, float, sink, air, water, experiment, submerge"
+      "description": "Hands-on experiment: water displacement and air pressure"
     },
     {
-      "id": "conversation1",
       "name": "Conversation 1",
       "topics": [
-        { "id": "conv1_color_hair_socks", "name": "What color is/are your hair/socks? -My hair is black/socks are white" },
-        { "id": "conv1_who_love", "name": "Who do you love? -I love my father & mother" },
-        { "id": "conv1_what_can_do", "name": "What can you do? -I can sing & dance" },
-        { "id": "conv1_where_playing", "name": "Where do you like playing? -I like playing on the..." },
-        { "id": "conv1_what_doing", "name": "What are you doing? -I am walking/running/jumping" }
+        "\"What color is/are your hair/socks?\" \"My hair is black/ socks are white.\"",
+        "\"Who do you love?\" \"I love my father & mother.\"",
+        "\"What can you do?\" \"I can sing & dance.\"",
+        "\"Where do you like playing?\" \"I like playing on the.....\"",
+        "\"What are you doing?\" \"I am walking / running / jumping.\"",
+        "Vocabulary: black, white, hair, socks, shirt, mother, father, love, sing, dance, slide, swings, trampoline, walking, running, jumping"
       ],
-      "vocabulary": "black, white, hair, socks, shirt, mother, father, love, sing, dance, slide, swings, trampoline, walking, running, jumping"
+      "description": "Extended conversation: colors, family, abilities, actions"
     },
     {
-      "id": "conversation3",
       "name": "Conversation 3",
       "topics": [
-        { "id": "conv3_sunny_days", "name": "What do you use/wear on sunny days? -I wear sunglasses/a hat/use an umbrella" },
-        { "id": "conv3_what_is_this", "name": "What is this? -It's a television" },
-        { "id": "conv3_home_appliances", "name": "Do you have a microwave at home? -Yes, we do./No, we don't" }
+        "\"What do you use/wear on sunny days?\" \"I wear sunglasses/ a hat/ use an umbrella\"",
+        "\"What is this?\" \"It's a television.\"",
+        "\"Do you have a microwave at home?\" \"Yes, we do. / No, we don't.\"",
+        "Vocabulary: sunglasses, hat, umbrella, TV, microwave, toaster"
       ],
-      "vocabulary": "sunglasses, hat, umbrella, TV, microwave, toaster"
+      "description": "Weather-appropriate items, household appliances, yes/no questions"
     },
     {
-      "id": "arts",
       "name": "Arts",
       "topics": [
-        { "id": "arts_leaf_painting", "name": "Leaf painting" },
-        { "id": "arts_fancy_mask", "name": "Fancy mask crafting" },
-        { "id": "arts_santa_mobile", "name": "Creating a Santa Claus mobile" },
-        { "id": "arts_new_year_card", "name": "New Year's card" },
-        { "id": "arts_watercolor_squish", "name": "Water color squish painting" }
+        "Leaf painting",
+        "Fancy mask crafting",
+        "Creating a Santa Claus mobile",
+        "New Year's card",
+        "Water color squish painting",
+        "Vocabulary: leaf, paint, print, texture, pattern, watercolor, mask, design, face, eyes, Santa Claus, mobile, card, color pencil, fold, squish"
       ],
-      "vocabulary": "leaf, paint, print, texture, pattern, watercolor, mask, design, face, eyes, Santa Claus, mobile, card, color pencil, fold, squish"
+      "description": "Seasonal arts: nature printing, 3D crafts, watercolor techniques"
     },
     {
-      "id": "physical_education",
       "name": "Physical Education",
       "topics": [
-        { "id": "pe_zigzag_ball", "name": "Zigzag running and ball handling" },
-        { "id": "pe_ring_toss", "name": "Ring toss" },
-        { "id": "pe_relay_race", "name": "Relay Race" },
-        { "id": "pe_zigzag_arches", "name": "Zigzag running and going under the arches" },
-        { "id": "pe_color_sorting", "name": "Color sorting game" }
+        "Practice zigzag running and ball handling",
+        "Ring toss",
+        "Relay Race",
+        "Zigzag running and going under arches",
+        "Color sorting game",
+        "Vocabulary: zigzag, run, ball, put, toss, ring, pole, towel, pass, arches, go under, chair, rubber ring, color, sort, match"
       ],
-      "vocabulary": "zigzag, run, ball, put, toss, ring, pole, towel, pass, arches, go under, chair, rubber ring, color, sort, match"
+      "description": "Gross motor: agility drills, team games, coordination"
     },
     {
-      "id": "puppet_show",
       "name": "Puppet Show",
       "topics": [
-        { "id": "puppet_weeping_tree", "name": "The Weeping Tree" },
-        { "id": "puppet_sick_bear", "name": "The Sick Bear" }
+        "The Weeping Tree",
+        "The Sick Bear",
+        "Vocabulary: Tree, Weep, Butterfly, Flower, Bear, Rain, Sick, Play, Friends"
       ],
-      "vocabulary": "Tree, Weep, Butterfly, Flower, Bear, Rain, Sick, Play, Friends"
+      "description": "Emotional storytelling: empathy, friendship, nature"
     },
     {
-      "id": "cooking",
       "name": "Cooking",
       "topics": [
-        { "id": "cooking_pork_balls", "name": "Crispy Puffed Pork balls" }
+        "Crispy Puffed Pork Balls",
+        "Vocabulary: minced pork, bread, egg, carrot, onion, cooking oil, sugar, salt, ketchup"
       ],
-      "vocabulary": "minced pork, bread, egg, carrot, onion, cooking oil, sugar, salt, ketchup"
+      "description": "Cooking activity: recipe following, measurement, food preparation"
     }
   ]
 }
