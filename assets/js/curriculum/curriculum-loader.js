@@ -16,8 +16,8 @@ export default class CurriculumLoader {
 
   /**
    * Load curriculum for a specific grade and month
-   * @param {string} grade - Grade level (K1, K2, K3, PVT)
-   * @param {string} month - Month name (August, September, etc.) or 'General' for PVT
+   * @param {string} grade - Grade level (K1, K2, P2, PVT)
+   * @param {string} month - Month name (August, September, etc.) or 'General' for PVT, 'Semester 1'/'Semester 2' for P2
    * @returns {Promise} Resolves with curriculum data or rejects with error
    */
   async load(grade, month) {
@@ -85,6 +85,7 @@ export default class CurriculumLoader {
       K1: ["August", "November", "December", "January"],
       K2: ["November", "December", "January"],
       K3: [],
+      P2: ["Semester 1", "Semester 2"],
       PVT: ["General"],
     };
 
@@ -101,6 +102,7 @@ export default class CurriculumLoader {
       K1: ["August", "November", "December", "January"],
       K2: ["November", "December", "January"],
       K3: [],
+      P2: ["Semester 1", "Semester 2"],
       PVT: ["General"],
     };
 
