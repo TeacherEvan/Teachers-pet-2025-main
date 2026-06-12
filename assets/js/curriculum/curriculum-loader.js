@@ -84,7 +84,6 @@ export default class CurriculumLoader {
     const availableList = {
       K1: ["August", "November", "December", "January"],
       K2: ["November", "December", "January"],
-      K3: [],
       P2: ["Semester 1", "Semester 2"],
       PVT: ["General"],
     };
@@ -101,7 +100,6 @@ export default class CurriculumLoader {
     const availableList = {
       K1: ["August", "November", "December", "January"],
       K2: ["November", "December", "January"],
-      K3: [],
       P2: ["Semester 1", "Semester 2"],
       PVT: ["General"],
     };

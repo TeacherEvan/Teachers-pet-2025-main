@@ -1,14 +1,24 @@
+import CurriculumLoader from "../curriculum/curriculum-loader.js";
+
 export class SubjectsController {
     constructor(app) {
         this.app = app;
+        this.curriculumLoader = new CurriculumLoader();
+        this.subjectsContainer = null;
     }
 
-    init() {
+    async init() {
+        this.cacheElements();
         this.loadSessionDataFromURL();
+        await this.loadAndRenderCurriculum();
         this.setupSubjectInteractions();
         this.setupBulkActions();
         this.setupCommentGeneration();
         this.updateSelectionSummary();
+    }
+
+    cacheElements() {
+        this.subjectsContainer = document.getElementById("subjectsForm");
     }
 
     loadSessionDataFromURL() {
@@ -23,9 +33,92 @@ export class SubjectsController {
             sessionData.strengths = params.get('strengths');
             sessionData.weaknesses = params.get('weaknesses');
         }
+
+        // Also load grade and month from URL for curriculum loading
+        if (params.has('grade')) {
+            sessionData.grade = params.get('grade');
+        }
+        if (params.has('month')) {
+            sessionData.month = params.get('month');
+        }
+
+        // Fallback to localStorage for grade/month
+        if (!sessionData.grade || !sessionData.month) {
+            try {
+                const saved = localStorage.getItem('studentData');
+                if (saved) {
+                    const data = JSON.parse(saved);
+                    sessionData.grade = sessionData.grade || data.grade || '';
+                    sessionData.month = sessionData.month || data.month || '';
+                }
+            } catch (e) {
+                console.warn('Could not load grade/month from localStorage:', e);
+            }
+        }
     }
 
-    setupSubjectInteractions() {
+    async loadAndRenderCurriculum() {
+        const { grade, month } = this.app.sessionData;
+
+        if (!grade || !month) {
+            console.warn('Grade or month not available, using hardcoded topics');
+            return; // Keep existing hardcoded HTML
+        }
+
+        try {
+            if (this.app.showLoader) this.app.showLoader();
+
+            const curriculum = await this.curriculumLoader.load(grade, month);
+            this.renderSubjects(curriculum.subjects);
+        } catch (error) {
+            console.error("Failed to load curriculum:", error);
+            if (this.app.notify) {
+                this.app.notify("Failed to load curriculum. Using available topics.", "warning");
+            }
+        } finally {
+            if (this.app.hideLoader) this.app.hideLoader();
+        }
+    }
+
+    renderSubjects(subjects) {
+        if (!this.subjectsContainer) return;
+
+        this.subjectsContainer.innerHTML = subjects.map(subject => this.renderSubject(subject)).join("");
+        this.bindSubjectEvents();
+    }
+
+    renderSubject(subject) {
+        const subjectId = subject.id || subject.name.toLowerCase().replace(/\s+/g, "-");
+        const topicsHtml = subject.topics.map(topic => this.renderTopic(topic, subjectId)).join("");
+        return `
+      <div class="subject-section">
+        <div class="subject-header" data-subject="${subjectId}">
+          <div class="subject-title">
+            <input type="checkbox" class="subject-checkbox" id="subject_${subjectId}" value="${subject.name}"
+              onchange="app.controllers.subjects.handleSubjectCheck('${subjectId}')">
+            <label for="subject_${subjectId}">${subject.name.toUpperCase()}</label>
+            <span class="dropdown-hint">Click to drop down</span>
+            <span class="dropdown-arrow" id="arrow_${subjectId}">▼</span>
+          </div>
+        </div>
+        <div class="subject-content" id="content_${subjectId}">${topicsHtml}</div>
+      </div>
+    `;
+    }
+
+    renderTopic(topic, subjectId) {
+        const topicName = topic.name || topic;
+        const topicId = `${subjectId}-${topic.id || topicName.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`;
+        return `
+      <div class="topic-item">
+        <input type="checkbox" class="topic-checkbox" id="topic_${topicId}" value="${topicName}"
+          data-subject="${subjectId}" data-topic="${topicName}">
+        <label for="topic_${topicId}" class="topic-text">${topicName}</label>
+      </div>
+    `;
+    }
+
+    bindSubjectEvents() {
         const subjectSections = document.querySelectorAll('.subject-section');
 
         subjectSections.forEach(section => {
@@ -34,134 +127,101 @@ export class SubjectsController {
             const arrow = section.querySelector('.dropdown-arrow');
 
             if (header && content && arrow) {
-                header.addEventListener('click', () => {
-                    const isExpanded = content.classList.contains('expanded');
+                header.addEventListener('click', (e) => {
+                    if (e.target.tagName === 'INPUT') return; // Don't toggle if clicking checkbox
+                    const isExpanded = content.classList.contains('active');
 
                     // Close all other sections
                     subjectSections.forEach(otherSection => {
                         if (otherSection !== section) {
-                            otherSection.querySelector('.subject-content')?.classList.remove('expanded');
+                            otherSection.querySelector('.subject-content')?.classList.remove('active');
                             otherSection.querySelector('.dropdown-arrow')?.classList.remove('rotated');
                             otherSection.classList.remove('expanded');
                         }
                     });
 
                     // Toggle current section
-                    content.classList.toggle('expanded', !isExpanded);
+                    content.classList.toggle('active', !isExpanded);
                     arrow.classList.toggle('rotated', !isExpanded);
                     section.classList.toggle('expanded', !isExpanded);
                 });
             }
 
-            // Setup topic checkboxes and ratings
-            const topics = section.querySelectorAll('.topic-item');
+            // Setup topic checkboxes
+            const topics = section.querySelectorAll('.topic-checkbox');
             topics.forEach(topic => this.setupTopicInteraction(topic));
         });
     }
 
-    setupTopicInteraction(topicElement) {
-        const checkbox = topicElement.querySelector('.topic-checkbox');
-        const ratingOptions = topicElement.querySelectorAll('.rating-option');
-        const topicText = topicElement.querySelector('.topic-text').textContent.trim();
+    // Keep for backward compatibility with inline onclick handlers
+    handleSubjectCheck(subjectId) {
+        const checkbox = document.getElementById(`subject_${subjectId}`);
+        if (!checkbox) return;
 
-        if (checkbox) {
-            checkbox.addEventListener('change', () => {
-                if (checkbox.checked) {
-                    if (!this.app.sessionData.subjects.includes(topicText)) {
-                        this.app.sessionData.subjects.push(topicText);
-                    }
-                    // Enable rating options
-                    ratingOptions.forEach(option => {
-                        option.style.pointerEvents = 'auto';
-                        option.style.opacity = '1';
-                    });
-                } else {
-                    // Remove from subjects
-                    const index = this.app.sessionData.subjects.indexOf(topicText);
-                    if (index > -1) {
-                        this.app.sessionData.subjects.splice(index, 1);
-                    }
-                    // Remove rating
-                    delete this.app.sessionData.topicRatings[topicText];
-                    // Disable rating options
-                    ratingOptions.forEach(option => {
-                        option.classList.remove('selected');
-                        option.style.pointerEvents = 'none';
-                        option.style.opacity = '0.3';
-                    });
+        const content = document.getElementById(`content_${subjectId}`);
+        const arrow = document.getElementById(`arrow_${subjectId}`);
+        const section = checkbox.closest('.subject-section');
+
+        if (checkbox.checked) {
+            // Select all topics in this subject
+            const topicCheckboxes = content?.querySelectorAll('.topic-checkbox');
+            topicCheckboxes?.forEach(topic => {
+                if (!topic.checked) {
+                    topic.checked = true;
+                    topic.dispatchEvent(new Event('change'));
                 }
-                this.updateSelectionSummary();
+            });
+            section?.classList.add('expanded');
+            content?.classList.add('active');
+            arrow?.classList.add('rotated');
+        } else {
+            // Deselect all topics in this subject
+            const topicCheckboxes = content?.querySelectorAll('.topic-checkbox');
+            topicCheckboxes?.forEach(topic => {
+                if (topic.checked) {
+                    topic.checked = false;
+                    topic.dispatchEvent(new Event('change'));
+                }
             });
         }
+    }
 
-        // Setup rating interaction
-        ratingOptions.forEach(option => {
-            option.addEventListener('click', () => {
-                if (!checkbox.checked) return;
+    setupTopicInteraction(topicElement) {
+        const topicName = topicElement.value;
 
-                // Clear previous selection
-                ratingOptions.forEach(opt => opt.classList.remove('selected'));
-
-                // Set new selection
-                option.classList.add('selected');
-                this.app.sessionData.topicRatings[topicText] = parseInt(option.dataset.value);
-
-                this.updateSelectionSummary();
-            });
-        });
-
-        // Initialize rating options as disabled
-        ratingOptions.forEach(option => {
-            option.style.pointerEvents = 'none';
-            option.style.opacity = '0.3';
+        topicElement.addEventListener('change', () => {
+            if (topicElement.checked) {
+                if (!this.app.sessionData.subjects.includes(topicName)) {
+                    this.app.sessionData.subjects.push(topicName);
+                }
+            } else {
+                // Remove from subjects
+                const index = this.app.sessionData.subjects.indexOf(topicName);
+                if (index > -1) {
+                    this.app.sessionData.subjects.splice(index, 1);
+                }
+                // Remove rating
+                delete this.app.sessionData.topicRatings[topicName];
+            }
+            this.updateSelectionSummary();
         });
     }
 
     setupBulkActions() {
-        const selectAllButton = document.querySelector('[data-action="select-all"]');
-        const clearAllButton = document.querySelector('[data-action="clear-all"]');
-
-        if (selectAllButton) {
-            selectAllButton.addEventListener('click', () => {
-                const checkboxes = document.querySelectorAll('.topic-checkbox');
-                checkboxes.forEach(checkbox => {
-                    if (!checkbox.checked) {
-                        checkbox.checked = true;
-                        checkbox.dispatchEvent(new Event('change'));
-                    }
-                });
-            });
-        }
-
-        if (clearAllButton) {
-            clearAllButton.addEventListener('click', () => {
-                const checkboxes = document.querySelectorAll('.topic-checkbox');
-                checkboxes.forEach(checkbox => {
-                    if (checkbox.checked) {
-                        checkbox.checked = false;
-                        checkbox.dispatchEvent(new Event('change'));
-                    }
-                });
-            });
-        }
+        // No bulk actions in Subjects.html (removed per UX request)
+        // Could add programmatic select/clear all if needed
     }
 
     updateSelectionSummary() {
-        const summaryContent = document.querySelector('.summary-content');
-        if (!summaryContent) return;
+        const selectionCount = document.getElementById('selectionCount');
+        if (!selectionCount) return;
 
         const selectedCount = this.app.sessionData.subjects.length;
-        const ratedCount = Object.keys(this.app.sessionData.topicRatings).length;
-
-        summaryContent.innerHTML = `
-      <span class="summary-count">${selectedCount}</span> subjects selected, 
-      <span class="summary-count">${ratedCount}</span> rated. 
-      ${selectedCount > 0 ? 'Ready to generate comments!' : 'Please select subjects to continue.'}
-    `;
+        selectionCount.textContent = selectedCount;
     }
 
     setupCommentGeneration() {
-        const generateButton = document.querySelector('[data-action="generate-comments"]');
+        const generateButton = document.getElementById('generateBtn');
         if (generateButton) {
             generateButton.addEventListener('click', () => {
                 if (this.app.sessionData.subjects.length === 0) {
@@ -199,196 +259,47 @@ export class SubjectsController {
     }
 
     displayComments(comments) {
-        // Create comments display modal or section
-        const commentsHTML = `
-      <div class="comments-overlay" id="commentsOverlay">
-        <div class="comments-container">
-          <div class="comments-header">
-            <h2>Generated Comments for ${this.app.sessionData.studentName}</h2>
-            <button class="close-comments" onclick="app.controllers.subjects.closeComments()">×</button>
-          </div>
-          <div class="comments-content">
-            <div class="comment-section">
-              <h3>Male Teacher Style</h3>
-              <div class="comment-text">${comments.male}</div>
-              <div class="word-count">Word count: ${this.getWordCount(comments.male)}</div>
-            </div>
-            <div class="comment-section">
-              <h3>Female Teacher Style</h3>
-              <div class="comment-text">${comments.female}</div>
-              <div class="word-count">Word count: ${this.getWordCount(comments.female)}</div>
-            </div>
-          </div>
-          <div class="comments-actions">
-            <button class="nav-button secondary" onclick="app.controllers.subjects.copyComments('male')">Copy Male Version</button>
-            <button class="nav-button secondary" onclick="app.controllers.subjects.copyComments('female')">Copy Female Version</button>
-            <button class="nav-button danger" onclick="app.startOverWithAnimation()">Start Over</button>
-          </div>
-        </div>
-      </div>
-    `;
+        // Use Subjects.html's existing comment display structure
+        const generatedComments = document.getElementById('generatedComments');
+        const commentText1 = document.getElementById('commentText1');
+        const commentText2 = document.getElementById('commentText2');
+        const wordCount1 = document.getElementById('wordCount1');
+        const wordCount2 = document.getElementById('wordCount2');
+        const comment1 = document.getElementById('comment1');
 
-        document.body.insertAdjacentHTML('beforeend', commentsHTML);
-
-        // Add styles for comments display
-        this.addCommentsStyles();
-    }
-
-    addCommentsStyles() {
-        if (document.querySelector('#comments-styles')) return;
-
-        const style = document.createElement('style');
-        style.id = 'comments-styles';
-        style.textContent = `
-      .comments-overlay {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: rgba(0, 0, 0, 0.8);
-        -webkit-backdrop-filter: blur(10px);
-        backdrop-filter: blur(10px);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        z-index: 10000;
-        padding: 20px;
-      }
-      
-      .comments-container {
-        background: var(--glass-bg);
-        -webkit-backdrop-filter: var(--glass-backdrop);
-        backdrop-filter: var(--glass-backdrop);
-        border: 1px solid var(--glass-border);
-        border-radius: var(--radius-lg);
-        box-shadow: var(--glass-shadow);
-        max-width: 800px;
-        width: 100%;
-        max-height: 90vh;
-        overflow-y: auto;
-        position: relative;
-      }
-      
-      .comments-header {
-        padding: var(--space-lg);
-        border-bottom: 1px solid rgba(255, 255, 255, 0.2);
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-      }
-      
-      .comments-header h2 {
-        color: var(--text-white);
-        margin: 0;
-        font-size: 1.5rem;
-      }
-      
-      .close-comments {
-        background: none;
-        border: none;
-        color: var(--text-white);
-        font-size: 2rem;
-        cursor: pointer;
-        width: 40px;
-        height: 40px;
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        transition: all var(--transition-normal);
-      }
-      
-      .close-comments:hover {
-        background: rgba(255, 255, 255, 0.1);
-      }
-      
-      .comments-content {
-        padding: var(--space-lg);
-      }
-      
-      .comment-section {
-        margin-bottom: var(--space-lg);
-        padding: var(--space-md);
-        background: rgba(255, 255, 255, 0.05);
-        border-radius: var(--radius-sm);
-        border: 1px solid rgba(255, 255, 255, 0.1);
-      }
-      
-      .comment-section h3 {
-        color: var(--text-white);
-        margin-bottom: var(--space-sm);
-        font-size: 1.2rem;
-      }
-      
-      .comment-text {
-        color: rgba(255, 255, 255, 0.9);
-        line-height: 1.6;
-        margin-bottom: var(--space-sm);
-        font-size: 1rem;
-      }
-      
-      .word-count {
-        color: rgba(255, 255, 255, 0.6);
-        font-size: 0.875rem;
-        font-style: italic;
-      }
-      
-      .comments-actions {
-        padding: var(--space-lg);
-        border-top: 1px solid rgba(255, 255, 255, 0.2);
-        display: flex;
-        gap: var(--space-md);
-        flex-wrap: wrap;
-        justify-content: center;
-      }
-    `;
-
-        document.head.appendChild(style);
-    }
-
-    closeComments() {
-        const overlay = document.getElementById('commentsOverlay');
-        if (overlay) {
-            overlay.remove();
+        if (commentText1 && comments.male) {
+            commentText1.textContent = comments.male;
         }
-    }
-
-    copyComments(type) {
-        const commentSections = document.querySelectorAll('.comment-section');
-        const targetSection = type === 'male' ? commentSections[0] : commentSections[1];
-        const commentText = targetSection.querySelector('.comment-text').textContent;
-
-        if (navigator.clipboard) {
-            navigator.clipboard.writeText(commentText).then(() => {
-                this.app.showNotification(`${type.charAt(0).toUpperCase() + type.slice(1)} teacher comment copied to clipboard!`, 'success');
-            }).catch(() => {
-                this.fallbackCopyToClipboard(commentText);
-            });
-        } else {
-            this.fallbackCopyToClipboard(commentText);
-        }
-    }
-
-    fallbackCopyToClipboard(text) {
-        const textArea = document.createElement('textarea');
-        textArea.value = text;
-        textArea.style.position = 'fixed';
-        textArea.style.left = '-999999px';
-        textArea.style.top = '-999999px';
-        document.body.appendChild(textArea);
-        textArea.focus();
-        textArea.select();
-
-        try {
-            document.execCommand('copy');
-            this.app.showNotification('Comment copied to clipboard!', 'success');
-        } catch (err) {
-            console.error('Fallback copy failed:', err);
-            this.app.showNotification('Unable to copy to clipboard. Please copy manually.', 'error');
+        if (commentText2 && comments.female) {
+            commentText2.textContent = comments.female;
         }
 
-        document.body.removeChild(textArea);
+        if (wordCount1 && comments.male) {
+            wordCount1.textContent = `(${this.getWordCount(comments.male)} words)`;
+        }
+        if (wordCount2 && comments.female) {
+            wordCount2.textContent = `(${this.getWordCount(comments.female)} words)`;
+        }
+
+        // Show the generated comments section
+        if (generatedComments) {
+            generatedComments.classList.remove('display-none');
+            generatedComments.style.display = 'block';
+        }
+
+        // Select first comment by default
+        if (comment1) {
+            comment1.classList.add('selected');
+        }
+
+        // Update selection indicator
+        const generateBtn = document.getElementById('generateBtn');
+        if (generateBtn) {
+            generateBtn.innerHTML = '🔄 Generate New Comments';
+        }
+
+        this.app.hideLoadingOverlay();
+        this.app.showNotification('Comments generated successfully!', 'success');
     }
 
     getWordCount(text) {
