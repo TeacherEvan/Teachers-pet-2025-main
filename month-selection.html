@@ -347,9 +347,9 @@
 
         <form id="monthForm">
             <div class="form-group">
-                <label for="monthSelect">Curriculum Month:</label>
+                <label for="monthSelect">Curriculum Period:</label>
                 <select id="monthSelect" name="monthSelect" required>
-                    <option value="">Choose a month...</option>
+                    <option value="">Choose a period...</option>
                     <option value="August">August</option>
                     <option value="September" disabled>September (Coming Soon)</option>
                     <option value="October" disabled>October (Coming Soon)</option>
@@ -362,6 +362,9 @@
                     <option value="May" disabled>May (Coming Soon)</option>
                     <option value="June" disabled>June (Coming Soon)</option>
                     <option value="July" disabled>July (Coming Soon)</option>
+                    <option value="Semester 1">Semester 1 (May–Sep)</option>
+                    <option value="Semester 2">Semester 2 (Nov–Mar)</option>
+                    <option value="General">General (Year-round)</option>
                 </select>
             </div>
 
@@ -392,6 +395,16 @@
                     Critical Thinking, Social-Emotional Learning, and Life Skills.</p>
             </div>
 
+            <div id="semester1Info" class="month-info">
+                <h3>📗 Semester 1 (May–Sep)</h3>
+                <p>First semester of Primary 2 IEAP covering core subjects: Thai Language (reading/writing), Mathematics (numbers 1-100, addition/subtraction), Science (living things, weather), Social Studies (community, Thailand), English (phonics, basic sentences), Arts (color mixing, Thai patterns), Health & PE (basic movements, healthy habits), Computing (computer parts, mouse/keyboard).</p>
+            </div>
+
+            <div id="semester2Info" class="month-info">
+                <h3>📗 Semester 2 (Nov–Mar)</h3>
+                <p>Second semester of Primary 2 IEAP advancing skills across all subjects: Thai Language (comprehension, consonant classes), Mathematics (multiplication intro, fractions, measurement), Science (life cycles, forces, water cycle), Social Studies (Thai history, maps, citizenship), English (vowel teams, past tense, questions), Arts (Thai crafts, drama), Health & PE (games, emotional health), Computing (file management, simple coding).</p>
+            </div>
+
             <div id="comingSoonInfo" class="month-info">
                 <h3>Coming Soon <span class="coming-soon-badge">AVAILABLE LATER</span></h3>
                 <p>This month's curriculum is currently being developed. Please select August for now, or check back
@@ -418,6 +431,7 @@
             'K1': ['August', 'November', 'December', 'January'],
             'K2': ['November', 'December', 'January'],
             'K3': [],
+            'P2': ['Semester 1', 'Semester 2'],
             'PVT': ['General']
         };
 
@@ -429,6 +443,8 @@
             'November': document.getElementById('novemberInfo'),
             'December': document.getElementById('decemberInfo'),
             'General': document.getElementById('generalInfo'),
+            'Semester 1': document.getElementById('semester1Info'),
+            'Semester 2': document.getElementById('semester2Info'),
             'comingSoon': document.getElementById('comingSoonInfo')
         };
 
@@ -452,7 +468,15 @@
 
                 // Display grade or redirect if missing
                 if (currentGrade) {
-                    gradeDisplay.textContent = `${currentGrade} - Kindergarten ${currentGrade.substring(1)}`;
+                    let gradeLabel = '';
+                    if (currentGrade === 'P2') {
+                        gradeLabel = 'P2 - Primary 2 (IEAP)';
+                    } else if (currentGrade === 'PVT') {
+                        gradeLabel = 'PVT - Private Student';
+                    } else {
+                        gradeLabel = `${currentGrade} - Kindergarten ${currentGrade.substring(1)}`;
+                    }
+                    gradeDisplay.textContent = gradeLabel;
                     console.log('Loaded grade:', currentGrade);
 
                     // Enable/disable months based on grade
