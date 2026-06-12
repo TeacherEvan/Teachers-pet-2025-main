@@ -7,8 +7,8 @@ export async function runTests() {
   const repoRoot = path.resolve(process.cwd());
   
   // Test Semester 1 exists and has correct structure
-  const sem1Path = path.join(repoRoot, "assets/data/curriculum/p2/semester1.json");
-  assert.ok(fs.existsSync(sem1Path), "semester1.json must exist");
+  const sem1Path = path.join(repoRoot, "assets/data/curriculum/p2/semester 1.json");
+  assert.ok(fs.existsSync(sem1Path), "semester 1.json must exist");
   
   const sem1 = JSON.parse(fs.readFileSync(sem1Path, "utf8"));
   assert.equal(sem1.grade, "P2");
@@ -34,8 +34,8 @@ export async function runTests() {
   }
   
   // Test Semester 2
-  const sem2Path = path.join(repoRoot, "assets/data/curriculum/p2/semester2.json");
-  assert.ok(fs.existsSync(sem2Path), "semester2.json must exist");
+  const sem2Path = path.join(repoRoot, "assets/data/curriculum/p2/semester 2.json");
+  assert.ok(fs.existsSync(sem2Path), "semester 2.json must exist");
   
   const sem2 = JSON.parse(fs.readFileSync(sem2Path, "utf8"));
   assert.equal(sem2.grade, "P2");
