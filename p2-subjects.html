@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>P2 Subject Selection - Teachers Pet</title>
+  <link rel="stylesheet" href="assets/css/main.css">
+  <link rel="stylesheet" href="assets/css/subjects.css">
+</head>
+<body>
+  <header class="app-header">
+    <h1>Subject Selection</h1>
+    <div id="current-grade-month" class="grade-month-display">Current: P2 · Semester 1</div>
+  </header>
+
+  <main class="app-main">
+    <section class="subjects-selection">
+      <div class="selection-header">
+        <h2>Select Topics & Rate Progress</h2>
+        <div id="selection-summary" class="selection-summary">0 topics selected, 0 rated</div>
+      </div>
+      
+      <div id="subjects-container" class="subjects-container">
+        <!-- Dynamically populated by P2SubjectsController -->
+      </div>
+      
+      <div class="actions-bar">
+        <button id="generate-comments" class="btn btn-primary" disabled>
+          Generate Comments
+        </button>
+        <a href="month-selection.html?grade=P2" class="btn btn-secondary">Back</a>
+      </div>
+    </section>
+  </main>
+
+  <script type="module">
+    import { P2SubjectsController } from "./assets/js/controllers/p2-subjects-controller.js";
+    import { TeachersPetApp } from "./assets/js/app-controller.js";
+    
+    // Initialize app and controller
+    const app = new TeachersPetApp();
+    await app.init();
+    
+    // Initialize P2 Subjects Controller
+    app.controllers.p2Subjects = new P2SubjectsController(app);
+    await app.controllers.p2Subjects.init();
+  </script>
+</body>
+</html>

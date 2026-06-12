@@ -9,6 +9,7 @@ import { createPersistentStore } from '../state/store.js';
 import { LauncherController } from './launcher-controller.js';
 import { StudentInfoController } from './student-info-controller.js';
 import { SubjectsController } from './subjects-controller.js';
+import { P2SubjectsController } from './p2-subjects-controller.js';
 
 export class TeachersPetApp {
     constructor() {
@@ -38,6 +39,7 @@ export class TeachersPetApp {
         if (path.includes('grade-selection')) return 'grade-selection';
         if (path.includes('month-selection')) return 'month-selection';
         if (path.includes('student-information')) return 'student-info';
+        if (path.includes('p2-subjects')) return 'p2-subjects';
         if (path.includes('Subjects')) return 'subjects';
         return 'launcher';
     }
@@ -49,6 +51,7 @@ export class TeachersPetApp {
         this.controllers.launcher = new LauncherController(this);
         this.controllers.studentInfo = new StudentInfoController(this);
         this.controllers.subjects = new SubjectsController(this);
+        this.controllers.p2Subjects = new P2SubjectsController(this);
 
         // Initialize based on current page
         switch (this.currentPage) {
@@ -66,6 +69,9 @@ export class TeachersPetApp {
                 break;
             case 'subjects':
                 if (this.controllers.subjects) this.controllers.subjects.init();
+                break;
+            case 'p2-subjects':
+                if (this.controllers.p2Subjects) this.controllers.p2Subjects.init();
                 break;
         }
 

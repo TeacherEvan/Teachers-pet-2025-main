@@ -621,7 +621,7 @@
             }
         }
 
-        // Continue to student information
+        // Continue to student information (or P2 subjects)
         continueBtn.addEventListener('click', function () {
             const selectedMonth = monthSelect.value;
 
@@ -638,12 +638,19 @@
             // Save month one more time before navigation
             saveMonth(selectedMonth);
 
-            // Navigate to student information page with context
+            // Navigate based on grade
             const params = new URLSearchParams({
                 grade: currentGrade,
                 month: selectedMonth
             });
-            window.location.href = `student-information.html?${params.toString()}`;
+            
+            let targetPage;
+            if (currentGrade === 'P2') {
+                targetPage = `p2-subjects.html?${params.toString()}`;
+            } else {
+                targetPage = `student-information.html?${params.toString()}`;
+            }
+            window.location.href = targetPage;
         });
 
         // Initialize page
