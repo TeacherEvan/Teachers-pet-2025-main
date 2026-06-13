@@ -10,7 +10,7 @@ import { LauncherController } from './launcher-controller.js';
 import { StudentInfoController } from './student-info-controller.js';
 import { SubjectsController } from './subjects-controller.js';
 import { P2SubjectsController } from './p2-subjects-controller.js';
-import { OptimizedCommentGenerator } from '../../optimized-comment-generator.js';
+// OptimizedCommentGenerator loaded on-demand via dynamic import
 
 export class TeachersPetApp {
     constructor() {
@@ -26,9 +26,6 @@ export class TeachersPetApp {
             subjects: [],
             topicRatings: {}
         });
-
-        // Singleton comment generator
-        this.commentGenerator = new OptimizedCommentGenerator();
 
         this.currentPage = this.getCurrentPage();
         this.initialized = false;
