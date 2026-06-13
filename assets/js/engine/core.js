@@ -30,7 +30,7 @@ export class EnhancedCommentEngine {
 
         // Fallback if data is missing (should not happen if script loaded correctly)
         if (Object.keys(this.data).length === 0) {
-            console.error('❌ TeachersPetData not loaded! Check script tags.');
+            debugLog('❌', 'TeachersPetData not loaded! Check script tags.');
         }
     }
 

@@ -29,12 +29,12 @@ export const TeachersPetProcessor = {
 
     // Validate student name
     if (!sessionData.studentName || sessionData.studentName.trim() === "") {
-      console.error("❌ Missing student name in session data!");
+      debugLog('❌', 'Missing student name in session data!');
       throw new Error("Student name is required for comment generation");
     }
 
     if (!engineData || !engineData.performanceMap || !engineData.grammarRules) {
-      console.error("❌ Engine data missing or incomplete");
+      debugLog('❌', 'Engine data missing or incomplete');
       throw new Error("Engine data not loaded for comment generation");
     }
 
