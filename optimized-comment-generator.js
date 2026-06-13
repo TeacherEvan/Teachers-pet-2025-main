@@ -32,12 +32,12 @@ export class OptimizedCommentGenerator {
                 this.isInitialized = true;
                 debugLog('OptimizedCommentGenerator initialized with EnhancedCommentEngine');
             } else {
-                console.warn('No comment engines available, using fallback mode');
+                debugLog('⚠️', 'No comment engines available, using fallback mode');
                 this.fallbackMode = true;
                 this.initializeFallback();
             }
         } catch (error) {
-            console.error('Failed to initialize OptimizedCommentGenerator:', error);
+            debugLog('❌', 'Failed to initialize OptimizedCommentGenerator:', error);
             this.fallbackMode = true;
             this.initializeFallback();
         }
@@ -57,7 +57,7 @@ export class OptimizedCommentGenerator {
             const sessionData = this.collectSessionData();
             return await this.generateComments(sessionData);
         } catch (error) {
-            console.error('Failed to generate comments from storage:', error);
+            debugLog('❌', 'Failed to generate comments from storage:', error);
             return this.generateErrorComments(error.message);
         }
     }
@@ -76,7 +76,7 @@ export class OptimizedCommentGenerator {
         try {
             validatedData = this.validateAndCleanSessionData(sessionData);
         } catch (error) {
-            console.error('Session data validation failed, using fallback:', error);
+            debugLog('❌', 'Session data validation failed, using fallback:', error);
             return this.generateFallbackComments(this.buildFallbackSessionData(sessionData));
         }
 
@@ -88,7 +88,7 @@ export class OptimizedCommentGenerator {
             // Both engines now return Promises
             return await this.engine.generateComments(validatedData);
         } catch (error) {
-            console.error('Engine failed, using fallback:', error);
+            debugLog('❌', 'Engine failed, using fallback:', error);
             return this.generateFallbackComments(validatedData);
         }
     }
@@ -202,7 +202,7 @@ export class OptimizedCommentGenerator {
         debugLog('coerceRating - input:', rating, 'parsed:', numRating);
 
         if (isNaN(numRating) || numRating < 1 || numRating > 10) {
-            console.warn('Invalid rating detected! Value:', rating, '- Defaulting to 5');
+            debugLog('⚠️', 'Invalid rating detected! Value:', rating, '- Defaulting to 5');
             return 5;
         }
 

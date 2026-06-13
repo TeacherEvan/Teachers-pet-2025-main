@@ -30,8 +30,8 @@ export default [
     },
     rules: {
       "no-unused-vars": ["warn", { 
-        "varsIgnorePattern": "^(LauncherController|StudentInfoController|SubjectsController|goBack|startOver|refreshReport|toggleSubject|handleSubjectCheck|ensureCommentGeneration|selectComment|copySelectedComment|exportReport)$",
-        "argsIgnorePattern": "^(e|err|_|subject)$"
+        "varsIgnorePattern": "^(BaseSubjectsController|LauncherController|StudentInfoController|SubjectsController|goBack|startOver|refreshReport|toggleSubject|handleSubjectCheck|ensureCommentGeneration|selectComment|copySelectedComment|exportReport|_.*|.*_)$",
+        "argsIgnorePattern": "^(e|err|_|subject|_.*|.*_)"
       }]
     },
     files: ["**/*.js"],

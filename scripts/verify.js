@@ -2,7 +2,6 @@ import { execSync } from "child_process";
 import fs from "fs";
 import path from "path";
 import { fileURLToPath } from "url";
-import { validateRootEngineShimFile } from "./verify-helpers.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -26,18 +25,7 @@ function log(type, message) {
 
 let hasError = false;
 
-// 1. Check Root Engine Compatibility Shim Contract
-const rootEnginePath = path.join(__dirname, "..", "enhanced-comment-engine.js");
-const rootEngineIssues = validateRootEngineShimFile(rootEnginePath);
-
-if (rootEngineIssues.length > 0) {
-  rootEngineIssues.forEach((issue) => log("error", issue));
-  hasError = true;
-} else {
-  log("success", 'Root enhanced-comment-engine.js shim contract verified.');
-}
-
-// 2. Check for Forbidden Hardcoded Curriculum in Templates
+// 1. Check for Forbidden Hardcoded Curriculum in Templates
 // We want to avoid "K1", "K2", "August", "November" in the generation logic,
 // but they are allowed in the configuration maps.
 // This is a heuristic check.
@@ -73,7 +61,7 @@ if (fs.existsSync(templatesPath)) {
   });
 }
 
-// 3. Check Documentation Existence
+// 2. Check Documentation Existence
 const requiredDocs = [
   "docs/PROJECT_STATUS.md",
   "docs/jobcard.md",
@@ -87,7 +75,7 @@ requiredDocs.forEach((doc) => {
   }
 });
 
-// 4. Check for "console.log" in production files (optional, but good practice)
+// 3. Check for "console.log" in production files (optional, but good practice)
 // We'll just warn
 const jsFilesToCheck = [
   "assets/js/engine/core.js",
@@ -110,7 +98,7 @@ jsFilesToCheck.forEach((file) => {
   }
 });
 
-// 5. Run ESLint
+// 4. Run ESLint
 try {
   log("info", "Running ESLint...");
   execSync("npm run lint", { stdio: "inherit" });

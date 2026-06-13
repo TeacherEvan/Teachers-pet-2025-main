@@ -1,23 +1,9 @@
-import CurriculumLoader from "../curriculum/curriculum-loader.js";
+import { BaseSubjectsController } from "./base-subjects-controller.js";
 import { TeachersPetUtils } from "../engine/utils.js";
 
-export class P2SubjectsController {
+export class P2SubjectsController extends BaseSubjectsController {
   constructor(app) {
-    this.app = app;
-    this.curriculumLoader = new CurriculumLoader();
-    this.subjectsContainer = null;
-    this.selectionSummary = null;
-    this.generateBtn = null;
-    this.gradeMonthDisplay = null;
-  }
-
-  async init() {
-    this.cacheElements();
-    this.loadSessionDataFromURL();
-    await this.loadAndRenderCurriculum();
-    this.setupSubjectInteractions();
-    this.setupCommentGeneration();
-    this.updateSelectionSummary();
+    super(app);
   }
 
   cacheElements() {
@@ -27,120 +13,36 @@ export class P2SubjectsController {
     this.gradeMonthDisplay = document.getElementById("current-grade-month");
   }
 
-  loadSessionDataFromURL() {
-    const params = new URLSearchParams(window.location.search);
-    this.app.sessionData.grade = params.get("grade") || "P2";
-    this.app.sessionData.month = params.get("month") || "Semester 1";
-    this.app.sessionData.subjects = [];
-    this.app.sessionData.topicRatings = {};
+  getGradeMonthDefaults() {
+    return { grade: "P2", month: "Semester 1" };
   }
 
-  async loadAndRenderCurriculum() {
-    const { grade, month } = this.app.sessionData;
-    
-    if (this.app.showLoader) this.app.showLoader();
-    
-    try {
-      const curriculum = await this.curriculumLoader.load(grade, month);
-      this.renderSubjects(curriculum.subjects);
-      this.updateGradeMonthDisplay(grade, month);
-    } catch (error) {
-      console.error("Failed to load curriculum:", error);
-      if (this.app.notify) {
-        this.app.notify("Failed to load curriculum. Please try again.", "error");
-      }
-      // Fallback to empty state - use safe DOM
-      this.subjectsContainer.innerHTML = '';
-      const errorDiv = document.createElement('div');
-      errorDiv.className = 'error-state';
-      errorDiv.innerHTML = `
-        <p>Unable to load curriculum data.</p>
-        <button class="btn btn-primary" onclick="location.reload()">Retry</button>
-      `;
-      this.subjectsContainer.appendChild(errorDiv);
-    } finally {
-      if (this.app.hideLoader) this.app.hideLoader();
-    }
+  getSubjectSelector() {
+    return ".subject-section";
   }
 
-  /**
-   * Escape HTML to prevent XSS
-   */
-  escapeHtml(text) {
-    if (!text) return '';
-    const div = document.createElement('div');
-    div.textContent = text;
-    return div.innerHTML;
+  getTopicSelector() {
+    return ".topic-checkbox";
   }
 
-  parseTopicName(name) {
-    // Topic name format: "English Name (Thai Name)"
-    const match = name.match(/^(.+?)\s*\((.+?)\)$/);
-    if (match) {
-      return { en: match[1].trim(), th: match[2].trim() };
-    }
-    return { en: name.trim(), th: "" };
-  }
-
-  getThaiSubjectName(englishName) {
-    const thaiNames = {
-      "Thai Language": "ไทย",
-      "Mathematics": "คณิตศาสตร์",
-      "Science": "วิทยาศาสตร์",
-      "Social Studies": "สังคมศึกษา",
-      "English": "อังกฤษ",
-      "Arts": "ศิลปะ",
-      "Health & Physical Education": "สุขศึกษา",
-      "Computing": "คอมพิวเตอร์",
-    };
-    return thaiNames[englishName] || "";
-  }
-
-  renderSubjects(subjects) {
-    this.subjectsContainer.innerHTML = '';
-    const fragment = document.createDocumentFragment();
-    subjects.forEach(subject => {
-      fragment.appendChild(this.createSubjectElement(subject));
-    });
-    this.subjectsContainer.appendChild(fragment);
-  }
-
-  createSubjectElement(subject) {
-    const subjectId = subject.id || subject.name.toLowerCase().replace(/\s+/g, '-');
-    const section = document.createElement('section');
-    section.className = 'subject-section';
-    section.setAttribute('data-subject', this.escapeHtml(subjectId));
-
-    const topicsFragment = document.createDocumentFragment();
-    subject.topics.forEach(topic => {
-      topicsFragment.appendChild(this.createTopicElement(topic, subjectId));
-    });
-
-    section.innerHTML = `
+  getSubjectTemplate(subject, subjectId) {
+    const thaiName = this.getThaiSubjectName(subject.name);
+    return `
       <h3 class="subject-title">
         <span class="subject-name-en">${this.escapeHtml(subject.name)}</span>
-        <span class="subject-name-th">${this.escapeHtml(this.getThaiSubjectName(subject.name))}</span>
+        <span class="subject-name-th">${this.escapeHtml(thaiName)}</span>
         <button class="subject-toggle" aria-expanded="false" aria-controls="${this.escapeHtml(subjectId)}-topics">▼</button>
       </h3>
       <div class="subject-topics" id="${this.escapeHtml(subjectId)}-topics" role="region"></div>
     `;
-
-    const topicsDiv = section.querySelector('.subject-topics');
-    topicsDiv.appendChild(topicsFragment);
-
-    return section;
   }
 
-  createTopicElement(topic, subjectId) {
-    const topicId = `${subjectId}-${topic.id}`;
+  getTopicTemplate(topic, subjectId, topicId) {
     const { en, th } = this.parseTopicName(topic.name);
-    const label = document.createElement('label');
-    label.className = 'topic-item';
-    label.setAttribute('data-topic-id', this.escapeHtml(topicId));
-    label.innerHTML = `
-      <input type="checkbox" 
+    return `
+      <input type="checkbox"
              class="topic-checkbox"
-             data-subject="${this.escapeHtml(subjectId)}" 
+             data-subject="${this.escapeHtml(subjectId)}"
              data-topic="${this.escapeHtml(topic.name)}"
              data-topic-id="${this.escapeHtml(topicId)}"
              data-vocab="${this.escapeHtml(topic.name)}"
@@ -151,23 +53,9 @@ export class P2SubjectsController {
         ${this.renderStars(0, topicId)}
       </div>
     `;
-    return label;
   }
 
-  renderStars(value, topicId) {
-    return Array.from({ length: 5 }, (_, i) => 
-      `<span class="star ${i < value ? "filled" : ""}" data-value="${i + 1}" data-topic="${topicId}" role="button" tabindex="0" aria-label="${i + 1} star${i + 1 === value ? " (selected)" : ""}">★</span>`
-    ).join("");
-  }
-
-  updateGradeMonthDisplay(grade, month) {
-    if (this.gradeMonthDisplay) {
-      const semesterLabel = month === "Semester 1" ? "Semester 1 (May–Sep)" : "Semester 2 (Nov–Mar)";
-      this.gradeMonthDisplay.textContent = `Current: ${grade} · ${semesterLabel}`;
-    }
-  }
-
-  setupSubjectInteractions() {
+  setupAdditionalInteractions() {
     // Toggle subject accordion
     this.subjectsContainer.addEventListener("click", (e) => {
       const toggle = e.target.closest(".subject-toggle");
@@ -200,9 +88,9 @@ export class P2SubjectsController {
       }
     });
 
-    // Topic checkbox changes
+    // Topic checkbox changes (handled by base, but we need to update P2-specific UI)
     this.subjectsContainer.addEventListener("change", (e) => {
-      if (e.target.matches('.topic-checkbox')) {
+      if (e.target.matches(".topic-checkbox")) {
         this.handleTopicCheckboxChange(e.target);
         this.updateSelectionSummary();
         this.updateGenerateButton();
@@ -210,16 +98,50 @@ export class P2SubjectsController {
     });
   }
 
+  parseTopicName(name) {
+    const match = name.match(/^(.+?)\s*\((.+?)\)$/);
+    if (match) {
+      return { en: match[1].trim(), th: match[2].trim() };
+    }
+    return { en: name.trim(), th: "" };
+  }
+
+  getThaiSubjectName(englishName) {
+    const thaiNames = {
+      "Thai Language": "ไทย",
+      "Mathematics": "คณิตศาสตร์",
+      "Science": "วิทยาศาสตร์",
+      "Social Studies": "สังคมศึกษา",
+      "English": "อังกฤษ",
+      "Arts": "ศิลปะ",
+      "Health & Physical Education": "สุขศึกษา",
+      "Computing": "คอมพิวเตอร์",
+    };
+    return thaiNames[englishName] || "";
+  }
+
+  renderStars(value, topicId) {
+    return Array.from({ length: 5 }, (_, i) =>
+      `<span class="star ${i < value ? "filled" : ""}" data-value="${i + 1}" data-topic="${topicId}" role="button" tabindex="0" aria-label="${i + 1} star${i + 1 === value ? " (selected)" : ""}">★</span>`
+    ).join("");
+  }
+
+  updateGradeMonthDisplay(grade, month) {
+    if (this.gradeMonthDisplay) {
+      const semesterLabel = month === "Semester 1" ? "Semester 1 (May–Sep)" : "Semester 2 (Nov–Mar)";
+      this.gradeMonthDisplay.textContent = `Current: ${grade} · ${semesterLabel}`;
+    }
+  }
+
   handleTopicCheckboxChange(checkbox) {
     const topicId = checkbox.dataset.topicId;
     const topicName = checkbox.value;
-    
+
     if (checkbox.checked) {
       if (!this.app.sessionData.subjects.includes(topicName)) {
         this.app.sessionData.subjects.push(topicName);
       }
-      // Enable stars visually
-      document.querySelectorAll(`.star[data-topic="${topicId}"]`).forEach(star => {
+      document.querySelectorAll(`.star[data-topic="${topicId}"]`).forEach((star) => {
         star.style.pointerEvents = "auto";
         star.style.opacity = "1";
       });
@@ -229,8 +151,7 @@ export class P2SubjectsController {
         this.app.sessionData.subjects.splice(index, 1);
       }
       delete this.app.sessionData.topicRatings[topicName];
-      // Reset and disable stars
-      document.querySelectorAll(`.star[data-topic="${topicId}"]`).forEach(star => {
+      document.querySelectorAll(`.star[data-topic="${topicId}"]`).forEach((star) => {
         star.classList.remove("filled");
         star.style.pointerEvents = "none";
         star.style.opacity = "0.3";
@@ -243,25 +164,22 @@ export class P2SubjectsController {
     stars.forEach((star, i) => {
       star.classList.toggle("filled", i < value);
     });
-    
-    // Find the checkbox for this topic
+
     const checkbox = document.querySelector(`.topic-checkbox[data-topic-id="${topicId}"]`);
     if (checkbox) {
       checkbox.checked = value > 0;
-      // Trigger change handler logic
       if (value > 0) {
         this.handleTopicCheckboxChange(checkbox);
       } else {
         this.handleTopicCheckboxChange(checkbox);
       }
     }
-    
-    // Update session data rating
+
     if (checkbox) {
       const topicName = checkbox.value;
       this.app.sessionData.topicRatings[topicName] = value;
     }
-    
+
     this.updateSelectionSummary();
     this.updateGenerateButton();
   }
@@ -269,7 +187,7 @@ export class P2SubjectsController {
   updateSelectionSummary() {
     const selectedCount = this.app.sessionData.subjects.length;
     const ratedCount = Object.keys(this.app.sessionData.topicRatings).length;
-    
+
     if (this.selectionSummary) {
       this.selectionSummary.textContent = `${selectedCount} topics selected, ${ratedCount} rated`;
     }
@@ -282,38 +200,30 @@ export class P2SubjectsController {
     }
   }
 
-  setupCommentGeneration() {
-    if (this.generateBtn) {
-      this.generateBtn.addEventListener("click", () => this.generateComments());
-    }
+  // Alias for test compatibility - base class calls this via setupSubjectInteractions
+  setupSubjectInteractions() {
+    this.setupAdditionalInteractions();
   }
 
   async generateComments() {
     if (this.app.sessionData.subjects.length === 0) {
-      if (this.app.notify) {
-        this.app.notify("Please select at least one topic before generating comments.", "warning");
-      }
+      if (this.app.notify) this.app.notify("Please select at least one topic before generating comments.", "warning");
       return;
     }
 
     if (this.app.showLoader) this.app.showLoader("Generating comments...");
 
     try {
-      // Use the singleton comment generator from app
+      const { OptimizedCommentGenerator } = await import("../../optimized-comment-generator.js");
+      const generator = new OptimizedCommentGenerator();
       const selections = this.collectSelections();
-      const comments = await this.app.commentGenerator.generateComments(selections);
-      
-      if (this.app.notify) {
-        this.app.notify("Comments generated successfully!", "success");
-      }
-      
-      // Display comments (could also copy to clipboard)
+      const comments = await generator.generateComments(selections);
+
+      if (this.app.notify) this.app.notify("Comments generated successfully!", "success");
       this.displayComments(comments);
     } catch (error) {
       console.error("Comment generation failed:", error);
-      if (this.app.notify) {
-        this.app.notify("Failed to generate comments. Please try again.", "error");
-      }
+      if (this.app.notify) this.app.notify("Failed to generate comments. Please try again.", "error");
     } finally {
       if (this.app.hideLoader) this.app.hideLoader();
     }
@@ -321,18 +231,18 @@ export class P2SubjectsController {
 
   collectSelections() {
     const selections = [];
-    
-    document.querySelectorAll('.topic-checkbox:checked').forEach(cb => {
+
+    document.querySelectorAll(".topic-checkbox:checked").forEach((cb) => {
       const topicId = cb.dataset.topicId;
       const stars = document.querySelectorAll(`.star[data-topic="${topicId}"].filled`).length;
       selections.push({
         subject: cb.dataset.subject,
         topic: cb.dataset.topic,
-        vocab: 10, // Default, could parse from curriculum
-        rating: stars
+        vocab: 10,
+        rating: stars,
       });
     });
-    
+
     return {
       grade: this.app.sessionData.grade,
       month: this.app.sessionData.month,
@@ -341,7 +251,7 @@ export class P2SubjectsController {
       overallRating: this.app.sessionData.overallRating || 5,
       strengths: this.app.sessionData.strengths || [],
       weaknesses: this.app.sessionData.weaknesses || [],
-      selections: selections
+      selections: selections,
     };
   }
 
@@ -351,34 +261,85 @@ export class P2SubjectsController {
     const maleWordCount = TeachersPetUtils.getWordCount(maleText);
     const femaleWordCount = TeachersPetUtils.getWordCount(femaleText);
 
-    const commentsHTML = `
-      <div class="comments-overlay" id="commentsOverlay">
-        <div class="comments-container">
-          <div class="comments-header">
-            <h2>Generated Comments</h2>
-            <button class="close-comments" onclick="this.closest('.comments-overlay').remove()">×</button>
-          </div>
-          <div class="comments-content">
-            <div class="comment-section">
-              <h3>Male Teacher Style</h3>
-              <div class="comment-text">${maleText}</div>
-              <div class="word-count">Word count: ${maleWordCount}</div>
-            </div>
-            <div class="comment-section">
-              <h3>Female Teacher Style</h3>
-              <div class="comment-text">${femaleText}</div>
-              <div class="word-count">Word count: ${femaleWordCount}</div>
-            </div>
-          </div>
-          <div class="comments-actions">
-            <button class="nav-button secondary" onclick="navigator.clipboard.writeText('${maleText.replace(/'/g, "\\'")}')">Copy Male Version</button>
-            <button class="nav-button secondary" onclick="navigator.clipboard.writeText('${femaleText.replace(/'/g, "\\'")}')">Copy Female Version</button>
-            <button class="nav-button danger" onclick="document.getElementById('commentsOverlay').remove()">Close</button>
-          </div>
-        </div>
-      </div>
-    `;
+    const overlay = document.createElement("div");
+    overlay.id = "commentsOverlay";
+    overlay.className = "comments-overlay";
 
-    document.body.insertAdjacentHTML('beforeend', commentsHTML);
+    const container = document.createElement("div");
+    container.className = "comments-container";
+
+    const header = document.createElement("div");
+    header.className = "comments-header";
+    const h2 = document.createElement("h2");
+    h2.textContent = "Generated Comments";
+    const closeBtn = document.createElement("button");
+    closeBtn.className = "close-comments";
+    closeBtn.textContent = "×";
+    closeBtn.addEventListener("click", () => overlay.remove());
+    header.appendChild(h2);
+    header.appendChild(closeBtn);
+
+    const content = document.createElement("div");
+    content.className = "comments-content";
+
+    const maleSection = document.createElement("div");
+    maleSection.className = "comment-section";
+    const maleH3 = document.createElement("h3");
+    maleH3.textContent = "Male Teacher Style";
+    const maleTextDiv = document.createElement("div");
+    maleTextDiv.className = "comment-text";
+    maleTextDiv.textContent = maleText;
+    const maleCount = document.createElement("div");
+    maleCount.className = "word-count";
+    maleCount.textContent = `Word count: ${maleWordCount}`;
+    maleSection.appendChild(maleH3);
+    maleSection.appendChild(maleTextDiv);
+    maleSection.appendChild(maleCount);
+
+    const femaleSection = document.createElement("div");
+    femaleSection.className = "comment-section";
+    const femaleH3 = document.createElement("h3");
+    femaleH3.textContent = "Female Teacher Style";
+    const femaleTextDiv = document.createElement("div");
+    femaleTextDiv.className = "comment-text";
+    femaleTextDiv.textContent = femaleText;
+    const femaleCount = document.createElement("div");
+    femaleCount.className = "word-count";
+    femaleCount.textContent = `Word count: ${femaleWordCount}`;
+    femaleSection.appendChild(femaleH3);
+    femaleSection.appendChild(femaleTextDiv);
+    femaleSection.appendChild(femaleCount);
+
+    content.appendChild(maleSection);
+    content.appendChild(femaleSection);
+
+    const actions = document.createElement("div");
+    actions.className = "comments-actions";
+
+    const copyMaleBtn = document.createElement("button");
+    copyMaleBtn.className = "nav-button secondary";
+    copyMaleBtn.textContent = "Copy Male Version";
+    copyMaleBtn.addEventListener("click", () => navigator.clipboard.writeText(maleText));
+
+    const copyFemaleBtn = document.createElement("button");
+    copyFemaleBtn.className = "nav-button secondary";
+    copyFemaleBtn.textContent = "Copy Female Version";
+    copyFemaleBtn.addEventListener("click", () => navigator.clipboard.writeText(femaleText));
+
+    const closeBtn2 = document.createElement("button");
+    closeBtn2.className = "nav-button danger";
+    closeBtn2.textContent = "Close";
+    closeBtn2.addEventListener("click", () => overlay.remove());
+
+    actions.appendChild(copyMaleBtn);
+    actions.appendChild(copyFemaleBtn);
+    actions.appendChild(closeBtn2);
+
+    container.appendChild(header);
+    container.appendChild(content);
+    container.appendChild(actions);
+    overlay.appendChild(container);
+
+    document.body.appendChild(overlay);
   }
 }
