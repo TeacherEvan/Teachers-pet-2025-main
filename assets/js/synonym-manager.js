@@ -46,14 +46,29 @@ export class SynonymManager {
             }
             this.synonymData = await response.json();
             this.initialized = true;
+            
+            // Build flat synonym map for O(1) lookup
+            this.synonymFlatMap = new Map();
+            for (const [category, words] of Object.entries(this.synonymData)) {
+                for (const [word, synonyms] of Object.entries(words)) {
+                    this.synonymFlatMap.set(word.toLowerCase(), synonyms);
+                }
+            }
+            
+            // Initialize memoization caches
+            this.escapeRegexCache = new Map();
+            this.matchCaseCache = new Map();
+
             debugLogSynonym('✅', 'SynonymManager: Synonym data loaded successfully', {
                 categories: Object.keys(this.synonymData),
-                totalWords: this.getTotalWordCount()
+                totalWords: this.getTotalWordCount(),
+                flatMapSize: this.synonymFlatMap.size
             });
             return this.synonymData;
         } catch (error) {
             debugLogSynonym('❌', 'SynonymManager: Failed to load synonym data:', error);
             this.synonymData = this.getEmptySynonymData();
+            this.synonymFlatMap = new Map();
             return this.synonymData;
         }
     }
@@ -133,23 +148,15 @@ export class SynonymManager {
     }
 
     /**
-     * Find synonyms for a word across all categories
+     * Find synonyms for a word across all categories - O(1) via flat map
      */
     findSynonyms(word) {
-        if (!this.synonymData) {
+        if (!this.synonymFlatMap) {
             return [];
         }
 
         const normalized = word.toLowerCase().trim();
-
-        // Search all categories
-        for (const category of Object.values(this.synonymData)) {
-            if (category[normalized]) {
-                return category[normalized];
-            }
-        }
-
-        return [];
+        return this.synonymFlatMap.get(normalized) || [];
     }
 
     /**
@@ -185,7 +192,7 @@ export class SynonymManager {
     }
 
     /**
-     * Process text and replace overused words with synonyms
+     * Process text and replace overused words with synonyms - Optimized O(n) version
      * @param {string} text - The text to process
      * @param {number} threshold - Maximum uses before replacement (default: 2)
      * @returns {Promise<string>} - Processed text with synonyms
@@ -209,36 +216,36 @@ export class SynonymManager {
         debugLogSynonym('📏', 'Current usage threshold:', this.maxUsageThreshold);
         debugLogSynonym('📊', 'Current usage counts BEFORE processing:', { ...this.usageCounts });
 
-        // Extract all words from text (case-insensitive matching)
-        const wordMatches = text.match(/\b[\w']+\b/g) || [];
-        const wordsInText = new Map(); // normalized -> [original forms with positions]
-
-        // Build word frequency map for this specific text
-        for (let i = 0; i < wordMatches.length; i++) {
-            const word = wordMatches[i];
-            const normalized = word.toLowerCase().trim();
-
+        // Single-pass tokenization with position tracking
+        const tokens = [];
+        const tokenRegex = /\b[\w']+\b/g;
+        let match;
+        while ((match = tokenRegex.exec(text)) !== null) {
+            const normalized = match[0].toLowerCase().trim();
             if (normalized.length >= 4) { // Only process substantial words
-                if (!wordsInText.has(normalized)) {
-                    wordsInText.set(normalized, []);
-                }
-                wordsInText.get(normalized).push(word);
+                tokens.push({ 
+                    word: match[0], 
+                    normalized, 
+                    start: match.index, 
+                    end: match.index + match[0].length 
+                });
             }
         }
 
-        debugLogSynonym('📝', 'Words found in current text:', Array.from(wordsInText.keys()));
+        debugLogSynonym('📝', 'Tokens found in current text:', tokens.map(t => t.normalized));
 
-        // Track replacements to make
-        const replacements = new Map(); // original word -> replacement word
+        // Track replacements to make (normalized -> {replacement, positions[]})
+        const replacements = new Map();
 
-        // Check each unique word against usage threshold
-        for (const [normalized, instances] of wordsInText.entries()) {
+        // Check each token against usage threshold
+        for (const token of tokens) {
+            const { normalized } = token;
             const currentUsage = this.getUsageCount(normalized);
 
             debugLogSynonym('🔍', `Checking "${normalized}": current usage = ${currentUsage}, threshold = ${this.maxUsageThreshold}`);
 
             // If word has been used >= threshold times, try to replace it
-            if (currentUsage >= this.maxUsageThreshold) {
+            if (currentUsage >= this.maxUsageThreshold && !replacements.has(normalized)) {
                 const synonyms = this.findSynonyms(normalized);
 
                 if (synonyms && synonyms.length > 0) {
@@ -247,27 +254,40 @@ export class SynonymManager {
                     const bestSynonym = this.selectBestSynonym(normalized, synonyms);
 
                     if (bestSynonym && bestSynonym.toLowerCase() !== normalized) {
-                        replacements.set(normalized, bestSynonym);
+                        replacements.set(normalized, { 
+                            replacement: bestSynonym, 
+                            positions: [token.start] 
+                        });
                         debugLogSynonym('✅', `Will replace "${normalized}" with "${bestSynonym}"`);
                     }
                 } else {
                     debugLogSynonym('⚠️', `No synonyms found for "${normalized}"`);
                 }
+            } else if (replacements.has(normalized)) {
+                // Already planning to replace this word, add position
+                replacements.get(normalized).positions.push(token.start);
             }
         }
 
         debugLogSynonym('🎯', 'Total replacements planned:', replacements.size);
 
-        // Apply replacements with case preservation
+        // Apply all replacements in single pass (right-to-left to preserve indices)
         let processedText = text;
+        
+        // Sort replacements by rightmost position first
+        const sortedReplacements = Array.from(replacements.entries())
+            .map(([normalized, data]) => ({
+                normalized,
+                replacement: data.replacement,
+                rightmostPos: Math.max(...data.positions)
+            }))
+            .sort((a, b) => b.rightmostPos - a.rightmostPos);
 
-        for (const [original, replacement] of replacements.entries()) {
-            // Use word boundary regex for accurate replacement
-            const regex = new RegExp(`\\b${this.escapeRegex(original)}\\b`, 'gi');
-
-            processedText = processedText.replace(regex, (match) => {
-                const replaced = this.matchCase(match, replacement);
-                debugLogSynonym('🔄', `Replacing "${match}" → "${replaced}"`);
+        for (const { normalized, replacement } of sortedReplacements) {
+            const regex = new RegExp(`\\b${this.escapeRegex(normalized)}\\b`, 'gi');
+            processedText = processedText.replace(regex, (originalMatch) => {
+                const replaced = this.matchCase(originalMatch, replacement);
+                debugLogSynonym('🔄', `Replacing "${originalMatch}" → "${replaced}"`);
                 return replaced;
             });
         }
@@ -294,28 +314,44 @@ export class SynonymManager {
     }
 
     /**
-     * Match the case pattern of the original word
+     * Escape special regex characters in a string - memoized
+     */
+    escapeRegex(str) {
+        if (this.escapeRegexCache.has(str)) {
+            return this.escapeRegexCache.get(str);
+        }
+        const result = str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+        this.escapeRegexCache.set(str, result);
+        return result;
+    }
+
+    /**
+     * Match the case pattern of the original word - memoized
      */
     matchCase(original, replacement) {
+        const key = original + '|' + replacement;
+        if (this.matchCaseCache.has(key)) {
+            return this.matchCaseCache.get(key);
+        }
+
         // All uppercase
         if (original === original.toUpperCase()) {
-            return replacement.toUpperCase();
+            const result = replacement.toUpperCase();
+            this.matchCaseCache.set(key, result);
+            return result;
         }
 
         // First letter uppercase (Title Case)
         if (original[0] === original[0].toUpperCase() && original.slice(1) === original.slice(1).toLowerCase()) {
-            return replacement.charAt(0).toUpperCase() + replacement.slice(1).toLowerCase();
+            const result = replacement.charAt(0).toUpperCase() + replacement.slice(1).toLowerCase();
+            this.matchCaseCache.set(key, result);
+            return result;
         }
 
         // All lowercase or mixed case - use replacement as-is (lowercase)
-        return replacement.toLowerCase();
-    }
-
-    /**
-     * Escape special regex characters in a string
-     */
-    escapeRegex(str) {
-        return str.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+        const result = replacement.toLowerCase();
+        this.matchCaseCache.set(key, result);
+        return result;
     }
 
     /**
