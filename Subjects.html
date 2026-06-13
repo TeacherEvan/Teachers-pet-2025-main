@@ -190,6 +190,7 @@
         overflow: hidden;
         background: rgba(255, 255, 255, 0.05);
         transition: all 0.3s ease;
+        contain: layout paint style;
     }
 
     .subject-section:hover {
@@ -256,6 +257,9 @@
         transition: max-height 0.4s ease-out, padding 0.3s ease;
         background: rgba(255, 255, 255, 0.03);
         border-top: 1px solid rgba(255, 255, 255, 0.1);
+        contain: layout paint style;
+        content-visibility: auto;
+        contain-intrinsic-size: 200px;
     }
 
     .subject-content.active {
@@ -353,6 +357,7 @@
     .comments-section {
         margin-top: 30px;
         display: none;
+        contain: layout paint style;
     }
 
     .comments-section.visible {
