@@ -1,6 +1,30 @@
 /* eslint-env es6 */
 /* global window */
 import { TeachersPetUtils } from "./utils.js";
+import { TeachersPetData } from "../data/engine-data.js";
+
+/**
+ * Pre-built inverted keyword index for standard engine data
+ * Built once at module load
+ */
+const STANDARD_KEYWORD_INDEX = (() => {
+  const index = new Map();
+  for (const [subject, keywords] of Object.entries(TeachersPetData.subjectTopicMap)) {
+    for (const keyword of keywords) {
+      const normalized = keyword.toLowerCase().trim();
+      if (!normalized) continue;
+      if (!index.has(normalized)) {
+        index.set(normalized, new Set());
+      }
+      index.get(normalized).add(subject);
+    }
+  }
+  const result = new Map();
+  for (const [keyword, subjects] of index) {
+    result.set(keyword, Array.from(subjects));
+  }
+  return result;
+})();
 
 /**
  * Debug logging helper - only logs when window.__TP_DEBUG__ === true
@@ -111,34 +135,74 @@ export const TeachersPetProcessor = {
 
   /**
    * Group topics under their parent subjects for better organization
+   * Optimized with cached inverted keyword index for O(topics × keywords_in_topic) lookup
    */
   groupTopicsBySubject: function (subjects, topicRatings, subjectTopicMap) {
     const grouped = {};
     const orphanedTopics = [];
     const topicList = Object.keys(topicRatings);
+    const subjectSet = new Set(subjects); // O(1) lookup
 
-    // Initialize with empty arrays for selected subjects
-    subjects.forEach((subject) => {
-      grouped[subject] = [];
-    });
+    // Use pre-built standard index if standard engine data is passed
+    // Otherwise build and cache custom index
+    let keywordIndexArr;
+    if (subjectTopicMap === TeachersPetData.subjectTopicMap) {
+      keywordIndexArr = STANDARD_KEYWORD_INDEX;
+    } else {
+      // Build and cache custom index
+      if (!this._keywordIndexCache) {
+        this._keywordIndexCache = new Map();
+      }
+      const cacheKey = JSON.stringify(
+        Object.entries(subjectTopicMap).map(([s, k]) => [s, [...k].sort()].join('|')).sort().join(';')
+      );
+      keywordIndexArr = this._keywordIndexCache.get(cacheKey);
+      if (!keywordIndexArr) {
+        const keywordIndex = new Map();
+        for (const [subject, keywords] of Object.entries(subjectTopicMap)) {
+          for (const keyword of keywords) {
+            const normalized = keyword.toLowerCase().trim();
+            if (!normalized) continue;
+            if (!keywordIndex.has(normalized)) {
+              keywordIndex.set(normalized, new Set());
+            }
+            keywordIndex.get(normalized).add(subject);
+          }
+        }
+        keywordIndexArr = new Map();
+        for (const [keyword, subjects] of keywordIndex) {
+          keywordIndexArr.set(keyword, Array.from(subjects));
+        }
+        this._keywordIndexCache.set(cacheKey, keywordIndexArr);
+      }
+    }
 
-    // Assign topics to subjects based on keyword matching
+    // Initialize groups
+    subjects.forEach((subject) => { grouped[subject] = []; });
+
     topicList.forEach((topic) => {
       const topicLower = topic.toLowerCase();
       let assigned = false;
 
-      for (const subject of subjects) {
-        const keywords = subjectTopicMap[subject] || [];
-        if (
-          keywords.some((keyword) => topicLower.includes(keyword.toLowerCase()))
-        ) {
-          grouped[subject].push(topic);
-          assigned = true;
-          break;
+      // Extract keywords from topic (split by space, filter length >= 3)
+      const topicKeywords = topicLower.split(/\s+/).filter(k => k.length >= 3);
+
+      // Check each keyword against index
+      for (const keyword of topicKeywords) {
+        const matchingSubjects = keywordIndexArr.get(keyword);
+        if (matchingSubjects) {
+          for (const subject of matchingSubjects) {
+            if (subjectSet.has(subject)) {
+              grouped[subject].push(topic);
+              assigned = true;
+              break;
+            }
+          }
+          if (assigned) break;
         }
       }
 
-      // If not assigned, try case-insensitive subject name matching
+      // Fallback: subject name matching (existing logic)
       if (!assigned) {
         for (const subject of subjects) {
           if (topicLower.includes(subject.toLowerCase())) {

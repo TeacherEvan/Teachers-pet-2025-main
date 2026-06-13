@@ -755,3 +755,28 @@ TeachersPetData.subjectTopicMap = {
     "typing"
   ],
 };
+
+/**
+ * Inverted keyword index for O(1) topic-to-subject lookup
+ * Built from subjectTopicMap at module load time
+ * Maps: normalized keyword -> Set of subject names
+ */
+export const TeachersPetKeywordIndex = (() => {
+  const index = new Map();
+  for (const [subject, keywords] of Object.entries(TeachersPetData.subjectTopicMap)) {
+    for (const keyword of keywords) {
+      const normalized = keyword.toLowerCase().trim();
+      if (!normalized) continue;
+      if (!index.has(normalized)) {
+        index.set(normalized, new Set());
+      }
+      index.get(normalized).add(subject);
+    }
+  }
+  // Convert Sets to Arrays for easier iteration
+  const result = new Map();
+  for (const [keyword, subjects] of index) {
+    result.set(keyword, Array.from(subjects));
+  }
+  return result;
+})();
