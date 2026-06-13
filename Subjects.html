@@ -15,7 +15,7 @@
     <!-- Note: Comment generation scripts are lazy-loaded on demand -->
     <link rel="modulepreload" href="assets/js/curriculum/curriculum-loader.js">
     <link rel="preload" href="assets/js/utils/performance-optimizer.js" as="script">
-    <link rel="preload" href="assets/js/utils/ui-enhancements.js" as="script">
+    <!-- ui-enhancements.js loaded via idle callback after page interactive -->
 
     <!-- CSS -->
     <link rel="stylesheet" href="assets/css/main.css">
@@ -626,6 +626,24 @@
     <script type="module">
         import { TeachersPetApp } from './assets/js/controllers/app-controller.js';
         window.app = new TeachersPetApp();
+        
+        // Load ui-enhancements.js via idle callback after page interactive
+        if ('requestIdleCallback' in window) {
+            requestIdleCallback(() => {
+                const script = document.createElement('script');
+                script.type = 'module';
+                script.src = 'assets/js/utils/ui-enhancements.js';
+                document.head.appendChild(script);
+            });
+        } else {
+            // Fallback for browsers without requestIdleCallback
+            setTimeout(() => {
+                const script = document.createElement('script');
+                script.type = 'module';
+                script.src = 'assets/js/utils/ui-enhancements.js';
+                document.head.appendChild(script);
+            }, 100);
+        }
     </script>
 </body>
 </html>
