@@ -25,7 +25,17 @@ export class StudentInfoController {
                 if (tracker) {
                     const safeGrade = this.escapeHtml(grade);
                     const safeMonth = this.escapeHtml(month);
-                    tracker.innerHTML = `<span style="background:rgba(0,0,0,0.07);border-radius:16px;padding:4px 12px;font-weight:600;display:inline-block;">Current: <span style='color:#2a7cff'>${safeGrade}</span> · <span style='color:#ff7c2a'>${safeMonth}</span> <a href='month-selection.html?grade=${encodeURIComponent(grade)}' style='margin-left:8px;font-size:13px;'>Change</a></span>`;
+                    // Build safely with DOM APIs
+                    tracker.innerHTML = ''; // Clear first
+                    const span = document.createElement('span');
+                    span.style.cssText = 'background:rgba(0,0,0,0.07);border-radius:16px;padding:4px 12px;font-weight:600;display:inline-block;';
+                    span.innerHTML = `Current: <span style="color:#2a7cff">${safeGrade}</span> · <span style="color:#ff7c2a">${safeMonth}</span> `;
+                    const changeLink = document.createElement('a');
+                    changeLink.href = `month-selection.html?grade=${encodeURIComponent(grade)}`;
+                    changeLink.style.cssText = 'margin-left:8px;font-size:13px;';
+                    changeLink.textContent = 'Change';
+                    span.appendChild(changeLink);
+                    tracker.appendChild(span);
                 }
             }
         } catch (e) { }

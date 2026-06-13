@@ -4,6 +4,16 @@
  */
 
 import { EnhancedCommentEngine } from './assets/js/engine/core.js';
+import { TeachersPetUtils } from './assets/js/engine/utils.js';
+
+/**
+ * Debug logging helper - only logs when window.__TP_DEBUG__ === true
+ */
+function debugLog(...args) {
+    if (typeof window !== 'undefined' && window.__TP_DEBUG__ === true) {
+        console.log(...args);
+    }
+}
 
 export class OptimizedCommentGenerator {
     constructor() {
@@ -20,7 +30,7 @@ export class OptimizedCommentGenerator {
             if (EnhancedCommentEngine) {
                 this.engine = new EnhancedCommentEngine();
                 this.isInitialized = true;
-                console.log('OptimizedCommentGenerator initialized with EnhancedCommentEngine');
+                debugLog('OptimizedCommentGenerator initialized with EnhancedCommentEngine');
             } else {
                 console.warn('No comment engines available, using fallback mode');
                 this.fallbackMode = true;
@@ -35,7 +45,7 @@ export class OptimizedCommentGenerator {
 
     initializeFallback() {
         this.isInitialized = true;
-        console.log('OptimizedCommentGenerator initialized in fallback mode');
+        debugLog('OptimizedCommentGenerator initialized in fallback mode');
     }
 
     /**
@@ -89,24 +99,24 @@ export class OptimizedCommentGenerator {
     collectSessionData() {
         // Get student data from localStorage
         const studentDataStr = localStorage.getItem('studentData');
-        console.log('📦 Raw localStorage studentData:', studentDataStr);
+        debugLog('Raw localStorage studentData:', studentDataStr);
 
         const studentData = studentDataStr ? JSON.parse(studentDataStr) : {};
-        console.log('📊 Parsed studentData:', studentData);
-        console.log('📊 studentData.studentName:', studentData.studentName);
-        console.log('📊 studentData.gender:', studentData.gender);
+        debugLog('Parsed studentData:', studentData);
+        debugLog('studentData.studentName:', studentData.studentName);
+        debugLog('studentData.gender:', studentData.gender);
 
         // Get selected subjects
         const selectedSubjects = this.getSelectedSubjects();
         const topicRatings = this.getTopicRatings();
 
         // Combine all data
-        console.log('📊 ⭐ Raw overallAttributes from localStorage:', studentData.overallAttributes, 'Type:', typeof studentData.overallAttributes);
+        debugLog('Raw overallAttributes from localStorage:', studentData.overallAttributes, 'Type:', typeof studentData.overallAttributes);
         const parsedRating = parseInt(studentData.overallAttributes);
-        console.log('📊 ⭐ After parseInt:', parsedRating, 'Type:', typeof parsedRating, 'isNaN:', isNaN(parsedRating));
+        debugLog('After parseInt:', parsedRating, 'Type:', typeof parsedRating, 'isNaN:', isNaN(parsedRating));
         // Use parsed rating if it's a valid number, otherwise default to 5
         const finalRating = (isNaN(parsedRating) || parsedRating < 1 || parsedRating > 10) ? 5 : parsedRating;
-        console.log('📊 ⭐ Final rating (validated, defaults to 5 if invalid):', finalRating);
+        debugLog('Final rating (validated, defaults to 5 if invalid):', finalRating);
         
         const sessionData = {
             studentName: studentData.studentName || '',
@@ -118,9 +128,9 @@ export class OptimizedCommentGenerator {
             topicRatings: topicRatings
         };
 
-        console.log('✅ Collected session data:', sessionData);
-        console.log('✅ Final studentName value:', sessionData.studentName);
-        console.log('✅ ⭐ Final overallRating value:', sessionData.overallRating);
+        debugLog('Collected session data:', sessionData);
+        debugLog('Final studentName value:', sessionData.studentName);
+        debugLog('Final overallRating value:', sessionData.overallRating);
         return sessionData;
     }
 
@@ -170,32 +180,43 @@ export class OptimizedCommentGenerator {
     }
 
     /**
-     * Validate and clean session data
+     * Validate session data - throws on invalid input
      */
-    validateAndCleanSessionData(sessionData) {
+    validateSessionData(sessionData) {
         const rawData = sessionData && typeof sessionData === 'object' ? sessionData : {};
-        console.log('🔍 ⭐ validateAndCleanSessionData - INPUT:', sessionData);
-        console.log('🔍 ⭐ Input overallRating:', rawData.overallRating, 'Type:', typeof rawData.overallRating);
-
-        const cleaned = this.buildFallbackSessionData(rawData);
+        debugLog('validateSessionData - INPUT:', sessionData);
 
         // Ensure required fields
         if (!rawData.studentName || String(rawData.studentName).trim() === '') {
             throw new Error('Student name is required for comment generation');
         }
 
-        // Ensure rating is within valid range
-        console.log('🔍 ⭐ Rating validation - value:', cleaned.overallRating, 'Type:', typeof cleaned.overallRating);
-        console.log('🔍 ⭐ Is < 1?', cleaned.overallRating < 1, 'Is > 10?', cleaned.overallRating > 10);
-        console.log('🔍 ⭐ Is NaN?', isNaN(cleaned.overallRating), 'Is undefined?', cleaned.overallRating === undefined);
-        
-        if (isNaN(cleaned.overallRating) || cleaned.overallRating < 1 || cleaned.overallRating > 10) {
-            console.warn('⚠️ ⭐ Invalid rating detected! Value:', cleaned.overallRating, '- Defaulting to 5');
-            cleaned.overallRating = 5;
-        } else {
-            console.log('✅ ⭐ Rating validation PASSED - using value:', cleaned.overallRating);
+        return rawData;
+    }
+
+    /**
+     * Coerce rating to valid range (1-10), defaulting to 5
+     */
+    coerceRating(rating) {
+        const numRating = Number(rating);
+        debugLog('coerceRating - input:', rating, 'parsed:', numRating);
+
+        if (isNaN(numRating) || numRating < 1 || numRating > 10) {
+            console.warn('Invalid rating detected! Value:', rating, '- Defaulting to 5');
+            return 5;
         }
 
+        debugLog('Rating validation PASSED - using value:', numRating);
+        return numRating;
+    }
+
+    /**
+     * Validate and clean session data
+     */
+    validateAndCleanSessionData(sessionData) {
+        const rawData = this.validateSessionData(sessionData);
+        const cleaned = this.buildFallbackSessionData(rawData);
+        cleaned.overallRating = this.coerceRating(cleaned.overallRating);
         return cleaned;
     }
 
@@ -247,8 +268,8 @@ export class OptimizedCommentGenerator {
             male: maleComment,
             female: femaleComment,
             wordCount: {
-                male: this.getWordCount(maleComment),
-                female: this.getWordCount(femaleComment)
+                male: TeachersPetUtils.getWordCount(maleComment),
+                female: TeachersPetUtils.getWordCount(femaleComment)
             }
         };
     }
@@ -266,7 +287,6 @@ export class OptimizedCommentGenerator {
         }
 
         comment += `${pronoun.subject} maintains positive behavior in the classroom and works well with peers. `;
-
         if (data.weaknesses) {
             const weaknesses = this.processTextList(data.weaknesses);
             comment += `With continued support in ${this.naturalJoin(weaknesses)}, ${name} will continue to develop these important skills. `;
@@ -290,7 +310,6 @@ export class OptimizedCommentGenerator {
         }
 
         comment += `${pronoun.subject} brings positive energy to classroom interactions and is a valued member of our learning community. `;
-
         if (data.weaknesses) {
             const weaknesses = this.processTextList(data.weaknesses);
             comment += `With gentle encouragement in ${this.naturalJoin(weaknesses)}, ${name} will continue to develop these important skills. `;
@@ -358,14 +377,6 @@ export class OptimizedCommentGenerator {
     }
 
     /**
-     * Get word count
-     */
-    getWordCount(text) {
-        if (!text) return 0;
-        return text.trim().split(/\s+/).filter(word => word.length > 0).length;
-    }
-
-    /**
      * Generate error comments when generation fails
      */
     generateErrorComments(errorMessage) {
@@ -375,8 +386,8 @@ export class OptimizedCommentGenerator {
             male: errorComment,
             female: errorComment,
             wordCount: {
-                male: this.getWordCount(errorComment),
-                female: this.getWordCount(errorComment)
+                male: TeachersPetUtils.getWordCount(errorComment),
+                female: TeachersPetUtils.getWordCount(errorComment)
             }
         };
     }
@@ -398,6 +409,7 @@ export class OptimizedCommentGenerator {
             }
         };
 
+        // Always log test results (test helper)
         console.log('Testing comment generation with sample data...');
         const result = await this.generateComments(testData);
         console.log('Test result:', result);
@@ -427,7 +439,7 @@ document.addEventListener('DOMContentLoaded', function () {
         window.commentGenerator.init();
     }
 
-    console.log('OptimizedCommentGenerator ready for use');
+    debugLog('OptimizedCommentGenerator ready for use');
 });
 
-console.log('Optimized Comment Generator loaded successfully');
+debugLog('Optimized Comment Generator loaded successfully');

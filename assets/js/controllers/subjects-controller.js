@@ -1,4 +1,5 @@
 import CurriculumLoader from "../curriculum/curriculum-loader.js";
+import { TeachersPetUtils } from "../engine/utils.js";
 
 export class SubjectsController {
     constructor(app) {
@@ -83,39 +84,68 @@ export class SubjectsController {
     renderSubjects(subjects) {
         if (!this.subjectsContainer) return;
 
-        this.subjectsContainer.innerHTML = subjects.map(subject => this.renderSubject(subject)).join("");
+        // Clear container safely
+        this.subjectsContainer.innerHTML = '';
+
+        // Build DOM elements safely
+        const fragment = document.createDocumentFragment();
+        subjects.forEach(subject => {
+            fragment.appendChild(this.createSubjectElement(subject));
+        });
+        this.subjectsContainer.appendChild(fragment);
         this.bindSubjectEvents();
     }
 
-    renderSubject(subject) {
-        const subjectId = subject.id || subject.name.toLowerCase().replace(/\s+/g, "-");
-        const topicsHtml = subject.topics.map(topic => this.renderTopic(topic, subjectId)).join("");
-        return `
-      <div class="subject-section">
-        <div class="subject-header" data-subject="${subjectId}">
-          <div class="subject-title">
-            <input type="checkbox" class="subject-checkbox" id="subject_${subjectId}" value="${subject.name}"
-              onchange="app.controllers.subjects.handleSubjectCheck('${subjectId}')">
-            <label for="subject_${subjectId}">${subject.name.toUpperCase()}</label>
-            <span class="dropdown-hint">Click to drop down</span>
-            <span class="dropdown-arrow" id="arrow_${subjectId}">▼</span>
-          </div>
-        </div>
-        <div class="subject-content" id="content_${subjectId}">${topicsHtml}</div>
-      </div>
-    `;
+    /**
+     * Escape HTML to prevent XSS
+     */
+    escapeHtml(text) {
+        if (!text) return '';
+        const div = document.createElement('div');
+        div.textContent = text;
+        return div.innerHTML;
     }
 
-    renderTopic(topic, subjectId) {
-        const topicName = topic.name || topic;
-        const topicId = `${subjectId}-${topic.id || topicName.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`;
-        return `
-      <div class="topic-item">
-        <input type="checkbox" class="topic-checkbox" id="topic_${topicId}" value="${topicName}"
-          data-subject="${subjectId}" data-topic="${topicName}">
-        <label for="topic_${topicId}" class="topic-text">${topicName}</label>
+    createSubjectElement(subject) {
+        const subjectId = subject.id || subject.name.toLowerCase().replace(/\s+/g, '-');
+        const section = document.createElement('div');
+        section.className = 'subject-section';
+
+        const topicsFragment = document.createDocumentFragment();
+        subject.topics.forEach(topic => {
+            topicsFragment.appendChild(this.createTopicElement(topic, subjectId));
+        });
+
+        section.innerHTML = `
+      <div class="subject-header" data-subject="${this.escapeHtml(subjectId)}">
+        <div class="subject-title">
+          <input type="checkbox" class="subject-checkbox" id="subject_${this.escapeHtml(subjectId)}" value="${this.escapeHtml(subject.name)}"
+            onchange="app.controllers.subjects.handleSubjectCheck('${this.escapeHtml(subjectId)}')">
+          <label for="subject_${this.escapeHtml(subjectId)}">${this.escapeHtml(subject.name.toUpperCase())}</label>
+          <span class="dropdown-hint">Click to drop down</span>
+          <span class="dropdown-arrow" id="arrow_${this.escapeHtml(subjectId)}">▼</span>
+        </div>
+        <div class="subject-content" id="content_${this.escapeHtml(subjectId)}"></div>
       </div>
     `;
+
+        const contentDiv = section.querySelector('.subject-content');
+        contentDiv.appendChild(topicsFragment);
+
+        return section;
+    }
+
+    createTopicElement(topic, subjectId) {
+        const topicName = topic.name || topic;
+        const topicId = `${subjectId}-${topic.id || topicName.toLowerCase().replace(/[^a-z0-9]+/g, '-')}`;
+        const div = document.createElement('div');
+        div.className = 'topic-item';
+        div.innerHTML = `
+      <input type="checkbox" class="topic-checkbox" id="topic_${this.escapeHtml(topicId)}" value="${this.escapeHtml(topicName)}"
+        data-subject="${this.escapeHtml(subjectId)}" data-topic="${this.escapeHtml(topicName)}">
+      <label for="topic_${this.escapeHtml(topicId)}" class="topic-text">${this.escapeHtml(topicName)}</label>
+    `;
+        return div;
     }
 
     bindSubjectEvents() {
@@ -241,14 +271,9 @@ export class SubjectsController {
         // Simulate processing time for premium experience
         setTimeout(() => {
             try {
-                // Use the optimized comment generator
-                if (typeof OptimizedCommentGenerator !== 'undefined') {
-                    const generator = new OptimizedCommentGenerator();
-                    const comments = generator.generateComments(this.app.sessionData);
-                    this.displayComments(comments);
-                } else {
-                    throw new Error('Comment generator not available');
-                }
+                // Use the singleton comment generator from app
+                const comments = this.app.commentGenerator.generateComments(this.app.sessionData);
+                this.displayComments(comments);
             } catch (error) {
                 console.error('Comment generation failed:', error);
                 this.app.showNotification('Failed to generate comments. Please try again.', 'error');
@@ -275,10 +300,10 @@ export class SubjectsController {
         }
 
         if (wordCount1 && comments.male) {
-            wordCount1.textContent = `(${this.getWordCount(comments.male)} words)`;
+            wordCount1.textContent = `(${TeachersPetUtils.getWordCount(comments.male)} words)`;
         }
         if (wordCount2 && comments.female) {
-            wordCount2.textContent = `(${this.getWordCount(comments.female)} words)`;
+            wordCount2.textContent = `(${TeachersPetUtils.getWordCount(comments.female)} words)`;
         }
 
         // Show the generated comments section
@@ -295,14 +320,10 @@ export class SubjectsController {
         // Update selection indicator
         const generateBtn = document.getElementById('generateBtn');
         if (generateBtn) {
-            generateBtn.innerHTML = '🔄 Generate New Comments';
+            generateBtn.textContent = '🔄 Generate New Comments';
         }
 
         this.app.hideLoadingOverlay();
         this.app.showNotification('Comments generated successfully!', 'success');
-    }
-
-    getWordCount(text) {
-        return text.trim().split(/\s+/).filter(word => word.length > 0).length;
     }
 }

@@ -1,4 +1,5 @@
 import CurriculumLoader from "../curriculum/curriculum-loader.js";
+import { TeachersPetUtils } from "../engine/utils.js";
 
 export class P2SubjectsController {
   constructor(app) {
@@ -48,20 +49,28 @@ export class P2SubjectsController {
       if (this.app.notify) {
         this.app.notify("Failed to load curriculum. Please try again.", "error");
       }
-      // Fallback to empty state
-      this.subjectsContainer.innerHTML = `
-        <div class="error-state">
-          <p>Unable to load curriculum data.</p>
-          <button class="btn btn-primary" onclick="location.reload()">Retry</button>
-        </div>
+      // Fallback to empty state - use safe DOM
+      this.subjectsContainer.innerHTML = '';
+      const errorDiv = document.createElement('div');
+      errorDiv.className = 'error-state';
+      errorDiv.innerHTML = `
+        <p>Unable to load curriculum data.</p>
+        <button class="btn btn-primary" onclick="location.reload()">Retry</button>
       `;
+      this.subjectsContainer.appendChild(errorDiv);
     } finally {
       if (this.app.hideLoader) this.app.hideLoader();
     }
   }
 
-  renderSubjects(subjects) {
-    this.subjectsContainer.innerHTML = subjects.map(subject => this.renderSubject(subject)).join("");
+  /**
+   * Escape HTML to prevent XSS
+   */
+  escapeHtml(text) {
+    if (!text) return '';
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
   }
 
   parseTopicName(name) {
@@ -71,21 +80,6 @@ export class P2SubjectsController {
       return { en: match[1].trim(), th: match[2].trim() };
     }
     return { en: name.trim(), th: "" };
-  }
-
-  renderSubject(subject) {
-    const subjectId = subject.id || subject.name.toLowerCase().replace(/\s+/g, "-");
-    const topicsHtml = subject.topics.map(topic => this.renderTopic(topic, subjectId)).join("");
-    return `
-      <section class="subject-section" data-subject="${subjectId}">
-        <h3 class="subject-title">
-          <span class="subject-name-en">${subject.name}</span>
-          <span class="subject-name-th">${this.getThaiSubjectName(subject.name)}</span>
-          <button class="subject-toggle" aria-expanded="false" aria-controls="${subjectId}-topics">▼</button>
-        </h3>
-        <div class="subject-topics" id="${subjectId}-topics" role="region">${topicsHtml}</div>
-      </section>
-    `;
   }
 
   getThaiSubjectName(englishName) {
@@ -102,25 +96,62 @@ export class P2SubjectsController {
     return thaiNames[englishName] || "";
   }
 
-  renderTopic(topic, subjectId) {
+  renderSubjects(subjects) {
+    this.subjectsContainer.innerHTML = '';
+    const fragment = document.createDocumentFragment();
+    subjects.forEach(subject => {
+      fragment.appendChild(this.createSubjectElement(subject));
+    });
+    this.subjectsContainer.appendChild(fragment);
+  }
+
+  createSubjectElement(subject) {
+    const subjectId = subject.id || subject.name.toLowerCase().replace(/\s+/g, '-');
+    const section = document.createElement('section');
+    section.className = 'subject-section';
+    section.setAttribute('data-subject', this.escapeHtml(subjectId));
+
+    const topicsFragment = document.createDocumentFragment();
+    subject.topics.forEach(topic => {
+      topicsFragment.appendChild(this.createTopicElement(topic, subjectId));
+    });
+
+    section.innerHTML = `
+      <h3 class="subject-title">
+        <span class="subject-name-en">${this.escapeHtml(subject.name)}</span>
+        <span class="subject-name-th">${this.escapeHtml(this.getThaiSubjectName(subject.name))}</span>
+        <button class="subject-toggle" aria-expanded="false" aria-controls="${this.escapeHtml(subjectId)}-topics">▼</button>
+      </h3>
+      <div class="subject-topics" id="${this.escapeHtml(subjectId)}-topics" role="region"></div>
+    `;
+
+    const topicsDiv = section.querySelector('.subject-topics');
+    topicsDiv.appendChild(topicsFragment);
+
+    return section;
+  }
+
+  createTopicElement(topic, subjectId) {
     const topicId = `${subjectId}-${topic.id}`;
     const { en, th } = this.parseTopicName(topic.name);
-    return `
-      <label class="topic-item" data-topic-id="${topicId}">
-        <input type="checkbox" 
-               class="topic-checkbox"
-               data-subject="${subjectId}" 
-               data-topic="${topic.name}"
-               data-topic-id="${topicId}"
-               data-vocab="${topic.name}"
-               value="${topic.name}">
-        <span class="topic-name-en">${en}</span>
-        <span class="topic-name-th">(${th})</span>
-        <div class="rating-stars" data-topic-id="${topicId}" role="group" aria-label="Rating for ${en}">
-          ${this.renderStars(0, topicId)}
-        </div>
-      </label>
+    const label = document.createElement('label');
+    label.className = 'topic-item';
+    label.setAttribute('data-topic-id', this.escapeHtml(topicId));
+    label.innerHTML = `
+      <input type="checkbox" 
+             class="topic-checkbox"
+             data-subject="${this.escapeHtml(subjectId)}" 
+             data-topic="${this.escapeHtml(topic.name)}"
+             data-topic-id="${this.escapeHtml(topicId)}"
+             data-vocab="${this.escapeHtml(topic.name)}"
+             value="${this.escapeHtml(topic.name)}">
+      <span class="topic-name-en">${this.escapeHtml(en)}</span>
+      <span class="topic-name-th">(${this.escapeHtml(th)})</span>
+      <div class="rating-stars" data-topic-id="${this.escapeHtml(topicId)}" role="group" aria-label="Rating for ${this.escapeHtml(en)}">
+        ${this.renderStars(0, topicId)}
+      </div>
     `;
+    return label;
   }
 
   renderStars(value, topicId) {
@@ -268,10 +299,9 @@ export class P2SubjectsController {
     if (this.app.showLoader) this.app.showLoader("Generating comments...");
 
     try {
-      const { OptimizedCommentGenerator } = await import("../utils/optimized-comment-generator.js");
-      const generator = new OptimizedCommentGenerator();
+      // Use the singleton comment generator from app
       const selections = this.collectSelections();
-      const comments = await generator.generate(selections);
+      const comments = await this.app.commentGenerator.generateComments(selections);
       
       if (this.app.notify) {
         this.app.notify("Comments generated successfully!", "success");
@@ -316,6 +346,11 @@ export class P2SubjectsController {
   }
 
   displayComments(comments) {
+    const maleText = comments.male || comments;
+    const femaleText = comments.female || comments;
+    const maleWordCount = TeachersPetUtils.getWordCount(maleText);
+    const femaleWordCount = TeachersPetUtils.getWordCount(femaleText);
+
     const commentsHTML = `
       <div class="comments-overlay" id="commentsOverlay">
         <div class="comments-container">
@@ -326,18 +361,18 @@ export class P2SubjectsController {
           <div class="comments-content">
             <div class="comment-section">
               <h3>Male Teacher Style</h3>
-              <div class="comment-text">${comments.male || comments}</div>
-              <div class="word-count">Word count: ${this.getWordCount(comments.male || comments)}</div>
+              <div class="comment-text">${maleText}</div>
+              <div class="word-count">Word count: ${maleWordCount}</div>
             </div>
             <div class="comment-section">
               <h3>Female Teacher Style</h3>
-              <div class="comment-text">${comments.female || comments}</div>
-              <div class="word-count">Word count: ${this.getWordCount(comments.female || comments)}</div>
+              <div class="comment-text">${femaleText}</div>
+              <div class="word-count">Word count: ${femaleWordCount}</div>
             </div>
           </div>
           <div class="comments-actions">
-            <button class="nav-button secondary" onclick="navigator.clipboard.writeText('${(comments.male || comments).replace(/'/g, "\\'")}')">Copy Male Version</button>
-            <button class="nav-button secondary" onclick="navigator.clipboard.writeText('${(comments.female || comments).replace(/'/g, "\\'")}')">Copy Female Version</button>
+            <button class="nav-button secondary" onclick="navigator.clipboard.writeText('${maleText.replace(/'/g, "\\'")}')">Copy Male Version</button>
+            <button class="nav-button secondary" onclick="navigator.clipboard.writeText('${femaleText.replace(/'/g, "\\'")}')">Copy Female Version</button>
             <button class="nav-button danger" onclick="document.getElementById('commentsOverlay').remove()">Close</button>
           </div>
         </div>
@@ -345,9 +380,5 @@ export class P2SubjectsController {
     `;
 
     document.body.insertAdjacentHTML('beforeend', commentsHTML);
-  }
-
-  getWordCount(text) {
-    return text.trim().split(/\s+/).filter(word => word.length > 0).length;
   }
 }

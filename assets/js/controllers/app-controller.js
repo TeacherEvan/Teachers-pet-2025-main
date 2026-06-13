@@ -10,6 +10,7 @@ import { LauncherController } from './launcher-controller.js';
 import { StudentInfoController } from './student-info-controller.js';
 import { SubjectsController } from './subjects-controller.js';
 import { P2SubjectsController } from './p2-subjects-controller.js';
+import { OptimizedCommentGenerator } from '../../optimized-comment-generator.js';
 
 export class TeachersPetApp {
     constructor() {
@@ -25,6 +26,9 @@ export class TeachersPetApp {
             subjects: [],
             topicRatings: {}
         });
+
+        // Singleton comment generator
+        this.commentGenerator = new OptimizedCommentGenerator();
 
         this.currentPage = this.getCurrentPage();
         this.initialized = false;
@@ -131,12 +135,20 @@ export class TeachersPetApp {
     showLoadingOverlay(message = 'Loading...') {
         const overlay = document.createElement('div');
         overlay.id = 'loadingOverlay';
-        overlay.innerHTML = `
-      <div class="loading-overlay-content">
-        <div class="loading-spinner"></div>
-        <div class="loading-message">${message}</div>
-      </div>
-    `;
+        
+        const content = document.createElement('div');
+        content.className = 'loading-overlay-content';
+        
+        const spinner = document.createElement('div');
+        spinner.className = 'loading-spinner';
+        
+        const messageDiv = document.createElement('div');
+        messageDiv.className = 'loading-message';
+        messageDiv.textContent = message; // Safe - uses textContent
+        
+        content.appendChild(spinner);
+        content.appendChild(messageDiv);
+        overlay.appendChild(content);
 
         overlay.style.cssText = `
       position: fixed;
@@ -153,23 +165,6 @@ export class TeachersPetApp {
       z-index: 9999;
       color: white;
       font-family: inherit;
-    `;
-
-        const contentStyle = `
-      text-align: center;
-      .loading-spinner {
-        width: 40px;
-        height: 40px;
-        border: 3px solid rgba(255, 255, 255, 0.3);
-        border-top: 3px solid white;
-        border-radius: 50%;
-        animation: spin 1s linear infinite;
-        margin: 0 auto 20px;
-      }
-      .loading-message {
-        font-size: 1.1rem;
-        font-weight: 500;
-      }
     `;
 
         document.body.appendChild(overlay);
