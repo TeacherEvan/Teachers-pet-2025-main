@@ -24,7 +24,6 @@
     <link rel="preload" href="assets/css/main.css" as="style">
     <link rel="preload" href="assets/css/components.css" as="style">
     <link rel="preload" href="assets/js/controllers/app-controller.js" as="script">
-    <link rel="preload" href="assets/js/comment-engine.js" as="script">
     <link rel="preload" href="assets/js/utils/performance-optimizer.js" as="script">
     <link rel="preload" href="assets/js/utils/ui-enhancements.js" as="script">
 
@@ -272,11 +271,17 @@
         };
     </script>
     <!-- Performance & UX Enhancement Scripts -->
-    <script src="assets/js/utils/error-boundary.js" defer></script>
-    <script src="assets/js/utils/performance-optimizer.js" defer></script>
-    <script src="assets/js/utils/ui-enhancements.js" defer></script>
     <script type="module">
+        import { ErrorBoundary } from './assets/js/utils/error-boundary.js';
+        import { PerformanceOptimizer } from './assets/js/utils/performance-optimizer.js';
+        import { UIEnhancements } from './assets/js/utils/ui-enhancements.js';
         import { TeachersPetApp } from './assets/js/controllers/app-controller.js';
+        
+        // Initialize global instances (same as before)
+        window.errorBoundary = new ErrorBoundary();
+        window.performanceOptimizer = new PerformanceOptimizer();
+        window.uiEnhancements = new UIEnhancements();
+        
         window.app = new TeachersPetApp();
     </script>
 </body>

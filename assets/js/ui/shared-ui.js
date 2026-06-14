@@ -74,3 +74,5 @@ function refreshReport() {
         clearAndNavigate(grade, month);
     }
 }
+
+export { captureGradeMonth, clearAndNavigate, goBack, startOver, refreshReport };

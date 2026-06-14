@@ -346,6 +346,4 @@ if (typeof window !== 'undefined') {
 }
 
 // Export for module systems
-if (typeof module !== 'undefined' && module.exports) {
-    module.exports = ErrorBoundary;
-}
+export { ErrorBoundary };

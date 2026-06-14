@@ -17,9 +17,8 @@
     <link rel="stylesheet" href="assets/css/components.css">
     <!-- Mythology Theme -->
     <link rel="stylesheet" href="assets/css/mythology-theme.css">
-</head>
-<style>
-    @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap');
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&display=swap');
 
     * {
         margin: 0;
@@ -696,8 +695,6 @@
         box-shadow: 0 6px 20px rgba(39, 174, 96, 0.6);
     }
 </style>
-<link rel="stylesheet" href="styles/inline-fixes.css">
-<script src="missing-functions.js"></script>
 </head>
 
 <body>
@@ -1530,11 +1527,17 @@
     </script>
 
     <!-- Include shared UI functions -->
-    <script src="assets/js/ui/shared-ui.js"></script>
-    <!-- Mythology Effects -->
-    <script src="assets/js/mythology-effects.js"></script>
     <script type="module">
         import { TeachersPetApp } from './assets/js/controllers/app-controller.js';
+        import { captureGradeMonth, clearAndNavigate, goBack, startOver, refreshReport } from './assets/js/ui/shared-ui.js';
+        
+        // Make shared UI functions globally available (for backward compatibility)
+        window.captureGradeMonth = captureGradeMonth;
+        window.clearAndNavigate = clearAndNavigate;
+        window.goBack = goBack;
+        window.startOver = startOver;
+        window.refreshReport = refreshReport;
+        
         // Initialize App
         document.addEventListener('DOMContentLoaded', () => {
             window.app = new TeachersPetApp();

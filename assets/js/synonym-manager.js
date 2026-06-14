@@ -7,18 +7,9 @@
  * with contextually appropriate synonyms to maintain professional variety
  * @class SynonymManager
  */
+import { createDebugLog } from './utils/debug.js';
 
-/**
- * Debug logging helper - only logs when window.__TP_DEBUG__ === true
- * @param {string} emoji - Emoji prefix for the log message
- * @param {string} message - Main log message
- * @param {...any} args - Additional arguments to log
- */
-function debugLogSynonym(emoji, message, ...args) {
-    if (typeof window !== 'undefined' && window.__TP_DEBUG__ === true) {
-        console.log(emoji + ' ' + message, ...args);
-    }
-}
+const debugLogSynonym = createDebugLog('📚 ');
 
 export class SynonymManager {
     constructor() {

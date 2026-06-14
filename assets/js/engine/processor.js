@@ -1,7 +1,7 @@
 /* eslint-env es6 */
-/* global window */
 import { TeachersPetUtils } from "./utils.js";
 import { TeachersPetData } from "../data/engine-data.js";
+import { debugLog } from '../utils/debug.js';
 
 /**
  * Pre-built inverted keyword index for standard engine data
@@ -25,18 +25,6 @@ const STANDARD_KEYWORD_INDEX = (() => {
   }
   return result;
 })();
-
-/**
- * Debug logging helper - only logs when window.__TP_DEBUG__ === true
- * @param {string} emoji - Emoji prefix for the log message
- * @param {string} message - Main log message
- * @param {...any} args - Additional arguments to log
- */
-function debugLog(emoji, message, ...args) {
-    if (typeof window !== 'undefined' && window.__TP_DEBUG__ === true) {
-        console.log(emoji + ' ' + message, ...args);
-    }
-}
 
 /**
  * Teachers Pet Data Processor

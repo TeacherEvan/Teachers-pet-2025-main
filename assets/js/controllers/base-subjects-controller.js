@@ -352,7 +352,7 @@ export class BaseSubjectsController {
 
     setTimeout(async () => {
       try {
-        const { OptimizedCommentGenerator } = await import("../../optimized-comment-generator.js");
+        const { OptimizedCommentGenerator } = await import("../optimized-comment-generator.js");
         const generator = new OptimizedCommentGenerator();
         const comments = generator.generateComments(this.app.sessionData);
         this.displayComments(comments);

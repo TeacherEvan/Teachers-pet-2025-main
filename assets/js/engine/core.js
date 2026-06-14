@@ -1,22 +1,10 @@
 /* eslint-env es6 */
-/* global window */
 import { TeachersPetData } from '../data/engine-data.js';
 import { synonymManager } from '../synonym-manager.js';
 import { TeachersPetProcessor } from './processor.js';
 import { TeachersPetTemplates } from './templates.js';
 import { TeachersPetUtils } from './utils.js';
-
-/**
- * Debug logging helper - only logs when window.__TP_DEBUG__ === true
- * @param {string} emoji - Emoji prefix for the log message
- * @param {string} message - Main log message
- * @param {...any} args - Additional arguments to log
- */
-function debugLog(emoji, message, ...args) {
-    if (typeof window !== 'undefined' && window.__TP_DEBUG__ === true) {
-        console.log(emoji + ' ' + message, ...args);
-    }
-}
+import { debugLog } from '../utils/debug.js';
 
 /**
  * Enhanced Comment Generation Engine (Core)

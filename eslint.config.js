@@ -35,7 +35,7 @@ export default [
       }]
     },
     files: ["**/*.js"],
-    ignores: ["node_modules/**", ".git/**", "eslint.config.js"]
+    ignores: ["node_modules/**", ".git/**", "eslint.config.js", "dist/**"]
   },
   {
     // Special config for ES modules (scripts directory)

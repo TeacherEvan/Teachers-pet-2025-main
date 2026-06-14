@@ -11,6 +11,9 @@
     "test:integration": "node tests/run-tests.js --integration",
     "test:perf": "node tests/perf/engine-benchmark.js",
     "e2e:testall": "node scripts/e2e-testall.js",
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview",
     "prepare": "husky"
   },
   "lint-staged": {
@@ -20,10 +23,13 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "complexity-report": "^2.0.0-alpha",
     "eslint": "^8.57.1",
     "globals": "^16.5.0",
+    "gzip-size": "^7.0.0",
     "husky": "^9.1.7",
     "lint-staged": "^16.2.7",
-    "typescript": "^6.0.3"
+    "typescript": "^6.0.3",
+    "vite": "^8.0.16"
   }
 }

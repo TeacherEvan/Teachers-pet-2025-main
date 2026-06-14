@@ -29,10 +29,29 @@ export class TeachersPetApp {
 
         this.currentPage = this.getCurrentPage();
         this.initialized = false;
-        this.controllers = {};
+        this._launcher = null;
+        this._studentInfo = null;
+        this._subjects = null;
+        this._p2Subjects = null;
 
         // Initialize app based on current page
         this.init();
+    }
+
+    // Lazy getters for controllers - only instantiate when accessed
+    get launcher() { return this._launcher ??= new LauncherController(this); }
+    get studentInfo() { return this._studentInfo ??= new StudentInfoController(this); }
+    get subjects() { return this._subjects ??= new SubjectsController(this); }
+    get p2Subjects() { return this._p2Subjects ??= new P2SubjectsController(this); }
+
+    // Compatibility proxy for existing code accessing this.controllers.xxx
+    get controllers() {
+        return {
+            get launcher() { return this.launcher; },
+            get studentInfo() { return this.studentInfo; },
+            get subjects() { return this.subjects; },
+            get p2Subjects() { return this.p2Subjects; }
+        };
     }
 
     getCurrentPage() {
@@ -48,16 +67,10 @@ export class TeachersPetApp {
     init() {
         if (this.initialized) return;
 
-        // Initialize controllers
-        this.controllers.launcher = new LauncherController(this);
-        this.controllers.studentInfo = new StudentInfoController(this);
-        this.controllers.subjects = new SubjectsController(this);
-        this.controllers.p2Subjects = new P2SubjectsController(this);
-
-        // Initialize based on current page
+        // Initialize based on current page - controllers are lazy-instantiated via getters
         switch (this.currentPage) {
             case 'launcher':
-                if (this.controllers.launcher) this.controllers.launcher.init();
+                this.launcher.init();
                 break;
             case 'grade-selection':
                 this.initGradeSelection();
@@ -66,13 +79,13 @@ export class TeachersPetApp {
                 this.initMonthSelection();
                 break;
             case 'student-info':
-                if (this.controllers.studentInfo) this.controllers.studentInfo.init();
+                this.studentInfo.init();
                 break;
             case 'subjects':
-                if (this.controllers.subjects) this.controllers.subjects.init();
+                this.subjects.init();
                 break;
             case 'p2-subjects':
-                if (this.controllers.p2Subjects) this.controllers.p2Subjects.init();
+                this.p2Subjects.init();
                 break;
         }
 
