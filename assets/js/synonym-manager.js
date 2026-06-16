@@ -12,12 +12,16 @@ import { createDebugLog } from './utils/debug.js';
 const debugLogSynonym = createDebugLog('📚 ');
 
 export class SynonymManager {
+    /** Constructor - now with regex cache */
     constructor() {
         this.synonymData = null;
         this.usageCounts = this.loadUsageCounts();
         this.sessionActive = true;
         this.maxUsageThreshold = 2; // Maximum uses before swapping
         this.initialized = false;
+        this.escapeRegexCache = new Map();
+        this.matchCaseCache = new Map();
+        this.regexCache = new Map();
 
         debugLogSynonym('📚', 'SynonymManager: Initializing...');
     }
@@ -46,10 +50,6 @@ export class SynonymManager {
                 }
             }
             
-            // Initialize memoization caches
-            this.escapeRegexCache = new Map();
-            this.matchCaseCache = new Map();
-
             debugLogSynonym('✅', 'SynonymManager: Synonym data loaded successfully', {
                 categories: Object.keys(this.synonymData),
                 totalWords: this.getTotalWordCount(),
@@ -275,7 +275,12 @@ export class SynonymManager {
             .sort((a, b) => b.rightmostPos - a.rightmostPos);
 
         for (const { normalized, replacement } of sortedReplacements) {
-            const regex = new RegExp(`\\b${this.escapeRegex(normalized)}\\b`, 'gi');
+            // Use memoized regex to avoid recreating on each call
+            let regex = this.regexCache.get(normalized);
+            if (!regex) {
+                regex = new RegExp(`\\\\b${this.escapeRegex(normalized)}\\\\b`, 'gi');
+                this.regexCache.set(normalized, regex);
+            }
             processedText = processedText.replace(regex, (originalMatch) => {
                 const replaced = this.matchCase(originalMatch, replacement);
                 debugLogSynonym('🔄', `Replacing "${originalMatch}" → "${replaced}"`);
