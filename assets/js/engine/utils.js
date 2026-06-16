@@ -61,9 +61,7 @@ export const TeachersPetUtils = {
       .filter((word) => word.length > 0).length;
   },
 
-  /**
-   * Improve grammar and formatting
-   */
+  /** Improve grammar and formatting */
   improveGrammar: function (text) {
     if (!text) return "";
 
@@ -87,9 +85,47 @@ export const TeachersPetUtils = {
     return text.trim();
   },
 
-  /**
-   * Ensure student name appears appropriately throughout comment
-   */
+  /** Get pronoun set for gender */
+  getPronounSet: function (gender) {
+    const pronouns = {
+      he: { subject: "He", object: "him", possessive: "his" },
+      she: { subject: "She", object: "her", possessive: "her" },
+      they: { subject: "They", object: "them", possessive: "their" },
+    };
+
+    const normalizedGender = typeof gender === "string" ? gender.toLowerCase() : "they";
+    return pronouns[normalizedGender] || pronouns.they;
+  },
+
+  /** Get performance descriptor for rating 1-10 */
+  getPerformanceDescriptor: function (rating) {
+    const descriptors = {
+      10: { level: "exceptional", attitude: "outstanding" },
+      9: { level: "excellent", attitude: "exemplary" },
+      8: { level: "very strong", attitude: "enthusiastic" },
+      7: { level: "strong", attitude: "positive" },
+      6: { level: "good", attitude: "cooperative" },
+      5: { level: "satisfactory", attitude: "willing" },
+      4: { level: "developing", attitude: "engaged" },
+      3: { level: "basic", attitude: "participative" },
+      2: { level: "beginning", attitude: "responsive" },
+      1: { level: "emerging", attitude: "guided" },
+    };
+
+    return descriptors[rating] || descriptors[5];
+  },
+
+  /** Process text list from comma-separated string */
+  processTextList: function (text) {
+    if (!text) return [];
+    if (Array.isArray(text)) {
+      return text.map((item) => String(item).trim()).filter(Boolean);
+    }
+    if (typeof text !== "string") return [];
+    return text.split(",").map((item) => item.trim()).filter(Boolean);
+  },
+
+  /** Ensure student name appears appropriately throughout comment */
   ensureNameUsage: function (text, studentName) {
     if (!studentName || !text) return text;
 

@@ -15,6 +15,9 @@ function debugLog(...args) {
     }
 }
 
+// Re-export for backward compatibility
+export { TeachersPetUtils };
+
 export class OptimizedCommentGenerator {
     constructor() {
         this.engine = null;
@@ -258,8 +261,8 @@ export class OptimizedCommentGenerator {
     generateFallbackComments(sessionData) {
         const safeData = this.buildFallbackSessionData(sessionData);
         const name = safeData.studentName;
-        const pronoun = this.getPronounSet(safeData.gender);
-        const performance = this.getPerformanceDescriptor(safeData.overallRating);
+        const pronoun = TeachersPetUtils.getPronounSet(safeData.gender);
+        const performance = TeachersPetUtils.getPerformanceDescriptor(safeData.overallRating);
 
         const maleComment = this.generateMaleFallbackComment(name, pronoun, performance, safeData);
         const femaleComment = this.generateFemaleFallbackComment(name, pronoun, performance, safeData);
@@ -278,7 +281,7 @@ export class OptimizedCommentGenerator {
         let comment = `${name} has demonstrated ${performance.level} performance this term, showing consistent progress across multiple learning areas. `;
 
         if (data.strengths) {
-            const strengths = this.processTextList(data.strengths);
+            const strengths = TeachersPetUtils.processTextList(data.strengths);
             comment += `${pronoun.subject} particularly excels in ${TeachersPetUtils.naturalJoin(strengths)}, displaying strong understanding. `;
         }
 
@@ -288,7 +291,7 @@ export class OptimizedCommentGenerator {
 
         comment += `${pronoun.subject} maintains positive behavior in the classroom and works well with peers. `;
         if (data.weaknesses) {
-            const weaknesses = this.processTextList(data.weaknesses);
+            const weaknesses = TeachersPetUtils.processTextList(data.weaknesses);
             comment += `With continued support in ${TeachersPetUtils.naturalJoin(weaknesses)}, ${name} will continue to develop these important skills. `;
         }
 
@@ -301,7 +304,7 @@ export class OptimizedCommentGenerator {
         let comment = `${name} has demonstrated ${performance.level} performance this term, bringing enthusiasm to our classroom community. `;
 
         if (data.strengths) {
-            const strengths = this.processTextList(data.strengths);
+            const strengths = TeachersPetUtils.processTextList(data.strengths);
             comment += `${pronoun.subject} particularly excels in ${TeachersPetUtils.naturalJoin(strengths)}, displaying strong abilities. `;
         }
 
@@ -311,59 +314,13 @@ export class OptimizedCommentGenerator {
 
         comment += `${pronoun.subject} brings positive energy to classroom interactions and is a valued member of our learning community. `;
         if (data.weaknesses) {
-            const weaknesses = this.processTextList(data.weaknesses);
+            const weaknesses = TeachersPetUtils.processTextList(data.weaknesses);
             comment += `With gentle encouragement in ${TeachersPetUtils.naturalJoin(weaknesses)}, ${name} will continue to develop these important skills. `;
         }
 
         comment += `${name} is ready for continued learning adventures and shows potential for future success.`;
 
         return comment;
-    }
-
-    /**
-     * Get pronoun set for gender
-     */
-    getPronounSet(gender) {
-        const pronouns = {
-            he: { subject: 'He', object: 'him', possessive: 'his' },
-            she: { subject: 'She', object: 'her', possessive: 'her' },
-            they: { subject: 'They', object: 'them', possessive: 'their' }
-        };
-
-        const normalizedGender = typeof gender === 'string' ? gender.toLowerCase() : 'they';
-        return pronouns[normalizedGender] || pronouns.they;
-    }
-
-    /**
-     * Get performance descriptor
-     */
-    getPerformanceDescriptor(rating) {
-        const descriptors = {
-            10: { level: 'exceptional', attitude: 'outstanding' },
-            9: { level: 'excellent', attitude: 'exemplary' },
-            8: { level: 'very strong', attitude: 'enthusiastic' },
-            7: { level: 'strong', attitude: 'positive' },
-            6: { level: 'good', attitude: 'cooperative' },
-            5: { level: 'satisfactory', attitude: 'willing' },
-            4: { level: 'developing', attitude: 'engaged' },
-            3: { level: 'basic', attitude: 'participative' },
-            2: { level: 'beginning', attitude: 'responsive' },
-            1: { level: 'emerging', attitude: 'guided' }
-        };
-
-        return descriptors[rating] || descriptors[5];
-    }
-
-    /**
-     * Process text list from comma-separated string
-     */
-    processTextList(text) {
-        if (!text) return [];
-        if (Array.isArray(text)) {
-            return text.map(item => String(item).trim()).filter(Boolean);
-        }
-        if (typeof text !== 'string') return [];
-        return text.split(',').map(item => item.trim()).filter(Boolean);
     }
 
     /**
