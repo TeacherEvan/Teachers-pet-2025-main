@@ -57,7 +57,7 @@ The file contains 17 major sections:
 
 ## Unique Strengths
 
-The Teachers Pet Copilot instructions go **beyond basic requirements** with:
+The Teacher's Pet Copilot instructions go **beyond basic requirements** with:
 
 ### 1. Research-First Methodology
 - Explicit instructions to use MCP tools before implementation
@@ -167,7 +167,7 @@ No changes are required. The Copilot instructions setup is complete and can serv
 ## References
 
 - [GitHub Copilot Best Practices](https://gh.io/copilot-coding-agent-tips)
-- [Repository Copilot Instructions](.github/copilot-instructions.md)
+- [Repository Copilot Instructions](../.github/copilot-instructions.md)
 - [Project Status Documentation](PROJECT_STATUS.md)
 - [Contribution Guidelines](../.github/CONTRIBUTING.md)
 

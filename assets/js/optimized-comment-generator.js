@@ -364,29 +364,31 @@ export class OptimizedCommentGenerator {
     }
 }
 
-// Initialize and expose globally
-window.OptimizedCommentGenerator = OptimizedCommentGenerator;
+// Initialize and expose globally (browser only)
+if (typeof window !== 'undefined') {
+    window.OptimizedCommentGenerator = OptimizedCommentGenerator;
 
-// Create global instance
-window.commentGenerator = new OptimizedCommentGenerator();
+    // Create global instance
+    window.commentGenerator = new OptimizedCommentGenerator();
 
-// Backward compatibility functions
-window.generateCommentsFromStorage = function () {
-    return window.commentGenerator.generateFromStorage();
-};
+    // Backward compatibility functions
+    window.generateCommentsFromStorage = function () {
+        return window.commentGenerator.generateFromStorage();
+    };
 
-window.testCommentGeneration = function () {
-    return window.commentGenerator.testGeneration();
-};
+    window.testCommentGeneration = function () {
+        return window.commentGenerator.testGeneration();
+    };
 
-// Auto-initialize when DOM is loaded
-document.addEventListener('DOMContentLoaded', function () {
-    // Ensure the generator is ready
-    if (!window.commentGenerator.isInitialized) {
-        window.commentGenerator.init();
-    }
+    // Auto-initialize when DOM is loaded
+    document.addEventListener('DOMContentLoaded', function () {
+        // Ensure the generator is ready
+        if (!window.commentGenerator.isInitialized) {
+            window.commentGenerator.init();
+        }
 
-    debugLog('OptimizedCommentGenerator ready for use');
-});
+        debugLog('OptimizedCommentGenerator ready for use');
+    });
+}
 
 debugLog('Optimized Comment Generator loaded successfully');

@@ -1,5 +1,9 @@
 # User Info Window Enhancement & Curriculum Data Fixes — Implementation Plan
 
+**Status:** ✅ **Archived — Implemented & Verified** (June 2025)
+
+
+
 > **For implementer:** Use TDD throughout. Write failing test first. Watch it fail. Then implement.
 
 **Goal:** Fix missing curriculum JSON files for all grade/month combos, eliminate duplicate curriculum tracker code, fix broken progress tracking, and improve auto-save UX in student-information.html.

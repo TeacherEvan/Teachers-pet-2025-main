@@ -15,7 +15,7 @@ class PerformanceOptimizer {
         this.resourcePrefetchQueue = [];
         this.idleCallbacks = new Map();
         this.performanceMetrics = {
-            startTime: performance.now(),
+            startTime: (typeof performance !== 'undefined') ? performance.now() : Date.now(),
             resourceTimings: [],
             customMarks: [],
             coreWebVitals: {
@@ -34,7 +34,10 @@ class PerformanceOptimizer {
         this.PREFETCH_PRIORITY = ['high', 'medium', 'low'];
         this.IDLE_CALLBACK_TIMEOUT = 2000; // Max wait time for idle callback
         
-        this.init();
+        // Only initialize in browser environment
+        if (typeof window !== 'undefined') {
+            this.init();
+        }
     }
 
     /**
@@ -608,18 +611,17 @@ class PerformanceOptimizer {
     }
 }
 
-// Initialize global performance optimizer
-if (typeof window !== 'undefined') {
-    window.performanceOptimizer = new PerformanceOptimizer();
-    
-    // Log performance report when page is fully loaded
+// Export singleton for module systems
+export const performanceOptimizer = (typeof window !== 'undefined') ? new PerformanceOptimizer() : null;
+
+// Auto-initialize in browser (only if window has addEventListener)
+if (typeof window !== 'undefined' && window.addEventListener) {
+    performanceOptimizer.mark('app-fully-loaded');
     window.addEventListener('load', () => {
         setTimeout(() => {
-            window.performanceOptimizer.mark('app-fully-loaded');
-            window.performanceOptimizer.logPerformanceReport();
+            performanceOptimizer.logPerformanceReport();
         }, 1000);
     });
 }
 
-// Export for module systems
 export { PerformanceOptimizer };

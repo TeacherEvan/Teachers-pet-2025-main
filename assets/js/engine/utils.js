@@ -1,7 +1,7 @@
 /* eslint-env es6 */
 
 /**
- * Teachers Pet Utility Functions
+ * Teacher's Pet Utility Functions
  * Pure functions for string manipulation, array handling, and formatting.
  */
 export const TeachersPetUtils = {

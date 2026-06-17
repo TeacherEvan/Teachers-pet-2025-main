@@ -98,85 +98,23 @@
         }
     </style>
 
-    <!-- Load required scripts -->
-    <script src="assets/js/data/engine-data.js"></script>
-    <!-- Engine Modules (Refactored) -->
-    <script src="assets/js/engine/utils.js"></script>
-    <script src="assets/js/engine/processor.js"></script>
-    <script src="assets/js/engine/templates.js"></script>
-    <script src="assets/js/engine/core.js"></script>
-    <script src="assets/js/synonym-manager.js"></script>
-    <script src="optimized-comment-generator.js"></script>
-</head>
+    <script type="module">
+        import { OptimizedCommentGenerator } from '../assets/js/optimized-comment-generator.js';
+        import { EnhancedCommentEngine } from '../assets/js/engine/core.js';
+        import { TeachersPetData } from '../assets/js/data/engine-data.js';
+        import { TeachersPetUtils } from '../assets/js/engine/utils.js';
+        import { TeachersPetProcessor } from '../assets/js/engine/processor.js';
+        import { TeachersPetTemplates } from '../assets/js/engine/templates.js';
+        import { synonymManager } from '../assets/js/synonym-manager.js';
 
-<body>
-    <h1>🔴 Issue Reproduction: Rating 1/10 Produces Rating 10 Comments</h1>
-
-    <div class="issue">
-        <h3>⚠️ Reported Issue</h3>
-        <p><strong>User complaint:</strong> "This was the comment generated after overall performance was ranked at 1
-            out of 10!!!!!!"</p>
-        <p><strong>Generated text contained:</strong> "excelled <strong>magnificently</strong>" and "<strong>phenomenal
-                competency</strong> mastery"</p>
-        <p><strong>Problem:</strong> These phrases are from Rating 10 pool, not Rating 1!</p>
-    </div>
-
-    <div class="test-container">
-        <h2>Test Case 1: Rating = 1 (Munkorn Example)</h2>
-        <button onclick="testRating1()">🧪 Run Test with Rating 1</button>
-        <button onclick="clearStorage()">🗑️ Clear Storage</button>
-
-        <h3>Test Data:</h3>
-        <pre id="testData1">Loading...</pre>
-
-        <h3>Console Logs (Rating Pipeline):</h3>
-        <div class="console-log" id="console1">Click "Run Test" to see debug output...</div>
-
-        <div class="expected">
-            <h3>✅ Expected for Rating 1:</h3>
-            <ul>
-                <li><strong>Performance Level:</strong> "emerging"</li>
-                <li><strong>Verbs:</strong> "explored enthusiastically", "discovered curiously", "began investigating",
-                    "started exploring", "commenced discovering"</li>
-                <li><strong>Descriptors:</strong> "discovering learning", "emerging awareness", "starting exploration",
-                    "initial curiosity", "beginning discovery"</li>
-                <li><strong>Adverbs:</strong> "curiously", "enthusiastically", "exploratively", "investigatively",
-                    "discoveringly"</li>
-            </ul>
-        </div>
-
-        <div class="actual">
-            <h3>📊 Generated Comment:</h3>
-            <div id="result1" style="padding: 10px; background: white; border-radius: 4px; margin-top: 10px;">
-                Waiting for test to run...
-            </div>
-        </div>
-    </div>
-
-    <div class="test-container">
-        <h2>Test Case 2: All Ratings (1-10 Verification)</h2>
-        <button onclick="testAllRatings()">🧪 Test All Ratings (1-10)</button>
-
-        <h3>Results:</h3>
-        <div id="allRatingsResults"></div>
-    </div>
-
-    <script>
-        // Intercept console.log for display
-        let consoleLogs = [];
-        const originalLog = console.log;
-        console.log = function (...args) {
-            consoleLogs.push(args.map(a => typeof a === 'object' ? JSON.stringify(a, null, 2) : String(a)).join(' '));
-            originalLog.apply(console, args);
-        };
-
-        function clearStorage() {
+        // Make functions globally available for onclick
+        window.clearStorage = function clearStorage() {
             localStorage.clear();
             sessionStorage.clear();
             alert('✅ Storage cleared!');
-        }
+        };
 
-        async function testRating1() {
+        window.testRating1 = async function testRating1() {
             consoleLogs = []; // Clear logs
 
             // Set up exact test data from issue
@@ -235,7 +173,7 @@
                         <div style="background: #fee; color: #c0392b; padding: 15px; margin-top: 20px; border-radius: 4px; border: 2px solid #e74c3c;">
                             <h4>❌ BUG DETECTED!</h4>
                             <p><strong>Found Rating 10 phrases in Rating 1 comment:</strong></p>
-                            <ul>${foundBugPhrases.map(p => `<li>${p}</li>`).join('')}</ul>
+                            <ul>${foundBugPhrases.map(p => '<li>' + p + '</li>').join('')}</ul>
                             <p><strong>This confirms the reported issue!</strong></p>
                         </div>
                     `;
@@ -245,12 +183,12 @@
                 document.getElementById('console1').innerHTML = consoleLogs.join('<br>');
 
             } catch (error) {
-                document.getElementById('result1').innerHTML = `<p style="color: red;">❌ Error: ${error.message}</p>`;
+                document.getElementById('result1').innerHTML = '<p style="color: red;">❌ Error: ' + error.message + '</p>';
                 console.error('Test failed:', error);
             }
-        }
+        };
 
-        async function testAllRatings() {
+        window.testAllRatings = async function testAllRatings() {
             const resultsDiv = document.getElementById('allRatingsResults');
             resultsDiv.innerHTML = '<p>Testing all ratings 1-10... Please wait...</p>';
 
@@ -295,17 +233,25 @@
                 const status = hasCorrectLevel ? '✅ PASS' : '❌ FAIL';
                 const rowColor = hasCorrectLevel ? '#d4edda' : '#f8d7da';
 
-                results += `<tr style="background: ${rowColor};">
-                    <td style="padding: 10px; border: 1px solid #ddd;"><strong>${rating}</strong></td>
-                    <td style="padding: 10px; border: 1px solid #ddd;">${expectedLevel}</td>
-                    <td style="padding: 10px; border: 1px solid #ddd; font-size: 12px;">${sample}</td>
-                    <td style="padding: 10px; border: 1px solid #ddd;">${status}</td>
-                </tr>`;
+                results += '<tr style="background: ' + rowColor + ';">' +
+                    '<td style="padding: 10px; border: 1px solid #ddd;"><strong>' + rating + '</strong></td>' +
+                    '<td style="padding: 10px; border: 1px solid #ddd;">' + expectedLevel + '</td>' +
+                    '<td style="padding: 10px; border: 1px solid #ddd; font-size: 12px;">' + sample + '</td>' +
+                    '<td style="padding: 10px; border: 1px solid #ddd;">' + status + '</td>' +
+                '</tr>';
             }
 
             results += '</table>';
             resultsDiv.innerHTML = results;
-        }
+        };
+
+        // Intercept console.log for display
+        let consoleLogs = [];
+        const originalLog = console.log;
+        console.log = function (...args) {
+            consoleLogs.push(args.map(a => typeof a === 'object' ? JSON.stringify(a, null, 2) : String(a)).join(' '));
+            originalLog.apply(console, args);
+        };
 
         // Display available data on load
         window.addEventListener('load', function () {
@@ -318,6 +264,59 @@
             }
         });
     </script>
+</head>
+
+<body>
+    <h1>🔴 Issue Reproduction: Rating 1/10 Produces Rating 10 Comments</h1>
+
+    <div class="issue">
+        <h3>⚠️ Reported Issue</h3>
+        <p><strong>User complaint:</strong> "This was the comment generated after overall performance was ranked at 1
+            out of 10!!!!!!"</p>
+        <p><strong>Generated text contained:</strong> "excelled <strong>magnificently</strong>" and "<strong>phenomenal
+                competency</strong> mastery"</p>
+        <p><strong>Problem:</strong> These phrases are from Rating 10 pool, not Rating 1!</p>
+    </div>
+
+    <div class="test-container">
+        <h2>Test Case 1: Rating = 1 (Munkorn Example)</h2>
+        <button onclick="testRating1()">🧪 Run Test with Rating 1</button>
+        <button onclick="clearStorage()">🗑️ Clear Storage</button>
+
+        <h3>Test Data:</h3>
+        <pre id="testData1">Loading...</pre>
+
+        <h3>Console Logs (Rating Pipeline):</h3>
+        <div class="console-log" id="console1">Click "Run Test" to see debug output...</div>
+
+        <div class="expected">
+            <h3>✅ Expected for Rating 1:</h3>
+            <ul>
+                <li><strong>Performance Level:</strong> "emerging"</li>
+                <li><strong>Verbs:</strong> "explored enthusiastically", "discovered curiously", "began investigating",
+                    "started exploring", "commenced discovering"</li>
+                <li><strong>Descriptors:</strong> "discovering learning", "emerging awareness", "starting exploration",
+                    "initial curiosity", "beginning discovery"</li>
+                <li><strong>Adverbs:</strong> "curiously", "enthusiastically", "exploratively", "investigatively",
+                    "discoveringly"</li>
+            </ul>
+        </div>
+
+        <div class="actual">
+            <h3>📊 Generated Comment:</h3>
+            <div id="result1" style="padding: 10px; background: white; border-radius: 4px; margin-top: 10px;">
+                Waiting for test to run...
+            </div>
+        </div>
+    </div>
+
+    <div class="test-container">
+        <h2>Test Case 2: All Ratings (1-10 Verification)</h2>
+        <button onclick="testAllRatings()">🧪 Test All Ratings (1-10)</button>
+
+        <h3>Results:</h3>
+        <div id="allRatingsResults"></div>
+    </div>
 </body>
 
 </html>

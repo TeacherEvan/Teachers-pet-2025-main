@@ -1,233 +1,249 @@
-# Investigation Report - Teachers Pet Codebase
+# Investigation Report: Teachers Pet 2025
 
-**Generated:** June 13, 2026  
-**Phase:** 3 - Root Cause & Reproduction  
-**Focus:** HIGH severity findings from Phase 2 Review
-
----
-
-## Issue A1: Service Instantiated Per Request (OptimizedCommentGenerator)
-
-**Severity:** HIGH  
-**File:** `assets/js/controllers/subjects-controller.js:246`, `assets/js/controllers/p2-subjects-controller.js:272`  
-**Finding:** `new OptimizedCommentGenerator()` created inside `generateComments()` handler. Should be singleton instantiated once in `AppController` and injected.
-
-### Reproduction
-- **Test:** `tests/unit/p2-subjects-controller.test.js` - Check if controller creates new instance
-- **Script:** Manual inspection of current code
-
-### Root Cause Analysis
-**CURRENT CODE STATUS:** Upon investigation, the codebase has **already been fixed**.
-- `AppController` creates singleton at line 31: `this.commentGenerator = new OptimizedCommentGenerator();`
-- `SubjectsController` uses `this.app.commentGenerator.generateComments()` (line 275)
-- `P2SubjectsController` uses `await this.app.commentGenerator.generateComments()` (line 304)
-
-**Conclusion:** This finding appears to be from an older version. The singleton pattern is correctly implemented. **NO ACTION NEEDED.**
+**Generated:** 2025-06-17
+**Phase:** 3 — Root Cause & Reproduction
+**Scope:** CRITICAL & HIGH findings from review_findings.md
 
 ---
 
-## Issue Q1: Duplicate `getWordCount` Function
+## Issue 1: Dual `optimized-comment-generator.js` Files (CRITICAL)
 
-**Severity:** HIGH  
-**Locations:** 6+ reported - `TeachersPetUtils`, `SubjectsController`, `P2SubjectsController`, `OptimizedCommentGenerator`, `enhanced-comment-engine.js`, `templates.js`
-
-### Reproduction
-- **Search:** `rg "getWordCount" . --type js`
-
-### Root Cause Analysis
-**CURRENT CODE STATUS:** All locations **use the shared utility** `TeachersPetUtils.getWordCount()`:
-- `assets/js/engine/utils.js:56-62` - **Single source of truth** (original implementation)
-- `assets/js/engine/utils.js:56-62` - `TeachersPetUtils.getWordCount` defined
-- `assets/js/engine/core.js:71-72` - Uses `TeachersPetUtils.getWordCount()`
-- `assets/js/controllers/subjects-controller.js:303,306` - Uses `TeachersPetUtils.getWordCount()`
-- `assets/js/controllers/p2-subjects-controller.js:351,352` - Uses `TeachersPetUtils.getWordCount()`
-- `optimized-comment-generator.js:271,272,390,391` - Uses `TeachersPetUtils.getWordCount()` (imported at line 7)
-- `assets/js/engine/templates.js` - Uses `TeachersPetUtils` methods but NOT `getWordCount` directly
-
-**Conclusion:** This finding is **INCORRECT** - there is NO duplicate function. All usages correctly import from the single `TeachersPetUtils` module. **NO ACTION NEEDED.**
-
----
-
-## Issue Q2: Excessive Debug `console.log` in Production Code
-
-**Severity:** HIGH  
-**File:** `optimized-comment-generator.js:92-123, 175-199` (and other locations)  
-**Finding:** 20+ log statements with emoji prefixes, not gated by `window.__TP_DEBUG__`. Legacy shim has no debug gating.
+### Finding Recap
+Two files with significant divergence:
+- **Root:** `optimized-comment-generator.js` (444 lines) — imports from `./assets/js/engine/...`, duplicates 4 utility methods (62 extra lines)
+- **Assets:** `assets/js/optimized-comment-generator.js` (391 lines) — imports from `./engine/...`, uses `TeachersPetUtils`
 
 ### Reproduction
-- **Test:** Run app without `window.__TP_DEBUG__ = true`, check console output
-- **Script:** `grep -n "console\." optimized-comment-generator.js`
 
-### Root Cause Analysis
-**LOCATIONS OF UNGATED CONSOLE OUTPUT:**
+**Test HTML files (load ROOT version via classic script tag):**
+- `tests/test-student-name.html:98` — `<script src="optimized-comment-generator.js"></script>`
+- `tests/test-rating-issue.html:109` — `<script src="optimized-comment-generator.js"></script>`
+- `tests/test-all-subjects-audit.html:359` — `<script src="optimized-comment-generator.js"></script>`
 
-| Line | Call | Type | Gated? |
-|------|------|------|--------|
-| 35 | `console.warn('No comment engines available...')` | warn | ❌ NO |
-| 40 | `console.error('Failed to initialize OptimizedCommentGenerator:', error)` | error | ❌ NO |
-| 60 | `console.error('Failed to generate comments from storage:', error)` | error | ❌ NO |
-| 79 | `console.error('Session data validation failed, using fallback:', error)` | error | ❌ NO |
-| 91 | `console.error('Engine failed, using fallback:', error)` | error | ❌ NO |
-| 187 | `debugLog('validateSessionData - INPUT:', sessionData)` | debugLog | ✅ YES (gated) |
-| 202 | `debugLog('coerceRating - input:', rating, 'parsed:', numRating)` | debugLog | ✅ YES (gated) |
-| 205 | `console.warn('Invalid rating detected! Value:', rating, '- Defaulting to 5')` | warn | ❌ NO |
-| 209 | `debugLog('Rating validation PASSED - using value:', numRating)` | debugLog | ✅ YES (gated) |
-| 413 | `console.log('Testing comment generation with sample data...')` | log | ❌ NO |
-| 415 | `console.log('Test result:', result)` | log | ❌ NO |
-| 442 | `debugLog('OptimizedCommentGenerator ready for use')` | debugLog | ✅ YES (gated) |
-| 445 | `debugLog('Optimized Comment Generator loaded successfully')` | debugLog | ✅ YES (gated) |
+**Production HTML files (ES modules from `assets/js/`):**
+- `index.html:277` — `import { TeachersPetApp } from './assets/js/controllers/app-controller.js';` (no direct import of optimized-comment-generator)
+- `p2-subjects.html:39` — `import { P2SubjectsController } from "./assets/js/controllers/p2-subjects-controller.js";`
 
-**Total ungated console calls: 8 (6 errors, 1 warn in init, 1 warn in coerceRating, 2 test logs)**
+**Controllers (dynamic import resolves to ROOT):**
+- `base-subjects-controller.js:97` — `await import("../optimized-comment-generator.js")` → from `assets/js/controllers/` → `assets/optimized-comment-generator.js` (ROOT)
+- `subjects-controller.js:97` — same path
+- `p2-subjects-controller.js:217` — same path
 
-The `debugLog` helper (lines 12-16) is properly gated by `window.__TP_DEBUG__ === true`, but direct `console.error`, `console.warn`, and `console.log` calls bypass this gate.
+### Root Cause
+**Vite resolves `../optimized-comment-generator.js` from `assets/js/controllers/` to the ROOT file** (one level up from `assets/`), NOT to `assets/js/optimized-comment-generator.js`.
+
+The test HTML files explicitly load the ROOT file via `<script src="optimized-comment-generator.js">` (relative to test file location in `tests/` → resolves to ROOT).
+
+### Behavioral Differences
+| Feature | ROOT Version | Assets Version |
+|---------|--------------|----------------|
+| Imports | `./assets/js/engine/core.js` | `./engine/core.js` |
+| Utils | Duplicates `getPronounSet`, `getPerformanceDescriptor`, `processTextList`, `naturalJoin` | Uses `TeachersPetUtils` |
+| Exports | `export { TeachersPetUtils }` (re-export) | No re-export |
+| Singleton | `window.commentGenerator = new OptimizedCommentGenerator()` | No global assignment |
+
+### Impact
+- **Tests use different code than production** — test results may not reflect actual app behavior
+- **Production controllers load ROOT version** — but `app-controller.js` doesn't use it directly; only controllers do
+- **Root version has `window.commentGenerator`** — templates.js:269 checks `window.synonymManager` but not commentGenerator
+- **Inconsistent utility behavior** — Root duplicates logic that could drift from `TeachersPetUtils`
 
 ### Fix Design
-- **Change:** Wrap all `console.error`/`console.warn`/`console.log` with `debugLog` or add gating condition
-- **Pattern:** Replace `console.error(msg, err)` with `debugLog('❌', msg, err)` 
-- **Test helper:** `testGeneration()` (lines 398-417) should remain with console output as it's a dev tool
-- **Migration needed:** NO - purely internal logging changes
+**Option A (Recommended):** Delete ROOT `optimized-comment-generator.js`, update all dynamic imports to `./optimized-comment-generator.js` (from `assets/js/controllers/` → `assets/js/`), update test HTML files to use ES module import from `../assets/js/optimized-comment-generator.js`.
+
+**Option B:** Delete Assets version, update imports in controllers to `../../optimized-comment-generator.js` (messy), keep test HTML as-is.
+
+**Decision:** Option A — Assets version is cleaner (uses shared `TeachersPetUtils`), follows project structure, and is the intended module.
+
+### Migration Steps
+1. Delete `/optimized-comment-generator.js` (ROOT)
+2. Update 3 controllers: `../optimized-comment-generator.js` → `./optimized-comment-generator.js`
+3. Update 3 test HTML files: `<script src="optimized-comment-generator.js">` → ES module import from `../assets/js/optimized-comment-generator.js`
+4. Verify `window.commentGenerator` usage — templates.js doesn't use it; only root version created it. Remove if unused.
+
+### Test Plan
+- Run `npm test` — all 16 suites should pass
+- Open test HTML files in browser — verify comment generation works
+- Check browser console for `window.commentGenerator` references
 
 ---
 
-## Issue S1: XSS via `innerHTML`
+## Issue 2: Global Window Pollution (CRITICAL)
 
-**Severity:** HIGH  
-**Files:** 
-- `assets/js/controllers/subjects-controller.js:86, 298`
-- `assets/js/controllers/p2-subjects-controller.js:52, 64`
-- `assets/js/controllers/app-controller.js:134`
-- `assets/js/controllers/student-info-controller.js:28`
+### Finding Recap
+5+ classes assigned to `window` globals across 5 files:
 
-### Reproduction
-- **Test:** Inject malicious curriculum JSON with `<script>alert(1)</script>` in subject/topic names
-- **Manual:** Craft URL with malicious grade/month params
+| Global | Defined In | Used By |
+|--------|------------|---------|
+| `window.performanceOptimizer` | performance-optimizer.js:613 | launcher-controller.js:24, 41 |
+| `window.uiEnhancements` | ui-enhancements.js:1143 | ui-enhancements.js:441 (quick nav) |
+| `window.errorBoundary` + `window.safeExecute` | error-boundary.js:340, 343 | — (no usages found) |
+| `window.synonymManager` | synonym-manager.js:388 (commented) | templates.js:269 — `window.synonymManager.replaceOverused()` |
+| `window.OptimizedCommentGenerator` + `window.commentGenerator` | optimized-comment-generator.js:368, 371 | templates.js:269 (checks `window.synonymManager` only), test HTML files |
+| `window.startOverWithAnimation` | app-controller.js:246 + launcher-controller.js:206 (DUPLICATE) | ui-enhancements.js:446, launcher-controller.js:249 |
+| `window.captureGradeMonth`, `clearAndNavigate`, `goBack`, `startOver`, `refreshReport` | student-information.html module script | — (onclick handlers in HTML) |
 
-### Root Cause Analysis
+### Root Cause
+**Historical pattern:** Early development used global assignments for cross-module communication before ES modules fully adopted. Some remains:
+- `templates.js` checks `window.synonymManager` (legacy fallback)
+- `launcher-controller.js` and `app-controller.js` both define `window.startOverWithAnimation`
+- `ui-enhancements.js` quick nav uses `window.startOverWithAnimation`
+- Test HTML files use `window.commentGenerator` and `EnhancedCommentEngine` globals
 
-#### `subjects-controller.js` - **PARTIALLY PROTECTED**
-- Has `escapeHtml()` method (lines 100-107) using `textContent` → `innerHTML` pattern (safe)
-- Uses `escapeHtml()` in ALL template literals (lines 122-129, 143-147)
-- **BUT:** Line 88: `this.subjectsContainer.innerHTML = ''` - safe (empty string)
-- **Conclusion:** Properly escaped via `escapeHtml()` wrapper
-
-#### `p2-subjects-controller.js` - **PARTIALLY PROTECTED**
-- Has `escapeHtml()` method (lines 66-74) - same safe pattern
-- Uses `escapeHtml()` in template literals (lines 119-126, 140-153)
-- **CRITICAL FINDING Line 382:** `document.body.insertAdjacentHTML('beforeend', commentsHTML)`
-  - `commentsHTML` contains `${maleText}`, `${femaleText}` from generated comments
-  - Comments come from engine which processes user data (studentName, strengths, weaknesses)
-  - **NO SANITIZATION** on generated comment text before HTML insertion
-  - Line 374-375: `navigator.clipboard.writeText('${maleText.replace(/'/g, "\\'")}')` - only escapes single quotes, NOT HTML
-- **Line 56-60:** Error state uses `innerHTML` with static HTML (safe, no user data)
-
-#### `app-controller.js` - **SAFE**
-- Line 134: `messageDiv.textContent = message` - uses textContent (safe)
-- `showLoadingOverlay` builds DOM with `createElement` (safe)
-- `showNotification` uses `textContent = message` (safe)
-
-#### `student-info-controller.js` - **NEEDS CHECK**
-- Need to read this file
+### Impact
+- **Namespace collisions** — third-party scripts could overwrite
+- **Testing difficulty** — globals persist between tests
+- **Memory leaks** — instances never cleaned up
+- **Security surface** — XSS could access app internals
+- **Duplicate definition** — `startOverWithAnimation` defined twice; launcher version wins (loaded last in index.html)
 
 ### Fix Design
-1. **`p2-subjects-controller.js:382`** - Replace `insertAdjacentHTML` with safe DOM construction OR sanitize `maleText`/`femaleText` before interpolation
-2. **`p2-subjects-controller.js:374-375`** - Fix clipboard escaping (current only escapes single quotes)
-3. **Verify `student-info-controller.js`** for similar issues
-4. **Pattern:** Create `safeInsertHTML(container, html, data)` helper that sanitizes data values
-5. **Tests to add:** XSS test with malicious curriculum data
-6. **Migration needed:** NO - internal fix
+**Strategy:** Remove all `window.*` assignments; use ES module imports exclusively.
+
+#### Per Global:
+1. **`window.performanceOptimizer`** → Export singleton from module; import in `launcher-controller.js`
+2. **`window.uiEnhancements`** → Export singleton; `ui-enhancements.js` quick nav uses local reference
+3. **`window.errorBoundary` + `window.safeExecute`** → Remove (no consumers found); if needed, export `errorBoundary` instance
+4. **`window.synonymManager`** → Already exported as `synonymManager` singleton; `templates.js:269` should import it (currently falls back to global)
+5. **`window.OptimizedCommentGenerator` / `window.commentGenerator`** → Remove; controllers already import class; test HTML files need migration
+5. **`window.startOverWithAnimation`** → Keep ONE definition in `app-controller.js` (app owns navigation); export function; `launcher-controller.js` and `ui-enhancements.js` import it
+6. **`window.captureGradeMonth` etc.** → Already exported from `shared-ui.js`; student-information.html should import and assign to window ONLY for onclick handlers (or migrate onclick to addEventListener)
+
+### Migration Steps
+1. **performance-optimizer.js:** Remove `window.performanceOptimizer = ...`; add `export const performanceOptimizer = new PerformanceOptimizer();`
+2. **ui-enhancements.js:** Remove `window.uiEnhancements = ...`; export singleton; quick nav uses local `startOverWithAnimation` import
+3. **error-boundary.js:** Remove `window.errorBoundary` and `window.safeExecute`; export `errorBoundary` instance
+4. **synonym-manager.js:** Ensure `export const synonymManager` (already line 390); remove commented global
+5. **optimized-comment-generator.js (Assets):** Remove `window.OptimizedCommentGenerator` and `window.commentGenerator`
+6. **app-controller.js:** Keep `startOverWithAnimation` as exported function; remove `window.` assignment
+7. **launcher-controller.js:** Remove local `window.startOverWithAnimation` definition; import from `app-controller.js`
+8. **templates.js:269:** Change `window.synonymManager` → import `synonymManager` from `../synonym-manager.js`
+9. **Test HTML files:** Migrate to ES modules OR keep minimal globals for onclick (document migration needed)
+10. **student-information.html:** Import shared-ui functions; assign to window only for inline onclick handlers (or refactor onclick to addEventListener)
+
+### Test Plan
+- Run `npm test` — all suites pass
+- Load each HTML page in browser — verify no console errors
+- Verify `window` object has no app-specific globals (except minimal for inline handlers)
+- Check quick nav (Ctrl+K) works → calls `startOverWithAnimation`
+- Verify synonym replacement works in templates (imported, not global)
 
 ---
 
-## Issue C1: Function >50 Lines / High Cyclomatic Complexity
+## Issue 3: Dynamic Import in Hot Path (HIGH)
 
-**Severity:** HIGH  
-**File:** `optimized-comment-generator.js:175-199` (`validateAndCleanSessionData`)
+### Finding Recap
+3 controllers use `await import("../optimized-comment-generator.js")` inside `generateComments()` called on every click.
 
-### Reproduction
-- **Complexity check:** `eslint . --rule 'complexity: error'`
-- **Line count:** Function spans lines 216-221 (actually ~6 lines, not 25+)
+### Root Cause
+**Lazy loading attempt** — but module is already loaded at app init via controller imports. Dynamic import adds ~1-5ms overhead per click (module resolution cache hit).
 
-### Root Cause Analysis
-**ACTUAL CODE:**
+### Fix Design
+**Hoist import to module top-level:**
 ```javascript
-validateAndCleanSessionData(sessionData) {
-    const rawData = this.validateSessionData(sessionData);
-    const cleaned = this.buildFallbackSessionData(rawData);
-    cleaned.overallRating = this.coerceRating(cleaned.overallRating);
-    return cleaned;
+// At top of each controller file
+import { OptimizedCommentGenerator } from "../optimized-comment-generator.js";
+```
+Then use `new OptimizedCommentGenerator()` directly in `generateComments()`.
+
+### Migration Steps
+1. `base-subjects-controller.js` — add import, remove dynamic import in `generateComments()`
+2. `subjects-controller.js` — same
+3. `p2-subjects-controller.js` — same (uses different method name but same pattern)
+
+### Test Plan
+- Run tests — verify comment generation still works
+- Manual test: click "Generate Comments" multiple times — no errors
+
+---
+
+## Issue 4: Duplicate `escapeHtml` (HIGH)
+
+### Finding Recap
+3 identical implementations:
+- `base-subjects-controller.js:98-103`
+- `student-info-controller.js:49-54`
+- `error-boundary.js:306-311`
+
+### Root Cause
+**Copy-paste** during controller creation. `p2-subjects-controller.js` inherits from base; `subjects-controller.js` inline in templates.
+
+### Fix Design
+**Extract to `assets/js/utils/security.js`:**
+```javascript
+export function escapeHtml(text) {
+  if (!text) return '';
+  const div = document.createElement('div');
+  div.textContent = text;
+  return div.innerHTML;
 }
 ```
-This is **6 lines** with **3 function calls** - LOW complexity.
+Import in all 3 locations.
 
-**WHAT THE REVIEW LIKELY MEANT:** The surrounding functions have high complexity:
-- `collectSessionData()` (lines 99-135): ~37 lines, multiple nested conditions
-- `validateSessionData()` (lines 185-195): Simple
-- `coerceRating()` (lines 200-211): Simple  
-- `buildFallbackSessionData()` (lines 223-253): ~31 lines, multiple transformations
-- `generateFallbackComments()` (lines 258-275): ~18 lines
+### Migration Steps
+1. Create `assets/js/utils/security.js`
+2. Update `base-subjects-controller.js`, `student-info-controller.js`, `error-boundary.js` to import
+3. `subjects-controller.js` and `p2-subjects-controller.js` already use `this.escapeHtml()` from base — no change needed
+4. `student-info-controller.js` uses its own — replace with import
 
-**Conclusion:** The specific function `validateAndCleanSessionData` is NOT >50 lines. The review finding appears incorrect for this specific function. However, `collectSessionData` and `buildFallbackSessionData` are candidates for decomposition.
-
----
-
-## Additional Issues Found During Investigation
-
-### Issue S1b: `student-info-controller.js` - Need to Verify
-Need to check this file for XSS vulnerabilities.
-
-### Issue S1c: `p2-subjects-controller.js` clipboard XSS
-Lines 374-375: Template literal in `onclick` with only single-quote escaping.
+### Test Plan
+- Run tests — verify XSS protection still works
+- Manual test: enter `<script>alert(1)</script>` in form fields — should render as text
 
 ---
 
-## Investigation Summary
+## Issue 5: localStorage No Validation (HIGH)
 
-| Issue | Status | Action Required |
-|-------|--------|-----------------|
-| A1: Singleton per request | **FIXED** (already singleton) | None |
-| Q1: Duplicate getWordCount | **FALSE POSITIVE** (all use shared util) | None |
-| Q2: Ungated console logs | **CONFIRMED** (8 ungated calls) | Fix: gate all console calls |
-| S1: XSS via innerHTML | **PARTIAL** (controllers protected, p2 display vulnerable) | Fix: p2-subjects display + clipboard |
-| C1: Function >50 lines | **FALSE POSITIVE** (function is 6 lines) | Optional: decompose collectSessionData |
+### Finding Recap
+Multiple controllers read `localStorage.getItem('studentData')` → `JSON.parse()` with no schema validation.
 
----
+### Root Cause
+**Trust assumption** — only app writes to this key. But corrupted data, manual edits, or cross-tab issues can break app.
 
-## Priority Fix Designs
-
-### Fix 1: Gate All Console Output in optimized-comment-generator.js
+### Fix Design
+**Add validation in `createPersistentStore` (store.js):**
 ```javascript
-// Replace lines 35, 40, 60, 79, 91, 205 with debugLog
-debugLog('⚠️', 'No comment engines available, using fallback mode');
-debugLog('❌', 'Failed to initialize OptimizedCommentGenerator:', error);
-// etc.
+const sessionSchema = {
+  studentName: 'string',
+  gender: 'string',
+  overallRating: 'number',
+  grade: 'string',
+  month: 'string',
+  subjects: 'array',
+  topicRatings: 'object',
+  strengths: 'string',
+  weaknesses: 'string'
+};
 
-// Keep testGeneration() console.log as-is (dev tool only)
+function validateSessionData(data) {
+  if (!data || typeof data !== 'object') return false;
+  for (const [key, type] of Object.entries(sessionSchema)) {
+    if (key in data && typeof data[key] !== type) return false;
+  }
+  return true;
+}
 ```
+Use in `createPersistentStore` load step; fallback to initialState if invalid.
 
-### Fix 2: XSS Protection in p2-subjects-controller.js displayComments()
-```javascript
-// Option A: Safe DOM construction
-const overlay = document.createElement('div');
-overlay.id = 'commentsOverlay';
-overlay.className = 'comments-overlay';
-// ... build with createElement/textContent
+### Migration Steps
+1. Update `assets/js/state/store.js` with validation
+2. Test with corrupted localStorage — should reset to defaults gracefully
 
-// Option B: Sanitize before insertAdjacentHTML
-const safeMaleText = this.escapeHtml(maleText);
-const safeFemaleText = this.escapeHtml(femaleText);
-// Then use in template
-
-// Fix clipboard: 
-navigator.clipboard.writeText(maleText); // No escaping needed for clipboard text
-```
-
-### Fix 3: Verify student-info-controller.js
-Read file and apply same XSS protection pattern.
+### Test Plan
+- Manually corrupt localStorage: `localStorage.setItem('studentData', 'invalid json')` — app should not crash
+- `localStorage.setItem('studentData', '{"studentName": 123}')` — should fallback to initialState
 
 ---
 
 ## Gate Decision
-**Investigation complete.** Ready for Phase 4 (Fix) implementation for:
-1. **Q2** - Gate console logs in optimized-comment-generator.js
-2. **S1** - Fix XSS in p2-subjects-controller.js displayComments()
-3. **S1b** - Verify/fix student-info-controller.js
+
+**Investigation Complete.** Ready for **Phase 4: FIX** on all 5 issues.
+
+### Fix Order (Dependency-Aware)
+1. **Issue 1 (Dual generator)** — Foundation; affects which code runs
+2. **Issue 2 (Window globals)** — Architecture cleanup; enables pure ES modules
+3. **Issue 3 (Dynamic imports)** — Quick win after #1 (paths may change)
+4. **Issue 4 (escapeHtml)** — Independent; shared utility
+5. **Issue 5 (localStorage validation)** — Independent; store.js
+
+**Proceed with Phase 4?**

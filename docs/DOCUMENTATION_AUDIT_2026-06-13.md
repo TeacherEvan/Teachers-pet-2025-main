@@ -144,7 +144,7 @@ Fix the 4 actionable broken links immediately. Add link verification to CI.
 ## Priority Action Items
 
 ### 🔴 Immediate (Fix This Week)
-1. **Fix 4 broken internal links** (COPILOT_SETUP_VERIFICATION.md, MULTI-GRADE-IMPLEMENTATION-PLAN.md)
+1. **Fix 4 broken internal links** — `COPILOT_SETUP_VERIFICATION.md` and `MULTI-GRADE-IMPLEMENTATION-PLAN.md`
 2. **Create `docs/README.md`** as documentation hub with TOC linking to all major docs
 3. **Update `README.md` navigation flow** to include grade-selection → month-selection → P2 semester flow
 4. **Standardize project name** — pick "Teacher's Pet" or "Teachers Pet" and apply everywhere

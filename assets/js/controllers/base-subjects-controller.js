@@ -1,5 +1,6 @@
 import CurriculumLoader from "../curriculum/curriculum-loader.js";
 import { TeachersPetUtils } from "../engine/utils.js";
+import { escapeHtml } from "../utils/security.js";
 
 /**
  * Base Subjects Controller
@@ -89,18 +90,6 @@ export class BaseSubjectsController {
   // ============================================
   // SHARED IMPLEMENTATIONS
   // ============================================
-
-  /**
-   * Escape HTML to prevent XSS
-   * @param {string} text
-   * @returns {string}
-   */
-  escapeHtml(text) {
-    if (!text) return "";
-    const div = document.createElement("div");
-    div.textContent = text;
-    return div.innerHTML;
-  }
 
   /**
    * Load session data from URL parameters and localStorage
@@ -199,7 +188,7 @@ export class BaseSubjectsController {
     const subjectId = subject.id || subject.name.toLowerCase().replace(/\s+/g, "-");
     const section = document.createElement("div");
     section.className = "subject-section";
-    section.setAttribute("data-subject", this.escapeHtml(subjectId));
+    section.setAttribute("data-subject", escapeHtml(subjectId));
 
     const topicsFragment = document.createDocumentFragment();
     subject.topics.forEach((topic) => {
@@ -229,7 +218,7 @@ export class BaseSubjectsController {
     const _topicName = topic.name || topic;
     const label = document.createElement("label");
     label.className = "topic-item";
-    label.setAttribute("data-topic-id", this.escapeHtml(topicId));
+    label.setAttribute("data-topic-id", escapeHtml(topicId));
     label.innerHTML = this.getTopicTemplate(topic, subjectId, topicId);
     return label;
   }
@@ -354,7 +343,7 @@ export class BaseSubjectsController {
       try {
         const { OptimizedCommentGenerator } = await import("../optimized-comment-generator.js");
         const generator = new OptimizedCommentGenerator();
-        const comments = generator.generateComments(this.app.sessionData);
+        const comments = await generator.generateComments(this.app.sessionData);
         this.displayComments(comments);
       } catch (error) {
         console.error("Comment generation failed:", error);

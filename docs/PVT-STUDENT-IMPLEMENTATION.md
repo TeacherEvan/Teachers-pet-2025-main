@@ -5,7 +5,7 @@
 
 ## Overview
 
-Added a new "PVT - Private Student" grade option to Teachers Pet with a comprehensive year-round curriculum covering 10 core kindergarten subjects, each with 5 age-appropriate topics.
+Added a new "PVT - Private Student" grade option to Teacher's Pet with a comprehensive year-round curriculum covering 10 core kindergarten subjects, each with 5 age-appropriate topics.
 
 ## Research Methodology
 

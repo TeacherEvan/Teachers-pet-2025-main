@@ -1,5 +1,5 @@
 /**
- * Teachers Pet Data Module
+ * Teacher's Pet Data Module
  * Centralized storage for static data used by comment engines.
  * Extracted from enhanced-comment-engine.js to improve maintainability.
  */

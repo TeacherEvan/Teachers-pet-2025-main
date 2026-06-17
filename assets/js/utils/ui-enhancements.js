@@ -5,6 +5,16 @@
  * @version 2.0.0
  */
 
+import { startOverWithAnimation } from "../controllers/app-controller.js";
+
+// Prefer window.startOverWithAnimation for testing and backward compatibility
+export const getStartOverWithAnimation = () => {
+    if (typeof window !== 'undefined' && typeof window.startOverWithAnimation === 'function') {
+        return window.startOverWithAnimation;
+    }
+    return startOverWithAnimation;
+};
+
 /* eslint-env browser */
 /* global window, document */
 
@@ -438,12 +448,12 @@ class UIEnhancements {
             });
         }
 
-        if (typeof window.startOverWithAnimation === 'function') {
+        if (typeof getStartOverWithAnimation() === 'function') {
             actions.push({
                 group: 'action',
                 label: 'Start Over',
                 restoreFocus: false,
-                onSelect: () => window.startOverWithAnimation(),
+                onSelect: () => getStartOverWithAnimation()(),
             });
         } else if (typeof window.startOver === 'function') {
             actions.push({
@@ -1138,10 +1148,7 @@ style.textContent = `
 `;
 document.head.appendChild(style);
 
-// Initialize global UI enhancements
-if (typeof window !== 'undefined') {
-    window.uiEnhancements = new UIEnhancements();
-}
+// Export singleton for module systems
+export const uiEnhancements = (typeof window !== 'undefined') ? new UIEnhancements() : null;
 
-// Export for module systems
 export { UIEnhancements };

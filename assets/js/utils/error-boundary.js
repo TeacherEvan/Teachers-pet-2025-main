@@ -4,6 +4,8 @@
  * @module ErrorBoundary
  */
 
+import { escapeHtml } from "./security.js";
+
 /* eslint-env browser */
 /* global window, document */
 
@@ -130,7 +132,7 @@ class ErrorBoundary {
                 <div class="error-text">
                     <h4>${errorTitle}</h4>
                     <p>${errorMessage}</p>
-                    ${!this.isProduction ? `<small class="error-debug">${this.escapeHtml(errorInfo.message)}</small>` : ''}
+                    ${!this.isProduction ? `<small class="error-debug">${escapeHtml(errorInfo.message)}</small>` : ''}
                 </div>
                 <button class="error-dismiss" onclick="this.parentElement.parentElement.remove()">
                     ✕
@@ -296,18 +298,6 @@ class ErrorBoundary {
             });
             return fallback();
         }
-    }
-
-    /**
-     * Escape HTML to prevent XSS
-     * @param {string} text - Text to escape
-     * @returns {string} Escaped text
-     */
-    escapeHtml(text) {
-        if (!text) return '';
-        const div = document.createElement('div');
-        div.textContent = text;
-        return div.innerHTML;
     }
 
     /**

@@ -1,5 +1,9 @@
 # P2 Subject Selection Page Implementation Plan
 
+**Status:** ✅ **Archived — Implemented & Verified** (June 2025)
+
+
+
 > **For implementer:** Use TDD throughout. Write failing test first. Watch it fail. Then implement.
 
 **Goal:** Create a dynamic P2 subject selection page (`p2-subjects.html`) that loads curriculum from JSON based on semester, supporting 8 subjects per semester with bilingual (Thai/English) names and topic checkboxes with 0-5 star rating.

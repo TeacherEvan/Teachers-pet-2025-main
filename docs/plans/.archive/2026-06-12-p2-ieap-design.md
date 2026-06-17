@@ -1,5 +1,9 @@
 # Design Document: P2-IEAP (Primary 2) Addition
 
+**Status:** ✅ **Archived — Implemented & Verified** (June 2025)
+
+
+
 **Date:** 2026-06-12  
 **Author:** Teacher Evan  
 **Status:** Approved for Implementation

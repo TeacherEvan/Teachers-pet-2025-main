@@ -6,6 +6,25 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 const repoRoot = path.resolve(__dirname, "..", "..");
 
+// Mock localStorage for Node.js test environment
+const mockStorage = new Map();
+globalThis.localStorage = {
+  getItem: (key) => mockStorage.get(key) || null,
+  setItem: (key, value) => mockStorage.set(key, String(value)),
+  removeItem: (key) => mockStorage.delete(key),
+  clear: () => mockStorage.clear(),
+  get length() { return mockStorage.size; },
+  key: (index) => Array.from(mockStorage.keys())[index] || null,
+};
+globalThis.sessionStorage = {
+  getItem: (key) => mockStorage.get(key) || null,
+  setItem: (key, value) => mockStorage.set(key, String(value)),
+  removeItem: (key) => mockStorage.delete(key),
+  clear: () => mockStorage.clear(),
+  get length() { return mockStorage.size; },
+  key: (index) => Array.from(mockStorage.keys())[index] || null,
+};
+
 function createClassList(owner) {
   const classes = new Set();
   return {
@@ -224,12 +243,15 @@ function querySelectorAllFrom(nodes, selector, documentRef) {
 }
 
 function createDocumentStub() {
+  let mockCookie = "";
   const documentRef = {
     elementsById: new Map(),
     activeElement: null,
     eventListeners: {},
     body: null,
     head: null,
+    get cookie() { return mockCookie; },
+    set cookie(value) { mockCookie = value; },
     documentElement: {
       attributes: {},
       setAttribute(name, value) {
@@ -344,9 +366,9 @@ export async function runTests() {
     const moduleUrl = `${pathToFileURL(
       path.join(repoRoot, "assets/js/utils/ui-enhancements.js"),
     ).href}?ui-test`;
-    await import(moduleUrl);
+    const { uiEnhancements } = await import(moduleUrl);
 
-    const enhancements = globalThis.window.uiEnhancements;
+    const enhancements = uiEnhancements;
     assert.equal(typeof enhancements.showQuickNavigation, "function");
 
     enhancements.showQuickNavigation();

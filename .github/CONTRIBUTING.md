@@ -1,6 +1,6 @@
-# Contributing to Teachers Pet
+# Contributing to Teacher's Pet
 
-Thank you for your interest in contributing to Teachers Pet! This document provides guidelines for contributing to the project.
+Thank you for your interest in contributing to Teacher's Pet! This document provides guidelines for contributing to the project.
 
 ## 🚀 Getting Started
 
@@ -215,4 +215,4 @@ Remember:
 
 ---
 
-Thank you for contributing to Teachers Pet! 🎓✨
+Thank you for contributing to Teacher's Pet! 🎓✨

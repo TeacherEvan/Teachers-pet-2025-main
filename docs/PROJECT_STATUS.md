@@ -1,10 +1,10 @@
-# Teachers Pet - Project Status & Agent Dashboard
+# Teacher's Pet - Project Status & Agent Dashboard
 
 **Last Updated:** December 23, 2025
 **Status:** Production-Ready / Modernized Architecture (Phase 3 Complete)
 
 ## 1. Project Overview
-**Teachers Pet** is a production-grade static HTML/CSS/JS web application designed to help teachers generate personalized student report comments. Version 2.0 features advanced performance optimization, premium glassmorphism UI, and comprehensive accessibility support following 2024 best practices.
+**Teacher's Pet** is a production-grade static HTML/CSS/JS web application designed to help teachers generate personalized student report comments. Version 2.0 features advanced performance optimization, premium glassmorphism UI, and comprehensive accessibility support following 2024 best practices.
 
 ### Key Constraints
 - **No Backend:** Runs entirely in the browser (client-side).

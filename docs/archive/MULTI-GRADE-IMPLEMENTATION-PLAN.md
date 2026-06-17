@@ -46,15 +46,15 @@ Transform Teachers Pet from single-curriculum (K1 August) to multi-grade, multi-
 ```
 assets/js/curriculum/
 ├── k1/
-│   ├── august.js      (current data - already exists as curriculum-data.md)
-│   ├── september.js   (empty - coming soon)
-│   ├── october.js     (empty - coming soon)
+│   ├── august.js      (current data — already exists in curriculum data)
+│   ├── september.js   (empty — coming soon)
+│   ├── october.js     (empty — coming soon)
 │   └── ...
 ├── k2/
-│   ├── august.js      (empty - coming soon)
+│   ├── august.js      (empty — coming soon)
 │   └── ...
 └── k3/
-    ├── august.js      (empty - coming soon)
+    ├── august.js      (empty — coming soon)
     └── ...
 ```
 
@@ -62,7 +62,7 @@ assets/js/curriculum/
 - ✅ Easy to add new months incrementally
 - ✅ Smaller file sizes (lazy load only needed curriculum)
 - ✅ Clear organization by grade/month
-- ✅ Simple to migrate from curriculum-data.md
+- ✅ Simple to migrate from curriculum data
 
 **File Structure Example:**
 ```javascript
@@ -77,7 +77,7 @@ window.CurriculumData.K1.August = {
       topics: [
         { id: 'english_letters', name: 'Draw lines to match letters' },
         { id: 'english_trace', name: 'Trace letters from dot' },
-        // ... all topics from curriculum-data.md
+        // ... all topics from curriculum data
       ]
     },
     // ... all other subjects
@@ -235,10 +235,10 @@ if (!isMonthAvailable(selectedGrade, selectedMonth)) {
 assets/js/curriculum/
 ├── curriculum-loader.js  (dynamic loader utility)
 ├── k1/
-│   └── august.js         (migrate from curriculum-data.md)
+│   └── august.js         (migrate from curriculum data)
 ```
 
-**Migration from curriculum-data.md:**
+**Migration from curriculum data:**
 - Convert markdown format to JavaScript object structure
 - Preserve all subject IDs, names, topics, activities, vocabulary
 - Ensure compatibility with existing PremiumCommentEngine and EnhancedCommentEngine
@@ -457,7 +457,7 @@ assets/js/curriculum/k1/august.js (JavaScript object)
 ### New Files to Create
 - [ ] `month-selection.html` (main new page)
 - [ ] `assets/js/curriculum/curriculum-loader.js` (optional utility)
-- [ ] `assets/js/curriculum/k1/august.js` (migrate from curriculum-data.md)
+- [ ] `assets/js/curriculum/k1/august.js` (migrate from curriculum data)
 - [ ] `MULTI-GRADE-MIGRATION-SUMMARY.md` (documentation)
 - [ ] Update `jobcard.md` (if exists) or create new entry
 

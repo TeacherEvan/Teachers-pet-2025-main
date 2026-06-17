@@ -3,6 +3,8 @@
  * Manages initialization, animations, and user interactions on the landing page
  * @class LauncherController
  */
+import { performanceOptimizer } from "../utils/performance-optimizer.js";
+
 export class LauncherController {
     constructor(appInstance) {
         this.app = appInstance;
@@ -21,15 +23,12 @@ export class LauncherController {
         }
 
         // Mark performance point
-        if (window.performanceOptimizer) {
-            window.performanceOptimizer.mark('launcher-init-start');
+        if (performanceOptimizer) {
+            performanceOptimizer.mark('launcher-init-start');
         }
 
         // Show premium loading screen
         this.displayLoadingScreen();
-
-        // Setup application reset functionality
-        this.configureStartOverBehavior();
 
         // Schedule loading completion and animation initialization
         // Using setTimeout for compatibility; requestIdleCallback could be used for non-critical tasks
@@ -38,9 +37,9 @@ export class LauncherController {
             this.initializeFloatingParticles();
             this.enhanceInteractiveElements();
             
-            if (window.performanceOptimizer) {
-                window.performanceOptimizer.mark('launcher-init-complete');
-                window.performanceOptimizer.measure(
+            if (performanceOptimizer) {
+                performanceOptimizer.mark('launcher-init-complete');
+                performanceOptimizer.measure(
                     'launcher-initialization',
                     'launcher-init-start',
                     'launcher-init-complete'
@@ -194,67 +193,6 @@ export class LauncherController {
       `;
             document.head.appendChild(styleElement);
         }
-    }
-
-    /**
-     * Configure "Start Over" functionality with context preservation
-     * Clears application data while optionally preserving grade/month context
-     * Provides smooth page transition for better UX
-     */
-    configureStartOverBehavior() {
-        // Global function accessible from all pages
-        window.startOverWithAnimation = () => {
-            // Step 1: Capture current curriculum context for preservation
-            let preservedGrade = '';
-            let preservedMonth = '';
-
-            try {
-                const savedData = localStorage.getItem('studentData');
-                if (savedData) {
-                    const parsedData = JSON.parse(savedData);
-                    preservedGrade = parsedData.grade;
-                    preservedMonth = parsedData.month;
-                }
-            } catch (error) {
-                console.warn('Could not parse saved data:', error);
-            }
-
-            // Step 2: Perform comprehensive data cleanup
-            localStorage.clear();
-            sessionStorage.clear();
-
-            // Clear browser cookies (if applicable)
-            // Note: Complex state management could use IndexedDB in future iterations
-            if (typeof document !== 'undefined') {
-                document.cookie.split(";").forEach(function (cookieString) {
-                    document.cookie = cookieString
-                        .replace(/^ +/, "")
-                        .replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/");
-                });
-            }
-
-            // Reset application session state
-            if (this.app && typeof this.app.resetSessionData === 'function') {
-                this.app.resetSessionData();
-            }
-
-            // Step 3: Restore curriculum context and navigate appropriately
-            if (preservedGrade && preservedMonth) {
-                // Preserve grade/month for continuity
-                const contextData = { grade: preservedGrade, month: preservedMonth };
-                localStorage.setItem('studentData', JSON.stringify(contextData));
-                console.log('🧹 Data cleared (Grade/Month preserved for context)');
-
-                // Navigate to student information page with preserved context
-                this.navigateWithPageTransition(
-                    `student-information.html?grade=${preservedGrade}&month=${preservedMonth}`
-                );
-            } else {
-                // Complete fresh start - return to landing page
-                console.log('🧹 All data cleared - starting fresh!');
-                this.navigateWithPageTransition('index.html');
-            }
-        };
     }
 
     /**

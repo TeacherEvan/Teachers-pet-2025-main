@@ -27,7 +27,7 @@ const STANDARD_KEYWORD_INDEX = (() => {
 })();
 
 /**
- * Teachers Pet Data Processor
+ * Teacher's Pet Data Processor
  * Handles data normalization, validation, and grouping.
  */
 export const TeachersPetProcessor = {
@@ -130,6 +130,9 @@ export const TeachersPetProcessor = {
     const orphanedTopics = [];
     const topicList = Object.keys(topicRatings);
     const subjectSet = new Set(subjects); // O(1) lookup
+    const subjectCount = subjects.length;
+    const keywordCount = Object.values(subjectTopicMap).reduce((sum, k) => sum + k.length, 0);
+    const cacheKey = `map-${subjectCount}-${keywordCount}`;
 
     // Use pre-built standard index if standard engine data is passed
     // Otherwise build and cache custom index
@@ -141,9 +144,6 @@ export const TeachersPetProcessor = {
       if (!this._keywordIndexCache) {
         this._keywordIndexCache = new Map();
       }
-      const cacheKey = JSON.stringify(
-        Object.entries(subjectTopicMap).map(([s, k]) => [s, [...k].sort()].join('|')).sort().join(';')
-      );
       keywordIndexArr = this._keywordIndexCache.get(cacheKey);
       if (!keywordIndexArr) {
         const keywordIndex = new Map();

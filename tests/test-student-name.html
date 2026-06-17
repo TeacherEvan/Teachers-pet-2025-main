@@ -95,10 +95,17 @@
         <div class="output" id="clearOutput"></div>
     </div>
 
-    <script src="optimized-comment-generator.js"></script>
+    <script type="module">
+        import { OptimizedCommentGenerator } from '../assets/js/optimized-comment-generator.js';
+        import { EnhancedCommentEngine } from '../assets/js/engine/core.js';
+        import { TeachersPetData } from '../assets/js/data/engine-data.js';
+        import { TeachersPetUtils } from '../assets/js/engine/utils.js';
+        import { TeachersPetProcessor } from '../assets/js/engine/processor.js';
+        import { TeachersPetTemplates } from '../assets/js/engine/templates.js';
+        import { synonymManager } from '../assets/js/synonym-manager.js';
 
-    <script>
-        function setStudentData() {
+        // Make functions available globally for onclick handlers
+        window.setStudentData = function setStudentData() {
             const output = document.getElementById('setOutput');
             const name = document.getElementById('testName').value;
             const gender = document.getElementById('testGender').value;
@@ -113,33 +120,33 @@
 
             try {
                 localStorage.setItem('studentData', JSON.stringify(studentData));
-                output.innerHTML = `<span class="success">✅ Saved successfully!</span>\n${JSON.stringify(studentData, null, 2)}`;
+                output.innerHTML = '<span class="success">✅ Saved successfully!</span>\n' + JSON.stringify(studentData, null, 2);
             } catch (error) {
-                output.innerHTML = `<span class="error">❌ Error:</span> ${error.message}`;
+                output.innerHTML = '<span class="error">❌ Error:</span> ' + error.message;
             }
-        }
+        };
 
-        function readStudentData() {
+        window.readStudentData = function readStudentData() {
             const output = document.getElementById('readOutput');
 
             try {
                 const raw = localStorage.getItem('studentData');
-                output.innerHTML = `<strong>Raw data:</strong>\n${raw}\n\n`;
+                output.innerHTML = '<strong>Raw data:</strong>\n' + raw + '\n\n';
 
                 if (raw) {
                     const parsed = JSON.parse(raw);
-                    output.innerHTML += `<strong>Parsed data:</strong>\n${JSON.stringify(parsed, null, 2)}\n\n`;
-                    output.innerHTML += `<strong>Student Name:</strong> <span class="success">${parsed.studentName}</span>\n`;
-                    output.innerHTML += `<strong>Gender:</strong> ${parsed.gender}`;
+                    output.innerHTML += '<strong>Parsed data:</strong>\n' + JSON.stringify(parsed, null, 2) + '\n\n';
+                    output.innerHTML += '<strong>Student Name:</strong> <span class="success">' + parsed.studentName + '</span>\n';
+                    output.innerHTML += '<strong>Gender:</strong> ' + parsed.gender;
                 } else {
                     output.innerHTML += '<span class="error">❌ No data found</span>';
                 }
             } catch (error) {
-                output.innerHTML = `<span class="error">❌ Error:</span> ${error.message}`;
+                output.innerHTML = '<span class="error">❌ Error:</span> ' + error.message;
             }
-        }
+        };
 
-        function testCommentEngine() {
+        window.testCommentEngine = async function testCommentEngine() {
             const output = document.getElementById('engineOutput');
 
             try {
@@ -159,32 +166,28 @@
 
                 output.innerHTML = '<strong>Testing with data:</strong>\n' + JSON.stringify(sessionData, null, 2) + '\n\n';
 
-                if (typeof EnhancedCommentEngine !== 'undefined') {
-                    const engine = new EnhancedCommentEngine();
-                    const result = engine.generateComments(sessionData);
+                const engine = new EnhancedCommentEngine();
+                const result = await engine.generateComments(sessionData);
 
-                    output.innerHTML += '<strong>Male Teacher Comment:</strong>\n' + result.male + '\n\n';
-                    output.innerHTML += '<strong>Female Teacher Comment:</strong>\n' + result.female + '\n\n';
-                    output.innerHTML += `<span class="success">✅ Comments generated successfully!</span>\n`;
-                    output.innerHTML += `Word counts - Male: ${result.wordCount.male}, Female: ${result.wordCount.female}`;
-                } else {
-                    output.innerHTML += '<span class="error">❌ EnhancedCommentEngine not available</span>';
-                }
+                output.innerHTML += '<strong>Male Teacher Comment:</strong>\n' + result.male + '\n\n';
+                output.innerHTML += '<strong>Female Teacher Comment:</strong>\n' + result.female + '\n\n';
+                output.innerHTML += '<span class="success">✅ Comments generated successfully!</span>\n';
+                output.innerHTML += 'Word counts - Male: ' + result.wordCount.male + ', Female: ' + result.wordCount.female;
             } catch (error) {
-                output.innerHTML += `\n<span class="error">❌ Error:</span> ${error.message}\n${error.stack}`;
+                output.innerHTML += '\n<span class="error">❌ Error:</span> ' + error.message + '\n' + error.stack;
             }
-        }
+        };
 
-        function clearData() {
+        window.clearData = function clearData() {
             const output = document.getElementById('clearOutput');
             localStorage.clear();
             sessionStorage.clear();
             output.innerHTML = '<span class="success">✅ All storage cleared!</span>';
-        }
+        };
 
         // Auto-read on page load
         window.addEventListener('DOMContentLoaded', () => {
-            readStudentData();
+            window.readStudentData();
         });
     </script>
 </body>

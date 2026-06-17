@@ -3,7 +3,7 @@
 import { TeachersPetUtils } from "./utils.js";
 
 /**
- * Teachers Pet Comment Templates
+ * Teacher's Pet Comment Templates
  * Contains the logic for generating specific sections of the comment.
  */
 export const TeachersPetTemplates = {

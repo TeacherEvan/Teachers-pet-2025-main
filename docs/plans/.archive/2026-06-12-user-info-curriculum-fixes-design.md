@@ -1,5 +1,9 @@
 # Design Document: User Info Window Enhancement & Curriculum Data Fixes
 
+**Status:** ✅ **Archived — Implemented & Verified** (June 2025)
+
+
+
 **Date:** 2026-06-12  
 **Branch:** main  
 **Author:** Evan

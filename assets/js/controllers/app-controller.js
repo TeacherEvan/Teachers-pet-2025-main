@@ -1,5 +1,5 @@
 /**
- * Teachers Pet - Main Application Controller
+ * Teacher's Pet - Main Application Controller
  * Modularized version of the original app.js
  * @class TeachersPetApp
  */
@@ -243,7 +243,7 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 // Global functions for backward compatibility
-window.startOverWithAnimation = () => {
+export function startOverWithAnimation() {
     // 1. Capture current context (Grade/Month) to preserve it
     let currentGrade = '';
     let currentMonth = '';
@@ -290,4 +290,4 @@ window.startOverWithAnimation = () => {
             setTimeout(() => { window.location.href = 'index.html'; }, 300);
         }
     }
-};
+}

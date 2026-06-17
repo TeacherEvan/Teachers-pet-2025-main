@@ -1,4 +1,4 @@
-# Teachers Pet – Copilot Instructions
+# Teacher's Pet – Copilot Instructions
 
 ## 📑 Table of Contents
 
@@ -69,7 +69,7 @@
 
 ## �📋 Repository Overview
 
-**Teachers Pet** is a production-ready static web application for generating personalized kindergarten student report comments. The application runs entirely client-side with no backend, using vanilla JavaScript and localStorage for state management.
+**Teacher's Pet** is a production-ready static web application for generating personalized kindergarten student report comments. The application runs entirely client-side with no backend, using vanilla JavaScript and localStorage for state management.
 
 **Key Features:**
 

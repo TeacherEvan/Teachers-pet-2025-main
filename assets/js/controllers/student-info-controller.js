@@ -1,3 +1,5 @@
+import { escapeHtml } from "../utils/security.js";
+
 export class StudentInfoController {
     constructor(app) {
         this.app = app;
@@ -23,8 +25,8 @@ export class StudentInfoController {
             if (grade && month) {
                 const tracker = document.getElementById('curriculumTracker');
                 if (tracker) {
-                    const safeGrade = this.escapeHtml(grade);
-                    const safeMonth = this.escapeHtml(month);
+                    const safeGrade = escapeHtml(grade);
+                    const safeMonth = escapeHtml(month);
                     // Build safely with DOM APIs
                     tracker.innerHTML = ''; // Clear first
                     const span = document.createElement('span');
@@ -39,18 +41,6 @@ export class StudentInfoController {
                 }
             }
         } catch (e) { }
-    }
-
-    /**
-     * Escape HTML to prevent XSS
-     * @param {string} text - Text to escape
-     * @returns {string} Escaped text
-     */
-    escapeHtml(text) {
-        if (!text) return '';
-        const div = document.createElement('div');
-        div.textContent = text;
-        return div.innerHTML;
     }
 
     setupFormValidation() {

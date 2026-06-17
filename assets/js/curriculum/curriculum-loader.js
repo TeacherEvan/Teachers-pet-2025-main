@@ -1,6 +1,6 @@
 /**
  * Curriculum Loader Utility
- * Teachers Pet - Dynamic Curriculum Loading System
+ * Teacher's Pet - Dynamic Curriculum Loading System
  *
  * Loads curriculum data based on selected grade and month.
  * Handles missing curriculum files with graceful fallbacks.

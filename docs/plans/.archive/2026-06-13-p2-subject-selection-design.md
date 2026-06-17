@@ -1,5 +1,9 @@
 # P2 Subject Selection Page Design
 
+**Status:** ✅ **Archived — Implemented & Verified** (June 2025)
+
+
+
 ## Context
 - **Project:** Teachers Pet - Report generation for Thai schools
 - **Current state:** `Subjects.html` has hardcoded K1/K2 subjects (13 subjects with ~50 topics)

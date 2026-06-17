@@ -1,4 +1,5 @@
 import { BaseSubjectsController } from "./base-subjects-controller.js";
+import { OptimizedCommentGenerator } from "../optimized-comment-generator.js";
 
 export class SubjectsController extends BaseSubjectsController {
   constructor(app) {
@@ -94,9 +95,8 @@ export class SubjectsController extends BaseSubjectsController {
 
     setTimeout(async () => {
       try {
-        const { OptimizedCommentGenerator } = await import("../optimized-comment-generator.js");
         const generator = new OptimizedCommentGenerator();
-        const comments = generator.generateComments(this.app.sessionData);
+        const comments = await generator.generateComments(this.app.sessionData);
         this.displayComments(comments);
       } catch (error) {
         console.error("Comment generation failed:", error);

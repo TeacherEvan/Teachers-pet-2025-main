@@ -1,5 +1,9 @@
 # P2-IEAP Implementation Plan
 
+**Status:** ✅ **Archived — Implemented & Verified** (June 2025)
+
+
+
 > **For implementer:** Use TDD throughout. Write failing test first. Watch it fail. Then implement.
 
 **Goal:** Add P2 (Primary 2 / IEAP) as a new grade level after K2 with two-semester Thai curriculum, 8 subjects, and full comment generation integration.
