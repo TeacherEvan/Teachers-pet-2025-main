@@ -31,7 +31,7 @@ export default class CurriculumLoader {
     // Construct curriculum file path
     const gradeFolder = grade.toLowerCase();
     const monthFile = month.toLowerCase();
-    const curriculumPath = `assets/data/curriculum/${gradeFolder}/${monthFile}.json`;
+    const curriculumPath = `data/curriculum/${gradeFolder}/${monthFile}.json`;
 
     console.log(`📚 Loading curriculum: ${grade} - ${month}`);
     console.log(`📂 Path: ${curriculumPath}`);

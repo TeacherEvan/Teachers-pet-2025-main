@@ -1,5 +1,6 @@
 import { BaseSubjectsController } from "./base-subjects-controller.js";
 import { OptimizedCommentGenerator } from "../optimized-comment-generator.js";
+import { TeachersPetUtils } from "../engine/utils.js";
 
 export class SubjectsController extends BaseSubjectsController {
   constructor(app) {
@@ -45,7 +46,7 @@ export class SubjectsController extends BaseSubjectsController {
     return `
       <input type="checkbox" class="topic-checkbox" id="topic_${this.escapeHtml(topicId)}" value="${this.escapeHtml(topicName)}"
         data-subject="${this.escapeHtml(subjectId)}" data-topic="${this.escapeHtml(topicName)}">
-      <label for="topic_${this.escapeHtml(topicId)}" class="topic-text">${this.escapeHtml(topicName)}</label>
+      <span class="topic-text">${this.escapeHtml(topicName)}</span>
     `;
   }
 

@@ -3,17 +3,27 @@
  * Provides backward compatibility and enhanced integration with existing systems
  */
 
-import { EnhancedCommentEngine } from './engine/core.js';
-import { TeachersPetUtils } from './engine/utils.js';
+// Import from the bundle to ensure all dependencies are properly bundled together
+// Some imports are only used to force bundling (prefixed with _)
+import { 
+  EnhancedCommentEngine, 
+  TeachersPetUtils, 
+  TeachersPetProcessor as _TeachersPetProcessor, 
+  TeachersPetTemplates as _TeachersPetTemplates, 
+  TeachersPetData as _TeachersPetData, 
+  synonymManager as _synonymManager, 
+  debugLog, 
+  createDebugLog 
+} from './comment-engine-bundle.js';
+
+// Local debugLog function (uses the imported createDebugLog if needed, or keep simple version)
+const localDebugLog = createDebugLog('');
 
 /**
  * Debug logging helper - only logs when window.__TP_DEBUG__ === true
  */
-function debugLog(...args) {
-    if (typeof window !== 'undefined' && window.__TP_DEBUG__ === true) {
-        console.log(...args);
-    }
-}
+// Use imported debugLog for engine logging, localDebugLog for this module
+const _debug = localDebugLog;
 
 // Re-export for backward compatibility
 export { TeachersPetUtils };

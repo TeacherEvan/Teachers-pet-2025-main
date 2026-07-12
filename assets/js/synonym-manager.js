@@ -35,7 +35,7 @@ export class SynonymManager {
         }
 
         try {
-            const response = await fetch('assets/data/synonyms.json');
+            const response = await fetch('data/synonyms.json');
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }

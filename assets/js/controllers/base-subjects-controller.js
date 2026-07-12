@@ -17,6 +17,14 @@ export class BaseSubjectsController {
     this.gradeMonthDisplay = null;
   }
 
+  /**
+   * Expose escapeHtml as an instance method so subclass templates
+   * can call this.escapeHtml(...).
+   */
+  escapeHtml(text) {
+    return escapeHtml(text);
+  }
+
   async init() {
     this.cacheElements();
     this.loadSessionDataFromURL();
@@ -216,11 +224,19 @@ export class BaseSubjectsController {
    */
   createTopicElement(topic, subjectId, topicId) {
     const _topicName = topic.name || topic;
-    const label = document.createElement("label");
+    const label = document.createElement("div");
     label.className = "topic-item";
     label.setAttribute("data-topic-id", escapeHtml(topicId));
     label.innerHTML = this.getTopicTemplate(topic, subjectId, topicId);
     return label;
+  }
+
+  /**
+   * Base hook used by init(); P2 overrides this with star-rating handlers.
+   * Defaults to the standard accordion/checkbox binding.
+   */
+  setupSubjectInteractions() {
+    this.bindSubjectEvents();
   }
 
   /**
@@ -267,7 +283,7 @@ export class BaseSubjectsController {
    * @param {HTMLInputElement} topicElement
    */
   setupTopicInteraction(topicElement) {
-    const _topicName = topicElement.value;
+    const topicName = topicElement.value;
 
     topicElement.addEventListener("change", () => {
       if (topicElement.checked) {

@@ -12,20 +12,24 @@ import { SubjectsController } from './subjects-controller.js';
 import { P2SubjectsController } from './p2-subjects-controller.js';
 // OptimizedCommentGenerator loaded on-demand via dynamic import
 
+// Shared singleton session store so every controller instance (and any
+// re-entrant app init) reads and writes the same student data.
+const sessionStore = createPersistentStore('studentData', {
+    grade: '',
+    month: '',
+    studentName: '',
+    gender: '',
+    overallRating: 5,
+    strengths: '',
+    weaknesses: '',
+    subjects: [],
+    topicRatings: {}
+});
+
 export class TeachersPetApp {
     constructor() {
-        // Initialize Reactive Store
-        this.sessionData = createPersistentStore('studentData', {
-            grade: '',
-            month: '',
-            studentName: '',
-            gender: '',
-            overallRating: 5,
-            strengths: '',
-            weaknesses: '',
-            subjects: [],
-            topicRatings: {}
-        });
+        // Initialize Reactive Store (shared singleton)
+        this.sessionData = sessionStore;
 
         this.currentPage = this.getCurrentPage();
         this.initialized = false;
@@ -66,6 +70,7 @@ export class TeachersPetApp {
 
     init() {
         if (this.initialized) return;
+        this.initialized = true; // set synchronously to block re-entrant calls
 
         // Initialize based on current page - controllers are lazy-instantiated via getters
         switch (this.currentPage) {

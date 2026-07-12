@@ -21,5 +21,16 @@ export default defineConfig({
     port: 3000,
     open: true,
   },
+  optimizeDeps: {
+    include: [
+      'engine/core.js',
+      'engine/processor.js',
+      'engine/templates.js',
+      'engine/utils.js',
+      'data/engine-data.js',
+      'synonym-manager.js',
+      'utils/debug.js',
+    ],
+  },
   plugins: [],
 });
