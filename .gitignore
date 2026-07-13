@@ -30,3 +30,5 @@ yarn-error.log*
 /tmp/
 temp/
 *.tmp
+.vercel
+.env*
