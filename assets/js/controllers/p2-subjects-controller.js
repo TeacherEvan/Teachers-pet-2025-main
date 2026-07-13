@@ -45,6 +45,7 @@ export class P2SubjectsController extends BaseSubjectsController {
              class="topic-checkbox"
              data-subject="${this.escapeHtml(subjectId)}"
              data-topic="${this.escapeHtml(topic.name)}"
+             data-subject-name="${this.escapeHtml(subject.name)}"
              data-topic-id="${this.escapeHtml(topicId)}"
              data-vocab="${this.escapeHtml(topic.name)}"
              value="${this.escapeHtml(topic.name)}">
@@ -230,17 +231,23 @@ export class P2SubjectsController extends BaseSubjectsController {
   }
 
   collectSelections() {
-    const selections = [];
+    const subjects = [];
+    const topicRatings = {};
+    const topicSubjects = {};
 
     document.querySelectorAll(".topic-checkbox:checked").forEach((cb) => {
       const topicId = cb.dataset.topicId;
       const stars = document.querySelectorAll(`.star[data-topic="${topicId}"].filled`).length;
-      selections.push({
-        subject: cb.dataset.subject,
-        topic: cb.dataset.topic,
-        vocab: 10,
-        rating: stars,
-      });
+      const subjectId = cb.dataset.subject;
+      const subjectName = cb.dataset.subjectName || this.resolveSubjectName(subjectId);
+      const topicName = cb.dataset.topic;
+
+      if (topicName && subjectName) {
+        // Authoritative explicit topic -> subject map for perfect integration
+        topicSubjects[topicName] = subjectName;
+        topicRatings[topicName] = stars || 5;
+        if (!subjects.includes(subjectName)) subjects.push(subjectName);
+      }
     });
 
     return {
@@ -251,8 +258,29 @@ export class P2SubjectsController extends BaseSubjectsController {
       overallRating: this.app.sessionData.overallRating || 5,
       strengths: this.app.sessionData.strengths || [],
       weaknesses: this.app.sessionData.weaknesses || [],
-      selections: selections,
+      subjects,
+      topicRatings,
+      topicSubjects,
     };
+  }
+
+  /**
+   * Resolve a subject's display name from its id using the loaded curriculum,
+   * falling back to the app session store.
+   */
+  resolveSubjectName(subjectId) {
+    // Try the curriculum loaded in the store if available
+    const loaded = this.app.sessionData.curriculum;
+    if (loaded && Array.isArray(loaded.subjects)) {
+      const found = loaded.subjects.find(
+        (s) => (s.id || "").toLowerCase().replace(/\s+/g, "-") === subjectId
+      );
+      if (found) return found.name;
+    }
+    // Fallback: a checked subject checkbox value for this id
+    const subjCb = document.getElementById("subject_" + subjectId);
+    if (subjCb && subjCb.value) return subjCb.value;
+    return subjectId;
   }
 
   displayComments(comments) {

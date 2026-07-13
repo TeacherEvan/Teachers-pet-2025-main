@@ -23,7 +23,8 @@ const sessionStore = createPersistentStore('studentData', {
     strengths: '',
     weaknesses: '',
     subjects: [],
-    topicRatings: {}
+    topicRatings: {},
+    topicSubjects: {}
 });
 
 export class TeachersPetApp {
@@ -135,7 +136,8 @@ export class TeachersPetApp {
             strengths: '',
             weaknesses: '',
             subjects: [],
-            topicRatings: {}
+            topicRatings: {},
+            topicSubjects: {}
         };
     }
 

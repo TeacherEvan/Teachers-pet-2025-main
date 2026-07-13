@@ -90,6 +90,7 @@ export const TeachersPetProcessor = {
         sessionData.subjects || [],
         sessionData.topicRatings || {},
         engineData.subjectTopicMap,
+        sessionData.topicSubjects || null,
       );
 
     const studentName = sessionData.studentName.trim();
@@ -125,7 +126,7 @@ export const TeachersPetProcessor = {
    * Group topics under their parent subjects for better organization
    * Optimized with cached inverted keyword index for O(topics × keywords_in_topic) lookup
    */
-  groupTopicsBySubject: function (subjects, topicRatings, subjectTopicMap) {
+  groupTopicsBySubject: function (subjects, topicRatings, subjectTopicMap, topicSubjects) {
     const grouped = {};
     const orphanedTopics = [];
     const topicList = Object.keys(topicRatings);
@@ -147,14 +148,26 @@ export const TeachersPetProcessor = {
       keywordIndexArr = this._keywordIndexCache.get(cacheKey);
       if (!keywordIndexArr) {
         const keywordIndex = new Map();
+        const addKey = (kw, subject) => {
+          const normalized = kw.toLowerCase().trim();
+          if (!normalized) return;
+          if (!keywordIndex.has(normalized)) {
+            keywordIndex.set(normalized, new Set());
+          }
+          keywordIndex.get(normalized).add(subject);
+        };
         for (const [subject, keywords] of Object.entries(subjectTopicMap)) {
           for (const keyword of keywords) {
-            const normalized = keyword.toLowerCase().trim();
-            if (!normalized) continue;
-            if (!keywordIndex.has(normalized)) {
-              keywordIndex.set(normalized, new Set());
-            }
-            keywordIndex.get(normalized).add(subject);
+            // Register the full keyword
+            addKey(keyword, subject);
+            // Register each subword (>=3 chars) so descriptive topic names
+            // like "Trace the letters..." match "letter"/"trace" -> English
+            const subwords = keyword
+              .toLowerCase()
+              .replace(/[()]/g, ' ')
+              .split(/[^a-z0-9\u0E00-\u0E7F]+/)
+              .filter((w) => w.length >= 3);
+            for (const sw of subwords) addKey(sw, subject);
           }
         }
         keywordIndexArr = new Map();
@@ -169,29 +182,49 @@ export const TeachersPetProcessor = {
     subjects.forEach((subject) => { grouped[subject] = []; });
 
     topicList.forEach((topic) => {
-      const topicLower = topic.toLowerCase();
       let assigned = false;
 
-      // Extract keywords from topic (split by space, filter length >= 3)
-      const topicKeywords = topicLower.split(/\s+/).filter(k => k.length >= 3);
+      // PRIMARY: explicit topic -> subject mapping (authoritative, supplied by caller)
+      if (topicSubjects && topicSubjects[topic] && subjectSet.has(topicSubjects[topic])) {
+        grouped[topicSubjects[topic]].push(topic);
+        assigned = true;
+      }
 
-      // Check each keyword against index
-      for (const keyword of topicKeywords) {
-        const matchingSubjects = keywordIndexArr.get(keyword);
-        if (matchingSubjects) {
-          for (const subject of matchingSubjects) {
-            if (subjectSet.has(subject)) {
-              grouped[subject].push(topic);
-              assigned = true;
-              break;
+      // FALLBACK 1: keyword/index matching (for curricula without explicit mapping)
+      if (!assigned) {
+        const topicLower = topic.toLowerCase();
+        const tokens = topicLower
+          .replace(/[()]/g, ' ')
+          .split(/[^a-z0-9\u0E00-\u0E7F]+/)
+          .filter((k) => k.length >= 3);
+
+        for (const token of tokens) {
+          let matchingSubjects = keywordIndexArr.get(token);
+          // Bidirectional substring match only when an exact key is not found
+          if (!matchingSubjects) {
+            for (const [kw, subs] of keywordIndexArr) {
+              if (kw.length >= 3 && (token.includes(kw) || kw.includes(token))) {
+                matchingSubjects = subs;
+                break;
+              }
             }
           }
-          if (assigned) break;
+          if (matchingSubjects) {
+            for (const subject of matchingSubjects) {
+              if (subjectSet.has(subject)) {
+                grouped[subject].push(topic);
+                assigned = true;
+                break;
+              }
+            }
+            if (assigned) break;
+          }
         }
       }
 
-      // Fallback: subject name matching (existing logic)
+      // FALLBACK 2: subject-name containment
       if (!assigned) {
+        const topicLower = topic.toLowerCase();
         for (const subject of subjects) {
           if (topicLower.includes(subject.toLowerCase())) {
             grouped[subject].push(topic);
@@ -203,9 +236,7 @@ export const TeachersPetProcessor = {
 
       // Still not assigned? Track as orphaned topic (do not inject fake subject)
       if (!assigned) {
-        debugLog(
-          `⚠️ Topic "${topic}" could not be matched to any subject - ORPHANED TOPIC`,
-        );
+        debugLog(`⚠️ Topic "${topic}" could not be matched to any subject - ORPHANED TOPIC`);
         orphanedTopics.push(topic);
       }
     });

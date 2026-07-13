@@ -141,6 +141,7 @@ export class BaseSubjectsController {
     // Ensure arrays/objects are initialized
     sessionData.subjects = sessionData.subjects || [];
     sessionData.topicRatings = sessionData.topicRatings || {};
+    sessionData.topicSubjects = sessionData.topicSubjects || {};
   }
 
   /**
@@ -286,6 +287,14 @@ export class BaseSubjectsController {
     const topicName = topicElement.value;
 
     topicElement.addEventListener("change", () => {
+      // Record authoritative topic -> subject mapping for clean integration
+      const subjectId = topicElement.dataset.subject;
+      const subjectCb = subjectId ? document.getElementById("subject_" + subjectId) : null;
+      const subjectName = subjectCb && subjectCb.value ? subjectCb.value : (subjectId || "");
+      if (topicName && subjectName) {
+        this.app.sessionData.topicSubjects[topicName] = subjectName;
+      }
+
       if (topicElement.checked) {
         if (!this.app.sessionData.subjects.includes(topicName)) {
           this.app.sessionData.subjects.push(topicName);
@@ -296,6 +305,7 @@ export class BaseSubjectsController {
           this.app.sessionData.subjects.splice(index, 1);
         }
         delete this.app.sessionData.topicRatings[topicName];
+        delete this.app.sessionData.topicSubjects[topicName];
       }
       this.updateSelectionSummary();
       this.updateGenerateButton();
