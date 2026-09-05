@@ -40,7 +40,7 @@ export class StudentInfoController {
                     tracker.appendChild(span);
                 }
             }
-        } catch (e) { }
+        } catch (e) { if (typeof window !== 'undefined' && window.__TP_DEBUG__) console.warn('[student-info] tracker init failed:', e); }
     }
 
     setupFormValidation() {

@@ -32,3 +32,4 @@ temp/
 *.tmp
 .vercel
 .env*
+docs/.scratch-audit/

@@ -262,7 +262,7 @@ export function startOverWithAnimation() {
             currentGrade = data.grade;
             currentMonth = data.month;
         }
-    } catch (e) { }
+    } catch (e) { if (typeof window !== 'undefined' && window.__TP_DEBUG__) console.warn('[app-controller] localStorage read failed:', e); }
 
     // 2. Clear everything
     localStorage.clear();
