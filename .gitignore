@@ -32,3 +32,6 @@ temp/
 *.tmp
 .vercel
 .env*
+
+# V2 surgical-implementation audit scratch
+docs/.scratch-audit/
