@@ -123,7 +123,7 @@ function ensureCommentGeneration() {
             }
 
             const safeParse = (val) => {
-                try { return JSON.parse(val || '{}'); } catch { return {}; }
+                try { return JSON.parse(val || '{}'); } catch (e) { if (typeof window !== 'undefined' && window.__TP_DEBUG__) console.warn('[subjects-ui] safeParse failed:', e); return {}; }
             };
 
             let studentData = safeParse(localStorage.getItem('studentData'));
@@ -133,7 +133,7 @@ function ensureCommentGeneration() {
                 if (ssData.studentName && ssData.gender) {
                     console.warn('ℹ️ Restoring studentData from sessionStorage fallback');
                     studentData = ssData;
-                    try { localStorage.setItem('studentData', JSON.stringify(ssData)); } catch { }
+                    try { localStorage.setItem('studentData', JSON.stringify(ssData)); } catch (e) { if (typeof window !== 'undefined' && window.__TP_DEBUG__) console.warn('[subjects-ui] localStorage setItem failed:', e); }
                 }
             }
 
