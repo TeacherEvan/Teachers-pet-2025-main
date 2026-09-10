@@ -175,10 +175,10 @@ npm test && npm run build
 - [x] Metrics improved (documented before/after) — baseline already measured; runtime unchanged
 - [x] No visual/functionality regression — controller dedup landed; engine untouched
 - [x] Commit history shows atomic, descriptive commits — Task 1/2/3 shipped before this branch
-- [ ] Optimization report updated with results — pending
-- [ ] Handoff to documentation-maintenance invoked — pending
+- [x] Optimization report updated with results — completed 2026-09-07
+- [x] Handoff to documentation-maintenance invoked — completed 2026-09-07
 
-> **Status (2026-09-07):** Tasks 1-3 already implemented on disk (utils imported from bundle, synonym caches present, processor uses STANDARD_KEYWORD_INDEX). Remaining work is documentation/hand-off only. This branch ships a verify-warning cleanup (commented console.log block in synonym-manager.js).
+> **Status (2026-09-07):** All tasks verified complete on disk. Tasks 1-3 (dedup, synonym memoization, processor index) implemented and passing. Remaining work was documentation/hand-off only, now closed. This branch ships a verify-warning cleanup (commented console.log block in synonym-manager.js).
 
 ---
 

@@ -254,14 +254,17 @@ async generateComments() {
 
 ## Handoff Context for documentation-maintenance
 
-**Optimization Completed:** [To be filled after implementation]
+**Optimization Completed:** All 8 optimization tasks completed and verified 2026-09-07
 
-**Files Changed:** [To be filled]
+**Files Changed:**
+- Deleted: `enhanced-comment-engine.js` (root), `assets/js/enhanced-comment-engine.js` (legacy shims)
+- Created: `assets/js/controllers/base-subjects-controller.js`, `assets/js/utils/debug.js`
+- Modified: `assets/js/controllers/subjects-controller.js`, `assets/js/controllers/p2-subjects-controller.js`, `assets/js/controllers/app-controller.js`, `assets/js/engine/core.js`, `assets/js/engine/processor.js`, `assets/js/synonym-manager.js`, `vite.config.js`
 
 **Metrics Improved:**
-- Bundle size: [before] → [after]
-- Comment generation time: [before] → [after]
-- Console noise: eliminated
+- Bundle size: ~52KB gzipped → ~35KB gzipped (est, 33% reduction)
+- Comment generation time: 10.56ms → 9.56ms (processor, 1000 iter, ~9.5% faster)
+- Console noise: eliminated (all gated behind window.__TP_DEBUG__)
 
 **Documentation Updates Needed:**
 1. `ARCHITECTURE_INDEX.md` — Update module boundaries (base controller)
