@@ -100,7 +100,7 @@ export class TeachersPetApp {
 
     // GRADE SELECTION PAGE METHODS (Simple enough to keep here for now)
     initGradeSelection() {
-        console.log('Initializing grade selection page');
+        if (typeof window !== 'undefined' && window.__TP_DEBUG__) console.log('Initializing grade selection page');
     }
 
     initMonthSelection() {
@@ -118,7 +118,7 @@ export class TeachersPetApp {
         }
         
         // No need for manual localStorage fallback - Store handles it!
-        console.log('Loaded grade/month:', this.sessionData.grade, this.sessionData.month);
+        if (typeof window !== 'undefined' && window.__TP_DEBUG__) console.log('Loaded grade/month:', this.sessionData.grade, this.sessionData.month);
     }
 
     // SHARED UTILITY METHODS

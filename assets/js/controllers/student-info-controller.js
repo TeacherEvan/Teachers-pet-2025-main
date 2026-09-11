@@ -34,7 +34,7 @@ export class StudentInfoController {
                     span.innerHTML = `Current: <span style="color:#2a7cff">${safeGrade}</span> · <span style="color:#ff7c2a">${safeMonth}</span> `;
                     const changeLink = document.createElement('a');
                     changeLink.href = `month-selection.html?grade=${encodeURIComponent(grade)}`;
-                    changeLink.style.cssText = 'margin-left:8px;font-size:13px;';
+                    changeLink.className = 'change-link';
                     changeLink.textContent = 'Change';
                     span.appendChild(changeLink);
                     tracker.appendChild(span);
