@@ -141,12 +141,11 @@ export class TeachersPetApp {
         };
     }
 
-    navigateWithTransition(url) {
+    async navigateWithTransition(url) {
         document.body.classList.add('page-exit');
 
-        setTimeout(() => {
-            window.location.href = url;
-        }, 600);
+        await new Promise(r => setTimeout(r, 600));
+        window.location.href = url;
     }
 
     showLoadingOverlay(message = 'Loading...') {
@@ -194,7 +193,7 @@ export class TeachersPetApp {
         }
     }
 
-    showNotification(message, type = 'info') {
+    async showNotification(message, type = 'info') {
         const notification = document.createElement('div');
         notification.className = `notification notification-${type}`;
         notification.textContent = message;
@@ -220,16 +219,13 @@ export class TeachersPetApp {
 
         document.body.appendChild(notification);
 
-        setTimeout(() => {
-            notification.style.transform = 'translateX(0)';
-        }, 100);
+        await new Promise(r => setTimeout(r, 100));
+        notification.style.transform = 'translateX(0)';
 
-        setTimeout(() => {
-            notification.style.transform = 'translateX(100%)';
-            setTimeout(() => {
-                notification.remove();
-            }, 300);
-        }, 4000);
+        await new Promise(r => setTimeout(r, 4000));
+        notification.style.transform = 'translateX(100%)';
+        await new Promise(r => setTimeout(r, 300));
+        notification.remove();
     }
 }
 
@@ -250,7 +246,7 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 // Global functions for backward compatibility
-export function startOverWithAnimation() {
+export async function startOverWithAnimation() {
     // 1. Capture current context (Grade/Month) to preserve it
     let currentGrade = '';
     let currentMonth = '';
@@ -285,7 +281,8 @@ export function startOverWithAnimation() {
             app.navigateWithTransition(target);
         } else {
             document.body.style.opacity = '0';
-            setTimeout(() => { window.location.href = target; }, 300);
+            await new Promise(r => setTimeout(r, 300));
+            window.location.href = target;
         }
     } else {
         // Full reset if no context
@@ -294,7 +291,8 @@ export function startOverWithAnimation() {
             app.navigateWithTransition('index.html');
         } else {
             document.body.style.opacity = '0';
-            setTimeout(() => { window.location.href = 'index.html'; }, 300);
+            await new Promise(r => setTimeout(r, 300));
+            window.location.href = 'index.html';
         }
     }
 }

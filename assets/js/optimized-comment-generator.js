@@ -5,15 +5,11 @@
 
 // Import from the bundle to ensure all dependencies are properly bundled together
 // Some imports are only used to force bundling (prefixed with _)
-import { 
-  EnhancedCommentEngine, 
-  TeachersPetUtils, 
-  TeachersPetProcessor as _TeachersPetProcessor, 
-  TeachersPetTemplates as _TeachersPetTemplates, 
-  TeachersPetData as _TeachersPetData, 
-  synonymManager as _synonymManager, 
-  debugLog, 
-  createDebugLog 
+import {
+  EnhancedCommentEngine,
+  TeachersPetUtils,
+  debugLog,
+  createDebugLog
 } from './comment-engine-bundle.js';
 
 // Local debugLog function (uses the imported createDebugLog if needed, or keep simple version)
@@ -374,31 +370,5 @@ export class OptimizedCommentGenerator {
     }
 }
 
-// Initialize and expose globally (browser only)
-if (typeof window !== 'undefined') {
-    window.OptimizedCommentGenerator = OptimizedCommentGenerator;
-
-    // Create global instance
-    window.commentGenerator = new OptimizedCommentGenerator();
-
-    // Backward compatibility functions
-    window.generateCommentsFromStorage = function () {
-        return window.commentGenerator.generateFromStorage();
-    };
-
-    window.testCommentGeneration = function () {
-        return window.commentGenerator.testGeneration();
-    };
-
-    // Auto-initialize when DOM is loaded
-    document.addEventListener('DOMContentLoaded', function () {
-        // Ensure the generator is ready
-        if (!window.commentGenerator.isInitialized) {
-            window.commentGenerator.init();
-        }
-
-        debugLog('OptimizedCommentGenerator ready for use');
-    });
-}
 
 debugLog('Optimized Comment Generator loaded successfully');

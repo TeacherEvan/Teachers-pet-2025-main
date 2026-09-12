@@ -1,6 +1,21 @@
 /* eslint-env es6 */
 
 /**
+ * Seeded random number generator (mulberry32) for deterministic behavior
+ * @param {number} seed - Seed value
+ * @returns {function} RNG function that returns 0-1
+ */
+export function createSeededRandom(seed) {
+  return function () {
+    seed |= 0;
+    seed = (seed + 0x6D2B79F5) | 0;
+    let t = Math.imul(seed ^ (seed >>> 15), 1 | seed);
+    t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+    return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+  };
+}
+
+/**
  * Teacher's Pet Utility Functions
  * Pure functions for string manipulation, array handling, and formatting.
  */
@@ -37,17 +52,17 @@ export const TeachersPetUtils = {
   /**
    * Select random item from array
    */
-  selectRandom: function (arr) {
+  selectRandom: function (arr, rng = Math.random) {
     if (!arr || arr.length === 0) return "";
-    return arr[Math.floor(Math.random() * arr.length)];
+    return arr[Math.floor(rng() * arr.length)];
   },
 
   /**
    * Get random item from array pool to prevent repetition
    */
-  getRandomFromPool: function (pool) {
+  getRandomFromPool: function (pool, rng = Math.random) {
     if (!pool || pool.length === 0) return "";
-    return pool[Math.floor(Math.random() * pool.length)];
+    return pool[Math.floor(rng() * pool.length)];
   },
 
   /**

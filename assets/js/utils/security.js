@@ -53,7 +53,7 @@ export function isSafe(text, context = 'html') {
             try {
                 new URL(str);
                 return true;
-            } catch {
+            } catch (e) {
                 return false;
             }
         default:

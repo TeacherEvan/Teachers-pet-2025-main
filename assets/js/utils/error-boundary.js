@@ -325,15 +325,6 @@ class ErrorBoundary {
     }
 }
 
-// Initialize global error boundary
-if (typeof window !== 'undefined') {
-    window.errorBoundary = new ErrorBoundary();
-    
-    // Add helper method to window for easy access
-    window.safeExecute = (fn, fallback) => {
-        return window.errorBoundary.try(fn, fallback);
-    };
-}
 
 // Export for module systems
 export { ErrorBoundary };
