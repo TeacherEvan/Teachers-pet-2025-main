@@ -167,7 +167,7 @@ export class OptimizedCommentGenerator {
                 try {
                     return JSON.parse(storedSubjects);
                 } catch (error) {
-                    console.warn('Failed to parse stored subjects:', error);
+                    debugLog('⚠️', 'Failed to parse stored subjects:', error);
                 }
             }
         }
@@ -367,9 +367,9 @@ export class OptimizedCommentGenerator {
         };
 
         // Always log test results (test helper)
-        console.log('Testing comment generation with sample data...');
+        debugLog('🧪', 'Testing comment generation with sample data...');
         const result = await this.generateComments(testData);
-        console.log('Test result:', result);
+        debugLog('🧪', 'Test result:', result);
         return result;
     }
 }
