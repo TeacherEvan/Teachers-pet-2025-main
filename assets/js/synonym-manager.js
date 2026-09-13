@@ -8,6 +8,7 @@
  * @class SynonymManager
  */
 import { createDebugLog } from './utils/debug.js';
+import { debug } from './utils/debug.js';
 
 const debugLogSynonym = createDebugLog('📚 ');
 
@@ -377,7 +378,7 @@ export class SynonymManager {
      */
     exportState() {
         const stats = this.getStatistics();
-        console.table(stats.usageCounts);
+        debug(stats.usageCounts);
         return stats;
     }
 }

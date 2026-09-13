@@ -1,5 +1,6 @@
 import { BaseSubjectsController } from "./base-subjects-controller.js";
 import { TeachersPetUtils } from "../engine/utils.js";
+import { debug } from '../utils/debug.js';
 
 export class P2SubjectsController extends BaseSubjectsController {
   constructor(app) {
@@ -223,7 +224,7 @@ export class P2SubjectsController extends BaseSubjectsController {
       if (this.app.notify) this.app.notify("Comments generated successfully!", "success");
       this.displayComments(comments);
     } catch (error) {
-      console.error("Comment generation failed:", error);
+      debug("Comment generation failed:", error);
       if (this.app.notify) this.app.notify("Failed to generate comments. Please try again.", "error");
     } finally {
       if (this.app.hideLoader) this.app.hideLoader();

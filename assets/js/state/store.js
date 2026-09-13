@@ -1,3 +1,4 @@
+import { debug } from '../utils/debug.js';
 /**
  * Reactive State Store with LocalStorage Persistence
  * Uses Proxy pattern to automatically sync state changes to localStorage.
@@ -40,12 +41,12 @@ export function createPersistentStore(key, initialState = {}) {
                 // Merge stored data with initial state structure
                 data = { ...data, ...parsed };
             } else {
-                console.warn(`Invalid data in ${key}, using defaults`);
+                debug(`Invalid data in ${key}, using defaults`);
                 localStorage.removeItem(key); // Clear invalid data
             }
         }
     } catch (e) {
-        console.warn(`Error loading ${key} from storage:`, e);
+        debug(`Error loading ${key} from storage:`, e);
     }
 
     // 2. Create Proxy Handler
@@ -60,10 +61,10 @@ export function createPersistentStore(key, initialState = {}) {
 
                 // Optional: Log for debugging
                 if (window.__TP_DEBUG__) {
-                    console.log(`💾 State Saved [${key}]: ${prop} =`, value);
+                    debug(`💾 State Saved [${key}]: ${prop} =`, value);
                 }
             } catch (e) {
-                console.error(`Error saving ${key} to storage:`, e);
+                debug(`Error saving ${key} to storage:`, e);
             }
 
             return result;

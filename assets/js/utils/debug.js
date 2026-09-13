@@ -17,6 +17,19 @@ export function createDebugLog(prefix = '') {
   };
 }
 
+
+/**
+ * Simple debug log function - passes through all arguments.
+ * Use this for general-purpose debug logging.
+ * Only logs when window.__TP_DEBUG__ === true.
+ * @param {...any} args - Arguments to log
+ */
+export function debug(...args) {
+    if (typeof window !== 'undefined' && window.__TP_DEBUG__ === true) {
+        console.log(...args);
+    }
+}
+
 /**
  * Default debug log instance (no prefix).
  * Use this for general-purpose debugging.

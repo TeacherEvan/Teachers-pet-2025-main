@@ -1,5 +1,6 @@
 import { BaseSubjectsController } from "./base-subjects-controller.js";
 import { TeachersPetUtils } from "../engine/utils.js";
+import { debug } from '../utils/debug.js';
 
 export class SubjectsController extends BaseSubjectsController {
   constructor(app) {
@@ -100,7 +101,7 @@ export class SubjectsController extends BaseSubjectsController {
         const comments = await generator.generateComments(this.app.sessionData);
         this.displayComments(comments);
       } catch (error) {
-        console.error("Comment generation failed:", error);
+        debug("Comment generation failed:", error);
         this.app.showNotification("Failed to generate comments. Please try again.", "error");
       } finally {
         this.app.hideLoadingOverlay();

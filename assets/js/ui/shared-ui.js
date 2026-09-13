@@ -1,3 +1,4 @@
+import { debug } from '../utils/debug.js';
 /**
  * Shared UI Functions
  * Common navigation and utility functions used across pages.
@@ -42,11 +43,11 @@ function clearAndNavigate(grade, month) {
     if (grade && month) {
         const preservedData = { grade: grade, month: month };
         localStorage.setItem('studentData', JSON.stringify(preservedData));
-        console.log('🧹 Data cleared (Grade/Month preserved)');
+        debug('🧹 Data cleared (Grade/Month preserved)');
         window.location.href = `student-information.html?grade=${grade}&month=${month}`;
     } else {
         // Full reset if no curriculum was selected
-        console.log('🧹 All data cleared - starting fresh!');
+        debug('🧹 All data cleared - starting fresh!');
         window.location.href = 'index.html';
     }
 }

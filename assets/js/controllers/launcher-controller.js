@@ -4,6 +4,7 @@
  * @class LauncherController
  */
 import { performanceOptimizer } from "../utils/performance-optimizer.js";
+import { debug } from '../utils/debug.js';
 
 export class LauncherController {
     constructor(appInstance) {
@@ -18,7 +19,7 @@ export class LauncherController {
      */
     init() {
         if (this.isInitialized) {
-            console.warn('LauncherController already initialized');
+            debug('LauncherController already initialized');
             return;
         }
 
@@ -88,7 +89,7 @@ export class LauncherController {
     initializeFloatingParticles() {
         const particlesContainer = document.querySelector('.particles-container');
         if (!particlesContainer) {
-            console.warn('Particles container not found');
+            debug('Particles container not found');
             return;
         }
 

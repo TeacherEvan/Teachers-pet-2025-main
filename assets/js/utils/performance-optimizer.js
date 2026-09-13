@@ -1,3 +1,4 @@
+import { debug } from './debug.js';
 /**
  * Performance Optimization Utilities - Production Grade 2024
  * Implements lazy loading, code splitting, progressive enhancement, and Core Web Vitals optimization
@@ -59,7 +60,7 @@ class PerformanceOptimizer {
         // Setup resource prefetching
         this.setupResourcePrefetching();
         
-        console.log('⚡ Performance Optimizer initialized');
+        debug('⚡ Performance Optimizer initialized');
     }
 
     /**
@@ -84,11 +85,11 @@ class PerformanceOptimizer {
                 performance.measure(name, startMark, endMark);
                 const measures = performance.getEntriesByName(name);
                 if (measures.length > 0) {
-                    console.log(`📊 ${name}: ${measures[0].duration.toFixed(2)}ms`);
+                    debug(`📊 ${name}: ${measures[0].duration.toFixed(2)}ms`);
                     return measures[0].duration;
                 }
             } catch (e) {
-                console.warn(`Could not measure ${name}:`, e);
+                debug(`Could not measure ${name}:`, e);
             }
         }
         return null;
@@ -99,7 +100,7 @@ class PerformanceOptimizer {
      */
     setupLazyImageLoading() {
         if (!('IntersectionObserver' in window)) {
-            console.warn('IntersectionObserver not supported, falling back to immediate loading');
+            debug('IntersectionObserver not supported, falling back to immediate loading');
             return;
         }
 
@@ -153,7 +154,7 @@ class PerformanceOptimizer {
             this.mark(`image-loaded-${src.substring(0, 30)}`);
         };
         tempImg.onerror = () => {
-            console.error(`Failed to load image: ${src}`);
+            debug(`Failed to load image: ${src}`);
             img.classList.add('error');
         };
         tempImg.src = src;
@@ -191,11 +192,11 @@ class PerformanceOptimizer {
      */
     async loadModule(moduleName, component) {
         if (this.loadedModules.has(moduleName)) {
-            console.log(`✅ Module ${moduleName} already loaded`);
+            debug(`✅ Module ${moduleName} already loaded`);
             return this.loadedModules.get(moduleName);
         }
 
-        console.log(`🔄 Loading module: ${moduleName}`);
+        debug(`🔄 Loading module: ${moduleName}`);
         this.mark(`module-load-start-${moduleName}`);
 
         try {
@@ -216,7 +217,7 @@ class PerformanceOptimizer {
             component.classList.add('module-loaded');
             return module;
         } catch (error) {
-            console.error(`❌ Failed to load module ${moduleName}:`, error);
+            debug(`❌ Failed to load module ${moduleName}:`, error);
             component.classList.add('module-error');
             throw error;
         }
@@ -236,11 +237,11 @@ class PerformanceOptimizer {
                     this.performanceMetrics.coreWebVitals.LCP = lcpValue;
                     
                     const rating = lcpValue <= 2500 ? '✅ Good' : lcpValue <= 4000 ? '⚠️ Needs Improvement' : '❌ Poor';
-                    console.log(`📊 LCP: ${lcpValue.toFixed(2)}ms ${rating}`);
+                    debug(`📊 LCP: ${lcpValue.toFixed(2)}ms ${rating}`);
                 });
                 lcpObserver.observe({ entryTypes: ['largest-contentful-paint'] });
             } catch (e) {
-                console.warn('Could not observe LCP:', e);
+                debug('Could not observe LCP:', e);
             }
 
             // Monitor First Input Delay (FID) - Target: <100ms
@@ -251,12 +252,12 @@ class PerformanceOptimizer {
                         this.performanceMetrics.coreWebVitals.FID = fidValue;
                         
                         const rating = fidValue <= 100 ? '✅ Good' : fidValue <= 300 ? '⚠️ Needs Improvement' : '❌ Poor';
-                        console.log(`📊 FID: ${fidValue.toFixed(2)}ms ${rating}`);
+                        debug(`📊 FID: ${fidValue.toFixed(2)}ms ${rating}`);
                     });
                 });
                 fidObserver.observe({ entryTypes: ['first-input'] });
             } catch (e) {
-                console.warn('Could not observe FID:', e);
+                debug('Could not observe FID:', e);
             }
 
             // Monitor Cumulative Layout Shift (CLS) - Target: <0.1
@@ -271,11 +272,11 @@ class PerformanceOptimizer {
                     this.performanceMetrics.coreWebVitals.CLS = clsScore;
                     
                     const rating = clsScore <= 0.1 ? '✅ Good' : clsScore <= 0.25 ? '⚠️ Needs Improvement' : '❌ Poor';
-                    console.log(`📊 CLS: ${clsScore.toFixed(4)} ${rating}`);
+                    debug(`📊 CLS: ${clsScore.toFixed(4)} ${rating}`);
                 });
                 clsObserver.observe({ entryTypes: ['layout-shift'] });
             } catch (e) {
-                console.warn('Could not observe CLS:', e);
+                debug('Could not observe CLS:', e);
             }
 
             // Monitor First Contentful Paint (FCP) - Target: <1.8s
@@ -288,12 +289,12 @@ class PerformanceOptimizer {
                         this.performanceMetrics.coreWebVitals.FCP = fcpValue;
                         
                         const rating = fcpValue <= 1800 ? '✅ Good' : fcpValue <= 3000 ? '⚠️ Needs Improvement' : '❌ Poor';
-                        console.log(`📊 FCP: ${fcpValue.toFixed(2)}ms ${rating}`);
+                        debug(`📊 FCP: ${fcpValue.toFixed(2)}ms ${rating}`);
                     }
                 });
                 fcpObserver.observe({ entryTypes: ['paint'] });
             } catch (e) {
-                console.warn('Could not observe FCP:', e);
+                debug('Could not observe FCP:', e);
             }
 
             // Monitor Time to First Byte (TTFB) - Target: <600ms
@@ -304,10 +305,10 @@ class PerformanceOptimizer {
                     this.performanceMetrics.coreWebVitals.TTFB = ttfbValue;
                     
                     const rating = ttfbValue <= 600 ? '✅ Good' : ttfbValue <= 1500 ? '⚠️ Needs Improvement' : '❌ Poor';
-                    console.log(`📊 TTFB: ${ttfbValue.toFixed(2)}ms ${rating}`);
+                    debug(`📊 TTFB: ${ttfbValue.toFixed(2)}ms ${rating}`);
                 }
             } catch (e) {
-                console.warn('Could not measure TTFB:', e);
+                debug('Could not measure TTFB:', e);
             }
         }
     }
@@ -370,7 +371,7 @@ class PerformanceOptimizer {
             document.head.appendChild(link);
         });
         
-        console.log('🔗 DNS prefetch configured for external domains');
+        debug('🔗 DNS prefetch configured for external domains');
     }
 
     /**
@@ -390,7 +391,7 @@ class PerformanceOptimizer {
             document.head.appendChild(link);
         });
         
-        console.log('🔗 Preconnect configured for critical origins');
+        debug('🔗 Preconnect configured for critical origins');
     }
 
     /**
@@ -416,7 +417,7 @@ class PerformanceOptimizer {
             }
             
             document.head.appendChild(link);
-            console.log(`⚡ Prefetching (${resource.priority}): ${resource.url}`);
+            debug(`⚡ Prefetching (${resource.priority}): ${resource.url}`);
         });
     }
 
@@ -503,7 +504,7 @@ class PerformanceOptimizer {
                 this.mark(`${taskName}-end`);
                 this.measure(taskName, `${taskName}-start`, `${taskName}-end`);
             } catch (error) {
-                console.error(`Error in idle task ${taskName}:`, error);
+                debug(`Error in idle task ${taskName}:`, error);
             }
         });
     }
@@ -551,39 +552,39 @@ class PerformanceOptimizer {
     logPerformanceReport() {
         const report = this.getPerformanceReport();
         console.group('⚡ Performance Report - Production Grade 2024');
-        console.log(`%c🕐 Total Runtime: ${report.totalTime}ms`, 'color: #4CAF50; font-weight: bold');
+        debug(`%c🕐 Total Runtime: ${report.totalTime}ms`, 'color: #4CAF50; font-weight: bold');
         
         console.group('📊 Core Web Vitals');
-        console.log(`LCP (Largest Contentful Paint): ${report.coreWebVitals.LCP}ms`);
-        console.log(`FID (First Input Delay): ${report.coreWebVitals.FID}ms`);
-        console.log(`CLS (Cumulative Layout Shift): ${report.coreWebVitals.CLS}`);
-        console.log(`FCP (First Contentful Paint): ${report.coreWebVitals.FCP}ms`);
-        console.log(`TTFB (Time to First Byte): ${report.coreWebVitals.TTFB}ms`);
+        debug(`LCP (Largest Contentful Paint): ${report.coreWebVitals.LCP}ms`);
+        debug(`FID (First Input Delay): ${report.coreWebVitals.FID}ms`);
+        debug(`CLS (Cumulative Layout Shift): ${report.coreWebVitals.CLS}`);
+        debug(`FCP (First Contentful Paint): ${report.coreWebVitals.FCP}ms`);
+        debug(`TTFB (Time to First Byte): ${report.coreWebVitals.TTFB}ms`);
         console.groupEnd();
         
         console.group('📦 Resources Loaded');
-        console.log(`Total: ${report.resources.total}`);
-        console.log(`Scripts: ${report.resources.scripts}`);
-        console.log(`Stylesheets: ${report.resources.stylesheets}`);
-        console.log(`Images: ${report.resources.images}`);
-        console.log(`Fonts: ${report.resources.fonts}`);
+        debug(`Total: ${report.resources.total}`);
+        debug(`Scripts: ${report.resources.scripts}`);
+        debug(`Stylesheets: ${report.resources.stylesheets}`);
+        debug(`Images: ${report.resources.images}`);
+        debug(`Fonts: ${report.resources.fonts}`);
         console.groupEnd();
         
         if (report.navigation) {
             console.group('🚀 Navigation Timing');
-            console.log(`DOM Content Loaded: ${report.navigation.domContentLoaded}ms`);
-            console.log(`Load Complete: ${report.navigation.loadComplete}ms`);
-            console.log(`DOM Interactive: ${report.navigation.domInteractive}ms`);
+            debug(`DOM Content Loaded: ${report.navigation.domContentLoaded}ms`);
+            debug(`Load Complete: ${report.navigation.loadComplete}ms`);
+            debug(`DOM Interactive: ${report.navigation.domInteractive}ms`);
             console.groupEnd();
         }
         
         console.group('🔧 Optimization Status');
-        console.log(`Loaded Modules: ${report.loadedModules.length}`);
-        console.log(`Active Observers: ${report.observersActive}`);
-        console.log(`Idle Callbacks: ${report.idleCallbacks}`);
+        debug(`Loaded Modules: ${report.loadedModules.length}`);
+        debug(`Active Observers: ${report.observersActive}`);
+        debug(`Idle Callbacks: ${report.idleCallbacks}`);
         console.groupEnd();
         
-        console.log('Custom Marks:', report.marks);
+        debug('Custom Marks:', report.marks);
         console.groupEnd();
         
         return report;

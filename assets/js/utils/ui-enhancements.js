@@ -6,6 +6,7 @@
  */
 
 import { startOverWithAnimation } from "../controllers/app-controller.js";
+import { debug } from './debug.js';
 
 // Prefer window.startOverWithAnimation for testing and backward compatibility
 export const getStartOverWithAnimation = () => {
@@ -41,7 +42,7 @@ class UIEnhancements {
             
             reducedMotionQuery.addEventListener('change', (e) => {
                 this.reducedMotion = e.matches;
-                console.log(`🎯 Reduced motion ${this.reducedMotion ? 'enabled' : 'disabled'}`);
+                debug(`🎯 Reduced motion ${this.reducedMotion ? 'enabled' : 'disabled'}`);
             });
         }
         
@@ -56,7 +57,7 @@ class UIEnhancements {
             });
         }
         
-        console.log(`🎨 User preferences: Dark mode ${this.darkMode ? 'on' : 'off'}, Reduced motion ${this.reducedMotion ? 'on' : 'off'}`);
+        debug(`🎨 User preferences: Dark mode ${this.darkMode ? 'on' : 'off'}, Reduced motion ${this.reducedMotion ? 'on' : 'off'}`);
     }
 
     /**
@@ -72,7 +73,7 @@ class UIEnhancements {
         this.setupHapticFeedback();
         this.setupKeyboardShortcuts();
         this.setupFormEnhancements();
-        console.log('✨ UI Enhancements initialized (2024 Production Grade)');
+        debug('✨ UI Enhancements initialized (2024 Production Grade)');
     }
 
     /**
@@ -80,7 +81,7 @@ class UIEnhancements {
      */
     applyColorScheme(isDark) {
         document.documentElement.setAttribute('data-theme', isDark ? 'dark' : 'light');
-        console.log(`🎨 Color scheme set to ${isDark ? 'dark' : 'light'} mode`);
+        debug(`🎨 Color scheme set to ${isDark ? 'dark' : 'light'} mode`);
     }
 
     /**
@@ -88,7 +89,7 @@ class UIEnhancements {
      */
     setupHapticFeedback() {
         if (!this.hapticSupported) {
-            console.log('📱 Haptic feedback not supported on this device');
+            debug('📱 Haptic feedback not supported on this device');
             return;
         }
         
@@ -100,7 +101,7 @@ class UIEnhancements {
             });
         });
         
-        console.log('📱 Haptic feedback enabled');
+        debug('📱 Haptic feedback enabled');
     }
 
     /**
@@ -136,7 +137,7 @@ class UIEnhancements {
             }
         });
         
-        console.log('⌨️ Keyboard shortcuts enabled');
+        debug('⌨️ Keyboard shortcuts enabled');
     }
 
     /**
@@ -162,7 +163,7 @@ class UIEnhancements {
         searchInput.focus();
         this.triggerHapticFeedback('medium');
 
-        console.log('🚀 Quick navigation triggered');
+        debug('🚀 Quick navigation triggered');
     }
 
     ensureQuickNavigationOverlay() {
@@ -534,7 +535,7 @@ class UIEnhancements {
             });
         });
         
-        console.log('📝 Form enhancements enabled');
+        debug('📝 Form enhancements enabled');
     }
 
     /**

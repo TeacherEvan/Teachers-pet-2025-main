@@ -10,6 +10,7 @@ import { LauncherController } from './launcher-controller.js';
 import { StudentInfoController } from './student-info-controller.js';
 import { SubjectsController } from './subjects-controller.js';
 import { P2SubjectsController } from './p2-subjects-controller.js';
+import { debug } from '../utils/debug.js';
 // OptimizedCommentGenerator loaded on-demand via dynamic import
 
 // Shared singleton session store so every controller instance (and any
@@ -100,11 +101,11 @@ export class TeachersPetApp {
 
     // GRADE SELECTION PAGE METHODS (Simple enough to keep here for now)
     initGradeSelection() {
-        if (typeof window !== 'undefined' && window.__TP_DEBUG__) console.log('Initializing grade selection page');
+        if (typeof window !== 'undefined' && window.__TP_DEBUG__) debug('Initializing grade selection page');
     }
 
     initMonthSelection() {
-        console.log('Initializing month selection page');
+        debug('Initializing month selection page');
         this.loadGradeMonthFromStorage();
     }
 
@@ -118,7 +119,7 @@ export class TeachersPetApp {
         }
         
         // No need for manual localStorage fallback - Store handles it!
-        if (typeof window !== 'undefined' && window.__TP_DEBUG__) console.log('Loaded grade/month:', this.sessionData.grade, this.sessionData.month);
+        if (typeof window !== 'undefined' && window.__TP_DEBUG__) debug('Loaded grade/month:', this.sessionData.grade, this.sessionData.month);
     }
 
     // SHARED UTILITY METHODS
@@ -233,15 +234,15 @@ export class TeachersPetApp {
 let app;
 
 // Add debug logging
-console.log('App Controller loaded, DOM state:', document.readyState);
+debug('App Controller loaded, DOM state:', document.readyState);
 
 document.addEventListener('DOMContentLoaded', () => {
-    console.log('DOM loaded, initializing TeachersPetApp');
+    debug('DOM loaded, initializing TeachersPetApp');
     try {
         app = new TeachersPetApp();
-        console.log('TeachersPetApp initialized successfully');
+        debug('TeachersPetApp initialized successfully');
     } catch (error) {
-        console.error('Error initializing TeachersPetApp:', error);
+        debug('Error initializing TeachersPetApp:', error);
     }
 });
 
@@ -258,7 +259,7 @@ export async function startOverWithAnimation() {
             currentGrade = data.grade;
             currentMonth = data.month;
         }
-    } catch (e) { if (typeof window !== 'undefined' && window.__TP_DEBUG__) console.warn('[app-controller] localStorage read failed:', e); }
+    } catch (e) { if (typeof window !== 'undefined' && window.__TP_DEBUG__) debug('[app-controller] localStorage read failed:', e); }
 
     // 2. Clear everything
     localStorage.clear();
@@ -274,7 +275,7 @@ export async function startOverWithAnimation() {
     if (currentGrade && currentMonth) {
         const preservedData = { grade: currentGrade, month: currentMonth };
         localStorage.setItem('studentData', JSON.stringify(preservedData));
-        console.log('🧹 Data cleared (Grade/Month preserved)');
+        debug('🧹 Data cleared (Grade/Month preserved)');
 
         const target = `student-information.html?grade=${currentGrade}&month=${currentMonth}`;
         if (app) {
@@ -286,7 +287,7 @@ export async function startOverWithAnimation() {
         }
     } else {
         // Full reset if no context
-        console.log('🧹 All data cleared - starting fresh!');
+        debug('🧹 All data cleared - starting fresh!');
         if (app) {
             app.navigateWithTransition('index.html');
         } else {

@@ -1,3 +1,4 @@
+import { debug } from '../utils/debug.js';
 /**
  * Curriculum Loader Utility
  * Teacher's Pet - Dynamic Curriculum Loading System
@@ -33,8 +34,8 @@ export default class CurriculumLoader {
     const monthFile = month.toLowerCase();
     const curriculumPath = `data/curriculum/${gradeFolder}/${monthFile}.json`;
 
-    console.log(`📚 Loading curriculum: ${grade} - ${month}`);
-    console.log(`📂 Path: ${curriculumPath}`);
+    debug(`📚 Loading curriculum: ${grade} - ${month}`);
+    debug(`📂 Path: ${curriculumPath}`);
 
     try {
       const response = await fetch(curriculumPath);
@@ -50,7 +51,7 @@ export default class CurriculumLoader {
       // Validate data structure
       if (data && data.subjects) {
         this.loadedCurriculum = data;
-        console.log(
+        debug(
           `✅ Curriculum loaded: ${this.loadedCurriculum.subjects.length} subjects`,
         );
         return this.loadedCurriculum;
@@ -60,7 +61,7 @@ export default class CurriculumLoader {
         );
       }
     } catch (error) {
-      console.error("❌", error.message);
+      debug("❌", error.message);
       throw error;
     }
   }
@@ -114,6 +115,6 @@ export default class CurriculumLoader {
     this.loadedCurriculum = null;
     this.currentGrade = "";
     this.currentMonth = "";
-    console.log("🧹 Curriculum data cleared");
+    debug("🧹 Curriculum data cleared");
   }
 }

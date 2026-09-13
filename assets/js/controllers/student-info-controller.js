@@ -1,4 +1,5 @@
 import { escapeHtml } from "../utils/security.js";
+import { debug } from '../utils/debug.js';
 
 export class StudentInfoController {
     constructor(app) {
@@ -40,7 +41,7 @@ export class StudentInfoController {
                     tracker.appendChild(span);
                 }
             }
-        } catch (e) { if (typeof window !== 'undefined' && window.__TP_DEBUG__) console.warn('[student-info] tracker init failed:', e); }
+        } catch (e) { if (typeof window !== 'undefined' && window.__TP_DEBUG__) debug('[student-info] tracker init failed:', e); }
     }
 
     setupFormValidation() {
@@ -206,7 +207,7 @@ export class StudentInfoController {
                 month = data.month || '';
             }
         } catch (e) {
-            console.warn('Could not load grade/month from localStorage:', e);
+            debug('Could not load grade/month from localStorage:', e);
         }
 
         const sessionData = {

@@ -1,16 +1,17 @@
+import { debug } from '../utils/debug.js';
 /**
  * Subjects Page UI Functions
  * Handles subject toggling, selection, and comment generation triggers.
  */
 
 function toggleSubject(subjectId) {
-    console.log('🔄 toggleSubject called for:', subjectId);
+    debug('🔄 toggleSubject called for:', subjectId);
 
     const content = document.getElementById('content_' + subjectId);
     const arrow = document.getElementById('arrow_' + subjectId);
 
     if (!content || !arrow) {
-        console.error('❌ Subject elements not found for:', subjectId);
+        debug('❌ Subject elements not found for:', subjectId);
         return;
     }
 
@@ -33,7 +34,7 @@ function handleSubjectCheck(subjectId) {
     const content = document.getElementById('content_' + subjectId);
 
     if (!checkbox || !content) {
-        console.error('Subject checkbox or content not found for:', subjectId);
+        debug('Subject checkbox or content not found for:', subjectId);
         return;
     }
 
@@ -64,7 +65,7 @@ function inferSubjectsFromTopics(topicRatings, selectedSubjects) {
         // Find the parent subject-content div
         const contentDiv = checkbox.closest('.subject-content');
         if (!contentDiv) {
-            console.warn('⚠️ Could not find parent subject-content for topic:', checkbox.value);
+            debug('⚠️ Could not find parent subject-content for topic:', checkbox.value);
             return;
         }
 
@@ -74,7 +75,7 @@ function inferSubjectsFromTopics(topicRatings, selectedSubjects) {
         // Find the corresponding subject checkbox to get the subject name
         const subjectCheckbox = document.getElementById('subject_' + subjectId);
         if (!subjectCheckbox) {
-            console.warn('⚠️ Could not find subject checkbox for ID:', subjectId);
+            debug('⚠️ Could not find subject checkbox for ID:', subjectId);
             return;
         }
 
@@ -87,7 +88,7 @@ function inferSubjectsFromTopics(topicRatings, selectedSubjects) {
     // Add inferred subjects to selectedSubjects if not already present
     inferredSubjects.forEach(subject => {
         if (!selectedSubjects.some(s => s.toLowerCase() === subject.toLowerCase())) {
-            console.log('✅ Inferred subject from topic (DOM-based):', subject);
+            debug('✅ Inferred subject from topic (DOM-based):', subject);
             selectedSubjects.push(subject);
         }
     });
@@ -96,7 +97,7 @@ function inferSubjectsFromTopics(topicRatings, selectedSubjects) {
 function ensureCommentGeneration() {
     (async () => {
         try {
-            console.log('🚀 Starting comment generation...');
+            debug('🚀 Starting comment generation...');
 
             // Show loading state
             if (typeof showGenerationLoading === 'function') {
@@ -108,7 +109,7 @@ function ensureCommentGeneration() {
                 try {
                     await loadCommentGenerationScripts();
                 } catch (error) {
-                    console.error('❌ Failed to load comment generation scripts:', error);
+                    debug('❌ Failed to load comment generation scripts:', error);
                     alert('Failed to load comment generation system. Please refresh the page and try again.');
                     if (typeof hideGenerationLoading === 'function') {
                         hideGenerationLoading();
@@ -123,7 +124,7 @@ function ensureCommentGeneration() {
             }
 
             const safeParse = (val) => {
-                try { return JSON.parse(val || '{}'); } catch (e) { if (typeof window !== 'undefined' && window.__TP_DEBUG__) console.warn('[subjects-ui] safeParse failed:', e); return {}; }
+                try { return JSON.parse(val || '{}'); } catch (e) { if (typeof window !== 'undefined' && window.__TP_DEBUG__) debug('[subjects-ui] safeParse failed:', e); return {}; }
             };
 
             let studentData = safeParse(localStorage.getItem('studentData'));
@@ -131,9 +132,9 @@ function ensureCommentGeneration() {
             if (!studentData.studentName || !studentData.gender) {
                 const ssData = safeParse(sessionStorage.getItem('studentData'));
                 if (ssData.studentName && ssData.gender) {
-                    console.warn('ℹ️ Restoring studentData from sessionStorage fallback');
+                    debug('ℹ️ Restoring studentData from sessionStorage fallback');
                     studentData = ssData;
-                    try { localStorage.setItem('studentData', JSON.stringify(ssData)); } catch (e) { if (typeof window !== 'undefined' && window.__TP_DEBUG__) console.warn('[subjects-ui] localStorage setItem failed:', e); }
+                    try { localStorage.setItem('studentData', JSON.stringify(ssData)); } catch (e) { if (typeof window !== 'undefined' && window.__TP_DEBUG__) debug('[subjects-ui] localStorage setItem failed:', e); }
                 }
             }
 
@@ -199,14 +200,14 @@ function ensureCommentGeneration() {
             // Validate that user data appears in comments
             const validationResult = validateUserDataInComments(comments, sessionData);
             if (!validationResult.isValid) {
-                console.warn('⚠️ Some user data missing from comments:', validationResult.missing);
+                debug('⚠️ Some user data missing from comments:', validationResult.missing);
             }
 
             // Display generated comments
             displayGeneratedComments(comments);
 
         } catch (error) {
-            console.error('❌ Comment generation failed:', error);
+            debug('❌ Comment generation failed:', error);
             alert('An error occurred during comment generation: ' + error.message);
             if (typeof hideGenerationLoading === 'function') {
                 hideGenerationLoading();

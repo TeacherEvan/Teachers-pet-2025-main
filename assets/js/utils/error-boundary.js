@@ -5,6 +5,7 @@
  */
 
 import { escapeHtml } from "./security.js";
+import { debug } from './debug.js';
 
 /* eslint-env browser */
 /* global window, document */
@@ -39,7 +40,7 @@ class ErrorBoundary {
             });
         });
 
-        console.log('🛡️ Error Boundary initialized');
+        debug('🛡️ Error Boundary initialized');
     }
 
     /**
@@ -65,7 +66,7 @@ class ErrorBoundary {
 
         // Log to console in development
         if (!this.isProduction) {
-            console.error('❌ Error caught by ErrorBoundary:', errorInfo);
+            debug('❌ Error caught by ErrorBoundary:', errorInfo);
         }
 
         // Show user-friendly error message
@@ -85,7 +86,7 @@ class ErrorBoundary {
         // Extensibility point for external monitoring services
         // Examples: Sentry, LogRocket, Datadog, New Relic
         // Implementation would depend on which service is chosen
-        console.log('📊 Error would be sent to monitoring service:', errorInfo.message);
+        debug('📊 Error would be sent to monitoring service:', errorInfo.message);
     }
 
     /**
@@ -313,7 +314,7 @@ class ErrorBoundary {
      */
     clearErrors() {
         this.errors = [];
-        console.log('🗑️ Error log cleared');
+        debug('🗑️ Error log cleared');
     }
 
     /**

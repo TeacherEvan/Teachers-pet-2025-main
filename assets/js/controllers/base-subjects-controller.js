@@ -1,6 +1,7 @@
 import CurriculumLoader from "../curriculum/curriculum-loader.js";
 import { TeachersPetUtils } from "../engine/utils.js";
 import { escapeHtml } from "../utils/security.js";
+import { debug } from '../utils/debug.js';
 
 /**
  * Base Subjects Controller
@@ -134,7 +135,7 @@ export class BaseSubjectsController {
           sessionData.month = sessionData.month || data.month || defaults.month;
         }
       } catch (e) {
-        console.warn("Could not load grade/month from localStorage:", e);
+        debug("Could not load grade/month from localStorage:", e);
       }
     }
 
@@ -151,7 +152,7 @@ export class BaseSubjectsController {
     const { grade, month } = this.app.sessionData;
 
     if (!grade || !month) {
-      console.warn("Grade or month not available, using hardcoded topics");
+      debug("Grade or month not available, using hardcoded topics");
       return;
     }
 
@@ -161,7 +162,7 @@ export class BaseSubjectsController {
       const curriculum = await this.curriculumLoader.load(grade, month);
       this.renderSubjects(curriculum.subjects);
     } catch (error) {
-      console.error("Failed to load curriculum:", error);
+      debug("Failed to load curriculum:", error);
       if (this.app.notify) {
         this.app.notify("Failed to load curriculum. Using available topics.", "warning");
       }
@@ -372,7 +373,7 @@ export class BaseSubjectsController {
         const comments = await generator.generateComments(this.app.sessionData);
         this.displayComments(comments);
       } catch (error) {
-        console.error("Comment generation failed:", error);
+        debug("Comment generation failed:", error);
         this.app.showNotification("Failed to generate comments. Please try again.", "error");
       } finally {
         this.app.hideLoadingOverlay();
