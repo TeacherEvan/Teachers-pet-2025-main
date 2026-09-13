@@ -216,7 +216,6 @@ export class P2SubjectsController extends BaseSubjectsController {
     if (this.app.showLoader) this.app.showLoader("Generating comments...");
 
     try {
-      const { OptimizedCommentGenerator } = await import("../optimized-comment-generator.js");
       const generator = new OptimizedCommentGenerator();
       const selections = this.collectSelections();
       const comments = await generator.generateComments(selections);

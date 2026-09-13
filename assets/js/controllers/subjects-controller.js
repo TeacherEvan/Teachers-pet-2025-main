@@ -93,20 +93,17 @@ export class SubjectsController extends BaseSubjectsController {
     }
 
     this.app.showLoadingOverlay("Generating premium comments...");
-
-    setTimeout(async () => {
-      try {
-        const { OptimizedCommentGenerator } = await import("../optimized-comment-generator.js");
-        const generator = new OptimizedCommentGenerator();
-        const comments = await generator.generateComments(this.app.sessionData);
-        this.displayComments(comments);
-      } catch (error) {
-        debug("Comment generation failed:", error);
-        this.app.showNotification("Failed to generate comments. Please try again.", "error");
-      } finally {
-        this.app.hideLoadingOverlay();
-      }
-    }, 2000);
+    try {
+      const { OptimizedCommentGenerator } = await import("../optimized-comment-generator.js");
+      const generator = new OptimizedCommentGenerator();
+      const comments = await generator.generateComments(this.app.sessionData);
+      this.displayComments(comments);
+    } catch (error) {
+      debug("Comment generation failed:", error);
+      this.app.showNotification("Failed to generate comments. Please try again.", "error");
+    } finally {
+      this.app.hideLoadingOverlay();
+    }
   }
 
   displayComments(comments) {

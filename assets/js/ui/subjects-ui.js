@@ -1,4 +1,5 @@
 import { debug } from '../utils/debug.js';
+import { safeParse } from '../utils/security.js';
 /**
  * Subjects Page UI Functions
  * Handles subject toggling, selection, and comment generation triggers.
@@ -351,7 +352,7 @@ function exportReport() {
         return;
     }
 
-    const studentData = JSON.parse(localStorage.getItem('studentData') || '{}');
+    const studentData = safeParse(localStorage.getItem('studentData'), {});
     const commentText = selectedComment.textContent;
 
     const reportContent = `
