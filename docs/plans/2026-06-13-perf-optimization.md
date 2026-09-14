@@ -137,3 +137,19 @@ npm run build     # Vite builds dist/
 npm run preview   # Preview production build
 # Manual: Open each page, check Network tab for request count
 ```
+---
+
+## Resolution (2026-09-15)
+
+**Status: ARCHIVED — ALL TASKS VERIFIED COMPLETE ON DISK**
+
+All 5 tasks confirmed implemented via live-tree verification:
+- Task 1: vite.config.js exists with 7 multi-page HTML entries
+- Task 2: regexCache memoization present in synonym-manager.js
+- Task 3: mythology-effects.js removed; preload fixed
+- Task 4: debug.js shared util (createDebugLog + debugLog) used by all controllers
+- Task 5: app-controller.js lazy-instantiates controllers via getters
+
+Gates: npm test 24/24 PASS, npm run lint PASS, npm run verify PASS.
+This plan had no [x] ticks but every task was already shipped.
+Archived rather than re-implemented — re-deriving would fabricate diffs.
