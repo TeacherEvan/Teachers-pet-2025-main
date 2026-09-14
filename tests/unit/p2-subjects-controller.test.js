@@ -23,5 +23,20 @@ export async function runTests() {
   assert.ok(typeof controller.setupSubjectInteractions === "function", "has setupSubjectInteractions");
   assert.ok(typeof controller.updateSelectionSummary === "function", "has updateSelectionSummary");
 
+  // Test 3: generateComments must import OptimizedCommentGenerator dynamically
+  // (regression: P2 override referenced the class without importing it -> ReferenceError at runtime)
+  const fs = await import("node:fs");
+  const source = fs.readFileSync(new URL("../../assets/js/controllers/p2-subjects-controller.js", import.meta.url), "utf-8");
+  assert.ok(
+    source.includes('await import("../optimized-comment-generator.js")'),
+    "P2 generateComments must dynamically import OptimizedCommentGenerator"
+  );
+  // Ensure no bare constructor call survives without a destructuring import on the same path
+  const genBlock = source.slice(source.indexOf("async generateComments"));
+  assert.ok(
+    genBlock.includes('const { OptimizedCommentGenerator } = await import'),
+    "generateComments block must destructure OptimizedCommentGenerator from the dynamic import"
+  );
+
   console.log("✅ p2-subjects-controller tests passed");
 }
